@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Dottys</string>
+    <string name="splash_first_text">Our Player Perks App was designed to enhance your experience while visiting any of our more than 40 locations.</string>
+    <string name="splash_second_text">Earn points and drawing entries just for playing at Dotty’s, Shelby’s and Stella’s locations.</string>
+    <string name="title_second_top_splas">The more you play the more you earn.</string>
+    <string name="title_third_splash_item">Redeem points the way you want.</string>
+    <string name="subtitle_third_splash_item">Points can be redeemed for incentives and other rewards, either through the app or on premise.</string>
+    <string name="title_four_splash_item">Are you ready? Let’s Go!</string>
+    <string name="subtitle_four_splash_item">Receive notifications for contests, special events, promotions and other incentives only available through Player Perks.</string>
+</resources>
