@@ -1,0 +1,26 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:textAlignment">center</item>
+        <item name="android:titleTextStyle">@style/TextViewPrimaryStyle</item>
+        <item name="android:gravity">center</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorSecundary</item>
+    </style>
+    <style name="TextViewPrimaryStyle" >
+        <item name="android:textColor">#FFF</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:fontFamily">proxima_nova_regular</item>
+    </style>
+
+    <style name="ButtonPrimaryStyle" >
+        <item name="android:textColor">#FFF</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:fontFamily">proxima_nova_regular</item>
+    </style>
+</resources>
