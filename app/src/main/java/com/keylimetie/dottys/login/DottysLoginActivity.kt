@@ -1,23 +1,26 @@
 package com.keylimetie.dottys.login
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
-import android.widget.TextView
-import com.keylimetie.dottys.DottysBaseActivity
-import com.keylimetie.dottys.R
+ import com.keylimetie.dottys.*
 
-class DottysLoginActivity : DottysBaseActivity() {
+class DottysLoginActivity : DottysBaseActivity(), DottysLoginDelegate {
+
+
+
+    private val viewModel = DottysLoginViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dottys_login)
+        viewModel.initView(this)
+    }
+
+    override fun onUserLogin(registerUserData: DottysLoginResponseModel) {
+        saveDataPreference(PreferenceTypeKey.USER_DATA, registerUserData.toJson())
+        val intent = Intent(this, DottysMainNavigationActivity::class.java)
+        startActivity(intent)
 
     }
 
-    override fun onStart() {
-        super.onStart()
-        val titleBar = actionBarView?.findViewById<TextView>(R.id.title_bar)
-
-        titleBar?.text = "Log in"
-    }
 }

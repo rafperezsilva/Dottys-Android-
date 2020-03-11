@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.keylimetie.dottys">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH"
+        android:required="false" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_ADMIN"
+        android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -8,8 +20,22 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".login.DottysLoginActivity"></activity>
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity
+            android:name=".DottysMainNavigationActivity"
+            android:label="@string/title_activity_dottys_main_navigation"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".main.DottysMainActivity"
+            android:label="@string/title_activity_dottys_main"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".DottysDashboardActivity" />
+        <activity
+            android:name=".DottysMainActivity"
+            android:label="@string/title_activity_dottys_main"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".login.DottysLoginActivity" />
         <activity
             android:name=".splash.DottysSplashActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">

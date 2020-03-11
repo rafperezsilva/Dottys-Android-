@@ -18,7 +18,6 @@
             android:tint="#FFF"
             android:scaleY="0.7"
             android:scaleX="0.8"
-            android:layout_marginLeft="5dp"
             android:src = "@mipmap/back_icon_black" />
         <TextView
             android:id = "@+id/title_bar"

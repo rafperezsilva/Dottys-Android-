@@ -4,10 +4,11 @@ import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
+import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.R
 
 
-class DottysSplashActivity : AppCompatActivity() {
+class DottysSplashActivity : DottysBaseActivity() {
     private val viewModel = DottysSplashViewModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,6 +17,7 @@ class DottysSplashActivity : AppCompatActivity() {
         this.window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
+
         )
 
 

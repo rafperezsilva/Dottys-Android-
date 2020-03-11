@@ -10,17 +10,45 @@
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorSecundary</item>
     </style>
-    <style name="TextViewPrimaryStyle" >
+
+    <style name="TextViewPrimaryStyle">
         <item name="android:textColor">#FFF</item>
         <item name="android:textSize">16sp</item>
         <item name="android:gravity">center</item>
         <item name="android:fontFamily">proxima_nova_regular</item>
     </style>
 
-    <style name="ButtonPrimaryStyle" >
+    <style name="ButtonPrimaryStyle">
         <item name="android:textColor">#FFF</item>
         <item name="android:textSize">18sp</item>
         <item name="android:gravity">center</item>
         <item name="android:fontFamily">proxima_nova_regular</item>
     </style>
+
+    <style name="ImageIconStyle">
+        <item name="android:tint">#2556585A</item>
+        <item name="android:scaleY">0.7</item>
+        <item name="android:scaleX">0.7</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:layout_width">35dp</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="EditTextLoginStyle">
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:background">#00000000</item>
+        <item name="android:textAlignment">textStart</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
 </resources>
