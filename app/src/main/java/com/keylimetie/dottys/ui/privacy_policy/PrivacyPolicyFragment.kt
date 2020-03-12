@@ -1,4 +1,4 @@
-package com.keylimetie.dottys.ui.send
+package com.keylimetie.dottys.ui.privacy_policy
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,20 +10,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.keylimetie.dottys.R
 
-class SendFragment : Fragment() {
+class PrivacyPolicyFragment : Fragment() {
 
-    private lateinit var sendViewModel: SendViewModel
+    private lateinit var privacyPolicyViewModel: PrivacyPolicyModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        sendViewModel =
-            ViewModelProviders.of(this).get(SendViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_send, container, false)
-        val textView: TextView = root.findViewById(R.id.text_send)
-        sendViewModel.text.observe(this, Observer {
+        privacyPolicyViewModel =
+            ViewModelProviders.of(this).get(PrivacyPolicyModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_share, container, false)
+        val textView: TextView = root.findViewById(R.id.text_share)
+        privacyPolicyViewModel.text.observe(this, Observer {
             textView.text = it
         })
         return root

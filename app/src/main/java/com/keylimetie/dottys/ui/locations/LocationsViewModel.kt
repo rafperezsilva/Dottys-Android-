@@ -1,10 +1,10 @@
-package com.keylimetie.dottys.ui.gallery
+package com.keylimetie.dottys.ui.locations
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class GalleryViewModel : ViewModel() {
+class LocationsViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is gallery Fragment"

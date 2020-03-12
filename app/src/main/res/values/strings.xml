@@ -19,10 +19,24 @@
     <string name="action_settings">Settings</string>
 
     <string name="menu_dashboard">Dashboard</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
-    <string name="menu_tools">Tools</string>
-    <string name="menu_share">Share</string>
-    <string name="menu_send">Send</string>
+    <string name="menu_locations">Locations</string>
+    <string name="menu_rewards">Rewards</string>
+     <string name="menu_privacy_policy">Privacy Policy</string>
+    <string name="menu_terms_and_conditions">Terms and Conditions</string>
+    <string name="menu_replay_tutorial">Replay Tutorial</string>
+    <string name="menu_contact_support">Contact Support</string>
+    <string name="menu_logout">Logout</string>
+
+
+
+    <string name="menu_drawing">Drawing</string>
+<!--    <string name="menu_privacy_policy">Share</string>-->
+    <string name="menu_profile">Profile</string>
     <string name="title_activity_dottys_main_navigation">DottysMainNavigationActivity</string>
+    <string name="default_wired_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sit amet viverra tellus. Vivamus dictum, magna laoreet congue rhoncus, tellus nibh cursus nunc, vel cursus nisl elit vitae libero. Phasellus et nunc in augue facilisis condimentum. Ut quis ipsum lorem. Cras eu mauris ligula.
+
+Suspendisse potenti. Donec nibh eros, pellentesque pretium nisi et, mattis consequat sem. Donec et diam nec nibh volutpat bibendum. Aenean ut risus eget lectus suscipit convallis quis vitae ex. Pellentesque eu urna nec risus pellentesque ullamcorper.
+
+Sed commodo tellus sit amet nisi scelerisque volutpat. Nam ac sapien ac felis vehicula pulvinar vulputate fermentum nibh. Phasellus venenatis ante at lobortis ullamcorper. Praesent eu tellus id enim tempor mollis id sit amet libero. Nunc maximus velit elit, id volutpat mauris finibus facilisis.</string>
+
 </resources>

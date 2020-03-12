@@ -1,16 +1,13 @@
 package com.keylimetie.dottys
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.*
+import android.view.Menu
+import android.view.View
+import android.view.WindowManager
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -18,55 +15,45 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
-import com.keylimetie.dottys.ui.dashboard.DashboardFragment
-import com.keylimetie.dottys.ui.gallery.GalleryFragment
+import com.keylimetie.dottys.ui.reusable_fragment.ReusableFragment
 
 class DottysMainNavigationActivity : DottysBaseActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var controller: NavController // don't forget to initialize
     private lateinit var toolbar: Toolbar
+    var selectedItemId: Int? = 0
 
     private val listener = NavController.OnDestinationChangedListener { controller, destination, arguments ->
-
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
-        // react on change
-        // you can check destination.id or destination.label and act based on that
         val logoAppBar = findViewById<ImageView>(R.id.logo_appbar)
-        controller.currentDestination
+
+        selectedItemId = destination.id
+
         when (destination.id) {
-            R.id.nav_dashboard -> {
-                Toast.makeText(this,"DASHBOARD",Toast.LENGTH_SHORT).show()
-                toolbar.setBackgroundColor(resources.getColor(R.color.colorDottysGrey))
-                logoAppBar.visibility = View.VISIBLE
-                window.setStatusBarColor(ContextCompat.getColor(this,R.color.colorDottysGrey))
-
-            }
-            R.id.nav_gallery -> {
-                Toast.makeText(this,"GALERY",Toast.LENGTH_SHORT).show()
-                toolbar.setBackgroundColor(resources.getColor(R.color.colorPrimary))
+            R.id.nav_locations, R.id.nav_profile -> {
+                 toolbar.setBackgroundColor(resources.getColor(R.color.colorPrimary))
                 logoAppBar.visibility = View.INVISIBLE
-                window.setStatusBarColor(ContextCompat.getColor(this,R.color.colorPrimary))
-
-//                var params = logoAppBar.layoutParams
-//                params.height = 0
-//                logoAppBar.layoutParams = params
+                window.statusBarColor = ContextCompat.getColor(this,R.color.colorPrimary)
             }
             else -> {
-                logoAppBar.visibility = View.INVISIBLE
+                when(destination.id){
+                    R.id.nav_dashboard -> {
+                        logoAppBar.visibility = View.VISIBLE
+                    }
+                    else -> {
+                        logoAppBar.visibility = View.INVISIBLE
+                    }
+                }
+                toolbar.setBackgroundColor(resources.getColor(R.color.colorDottysGrey))
+                window.statusBarColor = ContextCompat.getColor(this,R.color.colorDottysGrey)
             }
         }
-        this.window.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
-            WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
-
-        )
     }
 
 
-
+    fun getSelectedItem(): Int? {
+        return selectedItemId
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dottys_main_navigation)
@@ -80,16 +67,38 @@ class DottysMainNavigationActivity : DottysBaseActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_dashboard, R.id.nav_gallery, R.id.nav_slideshow,
-                R.id.nav_tools, R.id.nav_share, R.id.nav_send
+                R.id.nav_dashboard, R.id.nav_locations, R.id.nav_rewards,
+                R.id.nav_drawing, R.id.nav_privacy_policy, R.id.nav_profile,
+                R.id.nav_terms_and_conditions, R.id.nav_replay_tutorial,
+                R.id.nav_contact_suppport,  R.id.nav_logout
             ), drawerLayout
         )
 
 
         setupActionBarWithNavController(controller, appBarConfiguration)
         navView.setupWithNavController(controller)
+        drawerLayout.addDrawerListener(object:DrawerLayout.DrawerListener{
+            override fun onDrawerStateChanged(p0: Int) {
+              }
 
+            override fun onDrawerSlide(p0: View, p1: Float) {
+             }
+
+            override fun onDrawerClosed(p0: View) {
+               // Toast.makeText(baseContext,"CLOSE  ",Toast.LENGTH_SHORT).show()
+                window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                 }
+
+            override fun onDrawerOpened(p0: View) {
+                window.setFlags(
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN
+                )
+            }
+        })
     }
+
 
     override fun onResume() {
         super.onResume()
@@ -101,56 +110,11 @@ class DottysMainNavigationActivity : DottysBaseActivity() {
         controller.removeOnDestinationChangedListener(listener)
     }
 
- //region
-//    private fun onItemNacItemSelected(navView: NavigationView, toolbar: Toolbar, drawerLayout: DrawerLayout, navController: NavController){
-//        val fragmentManager: FragmentManager = supportFragmentManager
-//        val ft: FragmentTransaction = fragmentManager.beginTransaction()
-//        navView.setNavigationItemSelectedListener {
-//            when (it.itemId) {
-//                R.id.nav_dashboard -> {
-//                    toolbar.setBackgroundColor(R.color.colorPrimary)
-//                    drawerLayout.closeDrawers()
-//                    ft.replace(R.layout.fragment_home,DashboardFragment())
-//                    true
-//                }
-//                R.id.nav_gallery -> {
-//                    toolbar.setBackgroundColor(R.color.colorAccent)
-//                    drawerLayout.closeDrawers()
-//                    ft.replace(R.layout.fragment_gallery,GalleryFragment())
-//                    true
-//                }
-//                else -> true
-//            }
-//
-//        }
-//        ft.commit()
 
-//     }
-//endregion
-
-    private fun getCheckedItem(navigationView: NavigationView): Int {
-        val menu = navigationView.menu
-        for (i in 0 until menu.size()) {
-            val item: MenuItem = menu[i]
-            if (item.isChecked) {
-                return i
-            }
-        }
-        return -1
-    }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.dottys_main_navigation, menu)
         return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        this.window.setFlags(
-            WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-            WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-
-        )
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onSupportNavigateUp(): Boolean {

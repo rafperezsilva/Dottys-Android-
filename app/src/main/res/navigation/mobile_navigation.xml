@@ -9,35 +9,57 @@
         android:id="@+id/nav_dashboard"
         android:name="com.keylimetie.dottys.ui.dashboard.DashboardFragment"
         android:label="@string/menu_dashboard"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_dashboard" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.keylimetie.dottys.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_locations"
+        android:name="com.keylimetie.dottys.ui.locations.LocationsFragment"
+        android:label="@string/menu_locations"
+        tools:layout="@layout/fragment_locations" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.keylimetie.dottys.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
+        android:id="@+id/nav_rewards"
+        android:name="com.keylimetie.dottys.ui.rewards.RewardsFragment"
+        android:label="@string/menu_rewards"
         tools:layout="@layout/fragment_slideshow" />
 
     <fragment
-        android:id="@+id/nav_tools"
-        android:name="com.keylimetie.dottys.ui.tools.ToolsFragment"
-        android:label="@string/menu_tools"
+        android:id="@+id/nav_drawing"
+        android:name="com.keylimetie.dottys.ui.drawing.DrawingFragment"
+        android:label="@string/menu_drawing"
         tools:layout="@layout/fragment_tools" />
 
     <fragment
-        android:id="@+id/nav_share"
-        android:name="com.keylimetie.dottys.ui.share.ShareFragment"
-        android:label="@string/menu_share"
+        android:id="@+id/nav_privacy_policy"
+        android:name="com.keylimetie.dottys.ui.reusable_fragment.ReusableFragment"
+        android:label="@string/menu_privacy_policy"
         tools:layout="@layout/fragment_share" />
 
     <fragment
-        android:id="@+id/nav_send"
-        android:name="com.keylimetie.dottys.ui.send.SendFragment"
-        android:label="@string/menu_send"
-        tools:layout="@layout/fragment_send" />
+        android:id="@+id/nav_profile"
+        android:name="com.keylimetie.dottys.ui.profile.ProfileFragment"
+        android:label="@string/menu_profile"
+        tools:layout="@layout/reusable_fragment" />
+
+    <fragment
+        android:id="@+id/nav_terms_and_conditions"
+        android:name="com.keylimetie.dottys.ui.reusable_fragment.ReusableFragment"
+        android:label="@string/menu_terms_and_conditions"
+        tools:layout="@layout/reusable_fragment" />
+    <fragment
+            android:id="@+id/nav_replay_tutorial"
+        android:name="com.keylimetie.dottys.ui.reusable_fragment.ReusableFragment"
+        android:label="@string/menu_terms_and_conditions"
+        tools:layout="@layout/reusable_fragment" />
+    <fragment
+        android:id="@+id/nav_contact_suppport"
+        android:name="com.keylimetie.dottys.ui.reusable_fragment.ReusableFragment"
+        android:label="@string/menu_contact_support"
+        tools:layout="@layout/reusable_fragment" />
+    <fragment
+        android:id="@+id/nav_logout"
+        android:name="com.keylimetie.dottys.ui.logout.LogoutFragment"
+        android:label="@string/menu_logout"
+        tools:layout="@layout/logout_fragment" />
+
 </navigation>
