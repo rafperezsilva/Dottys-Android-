@@ -2,18 +2,351 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
 
-    <TextView
-        android:id="@+id/text_home"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+             android:gravity="top"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/profile_dashboard_image"
+                            android:layout_width="120dp"
+                            android:layout_height="120dp"
+                            android:layout_marginTop="15dp"
+                            app:civ_border_color="#FFF"
+                            app:civ_border_width="5dp" />
+
+                        <TextView
+                            android:textSize="14sp"
+                            android:fontFamily="@font/proxima_nova_regular"
+                             android:textColor="#FFF"
+                            android:id="@+id/profile_name_dashboard"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="15dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/points_earned_textview"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:fontFamily="@font/proxima_nova_regular"
+                            android:text="0"
+                            android:textColor="#FFF"
+                            android:textSize="42sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="0dp"
+                            android:fontFamily="@font/proxima_nova_regular"
+                            android:text="POINTS EARNED"
+                            android:textColor="#9B9B9B"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/cash_rewards_textview"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:fontFamily="@font/proxima_nova_regular"
+                            android:text="$0"
+                            android:textColor="#FFF"
+                            android:textSize="42sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/proxima_nova_regular"
+                            android:text="CASH REWARDS"
+                            android:textColor="#9B9B9B"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_margin="3dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:background="@color/colorSecundary"
+                        android:fontFamily="@font/proxima_nova_regular"
+                        android:shadowColor="#FFF"
+                        android:shadowDx="-1"
+                        android:shadowDy="-1"
+                        android:shadowRadius="0.5"
+                        android:text="CONVERT POINTS"
+                        android:textColor="#202020" />
+
+                    <Button
+                        android:id="@+id/redeem_rewards_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_margin="3dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:background="@color/colorSecundary"
+                        android:fontFamily="@font/proxima_nova_regular"
+                        android:shadowColor="#FFF"
+                        android:shadowDx="-1"
+                        android:shadowDy="-1"
+                        android:shadowRadius="0.5"
+                        android:text="REDEEM REWARDS"
+                        android:textColor="#202020" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginTop="5dp"
+                android:background="#FFF">
+
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/pager_dashboard"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                 android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/proxima_nova_semibold"
+                        android:text="MY DRAWING ENTRIES"
+                        android:textColor="#FFF"
+                        android:textSize="22sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal|top"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_marginTop="15dp"
+                            android:gravity="top|center_horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/weekly_count_textview"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="10dp"
+                                android:fontFamily="@font/proxima_nova_extrabold"
+                                android:text="0"
+                                android:textColor="#E5BA4A"
+                                android:textSize="45sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+
+                                android:fontFamily="@font/proxima_nova_regular"
+                                android:text="Weekly"
+                                android:textColor="#FFF"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/weekly_end_days"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/proxima_nova_regular"
+                                android:text="ends in 4 days"
+                                android:textColor="#E5BA4A"
+                                android:textSize="18sp" />
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:alpha="0.5"
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginBottom="15dp"
+                            android:background="#FFF" />
+
+                        <LinearLayout
+                            android:layout_marginTop="15dp"
+                            android:gravity="top|center_horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/monthly_count_textview"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="10dp"
+                                android:fontFamily="@font/proxima_nova_extrabold"
+                                android:text="0"
+                                android:textColor="#E5BA4A"
+                                android:textSize="45sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+
+                                android:fontFamily="@font/proxima_nova_regular"
+                                android:text="Monthly"
+                                android:textColor="#FFF"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/monthly_end_days"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/proxima_nova_regular"
+                                android:text="ends in 4 days"
+                                android:textColor="#E5BA4A"
+                                android:textSize="18sp" />
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:alpha="0.5"
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginBottom="15dp"
+                            android:background="#FFF" />
+
+                        <LinearLayout
+                            android:layout_marginTop="15dp"
+                            android:gravity="top|center_horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/quarterly_count_textview"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="10dp"
+                                android:fontFamily="@font/proxima_nova_extrabold"
+                                android:text="0"
+                                android:textColor="#E5BA4A"
+                                android:textSize="45sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+
+                                android:fontFamily="@font/proxima_nova_regular"
+                                android:text="Quarterly"
+                                android:textColor="#FFF"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/quarterly_end_days"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/proxima_nova_regular"
+                                android:text="ends in 4 days"
+                                android:textColor="#E5BA4A"
+                                android:textSize="18sp" />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/location_dashboard_textview"
+                        android:textFontWeight="0"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/proxima_nova_semibold"
+                        android:gravity="center"
+                        android:text="Your drawing entries are entered at 75th St, Darien, IL 60561"
+                        android:textColor="#FFF"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+<!--    <ProgressBar-->
+<!--        android:id="@+id/progress_loader"-->
+<!--        style="?android:attr/progressBarStyleLarge"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_centerInParent="true"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:layout_marginEnd="8dp"-->
+<!--        android:layout_marginBottom="8dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
 </androidx.constraintlayout.widget.ConstraintLayout>

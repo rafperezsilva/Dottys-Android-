@@ -37,7 +37,7 @@ class DottysSplashViewModel : ViewModel() {
              val intent = Intent(context, DottysMainNavigationActivity::class.java)
              context.startActivity(intent)
          } else {
-             context.actionBarSetting()
+             //context.actionBarSetting()
          }
     }
 

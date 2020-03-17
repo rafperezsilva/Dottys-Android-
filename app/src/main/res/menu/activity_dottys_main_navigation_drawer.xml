@@ -49,6 +49,12 @@
             android:icon="@mipmap/logout_icon"
             android:title="@string/menu_logout" />
 
+        <item
+            android:id="@+id/nav_redeem_rewards"
+            android:enabled="false"
+            android:visible="false"
+            android:title="" />
+
     </group>
 
 <!--    <item android:title="Communicate">-->

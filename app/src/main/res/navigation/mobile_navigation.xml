@@ -46,11 +46,11 @@
         android:name="com.keylimetie.dottys.ui.reusable_fragment.ReusableFragment"
         android:label="@string/menu_terms_and_conditions"
         tools:layout="@layout/reusable_fragment" />
-    <fragment
-            android:id="@+id/nav_replay_tutorial"
-        android:name="com.keylimetie.dottys.ui.reusable_fragment.ReusableFragment"
-        android:label="@string/menu_terms_and_conditions"
-        tools:layout="@layout/reusable_fragment" />
+<!--    <fragment-->
+<!--            android:id="@+id/nav_replay_tutorial"-->
+<!--        android:name="com.keylimetie.dottys.ui.reusable_fragment.ReusableFragment"-->
+<!--        android:label="@string/menu_terms_and_conditions"-->
+<!--        tools:layout="@layout/reusable_fragment" />-->
     <fragment
         android:id="@+id/nav_contact_suppport"
         android:name="com.keylimetie.dottys.ui.reusable_fragment.ReusableFragment"
@@ -61,5 +61,10 @@
         android:name="com.keylimetie.dottys.ui.logout.LogoutFragment"
         android:label="@string/menu_logout"
         tools:layout="@layout/logout_fragment" />
+    <fragment
+        android:id="@+id/nav_redeem_rewards"
+        android:name="com.keylimetie.dottys.ui.redeem_rewards.DottysRedeemRewrds"
+        android:label="@string/menu_redeem_rewards"
+        tools:layout="@layout/dottys_redeem_rewrds_fragment" />
 
 </navigation>

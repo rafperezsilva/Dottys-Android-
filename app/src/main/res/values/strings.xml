@@ -21,16 +21,16 @@
     <string name="menu_dashboard">Dashboard</string>
     <string name="menu_locations">Locations</string>
     <string name="menu_rewards">Rewards</string>
-     <string name="menu_privacy_policy">Privacy Policy</string>
+    <string name="menu_privacy_policy">Privacy Policy</string>
     <string name="menu_terms_and_conditions">Terms and Conditions</string>
     <string name="menu_replay_tutorial">Replay Tutorial</string>
     <string name="menu_contact_support">Contact Support</string>
     <string name="menu_logout">Logout</string>
-
+    <string name="menu_redeem_rewards">Logout</string>
 
 
     <string name="menu_drawing">Drawing</string>
-<!--    <string name="menu_privacy_policy">Share</string>-->
+    <!--    <string name="menu_privacy_policy">Share</string>-->
     <string name="menu_profile">Profile</string>
     <string name="title_activity_dottys_main_navigation">DottysMainNavigationActivity</string>
     <string name="default_wired_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sit amet viverra tellus. Vivamus dictum, magna laoreet congue rhoncus, tellus nibh cursus nunc, vel cursus nisl elit vitae libero. Phasellus et nunc in augue facilisis condimentum. Ut quis ipsum lorem. Cras eu mauris ligula.

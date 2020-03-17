@@ -22,18 +22,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".redeem.DottysRedeemRewardsActivity"
+            ></activity>
         <activity
             android:name=".DottysMainNavigationActivity"
             android:label="@string/title_activity_dottys_main_navigation"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity
-            android:name=".main.DottysMainActivity"
-            android:label="@string/title_activity_dottys_main"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".DottysDashboardActivity" />
-        <activity
-            android:name=".DottysMainActivity"
-            android:label="@string/title_activity_dottys_main"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".login.DottysLoginActivity" />
         <activity

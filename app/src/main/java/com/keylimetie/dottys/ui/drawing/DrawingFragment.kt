@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.keylimetie.dottys.R
 
-class DrawingFragment : Fragment() {
+class DrawingFragment : Fragment(), DottysDrawingDelegates {
 
     private lateinit var toolsViewModel: DrawingViewModel
 
@@ -26,6 +26,11 @@ class DrawingFragment : Fragment() {
         toolsViewModel.text.observe(this, Observer {
             textView.text = it
         })
+        toolsViewModel.initViewSetting(this, null)
         return root
+    }
+
+    override fun getDrawingUser(dawing: DottysDrawingModel) {
+
     }
 }

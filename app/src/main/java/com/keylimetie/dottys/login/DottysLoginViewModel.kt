@@ -39,7 +39,7 @@ open class DottysLoginViewModel : ViewModel() {
         passwordEditText = activityLogin.findViewById(R.id.password_login_edittext) as EditText
         mContext = activityLogin
         userLoginDataObserver = DottysLoginObserver(activityLogin)
-
+        activityLogin.hideLoader(activityLogin)
         activityLogin.sharedPreferences = activityLogin.getSharedPreferences(
             PreferenceTypeKey.USER_DATA.name,
             Context.MODE_PRIVATE
@@ -79,12 +79,13 @@ open class DottysLoginViewModel : ViewModel() {
         params["email"] = modelRegister.email!!
         params["password"] = modelRegister.password!!
         val jsonObject = JSONObject(params as Map<*, *>)
-       mContext?.progressBar?.visibility = VISIBLE
+       mContext?.showLoader(mContext!!)
         var request: JsonObjectRequest = JsonObjectRequest(
             Request.Method.POST,
             mContext?.baseUrl + "users/login",
             jsonObject,
             Response.Listener { response ->
+                mContext?.hideLoader(mContext!!)
                 // Process the json
                 try {
                     var person: DottysLoginResponseModel =
@@ -93,10 +94,10 @@ open class DottysLoginViewModel : ViewModel() {
                         )
                     userLoginDataObserver?.registerUserModel = person
                    Toast.makeText(mContext, "FULL NAME: \n" + person.fullName, Toast.LENGTH_SHORT).show()
-                 mContext?.progressBar?.visibility = INVISIBLE
+
                 } catch (e: Exception) {
                     println(e)
-                    mContext?.progressBar?.visibility = INVISIBLE
+                    mContext?.hideLoader(mContext!!)
                 }
 
             },
@@ -105,7 +106,7 @@ open class DottysLoginViewModel : ViewModel() {
                     Toast.makeText(mContext, "Invalid username or password.", Toast.LENGTH_LONG)
                         .show()
                 }
-                mContext?.progressBar?.visibility = INVISIBLE
+                mContext?.hideLoader(mContext!!)
                 println("Volley error: $it")
             })
 
