@@ -30,20 +30,18 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:scaleType="centerCrop"
+android:layout_marginTop="5dp"
+                    android:scaleType="fitCenter"
                     android:id="@+id/reward_image_item"
-                    android:layout_width="250dp"
-                    android:layout_height="250dp"
-                    android:layout_weight="2"
-
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
                     android:src="@mipmap/cash_10_image" />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
-                    android:layout_weight="2"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -74,6 +72,7 @@
                         android:textColor="#000"
                         android:textSize="17sp" />
                 </LinearLayout>
+
             </LinearLayout>
         </LinearLayout>
 

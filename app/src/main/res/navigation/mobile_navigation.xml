@@ -27,7 +27,7 @@
         android:id="@+id/nav_drawing"
         android:name="com.keylimetie.dottys.ui.drawing.DrawingFragment"
         android:label="@string/menu_drawing"
-        tools:layout="@layout/fragment_tools" />
+        tools:layout="@layout/fragment_drawing" />
 
     <fragment
         android:id="@+id/nav_privacy_policy"

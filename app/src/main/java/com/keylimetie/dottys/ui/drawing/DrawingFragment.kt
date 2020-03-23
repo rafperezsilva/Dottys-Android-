@@ -4,33 +4,34 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.R
 
 class DrawingFragment : Fragment(), DottysDrawingDelegates {
 
-    private lateinit var toolsViewModel: DrawingViewModel
+    private lateinit var drawingViewModel: DrawingViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        toolsViewModel =
+        drawingViewModel =
             ViewModelProviders.of(this).get(DrawingViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_tools, container, false)
-        val textView: TextView = root.findViewById(R.id.text_tools)
-        toolsViewModel.text.observe(this, Observer {
-            textView.text = it
-        })
-        toolsViewModel.initViewSetting(this, null)
+        val root = inflater.inflate(R.layout.fragment_drawing, container, false)
+        var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
+
+        activity?.let { drawingViewModel.initViewSetting(this, null, it, root) }
         return root
     }
 
-    override fun getDrawingUser(dawing: DottysDrawingModel) {
-
+    override fun getUserRewards(rewards: DottysDrawingRewardsModel) {
     }
+
+    override fun getUserDrawings(drawing: DottysDrawingUserModel) {
+    }
+
+
 }

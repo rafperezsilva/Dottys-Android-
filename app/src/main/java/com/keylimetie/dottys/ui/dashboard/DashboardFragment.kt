@@ -7,8 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProviders
 import com.keylimetie.dottys.DottysLoginResponseModel
 import com.keylimetie.dottys.DottysMainNavigationActivity
@@ -17,12 +15,7 @@ import com.keylimetie.dottys.models.DottysGlobalDataModel
 import com.keylimetie.dottys.models.DottysRewardsModel
 import com.keylimetie.dottys.redeem.DottysRedeemRewardsActivity
 import com.keylimetie.dottys.ui.drawing.DottysDrawingDelegates
-import com.keylimetie.dottys.ui.drawing.DottysDrawingModel
-import com.keylimetie.dottys.ui.redeem_rewards.DottysRedeemRewrds
-import java.io.Serializable
-import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.util.*
+import com.keylimetie.dottys.ui.drawing.DottysDrawingUserModel
 
 
 class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDelegates {
@@ -47,6 +40,7 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
         if (activity != null) {
             homeViewModel.initDashboardViewSetting(this, activity)
         }
+        activity?.hideKeyboard()
 
     }
 
@@ -69,7 +63,7 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
         activity?.let { homeViewModel.initDashboardPager(it, gloabalData) }
     }
 
-    override fun getDrawingUser(dawing: DottysDrawingModel) {
+    override fun getUserRewards(dawing: com.keylimetie.dottys.ui.drawing.DottysDrawingRewardsModel) {
         var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
 
         homeViewModel.initDashboardItemsView(viewFragment!!, dawing,activity!!)
@@ -81,23 +75,11 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
             val intent = Intent(context, DottysRedeemRewardsActivity::class.java)
             intent.putExtra("REDEEM_REWARDS", homeViewModel.userCurrentUserDataObserver?.currentUserRewards?.toJson().toString())
             startActivity(intent)
-//            // Get the text fragment instance
-//            val imageFragment = DottysRedeemRewrds()
-//
-//            // Get the support fragment manager instance
-//            val manager = activity.supportFragmentManager
-//
-//            // Begin the fragment transition using support fragment manager
-//            val transaction = manager.beginTransaction()
-//
-//            // Replace the fragment on container
-//            transaction.replace(R.id.nav_terms_and_conditions,imageFragment)
-//            transaction.addToBackStack(null)
-//
-//            // Finishing the transition
-//            transaction.commit()
-        }
+         }
 
 
         }
-    }
+
+    override fun getUserDrawings(drawing: DottysDrawingUserModel) {
+     }
+}

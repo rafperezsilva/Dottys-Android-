@@ -15,6 +15,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.navigation.NavigationView
 import com.keylimetie.dottys.ui.reusable_fragment.ReusableFragment
 
@@ -54,6 +55,11 @@ class DottysMainNavigationActivity : DottysBaseActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+
+    }
+
     fun getToolbarTitle(itemId:Int):String{
         when (itemId){
             R.id.nav_locations -> {return "Locations"}
@@ -76,6 +82,7 @@ class DottysMainNavigationActivity : DottysBaseActivity() {
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         initDrawerSetting()
+
     }
 
      fun initDrawerSetting(){
@@ -98,6 +105,7 @@ class DottysMainNavigationActivity : DottysBaseActivity() {
          navView.setupWithNavController(controller)
          drawerLayout.addDrawerListener(object:DrawerLayout.DrawerListener{
              override fun onDrawerStateChanged(p0: Int) {
+                 hideKeyboard()
              }
 
              override fun onDrawerSlide(p0: View, p1: Float) {
@@ -135,11 +143,11 @@ class DottysMainNavigationActivity : DottysBaseActivity() {
     }
 
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.dottys_main_navigation, menu)
-        return true
-    }
+//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        menuInflater.inflate(R.menu.dottys_main_navigation, menu)
+//        return true
+//    }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)

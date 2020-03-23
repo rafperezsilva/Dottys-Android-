@@ -8,18 +8,21 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
+            android:gravity="center"
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="#00000000"
             app:popupTheme="@style/AppTheme.PopupOverlay">
             <RelativeLayout
+                android:gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginRight="55dp">
                 <TextView
                     android:textSize="17sp"
                     android:fontFamily="@font/proxima_nova_regular"
@@ -28,8 +31,6 @@
                     android:gravity="center"
                     android:layout_marginTop="13dp"
                     android:layout_marginBottom="13dp"
-                    android:layout_marginRight="25dp"
-                    android:layout_marginLeft="25dp"
                     android:id="@+id/title_tool_bar_textview"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

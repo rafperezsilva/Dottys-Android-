@@ -10,14 +10,13 @@ import android.widget.TextView
 import com.keylimetie.dottys.R
 import com.keylimetie.dottys.models.DottysReward
 import com.keylimetie.dottys.models.IconType
-import kotlinx.android.synthetic.main.nav_header_dottys_main_navigation.view.*
 import kotlin.math.roundToInt
 
 
-class DottysRedeemAdapter(private val context: Context,
+class DottysRedeemAdapter(private val activity: DottysRedeemRewardsActivity,
                           private val dataSource: List<DottysReward>): BaseAdapter() {
     private val inflater: LayoutInflater
-            = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            = activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     //1
     override fun getCount(): Int {
         return dataSource.size
@@ -48,13 +47,15 @@ class DottysRedeemAdapter(private val context: Context,
         val descriptionRewards = rowView.findViewById<TextView>(R.id.description_item_textview)
         titleRewards.text = rewards.title
         descriptionRewards.text = rewards.description
-
+        expireRewards.text = "Expire in "+ rewards.endDate?.let { activity.getDiferencesDays(it) }+" days"
         when (rewards.iconType) {
             IconType.PointsToDollars -> {
                 imageRewards.setImageResource(R.mipmap.cash_image)
             }
             else -> {
                 imageRewards.setImageResource(R.mipmap.cash_10_image)
+                imageRewards.scaleX = 0.8F
+                imageRewards.scaleY = 0.8F
             }
         }
 

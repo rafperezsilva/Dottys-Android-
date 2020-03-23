@@ -4,12 +4,8 @@ import android.R
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
-import android.widget.Button
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModel
 import androidx.viewpager.widget.ViewPager
 import com.android.volley.AuthFailureError
@@ -24,16 +20,13 @@ import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.R.id
 import com.keylimetie.dottys.models.DottysGlobalDataModel
 import com.keylimetie.dottys.models.DottysRewardsModel
-import com.keylimetie.dottys.ui.drawing.DottysDrawingModel
 import com.keylimetie.dottys.ui.drawing.DrawingViewModel
-import com.keylimetie.dottys.ui.redeem_rewards.DottysRedeemRewrds
 import de.hdodenhof.circleimageview.CircleImageView
 import org.json.JSONArray
 import org.json.JSONObject
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.text.NumberFormat
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.set
@@ -60,7 +53,7 @@ class DashboardViewModel : ViewModel() {
 
     }
 
-    fun     initDashboardItemsView(rootView: View, drawingLoaction: DottysDrawingModel, activity:DottysMainNavigationActivity) {
+    fun     initDashboardItemsView(rootView: View, rewardsLoaction: com.keylimetie.dottys.ui.drawing.DottysDrawingRewardsModel, activity:DottysMainNavigationActivity) {
         val nameDashboard =
             rootView.findViewById<TextView>(com.keylimetie.dottys.R.id.profile_name_dashboard)
         val locationDashboard =
@@ -87,7 +80,7 @@ class DashboardViewModel : ViewModel() {
             .format(userCurrentUserDataObserver?.currentUserModel?.points)
         cashRewards.text = "$" + getCashForDrawing()
         pointsEarned.text = s
-        locationDashboard.text = addressLocationFotmatted(drawingLoaction)
+        locationDashboard.text = addressLocationFotmatted(rewardsLoaction)
         weeklyRewards.text =
             userCurrentUserDataObserver?.dawingSummaryModel?.filter { it.drawingType == "WEEKLY" }
                 ?.first()?.numberOfEntries.toString()
@@ -98,25 +91,17 @@ class DashboardViewModel : ViewModel() {
             userCurrentUserDataObserver?.dawingSummaryModel?.filter { it.drawingType == "QUARTERLY" }
                 ?.first()?.numberOfEntries.toString()
         weeklyDays.text = userCurrentUserDataObserver?.dawingSummaryModel?.filter { it.drawingType == "WEEKLY" }
-            ?.first()?.endDate?.let { getDiferencesDays(it) }
+            ?.first()?.endDate?.let {activity.getDiferencesDays(it) }
         monthlyDays.text = userCurrentUserDataObserver?.dawingSummaryModel?.filter { it.drawingType == "MONTHLY" }
-            ?.first()?.endDate?.let { getDiferencesDays(it) }
+            ?.first()?.endDate?.let { activity.getDiferencesDays(it) }
         querterlyDays.text = userCurrentUserDataObserver?.dawingSummaryModel?.filter { it.drawingType == "QUARTERLY" }
-            ?.first()?.endDate?.let { getDiferencesDays(it) }
+            ?.first()?.endDate?.let { activity.getDiferencesDays(it) }
 
 
 
     }
 
-    fun getDiferencesDays(dateString:String):String{
-        val date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSS").parse(dateString.replace("Z",""))
-        val diferenceAtTime =  date.time - Date().time
-
-
-        return "end in "+ (diferenceAtTime / (1000 * 3600 * 24)).toString() + " days"
-    }
-
-    fun getCashForDrawing(): String {
+   fun getCashForDrawing(): String {
         val drawingUser =
             userCurrentUserDataObserver?.currentUserRewards?.rewards?.filter { it.redeemed == false }
         var cash = 0
@@ -131,9 +116,9 @@ class DashboardViewModel : ViewModel() {
 
     }
 
-    fun addressLocationFotmatted(drawingLoaction: DottysDrawingModel): String {
+    fun addressLocationFotmatted(rewardsLoaction: com.keylimetie.dottys.ui.drawing.DottysDrawingRewardsModel): String {
         val staticFirtsText = "Your drawing entries are entered at "
-        return staticFirtsText + drawingLoaction.address1 + ", " + drawingLoaction.city + ", " + drawingLoaction.state + " " + drawingLoaction.zip
+        return staticFirtsText + rewardsLoaction.address1 + ", " + rewardsLoaction.city + ", " + rewardsLoaction.state + " " + rewardsLoaction.zip
     }
 
     fun String.md5(): String {
@@ -322,7 +307,7 @@ class DashboardViewModel : ViewModel() {
     fun getLocationDrawing(fragment: Fragment) {
         val drawingViewModel = DrawingViewModel()
         drawingViewModel.initViewSetting(
-            fragment,
+            fragment as  DashboardFragment,
             userCurrentUserDataObserver?.currentUserModel?.homeLocationID
         )
     }

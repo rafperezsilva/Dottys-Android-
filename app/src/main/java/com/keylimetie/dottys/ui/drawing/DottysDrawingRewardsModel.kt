@@ -9,7 +9,7 @@ val mapper = jacksonObjectMapper().apply {
     setSerializationInclusion(JsonInclude.Include.NON_NULL)
 }
 
-data class DottysDrawingModel (
+data class DottysDrawingRewardsModel (
     @get:JsonProperty("_id")@field:JsonProperty("_id")
     val id: String? = null,
 
@@ -40,6 +40,6 @@ data class DottysDrawingModel (
     fun toJson() = mapper.writeValueAsString(this)
 
     companion object {
-        fun fromJson(json: String) = mapper.readValue<DottysDrawingModel>(json)
+        fun fromJson(json: String) = mapper.readValue<DottysDrawingRewardsModel>(json)
     }
 }

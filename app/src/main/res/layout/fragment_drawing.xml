@@ -1,18 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".redeem.DottysRedeemRewardsActivity"
     android:background="@color/colorPrimary">
-
-<!--    <include-->
-<!--        android:id="@+id/include"-->
-<!--        layout="@layout/custom_action_bar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="?attr/toolbarStyle" />-->
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -33,15 +24,15 @@
             app:layout_constraintTop_toTopOf="parent">
             <Button
                 android:textColor="#FFF"
-                android:id="@+id/aviable_rewards_button"
-                android:text="AVAIBLE REWARDS"
+                android:id="@+id/drawing_entries_button"
+                android:text="DRAWING ENTRIES"
                 android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
             <Button
                 android:textColor="#FFF"
-                android:id="@+id/redeemed_rewards_button"
-                android:text="REDEEMED REWARDS"
+                android:id="@+id/cash_rewards_button"
+                android:text="CASH REWARDS"
                 android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
@@ -49,7 +40,7 @@
 
 
         <ListView
-            android:id="@+id/redeem_rewards_listview"
+            android:id="@+id/drawings_listview"
             android:layout_width="356dp"
             android:layout_height="0dp"
             android:layout_marginLeft="25dp"
@@ -61,7 +52,7 @@
             app:layout_constraintTop_toBottomOf="@+id/redeem_rewards_textview" />
 
         <TextView
-            android:id="@+id/redeem_rewards_textview"
+            android:id="@+id/drawing_title_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

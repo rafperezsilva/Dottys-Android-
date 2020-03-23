@@ -2,6 +2,9 @@ package com.keylimetie.dottys.redeem
 
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.View
+import android.widget.ExpandableListView
+import android.widget.Toast
 
 import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.R
@@ -19,5 +22,6 @@ class DottysRedeemRewardsActivity : DottysBaseActivity() {
          ) }
          viewModel.initViewRedeem(this)
      }
+
 
 }
