@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ExpandableListView
@@ -64,33 +63,43 @@ class LocationsViewModel : ViewModel() {
             rootView.findViewById<FloatingSearchView>(R.id.search_store_view)
         searchView?.setOnQueryChangeListener(FloatingSearchView.OnQueryChangeListener { oldQuery, newQuery -> //get suggestions based on newQuery
             println("$oldQuery / $newQuery")
-          // locationsStores?.let { filterQueryData(it,newQuery.toString()) }
-            if (newQuery == ""){
+            // locationsStores?.let { filterQueryData(it,newQuery.toString()) }
+            if (newQuery == "") {
                 hideKeyboard()
                 screenDimensionManager(LocationViewType.EXPANDED_TYPE)
             } else {
                 screenDimensionManager(LocationViewType.SEARCH_TYPE)
             }
-            locationsStores?.let { filterQueryData(it,newQuery.toString()) }?.let {
-                initExpandableList(activityDrawing,
+            locationsStores?.let { filterQueryData(it, newQuery.toString()) }?.let {
+                initExpandableList(
+                    activityDrawing,
                     it
                 )
             }
         })
-        getLocationsDottysRequest(activityDrawing, locationUser?.latitude.toString(), locationUser?.longitude.toString())
+        getLocationsDottysRequest(
+            activityDrawing,
+            locationUser?.latitude.toString(),
+            locationUser?.longitude.toString()
+        )
     }
 
-    fun filterQueryData( locations: ArrayList<DottysStoresLocation>, query: String):List<DottysStoresLocation>{
-        var flocatinoList =  locations.filter { it.address1?.toLowerCase()?.contains(query) ?: false ||
-                                                                       it.city?.toLowerCase()?.contains(query) ?: false  ||
-                                                                       it.zip?.toLowerCase()?.contains(query) ?: false }
+    fun filterQueryData(
+        locations: ArrayList<DottysStoresLocation>,
+        query: String
+    ): List<DottysStoresLocation> {
+        var flocatinoList = locations.filter {
+            it.address1?.toLowerCase()?.contains(query) ?: false ||
+                    it.city?.toLowerCase()?.contains(query) ?: false ||
+                    it.zip?.toLowerCase()?.contains(query) ?: false
+        }
 
 //        if (flocatinoList.size == 0) {
 //            flocatinoList =  locations.filter { it.address1?.toLowerCase()?.contains(query) ?: false || it.address2?.toLowerCase()?.contains(query) ?: false }
 //        } else if(flocatinoList.size == 0){
 //            flocatinoList =  locations.filter { it.zip?.contains(query) ?: false }
 //        }
-        return  flocatinoList
+        return flocatinoList
     }
 
     @SuppressLint("ServiceCast")
@@ -112,7 +121,7 @@ class LocationsViewModel : ViewModel() {
                 }
             }
             hideKeyboard()
-                screenDimensionManager(LocationViewType.EXPANDED_TYPE)
+            screenDimensionManager(LocationViewType.EXPANDED_TYPE)
         }
 
         listView?.setOnGroupCollapseListener {
@@ -127,14 +136,14 @@ class LocationsViewModel : ViewModel() {
     }
 
 
-    fun hideKeyboard(){
+    fun hideKeyboard() {
         val imm: InputMethodManager =
             locationFragment.activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(locationFragment.view?.getWindowToken(), 0)
+        imm.hideSoftInputFromWindow(locationFragment.view?.windowToken, 0)
     }
 
     fun heightToViewType(viewType: LocationViewType): Double {
-        var screenHeigth = locationFragment?.resources?.displayMetrics?.heightPixels ?: 0
+        var screenHeigth = locationFragment.resources.displayMetrics?.heightPixels ?: 0
         when (viewType) {
             LocationViewType.COLLAPSE_TYPE -> {
                 return screenHeigth * 0.45
@@ -196,12 +205,18 @@ class LocationsViewModel : ViewModel() {
         return markerLocations
     }
 
-    private fun getLocationsDottysRequest(mContext: DottysMainNavigationActivity, latitude: String, longitude: String) {
+    private fun getLocationsDottysRequest(
+        mContext: DottysMainNavigationActivity,
+        latitude: String,
+        longitude: String
+    ) {
         val mQueue = Volley.newRequestQueue(mContext)
         mContext.showLoader(mContext)
 
-        val locationURL = "locations?distance=150&limit=100&page=1&latitude="+latitude+"&longitude="+longitude
-        val mockUrl = "locations?distance=150&limit=100&page=1&latitude=41.6618384&longitude=-88.0011799"
+        val locationURL =
+            "locations?distance=150&limit=100&page=1&latitude=" + latitude + "&longitude=" + longitude
+        val mockUrl =
+            "locations?distance=150&limit=100&page=1&latitude=41.6618384&longitude=-88.0011799"
         val jsonObjectRequest = object : JsonObjectRequest(
             Method.GET,
             mContext.baseUrl + locationURL,
@@ -222,13 +237,14 @@ class LocationsViewModel : ViewModel() {
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {
                     mContext.hideLoader(mContext)
-                    Toast.makeText(mContext, "Has no nearest locations", Toast.LENGTH_LONG).show().run {
+                    Toast.makeText(mContext, "Has no nearest locations", Toast.LENGTH_LONG).show()
+                        .run {
 //                        if ( locationFragment.fragmentManager?.backStackEntryCount ?: 0 > 0) {
 //                            locationFragment.fragmentManager?.popBackStack()
 //                        }
-                        val intent = Intent(mContext, DottysMainNavigationActivity::class.java)
-                        mContext.startActivity(intent)
-                    }
+                            val intent = Intent(mContext, DottysMainNavigationActivity::class.java)
+                            mContext.startActivity(intent)
+                        }
 
                 }
             }) { //no semicolon or coma

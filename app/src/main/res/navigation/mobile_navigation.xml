@@ -17,11 +17,16 @@
         android:label="@string/menu_locations"
         tools:layout="@layout/fragment_locations" />
 
+<!--    <fragment-->
+<!--        android:id="@+id/nav_rewards"-->
+<!--        android:name="com.keylimetie.dottys.ui.rewards.RewardsFragment"-->
+<!--        android:label="@string/nav_rewards"-->
+<!--        tools:layout="@layout/fragment_slideshow" />-->
     <fragment
         android:id="@+id/nav_rewards"
-        android:name="com.keylimetie.dottys.ui.rewards.RewardsFragment"
+        android:name="com.keylimetie.dottys.ui.drawing.DrawingFragment"
         android:label="@string/menu_rewards"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_drawing" />
 
     <fragment
         android:id="@+id/nav_drawing"
@@ -33,7 +38,7 @@
         android:id="@+id/nav_privacy_policy"
         android:name="com.keylimetie.dottys.ui.reusable_fragment.ReusableFragment"
         android:label="@string/menu_privacy_policy"
-        tools:layout="@layout/fragment_share" />
+        tools:layout="@layout/fragment_share"/>
 
     <fragment
         android:id="@+id/nav_profile"

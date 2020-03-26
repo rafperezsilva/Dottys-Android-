@@ -6,14 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.navArgs
 import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.R
+import com.keylimetie.dottys.ui.dashboard.DashboardViewModel
 
 class DrawingFragment : Fragment(), DottysDrawingDelegates {
 
     private lateinit var drawingViewModel: DrawingViewModel
-
-    override fun onCreateView(
+     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -22,7 +23,6 @@ class DrawingFragment : Fragment(), DottysDrawingDelegates {
             ViewModelProviders.of(this).get(DrawingViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_drawing, container, false)
         var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
-
         activity?.let { drawingViewModel.initViewSetting(this, null, it, root) }
         return root
     }
@@ -31,7 +31,7 @@ class DrawingFragment : Fragment(), DottysDrawingDelegates {
     }
 
     override fun getUserDrawings(drawing: DottysDrawingUserModel) {
+        drawingViewModel.initListView()
     }
-
 
 }

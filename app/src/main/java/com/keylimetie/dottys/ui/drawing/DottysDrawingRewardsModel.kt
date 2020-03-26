@@ -1,8 +1,10 @@
 package com.keylimetie.dottys.ui.drawing
 
-import com.fasterxml.jackson.annotation.*
-import com.fasterxml.jackson.databind.*
-import com.fasterxml.jackson.module.kotlin.*
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 
 val mapper = jacksonObjectMapper().apply {
     propertyNamingStrategy = PropertyNamingStrategy.LOWER_CAMEL_CASE

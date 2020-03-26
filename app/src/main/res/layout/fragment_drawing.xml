@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary">
@@ -40,16 +41,16 @@
 
 
         <ListView
+            android:layout_marginTop="15dp"
             android:id="@+id/drawings_listview"
-            android:layout_width="356dp"
+            android:layout_width="357dp"
             android:layout_height="0dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="25dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/redeem_rewards_textview" />
+            app:layout_constraintTop_toBottomOf="@+id/drawing_subtitle_textview" />
 
         <TextView
             android:id="@+id/drawing_title_textview"
@@ -58,11 +59,25 @@
             android:layout_weight="1"
             android:fontFamily="@font/proxima_nova_semibold"
             android:text="You have"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginTop="5dp"
             android:textColor="#FFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+          <TextView
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:id="@+id/drawing_subtitle_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/proxima_nova_regular"
+            android:text="You have"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="15dp"
+            android:textColor="#FFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/drawing_title_textview" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,8 +1,10 @@
 package com.keylimetie.dottys.ui.drawing
 
-import com.fasterxml.jackson.annotation.*
-import com.fasterxml.jackson.databind.*
-import com.fasterxml.jackson.module.kotlin.*
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 
 val drawingMapper = jacksonObjectMapper().apply {
     propertyNamingStrategy = PropertyNamingStrategy.LOWER_CAMEL_CASE
@@ -10,7 +12,7 @@ val drawingMapper = jacksonObjectMapper().apply {
 }
 
 data class DottysDrawingUserModel (
-    val drawings: List<Drawing>? = null
+    val drawings: List<DottysDrawing>? = null
 ) {
     fun toJson() = drawingMapper.writeValueAsString(this)
 
@@ -19,7 +21,7 @@ data class DottysDrawingUserModel (
     }
 }
 
-data class Drawing (
+data class DottysDrawing(
     @get:JsonProperty("_id")@field:JsonProperty("_id")
     val id: String? = null,
 
@@ -27,8 +29,8 @@ data class Drawing (
     val endDate: String? = null,
     val createdAt: String? = null,
     val updatedAt: String? = null,
-    val title: String? = null,
-    val subtitle: String? = null,
+    var title: String? = null,
+    var subtitle: String? = null,
     val startDate: String? = null,
     val regionName: String? = null,
 

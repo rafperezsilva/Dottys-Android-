@@ -76,10 +76,10 @@ class DashboardViewModel : ViewModel() {
             rootView.findViewById<TextView>(com.keylimetie.dottys.R.id.quarterly_end_days)
 
         nameDashboard.text = userCurrentUserDataObserver?.currentUserModel?.fullName
-        val s: String = NumberFormat.getIntegerInstance()
+        val stringFormated: String = NumberFormat.getIntegerInstance()
             .format(userCurrentUserDataObserver?.currentUserModel?.points)
         cashRewards.text = "$" + getCashForDrawing()
-        pointsEarned.text = s
+        pointsEarned.text = stringFormated
         locationDashboard.text = addressLocationFotmatted(rewardsLoaction)
         weeklyRewards.text =
             userCurrentUserDataObserver?.dawingSummaryModel?.filter { it.drawingType == "WEEKLY" }
@@ -308,7 +308,7 @@ class DashboardViewModel : ViewModel() {
         val drawingViewModel = DrawingViewModel()
         drawingViewModel.initViewSetting(
             fragment as  DashboardFragment,
-            userCurrentUserDataObserver?.currentUserModel?.homeLocationID
+            userCurrentUserDataObserver?.currentUserModel?.homeLocationID, null, null
         )
     }
 

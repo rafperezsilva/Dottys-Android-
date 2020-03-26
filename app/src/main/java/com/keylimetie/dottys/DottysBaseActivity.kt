@@ -1,7 +1,6 @@
 package com.keylimetie.dottys
 
 import android.Manifest
-
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -10,9 +9,6 @@ import android.content.res.Configuration
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
-import android.view.ViewTreeObserver.OnGlobalLayoutListener
-import android.view.Window
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageButton
@@ -22,7 +18,6 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.dottysrewards.dottys.service.VolleyService
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.model.LatLng
@@ -35,22 +30,22 @@ enum class PreferenceTypeKey {
     USER_DATA, TOKEN
 }
 
-open class DottysBaseActivity: AppCompatActivity() {
+open class DottysBaseActivity : AppCompatActivity() {
     var sharedPreferences: SharedPreferences? = null
     var editor: SharedPreferences.Editor? = null
-    var actionBarView:  View? = null
-    var baseUrl:  String? = null
+    var actionBarView: View? = null
+    var baseUrl: String? = null
     var progressBar: ProgressBar? = null
-    val MAP_VIEW_BUNDLE_KEY: String = "mapViewBundleKey"
-    val PERMISSION_ID = 123
-    lateinit var mFusedLocationClient: FusedLocationProviderClient
+//    val MAP_VIEW_BUNDLE_KEY: String = "mapViewBundleKey"
+//    val PERMISSION_ID = 123
+//    lateinit var mFusedLocationClient: FusedLocationProviderClient
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         VolleyService.initialize(this)
         baseUrl = this.resources.getString(R.string.url_base_production)
         progressBar = findViewById(R.id.progress_loader)
         //hideLoader(this)
-        sharedPreferences =  this.getSharedPreferences(
+        sharedPreferences = this.getSharedPreferences(
             PreferenceTypeKey.USER_DATA.name,
             Context.MODE_PRIVATE
         )
@@ -64,31 +59,32 @@ open class DottysBaseActivity: AppCompatActivity() {
 
     }
 
-     fun actionBarSetting(actionBar: ActionBar, coloBackground: ColorDrawable){
+    fun actionBarSetting(actionBar: ActionBar, coloBackground: ColorDrawable) {
         actionBar.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         actionBar.setDisplayShowCustomEnabled(true)
         actionBar.setCustomView(R.layout.custom_action_bar)
         actionBar.elevation = 1F
         actionBarView = actionBar.customView
-         actionBar.setBackgroundDrawable(coloBackground)
+        actionBar.setBackgroundDrawable(coloBackground)
         val backButton = actionBarView?.findViewById<ImageButton>(R.id.back_image_button)
         backButton?.setOnClickListener {
             finish()
         }
     }
 
-    fun getDiferencesDays(dateString:String):String{
-        val date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSS").parse(dateString.replace("Z",""))
-        val diferenceAtTime =  date.time - Date().time
-        return "end in "+ (diferenceAtTime / (1000 * 3600 * 24)).toString() + " days"
+    fun getDiferencesDays(dateString: String): String {
+        val date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSS").parse(dateString.replace("Z", ""))
+        val diferenceAtTime = date.time - Date().time
+        return "end in " + (diferenceAtTime / (1000 * 3600 * 24)).toString() + " days"
     }
+
     fun saveDataPreference(keyPreference: PreferenceTypeKey, jsonData: String) {
         editor!!.putString(keyPreference.name, jsonData)
         editor!!.commit()
     }
 
     fun removeReferenceData(keyPreference: PreferenceTypeKey) {
-        editor =  sharedPreferences!!.edit()
+        editor = sharedPreferences!!.edit()
         editor!!.remove(keyPreference.name)
         editor!!.commit()
     }
@@ -125,7 +121,7 @@ open class DottysBaseActivity: AppCompatActivity() {
     }
 
 
-    fun  finishSession(mContext: DottysBaseActivity){
+    fun finishSession(mContext: DottysBaseActivity) {
         Toast.makeText(mContext, "User Logout", Toast.LENGTH_LONG).show()
         val editPref = mContext.sharedPreferences?.edit()
         editPref?.clear()
@@ -159,29 +155,30 @@ open class DottysBaseActivity: AppCompatActivity() {
         }
 //        gpsTracker?.let { activity?.let { it1 -> getLocation(it, it1) } }
     }
-      fun getLocation( gpsTracker: GpsTracker,  activity: Context): LatLng {
-      //  gpsTracker = GpsTracker(activity);
+
+    fun getLocation(gpsTracker: GpsTracker, activity: Context): LatLng {
+        //  gpsTracker = GpsTracker(activity);
         if (gpsTracker.canGetLocation()) {
             val latitude = gpsTracker.getLatitude()
             val longitude = gpsTracker.getLongitude()
-            return  LatLng(latitude, longitude)
+            return LatLng(latitude, longitude)
         } else {
             gpsTracker.showSettingsAlert()
         }
-        return  LatLng(0.0, 0.0)
+        return LatLng(0.0, 0.0)
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         // Checks whether a hardware keyboard is available
         if (newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO) {
-            Toast.makeText(this, "keyboard visible", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "keyboard visible", Toast.LENGTH_SHORT).show()
         } else if (newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_YES) {
-            Toast.makeText(this, "keyboard hidden", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "keyboard hidden", Toast.LENGTH_SHORT).show()
         }
     }
 
-    fun hideKeyboard(){
+    fun hideKeyboard() {
         val imm: InputMethodManager =
             getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(window.decorView.rootView.windowToken, 0)
