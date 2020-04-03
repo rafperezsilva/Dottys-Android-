@@ -27,7 +27,7 @@
             android:textSize = "17sp"
             android:textColor = "#FFF"
             android:layout_marginRight="35dp"
-            app:fontFamily = "@font/proxima_nova_light" />
+            app:fontFamily = "@font/proxima_nova_regular" />
     </LinearLayout>
 
 </LinearLayout>

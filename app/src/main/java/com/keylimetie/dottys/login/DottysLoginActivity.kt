@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import com.keylimetie.dottys.*
 
@@ -17,7 +18,9 @@ class DottysLoginActivity : DottysBaseActivity(), DottysLoginDelegate {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dottys_login)
         viewModel.initView(this)
-         this.supportActionBar?.let { actionBarSetting(it, ColorDrawable(resources.getColor(R.color.colorPrimary    ))) }
+         this.supportActionBar?.let { actionBarSetting(it, ColorDrawable(resources.getColor(R.color.colorPrimary))) }
+         val titleBar = actionBarView!!.findViewById<TextView>(R.id.title_bar)
+         titleBar.text = "Login"
     }
 
     override fun onUserLogin(registerUserData: DottysLoginResponseModel) {

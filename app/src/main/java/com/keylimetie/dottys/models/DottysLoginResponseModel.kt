@@ -22,9 +22,9 @@ data class DottysLoginResponseModel(
     val anniversaryDate: Any? = null,
     val cell: String? = null,
     val dob: String? = null,
-    val email: String? = null,
-    var firstName: String? = null,
-    var lastName: String? = null,
+    var email: String? = null,
+    val firstName: String? = null,
+    val lastName: String? = null,
     val state: String? = null,
     val zip: String? = null,
     val lastLoginAt: String? = null,
@@ -36,6 +36,8 @@ data class DottysLoginResponseModel(
     val city: String? = null,
     val timezone: String? = null,
     val totalMonthlyPlayDuration: Long? = null,
+    val phoneNumberVerified: Boolean? = null,
+    val profilePicture: String? = null,
     val weeklyVisits: Long? = null,
     val weeklyPlayDuration: Long? = null,
     val points: Long? = null,
@@ -50,11 +52,13 @@ data class DottysLoginResponseModel(
     @get:JsonProperty("isDeleted") @field:JsonProperty("isDeleted")
     val isDeleted: Boolean? = null,
 
+    val emailVerified: Boolean? = null,
     val deviceToken: String? = null,
+    val cellVerified: Boolean? = null,
     val averageMonthlyPlayDuration: Long? = null,
     val averageMonthlyPlayDays: Long? = null,
     val averageDailyPlayDuration: Long? = null,
-    val acl: List<ACL>? = null,
+    val acl: List<DottysACL>? = null,
     val fullName: String? = null,
     val token: String? = null
 ) {
@@ -65,7 +69,7 @@ data class DottysLoginResponseModel(
     }
 }
 
-data class ACL(
+data class DottysACL(
     @get:JsonProperty("_id") @field:JsonProperty("_id")
     val id: String? = null,
 
@@ -116,7 +120,7 @@ data class DottysRegisterResponseModel(
     val averageMonthlyPlayDuration: Long? = null,
     val averageMonthlyPlayDays: Long? = null,
     val averageDailyPlayDuration: Long? = null,
-    val acl: List<ACL>? = null,
+    val acl: List<DottysACL>? = null,
     val fullName: String? = null,
     val token: String? = null
 ) {
@@ -127,16 +131,40 @@ data class DottysRegisterResponseModel(
     }
 }
 
-//    fun toJson() = mapperBeacon.writeValueAsString(this)
-//
-//    companion object {
-//        fun fromJson(json: String) = mapperBeacon.readValue<DottysRegisterResponseModel>(json)
-//    }
-//}
-//
-//data class ACL (
-//    @get:JsonProperty("_id")@field:JsonProperty("_id")
-//    val id: String? = null,
-//
-//    val role: String? = null
-//)
+data class DottysRegisterRequestModel(
+
+    var address1: String? = null,
+    var address2: String? = null,
+    var anniversaryDate: Any? = null,
+    var cell: String? = null,
+    var email: String? = null,
+    var firstName: String? = null,
+    var lastName: String? = null,
+    var zip: String? = null,
+    var password: String? = null,
+    var city: String? = null
+
+
+) {
+    fun toJson() = mapper.writeValueAsString(this)
+
+    companion object {
+        fun fromJson(json: String) = mapper.readValue<DottysLoginResponseModel>(json)
+    }
+}
+
+
+data class DottysErrorModel (
+    val error: Error? = null
+) {
+    fun toJson() = mapper.writeValueAsString(this)
+
+    companion object {
+        fun fromJson(json: String) = mapper.readValue<DottysErrorModel>(json)
+    }
+}
+
+data class Error (
+    val messages: List<String>? = null,
+    val stack: String? = null
+)

@@ -93,12 +93,6 @@ class LocationsViewModel : ViewModel() {
                     it.city?.toLowerCase()?.contains(query) ?: false ||
                     it.zip?.toLowerCase()?.contains(query) ?: false
         }
-
-//        if (flocatinoList.size == 0) {
-//            flocatinoList =  locations.filter { it.address1?.toLowerCase()?.contains(query) ?: false || it.address2?.toLowerCase()?.contains(query) ?: false }
-//        } else if(flocatinoList.size == 0){
-//            flocatinoList =  locations.filter { it.zip?.contains(query) ?: false }
-//        }
         return flocatinoList
     }
 

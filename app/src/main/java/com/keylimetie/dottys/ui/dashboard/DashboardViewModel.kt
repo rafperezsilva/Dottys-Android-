@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.viewpager.widget.ViewPager
 import com.android.volley.AuthFailureError
+import com.android.volley.NetworkResponse
 import com.android.volley.Response
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.ImageRequest
@@ -36,7 +37,7 @@ import kotlin.properties.Delegates
 class DashboardViewModel : ViewModel() {
 
     var userCurrentUserDataObserver: DottysCurrentUserObserver? = null
-    private val displayMetrics = DisplayMetrics()
+   // private val displayMetrics = DisplayMetrics()
 
     fun initDashboardViewSetting(
         fragment: DashboardFragment,
@@ -133,9 +134,14 @@ class DashboardViewModel : ViewModel() {
     ) {
         val imageView = rootView.findViewById<CircleImageView>(id.profile_dashboard_image)
         val email = userCurrentUserDataObserver?.currentUserModel?.email//"mrirenita@gmail.com"
-        val mQueue = Volley.newRequestQueue(mContext)
-        val url = "https://www.gravatar.com/avatar/" + email?.md5()
+
         //   mContext.showLoader(mContext)
+        var url = "https://www.gravatar.com/avatar/" + email?.md5()
+        if (userCurrentUserDataObserver?.currentUserModel?.profilePicture != null){
+             url =  userCurrentUserDataObserver?.currentUserModel?.profilePicture ?: ""
+        }
+
+        val mQueue = Volley.newRequestQueue(mContext)
 
         val request = ImageRequest(url,
             Response.Listener { bitmap ->
@@ -155,6 +161,7 @@ class DashboardViewModel : ViewModel() {
 
 
         mQueue.add(request)
+
     }
 
     private fun getDrawingSummary(mContext: DottysMainNavigationActivity) {
@@ -297,6 +304,12 @@ class DashboardViewModel : ViewModel() {
                 params["Authorization"] = mContext.getUserPreference().token!!
                 return params
             }
+            override fun parseNetworkResponse(response: NetworkResponse?): Response<JSONObject> {
+                 println(response.toString())
+
+                return super.parseNetworkResponse(response)
+            }
+
 
         }
         mQueue.add(jsonObjectRequest)
@@ -316,38 +329,38 @@ class DashboardViewModel : ViewModel() {
         view: DottysMainNavigationActivity,
         drawingSummary: DottysGlobalDataModel
     ) {
-        view.windowManager.defaultDisplay.getMetrics(displayMetrics)
+        view.windowManager.defaultDisplay.getMetrics(view.displayMetrics)
         val pager = view.findViewById<ViewPager>(id.pager_dashboard)
-        pager.adapter = DashboardPagerAdapter(view, drawingSummary, displayMetrics)
+        pager.adapter = DashboardPagerAdapter(view, drawingSummary, view.displayMetrics)
         getUserRewards(view)
     }
 
 }
 
-/* CURRENT USER PROTOCOL */
-//region
-interface DottysDashboardDelegates {
-    fun getDrawingSummary(dawingSummary: DottysDrawingSumaryModel)
-    fun getCurrentUser(currentUser: DottysLoginResponseModel)
-    fun getUserRewards(rewards: DottysRewardsModel)
-    fun getGlobalData(gloabalData: DottysGlobalDataModel)
-}
+        /* CURRENT USER PROTOCOL */
+        //region
+        interface DottysDashboardDelegates {
+            fun getDrawingSummary(dawingSummary: DottysDrawingSumaryModel)
+            fun getCurrentUser(currentUser: DottysLoginResponseModel)
+            fun getUserRewards(rewards: DottysRewardsModel)
+            fun getGlobalData(gloabalData: DottysGlobalDataModel)
+        }
 
-class DottysCurrentUserObserver(lisener: DottysDashboardDelegates) {
-    private val element = ArrayList<DottysDrawingSumaryModelElement>()
-    var dawingSummaryModel: DottysDrawingSumaryModel by Delegates.observable(
-        initialValue = DottysDrawingSumaryModel(element),
-        onChange = { prop, old, new -> lisener.getDrawingSummary(new) })
+        class DottysCurrentUserObserver(lisener: DottysDashboardDelegates) {
+            private val element = ArrayList<DottysDrawingSumaryModelElement>()
+            var dawingSummaryModel: DottysDrawingSumaryModel by Delegates.observable(
+                initialValue = DottysDrawingSumaryModel(element),
+                onChange = { prop, old, new -> lisener.getDrawingSummary(new) })
 
-    var currentUserModel: DottysLoginResponseModel by Delegates.observable(
-        initialValue = DottysLoginResponseModel(),
-        onChange = { prop, old, new -> lisener.getCurrentUser(new) })
+            var currentUserModel: DottysLoginResponseModel by Delegates.observable(
+                initialValue = DottysLoginResponseModel(),
+                onChange = { prop, old, new -> lisener.getCurrentUser(new) })
 
-    var currentUserRewards: DottysRewardsModel by Delegates.observable(
-        initialValue = DottysRewardsModel(),
-        onChange = { prop, old, new -> lisener.getUserRewards(new) })
+            var currentUserRewards: DottysRewardsModel by Delegates.observable(
+                initialValue = DottysRewardsModel(),
+                onChange = { prop, old, new -> lisener.getUserRewards(new) })
 
-    var currentGlobalData: DottysGlobalDataModel by Delegates.observable(
-        initialValue = DottysGlobalDataModel(),
-        onChange = { prop, old, new -> lisener.getGlobalData(new) })
-}
+            var currentGlobalData: DottysGlobalDataModel by Delegates.observable(
+                initialValue = DottysGlobalDataModel(),
+                onChange = { prop, old, new -> lisener.getGlobalData(new) })
+        }

@@ -8,6 +8,9 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.TextUtils
+import android.util.DisplayMetrics
+import android.util.Patterns
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
@@ -24,6 +27,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.keylimetie.dottys.splash.DottysSplashActivity
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.regex.Pattern
 
 
 enum class PreferenceTypeKey {
@@ -36,13 +40,11 @@ open class DottysBaseActivity : AppCompatActivity() {
     var actionBarView: View? = null
     var baseUrl: String? = null
     var progressBar: ProgressBar? = null
-//    val MAP_VIEW_BUNDLE_KEY: String = "mapViewBundleKey"
-//    val PERMISSION_ID = 123
-//    lateinit var mFusedLocationClient: FusedLocationProviderClient
+    val displayMetrics = DisplayMetrics()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         VolleyService.initialize(this)
-        baseUrl = this.resources.getString(R.string.url_base_production)
+        baseUrl = this.resources.getString(R.string.url_base_development)
         progressBar = findViewById(R.id.progress_loader)
         //hideLoader(this)
         sharedPreferences = this.getSharedPreferences(
@@ -182,6 +184,62 @@ open class DottysBaseActivity : AppCompatActivity() {
         val imm: InputMethodManager =
             getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(window.decorView.rootView.windowToken, 0)
+    }
+
+    fun isValidEmail(target: CharSequence?): Boolean {
+        return !TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target)
+            .matches()
+    }
+
+    fun isValidPassword(data: String): Boolean {
+        val str = data
+        var valid = true
+
+        // Password policy check
+        // Password should be minimum minimum 8 characters long
+        if (str.length < 8) {
+            valid = false
+        }
+        // Password should contain at least one number
+//        var exp = ".*[0-9].*"
+//        var pattern = Pattern.compile(exp, Pattern.CASE_INSENSITIVE)
+//        var matcher = pattern.matcher(str)
+//        if (!matcher.matches()) {
+//            valid = false
+//        }
+
+        // Password should contain at least one capital letter
+        var exp = ".*[A-Z].*"
+        var pattern = Pattern.compile(exp)
+        var matcher = pattern.matcher(str)
+        if (!matcher.matches()) {
+            valid = false
+        }
+
+        // Password should contain at least one small letter
+        exp = ".*[a-z].*"
+        pattern = Pattern.compile(exp)
+        matcher = pattern.matcher(str)
+        if (!matcher.matches()) {
+            valid = false
+        }
+
+        // Password should contain at least one special character
+        // Allowed special characters : "~!@#$%^&*()-_=+|/,."';:{}[]<>?"
+//        exp = ".*[~!@#\$%\\^&*()\\-_=+\\|\\[{\\]};:'\",<.>/?].*"
+//        pattern = Pattern.compile(exp)
+//        matcher = pattern.matcher(str)
+//        if (!matcher.matches()) {
+//            valid = false
+//        }
+
+        // Set error if required
+//        if (updateUI) {
+//            val error: String? = if (valid) null else PASSWORD_POLICY
+//            setError(data, error)
+//        }
+
+        return valid
     }
 
 /*

@@ -9,6 +9,7 @@ import androidx.viewpager.widget.ViewPager
 import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.R
 import com.keylimetie.dottys.login.DottysLoginActivity
+import com.keylimetie.dottys.register.DottysRegisterActivity
 import com.viewpagerindicator.CirclePageIndicator
 
 
@@ -16,19 +17,19 @@ class DottysSplashViewModel : ViewModel() {
     private lateinit var viewPager: ViewPager
     private lateinit var loginButton: Button
     private lateinit var sigupButton: Button
-    private val displayMetrics = DisplayMetrics()
+ //   private val displayMetrics = DisplayMetrics()
 
      fun initView(context: DottysSplashActivity){
         viewPager = context.findViewById(R.id.splashViewPager)
         loginButton = context.findViewById(R.id.login_splash_button)
         sigupButton = context.findViewById(R.id.sign_up_splash_button)
-        context.windowManager.defaultDisplay.getMetrics(displayMetrics)
+        context.windowManager.defaultDisplay.getMetrics(context.displayMetrics)
 
          val indicator =  context.findViewById(R.id.indicator) as CirclePageIndicator
          viewPager.adapter = CustomPagerAdapter(
              context,
              initSplashData(context),
-             displayMetrics
+             context.displayMetrics
          )
          indicator.setViewPager(viewPager)
          buttonLisener(context)
@@ -79,6 +80,8 @@ class DottysSplashViewModel : ViewModel() {
             context.startActivity(intentLogin)
         }
         sigupButton.setOnClickListener {
+            val intent = Intent(context, DottysRegisterActivity::class.java)
+            context.startActivity(intent)
         }
     }
 

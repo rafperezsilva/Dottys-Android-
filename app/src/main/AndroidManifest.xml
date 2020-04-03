@@ -6,25 +6,28 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
-    <uses-permission android:name="com.keylimetie.dottys.permission.MAPS_RECEIVE"/>
-
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="com.keylimetie.dottys.permission.MAPS_RECEIVE" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission
         android:name="android.permission.BLUETOOTH"
         android:required="false" />
     <uses-permission
         android:name="android.permission.BLUETOOTH_ADMIN"
         android:required="false" />
+
     <permission
         android:name="com.keylimetie.dottys.permission.MAPS_RECEIVE"
-        android:protectionLevel="signature"/>
+        android:protectionLevel="signature" />
     <permission
-    android:name="com.keylimetie.dottys.permission.ACCESS_FINE_LOCATION"
-    android:protectionLevel="signature"/>
-   <permission
-    android:name="com.keylimetie.dottys.permission.ACCESS_COARSE_LOCATION"
-    android:protectionLevel="signature"/>
+        android:name="com.keylimetie.dottys.permission.ACCESS_FINE_LOCATION"
+        android:protectionLevel="signature" />
+    <permission
+        android:name="com.keylimetie.dottys.permission.ACCESS_COARSE_LOCATION"
+        android:protectionLevel="signature" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -33,25 +36,27 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-<!--        <meta-data-->
-<!--            android:name="com.google.android.maps.v2.API_KEY"-->
-<!--            android:value="AIzaSyDbgunZHBK75Lb-jJmGKV9M6HmPbCn4U1E" />-->
+        <activity android:name=".register.DottysProfilePictureActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+        <activity android:name=".register.DottysRegisterActivity" />
+        <activity android:name=".forgot_password.DottysEnterPasswordActivity" />
+        <activity android:name=".forgot_password.DottysEnterVerificationCodeActivity" />
+        <activity android:name=".forgot_password.DottysVerificationTypeActivity" />
+        <activity android:name=".forgot_password.DottysForgotPasswordMainActivity" /> <!-- <meta-data -->
+        <!-- android:name="com.google.android.maps.v2.API_KEY" -->
+        <!-- android:value="AIzaSyDbgunZHBK75Lb-jJmGKV9M6HmPbCn4U1E" /> -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBUH7AKtM5vEsx4IpST9tb6-l2LPu9SvtE"
-            />
+            android:value="AIzaSyBUH7AKtM5vEsx4IpST9tb6-l2LPu9SvtE" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <activity android:name=".redeem.DottysRedeemRewardsActivity"
-            ></activity>
+
+        <activity android:name=".redeem.DottysRedeemRewardsActivity" />
         <activity
             android:name=".DottysMainNavigationActivity"
             android:label="@string/title_activity_dottys_main_navigation"
-            android:theme="@style/AppTheme.NoActionBar">
-
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".login.DottysLoginActivity" />
         <activity
             android:name=".splash.DottysSplashActivity"
@@ -62,7 +67,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

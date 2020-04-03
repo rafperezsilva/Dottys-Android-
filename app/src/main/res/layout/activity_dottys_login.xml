@@ -32,19 +32,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/dottys_image"/>
-        <TextView
-            android:layout_weight="0"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="25sp"
-             android:textColor="@color/colorPrimary"
-            android:fontFamily="@font/proxima_nova_light"
-            android:text="Welcome back!"/>
-        <LinearLayout
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            <TextView
+                android:layout_weight="0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                 android:textColor="@color/colorPrimary"
+                android:fontFamily="@font/proxima_nova_light"
+                android:text="Welcome back!"/>
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
             <LinearLayout
                 android:layout_marginLeft="35dp"
@@ -95,24 +96,89 @@
                 android:background="#27383C3E"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"/>
+
+            <TextView
+                android:id="@+id/forgot_passwords_textview"
+                android:textColor="#5A9402"
+                android:layout_marginTop="30.5dp"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:text="Forgot password?"
+                android:textAlignment="textStart"
+                android:fontFamily="@font/proxima_nova_light"/>
+            <RelativeLayout
+                android:gravity="left"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="45dp">
+
+                <Button
+                    android:id="@+id/phanton_singup_button"
+                    android:background="@color/transparent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/sigup_textview"
+                    android:layout_alignStart="@+id/need_to_register"
+                    android:layout_alignParentTop="@+id/need_to_register"
+                    android:layout_alignParentBottom="@+id/need_to_register"
+                    />
+
+                <TextView
+                    android:id="@+id/need_to_register"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"
+
+                    android:layout_weight="0"
+                    android:fontFamily="@font/proxima_nova_light"
+                    android:text="Need to register?"
+                    android:textAlignment="textStart"
+                    android:textColor="#56585A" />
+
+                <TextView
+                    android:id="@+id/sigup_textview"
+                    android:lines="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                     android:layout_marginRight="35dp"
+                    android:layout_weight="0"
+                    android:fontFamily="@font/proxima_nova_light"
+                    android:text="Sign up for free?"
+                    android:textAlignment="textStart"
+                    android:textColor="#5A9402"
+                    android:layout_toRightOf="@+id/need_to_register"/>
+
+
+            </RelativeLayout>
+
+
         </LinearLayout>
+
         <Button
             android:id="@+id/submit_login_button"
-            android:elevation="1dp"
-            android:letterSpacing="0.2"
-            android:shadowColor="#000"
-            android:shadowDy="1"
-            android:shadowDx="1"
-            android:shadowRadius="1"
-            android:textColor="#FFF"
-            android:textSize="23sp"
-            android:textAlignment="center"
-            android:fontFamily="@font/proxima_nova_light"
-            android:text="SUBMIT"
-            android:layout_weight="0"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:background="#5A9402"/>
+            android:layout_weight="0"
+            android:background="#5A9402"
+            android:elevation="1dp"
+            android:fontFamily="@font/proxima_nova_light"
+            android:letterSpacing="0.2"
+            android:shadowColor="#000"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="1"
+            android:text="SUBMIT"
+            android:textAlignment="center"
+            android:textColor="#FFF"
+            android:textSize="23sp" />
     </LinearLayout>
 
 

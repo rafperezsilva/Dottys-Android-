@@ -8,7 +8,7 @@
     <string name="title_four_splash_item">Are you ready? Let’s Go!</string>
     <string name="subtitle_four_splash_item">Receive notifications for contests, special events, promotions and other incentives only available through Player Perks.</string>
 
-    <string name="url_base_development">http://dottys-dev.lextech.com/api/</string>
+    <string name="url_base_development">https://uat.rewards.icsdottys.com/api/</string>
     <string name="url_base_production">https://rewards.icsdottys.com/api/</string>
     <string name="title_activity_dottys_main">DottysMainActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>

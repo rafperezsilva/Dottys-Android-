@@ -249,8 +249,6 @@ class DrawingViewModel : ViewModel() {
                     // getDrawingSummary(mContext)
                     userDrawing = user
                     drawingObserver?.drawingsModel = user
-
-
                 }
             },
             object : Response.ErrorListener {
