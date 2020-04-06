@@ -1,6 +1,5 @@
 package com.keylimetie.dottys.models
 
-
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.core.JsonGenerator
@@ -38,7 +37,7 @@ val mapper = jacksonObjectMapper().apply {
 
 data class DottysRewardsModel(
     val pointsForCashCount: Long? = null,
-    val rewards: List<DottysReward>? = null
+    var rewards: List<DottysRewardModel>? = null
 ) {
     fun toJson() = mapper.writeValueAsString(this)
 
@@ -46,8 +45,47 @@ data class DottysRewardsModel(
         fun fromJson(json: String) = mapper.readValue<DottysRewardsModel>(json)
     }
 }
+//
+//val mapperRewards = jacksonObjectMapper().apply {
+//    propertyNamingStrategy = PropertyNamingStrategy.LOWER_CAMEL_CASE
+//    setSerializationInclusion(JsonInclude.Include.NON_NULL)
+//}
 
-data class DottysReward(
+//data class DottysRewardModel (
+//    val description: String? = null,
+//
+//    @get:JsonProperty("homeLocationId")@field:JsonProperty("homeLocationId")
+//    val homeLocationID: String? = null,
+//
+//    val subtitle: String? = null,
+//
+//    @get:JsonProperty("isSpun")@field:JsonProperty("isSpun")
+//    val isSpun: Boolean? = null,
+//
+//    @get:JsonProperty("_id")@field:JsonProperty("_id")
+//    val id: String? = null,
+//
+//    val endDate: String? = null,
+//
+//    @get:JsonProperty("isDeleted")@field:JsonProperty("isDeleted")
+//    val isDeleted: Boolean? = null,
+//
+//    val title: String? = null,
+//
+//    @get:JsonProperty("userId")@field:JsonProperty("userId")
+//    val userID: String? = null,
+//
+//    val iconType: IconType? = null,
+//    val offerType: String? = null,
+//    val graphicType: String? = null,
+//    val fullName: String? = null,
+//    val startDate: String? = null,
+//    val value: Long? = null,
+//    val redeemed: Boolean? = null
+//)
+
+
+data class DottysRewardModel(
     @get:JsonProperty("_id") @field:JsonProperty("_id")
     val id: String? = null,
 
@@ -94,6 +132,24 @@ data class DottysReward(
     val validationCode: String? = null,
     val redeemedValidationCode: String? = null
 )
+
+
+//{
+//    fun toJson() = mapper.writeValueAsString(this)
+//
+//    companion object {
+//        fun fromJson(json: String) = mapper.readValue<DottysReward>(json)
+//    }
+//}
+
+
+//{
+//    fun toJson() = mapper.writeValueAsString(this)
+//
+//    companion object {
+//        fun fromJson(json: String) = mapper.readValue<DottysRewardModel>(json)
+//    }
+//}
 
 enum class IconType(val value: String) {
     DailyCheckin("dailyCheckin"),

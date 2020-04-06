@@ -9,12 +9,9 @@ import androidx.annotation.RequiresApi
 import com.keylimetie.dottys.*
 
 class DottysLoginActivity : DottysBaseActivity(), DottysLoginDelegate {
+     private val viewModel = DottysLoginViewModel()
 
-
-
-    private val viewModel = DottysLoginViewModel()
-
-     override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dottys_login)
         viewModel.initView(this)

@@ -9,8 +9,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="com.keylimetie.dottys.permission.MAPS_RECEIVE" />
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission
         android:name="android.permission.BLUETOOTH"
         android:required="false" />
@@ -36,8 +36,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".register.DottysProfilePictureActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+        <activity android:name=".redeem.DottysRewardRedeemedActivity"></activity>
+        <activity android:name=".redeem.DottysCashRedeemRewardsActivity" />
+        <activity
+            android:name=".register.DottysProfilePictureActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".register.DottysRegisterActivity" />
         <activity android:name=".forgot_password.DottysEnterPasswordActivity" />
         <activity android:name=".forgot_password.DottysEnterVerificationCodeActivity" />

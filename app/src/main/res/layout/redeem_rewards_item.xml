@@ -6,9 +6,10 @@
     >
 
     <LinearLayout
-        android:layout_marginBottom="13dp"
+        android:id="@+id/linearLayout5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="13dp"
         android:background="#FFF"
         android:gravity="center"
         android:orientation="vertical"
@@ -18,11 +19,12 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
+
             <LinearLayout
 
                 android:layout_width="match_parent"
@@ -30,11 +32,11 @@
                 android:orientation="horizontal">
 
                 <ImageView
-android:layout_marginTop="5dp"
-                    android:scaleType="fitCenter"
                     android:id="@+id/reward_image_item"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
+                    android:layout_marginTop="5dp"
+                    android:scaleType="fitCenter"
                     android:src="@mipmap/cash_10_image" />
 
                 <LinearLayout
@@ -77,10 +79,11 @@ android:layout_marginTop="5dp"
         </LinearLayout>
 
         <Button
-            android:layout_weight="0"
+            android:id="@+id/rewards_for_cash_button"
             android:layout_width="match_parent"
             android:layout_height="47dp"
             android:layout_margin="7dp"
+            android:layout_weight="0"
             android:background="@color/colorGreen"
             android:fontFamily="@font/proxima_nova_light"
             android:shadowColor="#000"
@@ -89,7 +92,18 @@ android:layout_marginTop="5dp"
             android:shadowRadius="0.5"
             android:text="Redeem Reward for Cash"
             android:textColor="#FFF"
+
             android:textSize="18sp" />
     </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/redeem_rewards_relative"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#A6000000"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

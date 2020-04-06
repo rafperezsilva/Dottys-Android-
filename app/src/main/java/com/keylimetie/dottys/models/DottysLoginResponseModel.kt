@@ -1,5 +1,6 @@
 package com.keylimetie.dottys
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
@@ -155,7 +156,8 @@ data class DottysRegisterRequestModel(
 
 
 data class DottysErrorModel (
-    val error: Error? = null
+    @get:JsonProperty("error") @field:JsonProperty("error")
+     val error: ErrorDottys? = null
 ) {
     fun toJson() = mapper.writeValueAsString(this)
 
@@ -164,7 +166,8 @@ data class DottysErrorModel (
     }
 }
 
-data class Error (
+data class ErrorDottys (
     val messages: List<String>? = null,
     val stack: String? = null
 )
+

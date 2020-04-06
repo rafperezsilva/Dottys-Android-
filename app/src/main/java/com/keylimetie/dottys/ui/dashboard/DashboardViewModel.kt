@@ -1,7 +1,6 @@
 package com.keylimetie.dottys.ui.dashboard
 
-import android.R
-import android.util.DisplayMetrics
+
 import android.util.Log
 import android.view.View
 import android.widget.TextView
@@ -21,6 +20,7 @@ import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.R.id
 import com.keylimetie.dottys.models.DottysGlobalDataModel
 import com.keylimetie.dottys.models.DottysRewardsModel
+import com.keylimetie.dottys.ui.drawing.DottysDrawingRewardsModel
 import com.keylimetie.dottys.ui.drawing.DrawingViewModel
 import de.hdodenhof.circleimageview.CircleImageView
 import org.json.JSONArray
@@ -30,8 +30,8 @@ import java.security.MessageDigest
 import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.set
 import kotlin.properties.Delegates
+import android.R as R1
 
 
 class DashboardViewModel : ViewModel() {
@@ -56,25 +56,25 @@ class DashboardViewModel : ViewModel() {
 
     fun     initDashboardItemsView(rootView: View, rewardsLoaction: com.keylimetie.dottys.ui.drawing.DottysDrawingRewardsModel, activity:DottysMainNavigationActivity) {
         val nameDashboard =
-            rootView.findViewById<TextView>(com.keylimetie.dottys.R.id.profile_name_dashboard)
+            rootView.findViewById<TextView>(id.profile_name_dashboard)
         val locationDashboard =
-            rootView.findViewById<TextView>(com.keylimetie.dottys.R.id.location_dashboard_textview)
+            rootView.findViewById<TextView>(id.location_dashboard_textview)
         val pointsEarned =
-            rootView.findViewById<TextView>(com.keylimetie.dottys.R.id.points_earned_textview)
+            rootView.findViewById<TextView>(id.points_earned_textview)
         val cashRewards =
-            rootView.findViewById<TextView>(com.keylimetie.dottys.R.id.cash_rewards_textview)
+            rootView.findViewById<TextView>(id.cash_rewards_textview)
         val weeklyRewards =
-            rootView.findViewById<TextView>(com.keylimetie.dottys.R.id.weekly_count_textview)
+            rootView.findViewById<TextView>(id.weekly_count_textview)
         val monthlyRewards =
-            rootView.findViewById<TextView>(com.keylimetie.dottys.R.id.monthly_count_textview)
+            rootView.findViewById<TextView>(id.monthly_count_textview)
         val querterlyRewards =
-            rootView.findViewById<TextView>(com.keylimetie.dottys.R.id.quarterly_count_textview)
+            rootView.findViewById<TextView>(id.quarterly_count_textview)
          val weeklyDays =
-            rootView.findViewById<TextView>(com.keylimetie.dottys.R.id.weekly_end_days)
+            rootView.findViewById<TextView>(id.weekly_end_days)
         val monthlyDays =
-            rootView.findViewById<TextView>(com.keylimetie.dottys.R.id.monthly_end_days)
+            rootView.findViewById<TextView>(id.monthly_end_days)
         val querterlyDays =
-            rootView.findViewById<TextView>(com.keylimetie.dottys.R.id.quarterly_end_days)
+            rootView.findViewById<TextView>(id.quarterly_end_days)
 
         nameDashboard.text = userCurrentUserDataObserver?.currentUserModel?.fullName
         val stringFormated: String = NumberFormat.getIntegerInstance()
@@ -155,7 +155,7 @@ class DashboardViewModel : ViewModel() {
             }, 0, 0, null,
             Response.ErrorListener {
                 //mContext.hideLoader(mContext)
-                imageView.setImageResource(R.drawable.ic_menu_help)
+                imageView.setImageResource(R1.drawable.ic_menu_help)
             })
 
 
@@ -271,6 +271,63 @@ class DashboardViewModel : ViewModel() {
 
     }
 
+     /**/
+   fun getNearsDottysLocations(mContext: DottysMainNavigationActivity) {
+       val mQueue = Volley.newRequestQueue(mContext)
+
+       mContext.showLoader(mContext)
+
+       val jsonObjectRequest = object : JsonObjectRequest(Method.GET,
+           mContext.baseUrl + "locations/"+mContext.getUserPreference().homeLocationID,
+           null,
+           object : Response.Listener<JSONObject> {
+               override fun onResponse(response: JSONObject) {
+                   mContext.hideLoader(mContext)
+
+                   var dottysLocation: DottysDrawingRewardsModel =
+                       DottysDrawingRewardsModel.fromJson(
+                           response.toString()
+                       )
+                   userCurrentUserDataObserver?.dottysLocation = dottysLocation
+                   // getDrawingSummary(mContext)
+
+               }
+           },
+           object : Response.ErrorListener {
+               override fun onErrorResponse(error: VolleyError) {
+                   println(error.networkResponse.data.toString(Charsets.UTF_8))
+                   Log.e("TAG", error.message, error)
+               }
+           }) { //no semicolon or coma
+//           override fun getParams(): MutableMap<String, String> {
+//               val location = mContext.getLocation(mContext.gpsTracker,mContext)
+//               val params = HashMap<String, String>()
+//               params["latitude"] = location.latitude.toString()
+//               params["longitude"] = location.longitude.toString()
+//               params["limit"] = "50"
+//               params["page"] = "1"
+//               params["distance"] = "50"
+//               return params
+//           }
+           @Throws(AuthFailureError::class)
+           override fun getHeaders(): Map<String, String> {
+               val params = HashMap<String, String>()
+               params["Authorization"] = mContext.getUserPreference().token!!
+               return params
+           }
+           override fun parseNetworkResponse(response: NetworkResponse?): Response<JSONObject> {
+
+
+               return super.parseNetworkResponse(response)
+           }
+
+
+       }
+       mQueue.add(jsonObjectRequest)
+
+   }
+    /**/
+
     fun getUserRewards(mContext: DottysMainNavigationActivity) {
         val mQueue = Volley.newRequestQueue(mContext)
         mContext.showLoader(mContext)
@@ -287,7 +344,9 @@ class DashboardViewModel : ViewModel() {
                             response.toString()
                         )
                     // getDrawingSummary(mContext)
+                  //  user.rewards = user.rewards?.filter { it.locationID != null }
                     userCurrentUserDataObserver?.currentUserRewards = user
+
                 }
             },
             object : Response.ErrorListener {
@@ -305,7 +364,7 @@ class DashboardViewModel : ViewModel() {
                 return params
             }
             override fun parseNetworkResponse(response: NetworkResponse?): Response<JSONObject> {
-                 println(response.toString())
+                println(response.toString())
 
                 return super.parseNetworkResponse(response)
             }
@@ -315,7 +374,50 @@ class DashboardViewModel : ViewModel() {
         mQueue.add(jsonObjectRequest)
 
     }
+/*BEACON LIST REQUEST */
+    fun getBeaconList(mContext: DottysMainNavigationActivity) {
+        val mQueue = Volley.newRequestQueue(mContext)
+        mContext.showLoader(mContext)
 
+        val jsonObjectRequest = object : JsonObjectRequest(Method.GET,
+            mContext.baseUrl + "beacons",
+            null,
+            object : Response.Listener<JSONObject> {
+                override fun onResponse(response: JSONObject) {
+                    mContext.hideLoader(mContext)
+
+                    var user: DottysBeaconsModel =
+                        DottysBeaconsModel.fromJson(
+                            response.toString()
+                        )
+                    userCurrentUserDataObserver?.dottysBeaconList = user
+
+                }
+            },
+            object : Response.ErrorListener {
+                override fun onErrorResponse(error: VolleyError) {
+                    mContext.hideLoader(mContext)
+                    Log.e("TAG", error.message, error)
+                }
+            }) { //no semicolon or coma
+
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                val params = HashMap<String, String>()
+                params["Authorization"] = mContext.getUserPreference().token!!
+                return params
+            }
+            override fun parseNetworkResponse(response: NetworkResponse?): Response<JSONObject> {
+                println(response.toString())
+
+                return super.parseNetworkResponse(response)
+            }
+
+
+        }
+        mQueue.add(jsonObjectRequest)
+
+    }
 
     fun getLocationDrawing(fragment: Fragment) {
         val drawingViewModel = DrawingViewModel()
@@ -344,6 +446,8 @@ class DashboardViewModel : ViewModel() {
             fun getCurrentUser(currentUser: DottysLoginResponseModel)
             fun getUserRewards(rewards: DottysRewardsModel)
             fun getGlobalData(gloabalData: DottysGlobalDataModel)
+            fun getDottysUserLocation(locationData: DottysDrawingRewardsModel)
+            fun getBeaconList(beaconList: DottysBeaconsModel)
         }
 
         class DottysCurrentUserObserver(lisener: DottysDashboardDelegates) {
@@ -363,4 +467,10 @@ class DashboardViewModel : ViewModel() {
             var currentGlobalData: DottysGlobalDataModel by Delegates.observable(
                 initialValue = DottysGlobalDataModel(),
                 onChange = { prop, old, new -> lisener.getGlobalData(new) })
+            var dottysLocation: DottysDrawingRewardsModel by Delegates.observable(
+                initialValue = DottysDrawingRewardsModel(),
+                onChange = { prop, old, new -> lisener.getDottysUserLocation(new) })
+             var dottysBeaconList: DottysBeaconsModel by Delegates.observable(
+                initialValue = DottysBeaconsModel(),
+                onChange = { prop, old, new -> lisener.getBeaconList(new) })
         }

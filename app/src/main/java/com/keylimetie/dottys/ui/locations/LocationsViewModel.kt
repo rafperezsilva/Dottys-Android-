@@ -9,6 +9,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ExpandableListView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import com.android.volley.AuthFailureError
 import com.android.volley.Response
@@ -81,7 +82,7 @@ class LocationsViewModel : ViewModel() {
             activityDrawing,
             locationUser?.latitude.toString(),
             locationUser?.longitude.toString()
-        )
+        ,locationFragment)
     }
 
     fun filterQueryData(
@@ -199,28 +200,28 @@ class LocationsViewModel : ViewModel() {
         return markerLocations
     }
 
-    private fun getLocationsDottysRequest(
+    fun getLocationsDottysRequest(
         mContext: DottysMainNavigationActivity,
         latitude: String,
-        longitude: String
+        longitude: String, fragment:Fragment
     ) {
         val mQueue = Volley.newRequestQueue(mContext)
         mContext.showLoader(mContext)
-
-        val locationURL =
-            "locations?distance=150&limit=100&page=1&latitude=" + latitude + "&longitude=" + longitude
-        val mockUrl =
-            "locations?distance=150&limit=100&page=1&latitude=41.6618384&longitude=-88.0011799"
+/*MOCK LOCATION */
+      //  val locationURL =
+            "locations?distance=150&limit=100&page=1&page=1&latitude=" + latitude + "&longitude=" + longitude
+         val locationURL =
+            "locations?distance=150&limit=100&page=1&page=1&latitude=41.603161&longitude=-87.753459300000003"
         val jsonObjectRequest = object : JsonObjectRequest(
             Method.GET,
-            mContext.baseUrl + locationURL,
+            mContext.baseUrl +locationURL,
             null,
             object : Response.Listener<JSONObject> {
                 override fun onResponse(response: JSONObject) {
                     mContext.hideLoader(mContext)
 
                     var user: DottysLocationsStoresModel =
-                        DottysLocationsStoresModel.fromJson(
+                        DottysLocationsStoresModel.fromLocationJson(
                             response.toString()
                         )
                     locationDataObserver?.dottysLocationsModel = user
@@ -236,12 +237,26 @@ class LocationsViewModel : ViewModel() {
 //                        if ( locationFragment.fragmentManager?.backStackEntryCount ?: 0 > 0) {
 //                            locationFragment.fragmentManager?.popBackStack()
 //                        }
-                            val intent = Intent(mContext, DottysMainNavigationActivity::class.java)
-                            mContext.startActivity(intent)
+                            if(fragment.id == LocationsFragment().id) {
+                                val intent =
+                                    Intent(mContext, DottysMainNavigationActivity::class.java)
+                                mContext.startActivity(intent)
+                            }
                         }
 
                 }
             }) { //no semicolon or coma
+
+
+            override fun getParams(): MutableMap<String, String> {
+                val params = HashMap<String, String>()
+                params["latitude"] = latitude
+                params["longitude"] = longitude
+                params["limit"] = "150"
+                params["page"] = "1"
+                params["distance"] = "50"
+                return params
+            }
             @Throws(AuthFailureError::class)
             override fun getHeaders(): Map<String, String> {
                 val params = HashMap<String, String>()

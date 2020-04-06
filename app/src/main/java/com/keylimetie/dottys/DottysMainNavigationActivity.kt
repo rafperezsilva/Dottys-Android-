@@ -124,7 +124,7 @@ class DottysMainNavigationActivity : DottysBaseActivity() {
         navView.setupWithNavController(controller)
         drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
             override fun onDrawerStateChanged(p0: Int) {
-                hideKeyboard()
+                hideCustomKeyboard()
             }
 
             override fun onDrawerSlide(p0: View, p1: Float) {

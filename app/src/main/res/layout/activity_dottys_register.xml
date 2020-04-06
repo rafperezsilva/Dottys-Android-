@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_layout_sent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/main_layout_sent"
     tools:context=".register.DottysRegisterActivity">
 
     <ScrollView
@@ -87,19 +87,25 @@
                     android:text="First name" />
 
                 <EditText
-                    android:text="nametest"
                     android:id="@+id/first_name_register_edit_text"
                     style="@style/TextViewRegisterStyle"
                     android:layout_width="match_parent"
                     android:inputType="textPersonName"
                     android:textAlignment="textEnd"
-                    android:textColor="#222222"/>
+                    android:textColor="#222222" />
             </LinearLayout>
+            <RelativeLayout
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#CD383A3B"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="20dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
@@ -114,7 +120,6 @@
                     android:text="Last name" />
 
                 <EditText
-                    android:text="lastnametest"
                     android:id="@+id/last_name_register_edit_text"
                     style="@style/TextViewRegisterStyle"
                     android:layout_width="match_parent"
@@ -122,11 +127,18 @@
                     android:textAlignment="textEnd"
                     android:textColor="#222222" />
             </LinearLayout>
+            <RelativeLayout
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#CD383A3B"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="20dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
@@ -147,11 +159,18 @@
                     android:textAlignment="textEnd"
                     android:textColor="#222222" />
             </LinearLayout>
+            <RelativeLayout
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#CD383A3B"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="20dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
@@ -165,7 +184,6 @@
                     android:text="Email address" />
 
                 <EditText
-                    android:text="nametest@test.com"
                     android:id="@+id/email_register_edit_text"
                     style="@style/TextViewRegisterStyle"
                     android:layout_width="match_parent"
@@ -173,11 +191,19 @@
                     android:textAlignment="textEnd"
                     android:textColor="#222222" />
             </LinearLayout>
+            <RelativeLayout
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#CD383A3B"/>
+
             <!--PASSWORD-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="20dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
@@ -192,7 +218,6 @@
                     android:text="Password" />
 
                 <EditText
-                    android:text="Asdf.1234"
                     android:id="@+id/password_register_edit_text"
                     style="@style/TextViewRegisterStyle"
                     android:layout_width="match_parent"
@@ -209,11 +234,18 @@
                     android:background="@mipmap/eye_icon" />
 
             </LinearLayout>
+            <RelativeLayout
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#CD383A3B"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
@@ -228,11 +260,12 @@ contain 1 uppercase and 1 lowercase letter."
 
 
             </LinearLayout>
+
             <!-- RE ENTER PASSWORD-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="20dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
@@ -247,7 +280,6 @@ contain 1 uppercase and 1 lowercase letter."
                     android:text="Confirm Password" />
 
                 <EditText
-                    android:text="Asdf.1234"
                     android:id="@+id/confirm_password_register_edit_text"
                     style="@style/TextViewRegisterStyle"
                     android:layout_width="match_parent"
@@ -264,11 +296,18 @@ contain 1 uppercase and 1 lowercase letter."
                     android:background="@mipmap/eye_icon" />
 
             </LinearLayout>
+            <RelativeLayout
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#CD383A3B"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="20dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
@@ -280,26 +319,55 @@ contain 1 uppercase and 1 lowercase letter."
                 <TextView
                     style="@style/TextViewRegisterStyle"
                     android:text="Birthdate" />
+                <RelativeLayout
 
-                <EditText
-                    android:text="31 / 02 / 2002"
-                    android:id="@+id/birthdate_register_edit_text"
-                    style="@style/TextViewRegisterStyle"
                     android:layout_width="match_parent"
                     android:layout_weight="1"
-                    android:textAlignment="textEnd"
-                    android:textColor="#222222" />
+                    android:layout_height="wrap_content" >
+
+                    <Button
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentBottom="true"
+                        android:id="@+id/phanton_birthdate_button"
+                        android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                        android:background="#000A9099"
+                        android:layout_alignBottom="@+id/birthdate_register_edit_text"/>
+
+                    <EditText
+                         android:id="@+id/birthdate_register_edit_text"
+                        style="@style/TextViewRegisterStyle"
+                        android:layout_width="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="0dp"
+                        android:layout_marginEnd="0dp"
+
+                        android:layout_weight="1"
+                         android:textAlignment="textEnd"
+                        android:textColor="#222222" />
+                </RelativeLayout>
             </LinearLayout>
+            <RelativeLayout
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#CD383A3B"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="20dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
                 <androidx.appcompat.widget.AppCompatCheckBox
-                    android:checked="true"
                     android:id="@+id/legal_age_register_checkbox"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
@@ -317,15 +385,14 @@ contain 1 uppercase and 1 lowercase letter."
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginBottom="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
+                android:layout_marginBottom="30dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
                 <androidx.appcompat.widget.AppCompatCheckBox
-                    android:checked="true"
                     android:id="@+id/privacy_policy_register_checkbox"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
@@ -366,80 +433,81 @@ contain 1 uppercase and 1 lowercase letter."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--        android:id="@+id/verification_layout"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="@color/colorPrimary"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent">-->
+    <androidx.constraintlayout.widget.ConstraintLayout
 
-<!--        <ImageView-->
-<!--            android:id="@+id/image_verification"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_alignParentStart="true"-->
-<!--            android:layout_alignParentTop="true"-->
-<!--            android:layout_alignParentEnd="true"-->
-<!--            android:layout_marginStart="45dp"-->
-<!--            android:layout_marginEnd="45dp"-->
+        android:id="@+id/verification_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-<!--            android:src="@mipmap/send_varification_image"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
+        <ImageView
+            android:id="@+id/image_verification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="45dp"
+            android:layout_marginEnd="45dp"
 
-<!--        <TextView-->
-<!--            android:id="@+id/send_label"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_below="@+id/image_verification"-->
-<!--            android:layout_marginTop="15dp"-->
-<!--            android:layout_weight="0"-->
-<!--            android:fontFamily="@font/proxima_nova_light"-->
-<!--            android:text="Sent!"-->
-<!--            android:textAlignment="center"-->
-<!--            android:textColor="#FFF"-->
-<!--            android:textSize="36sp"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/image_verification" />-->
+            android:src="@mipmap/send_varification_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-<!--        <TextView-->
-<!--            android:id="@+id/textView"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_below="@+id/send_label"-->
-<!--            android:layout_marginStart="25dp"-->
-<!--            android:layout_marginTop="25dp"-->
-<!--            android:layout_marginEnd="25dp"-->
-<!--            android:layout_weight="0"-->
-<!--            android:fontFamily="@font/proxima_nova_light"-->
-<!--            android:text="An text message with a verification code has been sent to (xxx) xxx-8686."-->
-<!--            android:textAlignment="center"-->
-<!--            android:textColor="#FFF"-->
-<!--            android:textSize="18sp"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/send_label" />-->
+        <TextView
+            android:id="@+id/send_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/image_verification"
+            android:layout_marginTop="15dp"
+            android:layout_weight="0"
+            android:fontFamily="@font/proxima_nova_light"
+            android:text="Sent!"
+            android:textAlignment="center"
+            android:textColor="#FFF"
+            android:textSize="36sp"
+            app:layout_constraintTop_toBottomOf="@+id/image_verification" />
 
-<!--        <Button-->
-<!--            android:id="@+id/go_to_enter_verification"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_below="@+id/textView"-->
-<!--            android:layout_marginStart="55dp"-->
-<!--            android:layout_marginTop="35dp"-->
-<!--            android:layout_marginEnd="55dp"-->
-<!--            android:background="@drawable/border_layer"-->
-<!--            android:fontFamily="@font/proxima_nova_regular"-->
-<!--            android:text="Enter Verification Code"-->
-<!--            android:textAllCaps="false"-->
-<!--            android:textColor="#FFF"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/textView" />-->
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/send_label"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="25dp"
+            android:layout_weight="0"
+            android:fontFamily="@font/proxima_nova_light"
+            android:text="An text message with a verification code has been sent to (xxx) xxx-8686."
+            android:textAlignment="center"
+            android:textColor="#FFF"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/send_label" />
 
-<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+        <Button
+            android:id="@+id/go_to_enter_verification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView"
+            android:layout_marginStart="55dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginEnd="55dp"
+            android:background="@drawable/border_layer"
+            android:fontFamily="@font/proxima_nova_regular"
+            android:text="Enter Verification Code"
+            android:textAllCaps="false"
+            android:textColor="#FFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ProgressBar
         android:id="@+id/progress_loader"

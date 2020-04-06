@@ -4,4 +4,13 @@
         <attr name="longitude" format="float" />
         <attr name="marker" format="string" />
     </declare-styleable>
+<!--    <declare-styleable name="swipeview">-->
+<!--        <color name="colorAccent">#E91E63</color>-->
+<!--        <color name="colorPrimary">#E91E63</color>-->
+<!--        <color name="colorPrimaryDark">#E91E63</color>-->
+<!--        <color name="sb_stroke_color_default">#00BCD4</color>-->
+<!--        <color name="sb_swipe_bg_color_default">#FF5722</color>-->
+<!--        <color name="sb_text_color_default">#FF5722</color>-->
+<!--        <color name="sb_thumb_button_color_default">#00BCD4</color>-->
+<!--    </declare-styleable>-->
 </resources>

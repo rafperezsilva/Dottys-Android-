@@ -1,6 +1,7 @@
 package com.keylimetie.dottys.ui.locations
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.core.JsonGenerator
@@ -36,12 +37,16 @@ val mapper = jacksonObjectMapper().apply {
 }
 
 data class DottysLocationsStoresModel(
+    val total: Long? = null,
+    val limit: Long? = null,
+    val page: Long? = null,
+    val pages: Long? = null,
     val locations: List<DottysStoresLocation>? = null
 ) {
     fun toJson() = mapper.writeValueAsString(this)
 
     companion object {
-        fun fromJson(json: String) = mapper.readValue<DottysLocationsStoresModel>(json)
+        fun fromLocationJson(json: String) = mapper.readValue<DottysLocationsStoresModel>(json)
     }
 }
 
@@ -61,7 +66,8 @@ data class DottysStoresLocation(
     val state: String? = null,
     val zip: String? = null,
     val phone: String? = null,
-    val storeType: StoreType? = null,
+    @JsonIgnore(true)
+    val storeType: StoreType? = StoreType.DottyS,
     val storeNumber: Long? = null,
     val latitude: Double? = null,
     val longitude: Double? = null,
@@ -75,7 +81,11 @@ data class DottysStoresLocation(
     val distance: Double? = null,
     val createdBy: String? = null,
     val updatedBy: String? = null
+
+
 )
+
+
 
 enum class StoreType(val value: String) {
     Anchor("Anchor"),

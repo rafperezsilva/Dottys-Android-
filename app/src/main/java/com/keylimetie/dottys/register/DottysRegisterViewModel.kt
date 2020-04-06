@@ -1,12 +1,16 @@
 package com.keylimetie.dottys.register
 
+import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.text.InputType
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModel
@@ -23,6 +27,7 @@ import com.keylimetie.dottys.forgot_password.DottysEnterVerificationCodeActivity
 import com.keylimetie.dottys.register.volley_multipart.VolleyMultipartRequest
 import org.json.JSONObject
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 import kotlin.properties.Delegates
 
@@ -49,6 +54,7 @@ open class DottysRegisterViewModel : ViewModel() {
     private var showPasswordButonState = false
     private var showConfirmPasswordButonState = false
     private var submitRegisterButon: Button? = null
+    private var phantonBirthdayButton: Button? = null
     //endregion
 
     fun initRegisterView(activityRegister: DottysRegisterActivity) {
@@ -87,6 +93,7 @@ open class DottysRegisterViewModel : ViewModel() {
         showConfirmPasswordButon =
             activityRegister.findViewById<Button>(id.show_password_confirm_button)
         submitRegisterButon = activityRegister.findViewById<Button>(id.submit_register_button)
+        phantonBirthdayButton = activityRegister.findViewById<Button>(id.phanton_birthdate_button)
         verificationLayout =
             activityRegister.findViewById<ConstraintLayout>(id.verification_layout)
 
@@ -94,10 +101,10 @@ open class DottysRegisterViewModel : ViewModel() {
         paramsLayout?.height = 2
         verificationLayout?.layoutParams = paramsLayout
         initDatePackerView()
-//
-//        phoneEditText?.setDefaultCountry("US")
-//        phoneEditText?.isValid
+        activityRegister.hideCustomKeyboard()
+
     }
+
 
     fun showPasswordButtonAction() {
         showPasswordButon?.setOnClickListener {
@@ -132,13 +139,14 @@ open class DottysRegisterViewModel : ViewModel() {
                 it, activityRegister, year - 18, month, day
             )
         }
-        birthdateEditText?.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) {
-                //    v.clearFocus()
-                activityRegister?.hideKeyboard()
-                datePickerDialog?.show()
-            }
-        }
+//        birthdateEditText?.setOnFocusChangeListener { v, hasFocus ->
+//            if (hasFocus) {
+//                //    v.clearFocus()
+//                activityRegister?.hideKeyboard()
+//                datePickerDialog?.show()
+//            }
+//        }
+        phantonBirthdayButton?.setOnClickListener { datePickerDialog?.show() }
     }
 
     fun addCustomsSettings() {
@@ -210,7 +218,7 @@ open class DottysRegisterViewModel : ViewModel() {
             ).show()
             return false
         }
-        fillDataForRegisterRequest(editTextData)
+        //fillDataForRegisterRequest(editTextData)
         val gpsTracker = GpsTracker(activityRegister)
         val location = activityRegister.getLocation(gpsTracker, activityRegister)
         return true
@@ -309,14 +317,11 @@ open class DottysRegisterViewModel : ViewModel() {
             Response.ErrorListener { error ->
                 activityRegister.hideLoader(activityRegister)
                 if (error.networkResponse != null) {
-                    var testV = JSONObject(String(error.networkResponse.data)).toString()
-                    var errorData: DottysErrorModel =
-                        DottysErrorModel.fromJson(testV)
-                    Toast.makeText(
-                        activityRegister,
-                        errorData.error?.messages?.first(),
-                        Toast.LENGTH_LONG
-                    ).show()
+                    val errorRes = DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
+                    if (errorRes.error?.messages?.size ?: 0 > 0) {
+                        Toast.makeText(activityRewards, errorRes.error?.messages?.first() ?: "", Toast.LENGTH_LONG).show()
+                    }
+                    Log.e("ERROR VOLLEY ", error.message, error)
                 }
                 // Log.e("TAG", error.message, error)
             }) { //no semicolon or coma
@@ -342,31 +347,34 @@ open class DottysRegisterViewModel : ViewModel() {
             params,
             Response.Listener { response ->
                 context.hideLoader(context)
+                activityRegisterObserver?.imageHasUploaded = true
                 print(response.statusCode)
             },
             Response.ErrorListener { error ->
                 context.hideLoader(context)
-                print(error.networkResponse.statusCode)
-                print(error.networkResponse.data.toString(Charsets.UTF_8))
+                activityRegisterObserver?.imageHasUploaded = false
+                val errorRes = DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
+                if (errorRes.error?.messages?.size ?: 0 > 0) {
+                    Toast.makeText(activityRewards, errorRes.error?.messages?.first() ?: "", Toast.LENGTH_LONG).show()
+                }
+                Log.e("ERROR VOLLEY ", error.message, error)
 
             }) {
-            override var byteData: Map<String, VolleyMultipartRequest.DataPart>?
+
+            override var byteData: Map<String, DataPart>?
                 get() {
-                    val params: MutableMap<String, VolleyMultipartRequest.DataPart> = HashMap()
+                    val params: MutableMap<String, DataPart> = HashMap()
 
                     params["profilePicture"] =
-                        VolleyMultipartRequest.DataPart("profilePicture", imageData, "image/jpeg")
+                        DataPart("profilePicture", imageData, "image/jpeg")
 
                     return params
                 }
                 set(value) {}
-
         }
 
         mQueue.add(request)
     }
-
-
 
 }
 
@@ -375,12 +383,16 @@ open class DottysRegisterViewModel : ViewModel() {
 //region
 interface DottysRegisterUserDelegates {
     fun registerUser(userData: DottysLoginResponseModel)
+    fun imageProfileHasUploaded(hasUploaded: Boolean)
 }
 
 class DottysRegisterUserObserver(lisener: DottysRegisterUserDelegates) {
     var registerUser: DottysLoginResponseModel by Delegates.observable(
         initialValue = DottysLoginResponseModel(),
         onChange = { _, _, new -> lisener.registerUser(new) })
+    var imageHasUploaded: Boolean by Delegates.observable(
+        initialValue = false,
+        onChange = { _, _, new -> lisener.imageProfileHasUploaded(new) })
 
 }
 //endregion

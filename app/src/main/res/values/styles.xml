@@ -10,6 +10,14 @@
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorSecundary</item>
     </style>
+    <!-- Base application theme. -->
+<!--    <style name="swipeview" parent="Theme.AppCompat.Light.DarkActionBar">-->
+<!-- -->
+<!--        <color name="sb_stroke_color_default">#00BCD4</color>-->
+<!--        <color name="sb_swipe_bg_color_default">#FF5722</color>-->
+<!--        <color name="sb_text_color_default">#FF5722</color>-->
+<!--        <color name="sb_thumb_button_color_default">#00BCD4</color>-->
+<!--    </style>-->
 
     <style name="TextViewPrimaryStyle">
         <item name="android:textColor">#FFF</item>
@@ -42,6 +50,37 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
+   <style name="ButtonPadStyle">
+         <item name="android:textColor">#FFF</item>
+         <item name="android:layout_margin">15dp</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:background">#00000000</item>
+        <item name="android:fontFamily">@font/proxima_nova_semibold</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="EditTextEnterCodeStyle">
+        <item name="android:enabled">false</item>
+        <item name="android:textColor">#FFF</item>
+        <item name="android:inputType">number</item>
+        <item name="android:textSize">45sp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/proxima_nova_semibold</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginRight">6dp</item>
+        <item name="android:background">@drawable/border_code_edittext</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+<!--    <style name="SwipeView" >-->
+<!--        <attr format="color" name="sb_swipe_bg_color"/>-->
+<!--        <attr format="color" name="sb_thumb_bg_color"/>-->
+<!--        <attr format="color" name="sb_stroke_bg_color"/>-->
+<!--        <color name="sb_stroke_color_default">#FFFFFF</color>-->
+<!--        <color name="sb_swipe_bg_color_default">#4CAF50</color>-->
+<!--        <color name="sb_text_color_default">#FFFFFF</color>-->
+<!--        <color name="sb_thumb_button_color_default">#4CAF50</color>-->
+<!--    </style>-->
     <style name="TextViewRegisterStyle">
         <item name="android:textColor">#9B9B9B</item>
         <item name="android:textSize">16sp</item>

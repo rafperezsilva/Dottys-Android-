@@ -22,16 +22,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.dottysrewards.dottys.service.VolleyService
-import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.model.LatLng
 import com.keylimetie.dottys.splash.DottysSplashActivity
+import com.keylimetie.dottys.ui.dashboard.BeaconType
+import com.keylimetie.dottys.ui.dashboard.DottysBeacon
+import com.keylimetie.dottys.ui.dashboard.DottysBeaconsModel
+import com.keylimetie.dottys.ui.locations.DottysLocationsStoresModel
+import com.keylimetie.dottys.ui.locations.DottysStoresLocation
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
+import kotlin.collections.ArrayList
 
 
 enum class PreferenceTypeKey {
-    USER_DATA, TOKEN
+    USER_DATA, TOKEN, LOCATIONS, DOTTYS_USER_LOCATION, BEACON_AT_LOCATION
 }
 
 open class DottysBaseActivity : AppCompatActivity() {
@@ -41,10 +46,11 @@ open class DottysBaseActivity : AppCompatActivity() {
     var baseUrl: String? = null
     var progressBar: ProgressBar? = null
     val displayMetrics = DisplayMetrics()
+    val gpsTracker = GpsTracker(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         VolleyService.initialize(this)
-        baseUrl = this.resources.getString(R.string.url_base_development)
+        baseUrl = this.resources.getString(R.string.url_base_production)
         progressBar = findViewById(R.id.progress_loader)
         //hideLoader(this)
         sharedPreferences = this.getSharedPreferences(
@@ -55,7 +61,7 @@ open class DottysBaseActivity : AppCompatActivity() {
         //println("PERMISION LOCATION "+checkPermission())
         //mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 //        getLastLocation()
-        val gpsTracker = GpsTracker(this)
+
         requestLocation(gpsTracker, this)
 
 
@@ -91,6 +97,50 @@ open class DottysBaseActivity : AppCompatActivity() {
         editor!!.commit()
     }
 
+    open fun requestLocation(gpsTracker: GpsTracker?, activity: AppCompatActivity?) {
+        try {
+            if (ContextCompat.checkSelfPermission(
+                    applicationContext,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) !== PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    activity!!,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    101
+                )
+            }
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+//        gpsTracker?.let { activity?.let { it1 -> getLocation(it, it1) } }
+    }
+
+    fun getBeaconAtStoreLocation(): DottysBeacon {
+        val textoDate = sharedPreferences!!.getString(PreferenceTypeKey.BEACON_AT_LOCATION.name, "")
+
+        return try {
+            var person: DottysBeaconsModel =
+                DottysBeaconsModel.fromJson(
+                    textoDate!!
+                )
+            try {
+                var beaconAtStore = person.beacons?.filter { it.location?.storeNumber ?: 0 == getUserNearsLocations().locations?.first()?.storeNumber ?: 0 }
+                    ?: ArrayList()
+               // val beaconLocation = beaconAtStore.filter { it.beaconType == BeaconType.Location }.first()
+
+                   beaconAtStore.filter { it.beaconType == BeaconType.Location }.first()
+            } catch (e: Exception) {
+                println(e)
+                  DottysBeacon()
+            }
+
+        } catch (e: Exception) {
+            println(e)
+            DottysBeacon()
+        }
+    }
+
     fun getUserPreference(): DottysLoginResponseModel {
         val textoDate = sharedPreferences!!.getString(PreferenceTypeKey.USER_DATA.name, "")
 
@@ -104,6 +154,22 @@ open class DottysBaseActivity : AppCompatActivity() {
         } catch (e: Exception) {
             println(e)
             DottysLoginResponseModel()
+        }
+    }
+
+    fun getUserNearsLocations(): DottysLocationsStoresModel {
+        val textoDate = sharedPreferences!!.getString(PreferenceTypeKey.LOCATIONS.name, "")
+
+        return try {
+            var person: DottysLocationsStoresModel =
+                DottysLocationsStoresModel.fromLocationJson(
+                    textoDate!!
+                )
+            person
+
+        } catch (e: Exception) {
+            println(e)
+            DottysLocationsStoresModel()
         }
     }
 
@@ -139,24 +205,7 @@ open class DottysBaseActivity : AppCompatActivity() {
     /*
     * LOCATIONS PERMISSIONS
     * */
-    open fun requestLocation(gpsTracker: GpsTracker?, activity: AppCompatActivity?) {
-        try {
-            if (ContextCompat.checkSelfPermission(
-                    applicationContext,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) !== PackageManager.PERMISSION_GRANTED
-            ) {
-                ActivityCompat.requestPermissions(
-                    activity!!,
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    101
-                )
-            }
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace()
-        }
-//        gpsTracker?.let { activity?.let { it1 -> getLocation(it, it1) } }
-    }
+
 
     fun getLocation(gpsTracker: GpsTracker, activity: Context): LatLng {
         //  gpsTracker = GpsTracker(activity);
@@ -180,10 +229,11 @@ open class DottysBaseActivity : AppCompatActivity() {
         }
     }
 
-    fun hideKeyboard() {
+    fun hideCustomKeyboard() {
         val imm: InputMethodManager =
             getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(window.decorView.rootView.windowToken, 0)
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
     }
 
     fun isValidEmail(target: CharSequence?): Boolean {

@@ -38,5 +38,6 @@
 Suspendisse potenti. Donec nibh eros, pellentesque pretium nisi et, mattis consequat sem. Donec et diam nec nibh volutpat bibendum. Aenean ut risus eget lectus suscipit convallis quis vitae ex. Pellentesque eu urna nec risus pellentesque ullamcorper.
 
 Sed commodo tellus sit amet nisi scelerisque volutpat. Nam ac sapien ac felis vehicula pulvinar vulputate fermentum nibh. Phasellus venenatis ante at lobortis ullamcorper. Praesent eu tellus id enim tempor mollis id sit amet libero. Nunc maximus velit elit, id volutpat mauris finibus facilisis.</string>
+    <string name="backspace_pad"><![CDATA[<]]></string>
 
 </resources>

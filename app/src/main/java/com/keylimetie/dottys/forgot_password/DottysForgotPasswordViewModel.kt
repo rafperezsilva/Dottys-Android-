@@ -12,6 +12,7 @@ import com.android.volley.NetworkResponse
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.keylimetie.dottys.DottysErrorModel
 import com.keylimetie.dottys.R
 import com.keylimetie.dottys.forgot_password.VerificationMethodType.EMAIL
 import com.keylimetie.dottys.forgot_password.VerificationMethodType.SMS
@@ -230,7 +231,11 @@ open class DottysForgotPasswordViewModel : ViewModel() {
                 verificationActivity.hideLoader(verificationActivity) },
             Response.ErrorListener { error ->
                 verificationActivity.hideLoader(verificationActivity)
-
+                val errorRes = DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
+                if (errorRes.error?.messages?.size ?: 0 > 0) {
+                    Toast.makeText(activityRewards, errorRes.error?.messages?.first() ?: "", Toast.LENGTH_LONG).show()
+                }
+                Log.e("ERROR VOLLEY ", error.message, error)
                 Log.e("ERROR VOLLEY ", error.message, error)
             }) { //no semicolon or coma
 
