@@ -319,7 +319,7 @@ open class DottysRegisterViewModel : ViewModel() {
                 if (error.networkResponse != null) {
                     val errorRes = DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                     if (errorRes.error?.messages?.size ?: 0 > 0) {
-                        Toast.makeText(activityRewards, errorRes.error?.messages?.first() ?: "", Toast.LENGTH_LONG).show()
+                        Toast.makeText(activityRegister, errorRes.error?.messages?.first() ?: "", Toast.LENGTH_LONG).show()
                     }
                     Log.e("ERROR VOLLEY ", error.message, error)
                 }
@@ -355,7 +355,7 @@ open class DottysRegisterViewModel : ViewModel() {
                 activityRegisterObserver?.imageHasUploaded = false
                 val errorRes = DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                 if (errorRes.error?.messages?.size ?: 0 > 0) {
-                    Toast.makeText(activityRewards, errorRes.error?.messages?.first() ?: "", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, errorRes.error?.messages?.first() ?: "", Toast.LENGTH_LONG).show()
                 }
                 Log.e("ERROR VOLLEY ", error.message, error)
 

@@ -76,6 +76,8 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
 
     override fun getGlobalData(gloabalData: DottysGlobalDataModel) {
         var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
+        activity?.editor = activity?.sharedPreferences!!.edit()
+        activity?.saveDataPreference(PreferenceTypeKey.GLOBAL_DATA,gloabalData.toJson().toString())
         activity?.let { homeViewModel.initDashboardPager(it, gloabalData) }
     }
 

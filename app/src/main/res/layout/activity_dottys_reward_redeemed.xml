@@ -4,12 +4,139 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".redeem.DottysRewardRedeemedActivity">
+    tools:context=".redeem.DottysRewardRedeemedActivity"
+    android:background="@color/colorPrimary">
 
-    <ImageView
-        android:id="@+id/reward_barcode"
+    <TextView
+        android:id="@+id/congrats_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:fontFamily="@font/proxima_nova_semibold"
+        android:text="ENTER HOST ID"
+        android:textColor="#FFF"
+        android:textSize="32sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/you_earned_label"
+        android:layout_width="402dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="35dp"
+        android:fontFamily="@font/proxima_nova_semibold"
+        android:text="To complete Validation and Redemption."
+        android:textColor="#FFF"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/congrats_textview" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ticket_redemeed_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginEnd="45dp"
+        android:layout_marginBottom="25dp"
+        app:layout_constraintBottom_toTopOf="@+id/start_swipe"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/you_earned_label">
+
+        <ImageView
+            android:scaleType="fitXY"
+            android:id="@+id/ticket_redemeed_container2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:src="@mipmap/ticket_redemeed_image"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:fontFamily="@font/proxima_nova_extrabold"
+            android:text="10$"
+            android:textColor="#1E1E1E"
+            android:textSize="80sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ticket_redemeed_container2" />
+
+        <ImageView
+            android:scaleY="0.9"
+            android:scaleX="0.9"
+            android:id="@+id/reward_barcode"
+            android:layout_width="220dp"
+            android:layout_height="0dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            app:layout_constraintBottom_toTopOf="@+id/redemeed_code_textview"
+            app:layout_constraintEnd_toEndOf="@+id/ticket_redemeed_container2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+        <TextView
+            android:letterSpacing="0.2"
+            android:id="@+id/redemeed_code_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:fontFamily="@font/proxima_nova_semibold"
+            android:text="4455577"
+            android:textColor="#1E1E1E"
+            android:textSize="35sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/reward_barcode"
+            app:layout_constraintStart_toStartOf="@+id/reward_barcode" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <com.agik.AGIKSwipeButton.View.Swipe_Button_View
+        android:scaleY="0.8"
+        android:scaleX="0.9"
+        android:id="@+id/start_swipe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="27dp"
+        android:layout_marginEnd="27dp"
+        android:layout_marginBottom="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:sb_swipe_animate_text="true"
+        app:sb_swipe_text="Host Swipe to Redeem"
+        app:layout_constraintCircleAngle="15"  />
+<!--    <ImageView-->
+<!--        android:id="@+id/reward_barcode"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+    <ProgressBar
+        android:id="@+id/progress_loader"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -4,6 +4,7 @@ package com.keylimetie.dottys.ui.dashboard
 import android.util.Log
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.viewpager.widget.ViewPager
@@ -15,6 +16,7 @@ import com.android.volley.toolbox.ImageRequest
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.DottysLoginResponseModel
 import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.R.id
@@ -328,7 +330,7 @@ class DashboardViewModel : ViewModel() {
    }
     /**/
 
-    fun getUserRewards(mContext: DottysMainNavigationActivity) {
+    fun getUserRewards(mContext: DottysBaseActivity) {
         val mQueue = Volley.newRequestQueue(mContext)
         mContext.showLoader(mContext)
 

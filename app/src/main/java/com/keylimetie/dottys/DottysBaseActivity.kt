@@ -23,6 +23,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.dottysrewards.dottys.service.VolleyService
 import com.google.android.gms.maps.model.LatLng
+import com.keylimetie.dottys.models.DottysGlobalDataModel
 import com.keylimetie.dottys.splash.DottysSplashActivity
 import com.keylimetie.dottys.ui.dashboard.BeaconType
 import com.keylimetie.dottys.ui.dashboard.DottysBeacon
@@ -36,10 +37,11 @@ import kotlin.collections.ArrayList
 
 
 enum class PreferenceTypeKey {
-    USER_DATA, TOKEN, LOCATIONS, DOTTYS_USER_LOCATION, BEACON_AT_LOCATION
+    USER_DATA, GLOBAL_DATA, LOCATIONS, DOTTYS_USER_LOCATION, BEACON_AT_LOCATION
 }
 
 open class DottysBaseActivity : AppCompatActivity() {
+    var backButton: ImageButton? = null
     var sharedPreferences: SharedPreferences? = null
     var editor: SharedPreferences.Editor? = null
     var actionBarView: View? = null
@@ -74,7 +76,7 @@ open class DottysBaseActivity : AppCompatActivity() {
         actionBar.elevation = 1F
         actionBarView = actionBar.customView
         actionBar.setBackgroundDrawable(coloBackground)
-        val backButton = actionBarView?.findViewById<ImageButton>(R.id.back_image_button)
+          backButton = actionBarView?.findViewById<ImageButton>(R.id.back_image_button)
         backButton?.setOnClickListener {
             finish()
         }
@@ -157,7 +159,23 @@ open class DottysBaseActivity : AppCompatActivity() {
         }
     }
 
-    fun getUserNearsLocations(): DottysLocationsStoresModel {
+    fun getGLobalData(): DottysGlobalDataModel {
+        val textoDate = sharedPreferences!!.getString(PreferenceTypeKey.GLOBAL_DATA.name, "")
+
+        return try {
+            var person: DottysGlobalDataModel =
+                DottysGlobalDataModel.fromJson(
+                    textoDate!!
+                )
+            person
+
+        } catch (e: Exception) {
+            println(e)
+            DottysGlobalDataModel()
+        }
+    }
+
+     fun getUserNearsLocations(): DottysLocationsStoresModel {
         val textoDate = sharedPreferences!!.getString(PreferenceTypeKey.LOCATIONS.name, "")
 
         return try {

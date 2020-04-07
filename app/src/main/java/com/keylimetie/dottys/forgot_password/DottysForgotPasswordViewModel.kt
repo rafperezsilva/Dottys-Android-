@@ -233,7 +233,7 @@ open class DottysForgotPasswordViewModel : ViewModel() {
                 verificationActivity.hideLoader(verificationActivity)
                 val errorRes = DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                 if (errorRes.error?.messages?.size ?: 0 > 0) {
-                    Toast.makeText(activityRewards, errorRes.error?.messages?.first() ?: "", Toast.LENGTH_LONG).show()
+                    Toast.makeText(verificationActivity, errorRes.error?.messages?.first() ?: "", Toast.LENGTH_LONG).show()
                 }
                 Log.e("ERROR VOLLEY ", error.message, error)
                 Log.e("ERROR VOLLEY ", error.message, error)

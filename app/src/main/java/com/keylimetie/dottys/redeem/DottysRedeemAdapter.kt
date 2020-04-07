@@ -65,8 +65,9 @@ class DottysRedeemAdapter(private val activity: DottysRedeemRewardsActivity,
         if (rewards.redeemed == true) {
             paramsRelative.height = params.height
             redeemRewardsLayout.visibility = View.VISIBLE
-
+            rewardsForCashButton.isEnabled = false
         } else {
+            rewardsForCashButton.isEnabled = true
             paramsRelative.height = 1
             redeemRewardsLayout.visibility = View.INVISIBLE
         }

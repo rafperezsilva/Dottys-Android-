@@ -1,5 +1,7 @@
 package com.keylimetie.dottys.redeem
 
+import android.content.Intent
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Typeface.BOLD
 import android.graphics.drawable.ColorDrawable
@@ -10,9 +12,12 @@ import android.text.style.AbsoluteSizeSpan
 import android.text.style.AlignmentSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
+import android.util.Base64
 import android.util.Log
+import android.view.View
 import android.view.WindowManager
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
@@ -23,9 +28,10 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.keylimetie.dottys.DottysErrorModel
-import com.keylimetie.dottys.DottysLoginResponseModel
 import com.keylimetie.dottys.R
 import com.keylimetie.dottys.models.DottysRewardsModel
+import com.keylimetie.dottys.ui.dashboard.DashboardViewModel
+import com.keylimetie.dottys.ui.dashboard.DottysCurrentUserObserver
 import org.json.JSONObject
 import kotlin.math.roundToInt
 import kotlin.properties.Delegates
@@ -48,7 +54,7 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
 
     /* CASH REWARDS VIEW ITEMS */
     private var redeemImage: ImageView? = null
-    private var start: Swipe_Button_View? = null
+    private var swipeRewardsItem: Swipe_Button_View? = null
 
     private var zeroButton: Button? = null
     private var oneButton: Button? = null
@@ -73,6 +79,11 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
     private var codeHostArray = ArrayList<String>()
     private var rewardsObserver: DottysRedeemedRewardsObserver? = null
 
+    /* REDEMEED REWARDS ITEMS */
+    private var redemmedContainer: ImageView? = null
+   // private var swipeRedemeedItem: Swipe_Button_View? = null
+
+
     /* REDEEEM REWARDS VIEW */
     fun initViewRedeem(activityRedeem: DottysRedeemRewardsActivity){
         this.activityRedeem = activityRedeem
@@ -87,6 +98,7 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
         activityRedeem.window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         activityRedeem.window.statusBarColor = ContextCompat.getColor(activityRedeem, R.color.colorDottysGrey)
         val data = activityRedeem.intent.getStringExtra("REDEEM_REWARDS")
+
         redeemsUserData =  DottysRewardsModel.fromJson(data.toString())
         segmentTabLisener()
         viewSegmentSelectedHandler(segmentSelected)
@@ -190,7 +202,7 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
     }
 
     private fun initRewardsItemsView(activityRewards: DottysCashRedeemRewardsActivity) {
-        start = activityRewards.findViewById<Swipe_Button_View>(R.id.start_swipe)
+        swipeRewardsItem = activityRewards.findViewById<Swipe_Button_View>(R.id.start_swipe)
         codeVerificationLayout =
             activityRewards.findViewById<ConstraintLayout>(R.id.enter_code_layout)
         redeemImage = activityRewards.findViewById<ImageView>(R.id.redeem_rewards_image)
@@ -230,7 +242,16 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
             }
         }
         if (codeHostArray.size == 6 && validateStoreCode(activityRewards)) {
-            redeemRewards(activityRewards, getHostCode())
+            /*MOCK REDEEM REWARDS*/
+//            var intent = Intent(activityRewards, DottysRewardRedeemedActivity::class.java)
+//            intent.putExtra("STORE_LOCATION", "")
+//         activityRewards.  startActivity(intent)
+        redeemRewards(activityRewards, getHostCode())
+        }  else if (codeHostArray.size == 6 && !validateStoreCode(activityRewards)) {
+            Toast.makeText(activityRewards, "INVALID HOST CODE ID", Toast.LENGTH_LONG).show()
+            codeHostArray = ArrayList<String>()
+            editTextCodeManager(activityRewards)
+
         }
     }
 
@@ -284,14 +305,23 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
         }
     }
 
-    fun swipeBUttonSetting(activityRewards: DottysCashRedeemRewardsActivity) {
-        start?.setBackgroundResource(R.drawable.shape_swipe_view)
-        start?.setThumbBackgroundColor(activityRewards.resources.getColor(R.color.colorSecundaryDark))
-        start?.setTextColor(activityRewards.resources.getColor(R.color.colorTextGrey))
-        start?.setOnSwipeCompleteListener_forward_reverse(object : OnSwipeCompleteListener {
+    fun swipeBUttonSetting(activityRewards: AppCompatActivity) {
+        swipeRewardsItem?.setBackgroundResource(R.drawable.shape_swipe_view)
+        swipeRewardsItem?.setThumbBackgroundColor(activityRewards.resources.getColor(R.color.colorSecundaryDark))
+        swipeRewardsItem?.setTextColor(activityRewards.resources.getColor(R.color.colorTextGrey))
+        swipeRewardsItem?.setOnSwipeCompleteListener_forward_reverse(object : OnSwipeCompleteListener {
             override fun onSwipe_Forward(swipeView: Swipe_Button_View) {
-                codeVerificationLayout?.animate()?.x(0.0f)?.y(0.0f)?.scaleY(1f)?.setDuration(350)
-                    ?.start()
+                if (activityRewards is DottysRewardRedeemedActivity) {
+                    var dashBardViewModel = DashboardViewModel()
+
+                    dashBardViewModel.userCurrentUserDataObserver = DottysCurrentUserObserver(activityRewards as DottysRewardRedeemedActivity)
+                    dashBardViewModel.getUserRewards(activityRewards)
+
+                } else {
+                    codeVerificationLayout?.animate()?.x(0.0f)?.y(0.0f)?.scaleY(1f)
+                        ?.setDuration(350)
+                        ?.start()
+                }
             }
 
             override fun onSwipe_Reverse(swipeView: Swipe_Button_View) {}
@@ -355,6 +385,42 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
             }
         }
         mQueue.add(jsonObjectRequest)
+    }
+
+    /*REWARDS REDEMEE VIEW */
+
+    fun initRewardRedeemedView(redemeedActivity:DottysRewardRedeemedActivity){
+        redemeedActivity.supportActionBar?.let {redemeedActivity.actionBarSetting(it,
+            ColorDrawable(redemeedActivity.resources.getColor(R.color.colorDottysGrey))
+        ) }
+        val titleBar = redemeedActivity.actionBarView?.findViewById<TextView>(R.id.title_bar)
+        titleBar?.text = "REDEEM REWARDS"
+        redemeedActivity.hideLoader(redemeedActivity)
+        redemeedActivity.backButton  ?: return
+        redemeedActivity.backButton!!.visibility = View.INVISIBLE
+        redemeedActivity.window.statusBarColor = ContextCompat.getColor(redemeedActivity, R.color.colorDottysGrey)
+        val image = redemeedActivity.findViewById<ImageView>(R.id.reward_barcode)
+        val redemmedContainer = redemeedActivity.findViewById<ConstraintLayout>(R.id.ticket_redemeed_container)
+         var redemmedCodeItem = redemeedActivity.findViewById<TextView>(R.id.redemeed_code_textview)
+        redemmedCodeItem.text = redemeedActivity.rewardsRedemmed?.validationCode
+        if (redemeedActivity.rewardsRedemmed?.barcode?.split(",")?.size ?: 0 > 0) {
+            val bm = Base64.decode(redemeedActivity.rewardsRedemmed?.barcode?.split(",")?.get(1), 0)
+            image.setImageBitmap(BitmapFactory.decodeByteArray(bm, 0, bm.size))
+        }
+
+//                     val bm = Base64.decode(redemeedActivity.imageData.split(",")?.get(1), 0)
+//                    image.setImageBitmap(BitmapFactory.decodeByteArray(bm, 0, bm.size))
+
+
+        var containerParams = redemmedContainer?.layoutParams
+        redemeedActivity?.windowManager?.defaultDisplay?.getMetrics(redemeedActivity?.displayMetrics)
+        val containerWidthSize = ((redemeedActivity?.displayMetrics?.widthPixels ?: 0) * 0.7).roundToInt()
+        containerParams?.width = containerWidthSize
+        containerParams?.height = containerWidthSize + (containerWidthSize * 0.2).roundToInt()
+        redemmedContainer?.layoutParams = containerParams
+
+        swipeRewardsItem = redemeedActivity.findViewById<Swipe_Button_View>(R.id.start_swipe)
+        swipeBUttonSetting(redemeedActivity as DottysRewardRedeemedActivity)
     }
 }
 

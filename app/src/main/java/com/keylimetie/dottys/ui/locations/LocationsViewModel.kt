@@ -208,9 +208,9 @@ class LocationsViewModel : ViewModel() {
         val mQueue = Volley.newRequestQueue(mContext)
         mContext.showLoader(mContext)
 /*MOCK LOCATION */
-      //  val locationURL =
+        val locationURL =
             "locations?distance=150&limit=100&page=1&page=1&latitude=" + latitude + "&longitude=" + longitude
-         val locationURL =
+     //    val locationURL =
             "locations?distance=150&limit=100&page=1&page=1&latitude=41.603161&longitude=-87.753459300000003"
         val jsonObjectRequest = object : JsonObjectRequest(
             Method.GET,
@@ -237,7 +237,7 @@ class LocationsViewModel : ViewModel() {
 //                        if ( locationFragment.fragmentManager?.backStackEntryCount ?: 0 > 0) {
 //                            locationFragment.fragmentManager?.popBackStack()
 //                        }
-                            if(fragment.id == LocationsFragment().id) {
+                            if(fragment  is LocationsFragment) {
                                 val intent =
                                     Intent(mContext, DottysMainNavigationActivity::class.java)
                                 mContext.startActivity(intent)
