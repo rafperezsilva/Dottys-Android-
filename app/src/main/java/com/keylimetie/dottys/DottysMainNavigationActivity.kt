@@ -1,13 +1,16 @@
 package com.keylimetie.dottys
 
+import android.location.Location
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -15,13 +18,19 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
+import com.keylimetie.dottys.ui.dashboard.DashboardFragment
+import com.keylimetie.dottys.ui.dashboard.DashboardViewModel
 import com.keylimetie.dottys.ui.drawing.RewardsSegment
+import com.keylimetie.dottys.ui.locations.DottysLocationsStoresModel
+import com.keylimetie.dottys.ui.locations.LocationsViewModel
 
-class DottysMainNavigationActivity : DottysBaseActivity() {
+
+class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationDelegates,
+    com.keylimetie.dottys.ui.locations.DottysLocationDelegates {
 
     var segmentSelect: RewardsSegment? =  null
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var controller: NavController // don't forget to initialize
+    lateinit var controller: NavController // don't forget to initialize
     private lateinit var toolbar: Toolbar
     var selectedItemId: Int? = 0
 
@@ -73,7 +82,7 @@ class DottysMainNavigationActivity : DottysBaseActivity() {
                 return "REDEEM REWARDS"
             }
             R.id.nav_profile -> {
-                return "Profile"
+                return "My Profile"
             }
             R.id.nav_contact_suppport -> {
                 return "Help"
@@ -101,8 +110,14 @@ class DottysMainNavigationActivity : DottysBaseActivity() {
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         initDrawerSetting()
-
-    }
+        if(intent.getBooleanExtra("VIEW_FROM_PROFILE", false)) {
+            controller.navigate(R.id.nav_profile, intent.extras)
+        }
+        if (gpsTracker == null) {
+            gpsTracker = GpsTracker(this)
+        }
+        gpsTracker?.getLocation()?.let { gpsTracker?.onLocationChanged(it) }
+ }
 
     fun initDrawerSetting() {
 
@@ -178,4 +193,41 @@ class DottysMainNavigationActivity : DottysBaseActivity() {
 
 
     }
+    override fun onLocationChangeHandler(locationGps: Location?) {
+        print(locationGps?.latitude)
+       Toast.makeText(this, "Location has chande to \n Lat: ${locationGps?.latitude}\nLong: ${locationGps?.longitude}", Toast.LENGTH_LONG).show()
+         val locationsViewModel = LocationsViewModel()
+//        val vcMain = DottysMainNavigationActivity()
+       locationsViewModel.getLocationsDottysRequest(this,locationGps?.latitude.toString(),locationGps?.longitude.toString(), null)
+
+    }
+
+    override fun getStoresLocation(locations: DottysLocationsStoresModel) {
+       // var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
+        editor =  sharedPreferences!!.edit()
+        saveDataPreference(PreferenceTypeKey.LOCATIONS,locations.toJson())
+        val currentFragment = DashboardViewModel()
+        currentFragment.initAnalitycsItems()
+        //currentFragment.getBeaconList("")
+    }
+
+    override fun allItemsCollapse(isColappse: Boolean) {
+
+    }
+
+//    override fun onLocationChangeHandler(locationGps: Location?) {
+//        Toast.makeText(this, "Location has chande to \n Lat: ${locationGps?.latitude}\nLong: ${locationGps?.longitude}", Toast.LENGTH_LONG).show()
+//        val locationsViewModel = LocationsViewModel()
+//        val vcMain = DottysMainNavigationActivity()
+//        locationsViewModel.getLocationsDottysRequest(vcMain,locationGps?.latitude.toString(),locationGps?.longitude.toString(), null)
+//    }
+
+    fun getForegroundFragment(): Fragment? {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_dashboard)
+        return navHostFragment?.childFragmentManager?.fragments?.get(0)
+    }
 }
+
+
+

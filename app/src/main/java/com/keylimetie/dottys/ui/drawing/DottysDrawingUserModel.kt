@@ -1,5 +1,6 @@
 package com.keylimetie.dottys.ui.drawing
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
@@ -20,7 +21,7 @@ data class DottysDrawingUserModel (
         fun fromJson(json: String) = drawingMapper.readValue<DottysDrawingUserModel>(json)
     }
 }
-
+@JsonIgnoreProperties
 data class DottysDrawing(
     @get:JsonProperty("_id")@field:JsonProperty("_id")
     val id: String? = null,
@@ -40,10 +41,17 @@ data class DottysDrawing(
     val quantity: Long? = null,
     val priceInPoints: Long? = null,
     val locationName: String? = null,
+ //   val dummy: Boolean? = null,
 
     @get:JsonProperty("locationId")@field:JsonProperty("locationId")
     val locationID: String? = null,
 
     @get:JsonProperty("isDeleted")@field:JsonProperty("isDeleted")
     val isDeleted: Boolean? = null
-)
+){
+    fun toJson() = drawingMapper.writeValueAsString(this)
+
+    companion object {
+        fun fromJson(json: String) = drawingMapper.readValue<DottysDrawing>(json)
+    }
+}

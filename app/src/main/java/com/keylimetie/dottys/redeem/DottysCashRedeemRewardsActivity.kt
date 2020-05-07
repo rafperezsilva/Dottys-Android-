@@ -25,4 +25,9 @@ class DottysCashRedeemRewardsActivity : DottysBaseActivity(), DottysRedeemedRewa
         startActivity(intent)
     }
 
+    override fun getPurchaseDrawing(isPurchase: Boolean) { }
+    override fun getCachRewards(isCashed: Boolean) {
+        finish()
+     }
+
 }

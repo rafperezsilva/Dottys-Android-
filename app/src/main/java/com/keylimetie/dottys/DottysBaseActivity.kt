@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.drawable.ColorDrawable
+import android.location.Location
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.DisplayMetrics
@@ -25,11 +26,14 @@ import com.dottysrewards.dottys.service.VolleyService
 import com.google.android.gms.maps.model.LatLng
 import com.keylimetie.dottys.models.DottysGlobalDataModel
 import com.keylimetie.dottys.splash.DottysSplashActivity
-import com.keylimetie.dottys.ui.dashboard.BeaconType
-import com.keylimetie.dottys.ui.dashboard.DottysBeacon
-import com.keylimetie.dottys.ui.dashboard.DottysBeaconsModel
+import com.keylimetie.dottys.ui.dashboard.DashboardViewModel
+import com.keylimetie.dottys.ui.dashboard.models.BeaconType
+import com.keylimetie.dottys.ui.dashboard.models.DottysBeacon
+import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconsModel
 import com.keylimetie.dottys.ui.locations.DottysLocationsStoresModel
-import com.keylimetie.dottys.ui.locations.DottysStoresLocation
+import com.keylimetie.dottys.ui.locations.LocationsViewModel
+import java.math.BigInteger
+import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
@@ -40,7 +44,7 @@ enum class PreferenceTypeKey {
     USER_DATA, GLOBAL_DATA, LOCATIONS, DOTTYS_USER_LOCATION, BEACON_AT_LOCATION
 }
 
-open class DottysBaseActivity : AppCompatActivity() {
+open class DottysBaseActivity : AppCompatActivity(){//,    com.keylimetie.dottys.ui.locations.DottysLocationDelegates {
     var backButton: ImageButton? = null
     var sharedPreferences: SharedPreferences? = null
     var editor: SharedPreferences.Editor? = null
@@ -48,11 +52,14 @@ open class DottysBaseActivity : AppCompatActivity() {
     var baseUrl: String? = null
     var progressBar: ProgressBar? = null
     val displayMetrics = DisplayMetrics()
-    val gpsTracker = GpsTracker(this)
+
+     var gpsTracker : GpsTracker? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         VolleyService.initialize(this)
-        baseUrl = this.resources.getString(R.string.url_base_production)
+          baseUrl = this.resources.getString(R.string.url_base_development)
+        //baseUrl = this.resources.getString(R.string.url_base_development)
         progressBar = findViewById(R.id.progress_loader)
         //hideLoader(this)
         sharedPreferences = this.getSharedPreferences(
@@ -64,9 +71,14 @@ open class DottysBaseActivity : AppCompatActivity() {
         //mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 //        getLastLocation()
 
-        requestLocation(gpsTracker, this)
+    }
 
-
+    override fun onStart() {
+        super.onStart()
+//        if (gpsTracker == null) {
+//            gpsTracker = GpsTracker(this)
+//        }
+//        gpsTracker?.onLocationChanged(gpsTracker?.locationGps!!)
     }
 
     fun actionBarSetting(actionBar: ActionBar, coloBackground: ColorDrawable) {
@@ -76,7 +88,7 @@ open class DottysBaseActivity : AppCompatActivity() {
         actionBar.elevation = 1F
         actionBarView = actionBar.customView
         actionBar.setBackgroundDrawable(coloBackground)
-          backButton = actionBarView?.findViewById<ImageButton>(R.id.back_image_button)
+        backButton = actionBarView?.findViewById<ImageButton>(R.id.back_image_button)
         backButton?.setOnClickListener {
             finish()
         }
@@ -89,6 +101,7 @@ open class DottysBaseActivity : AppCompatActivity() {
     }
 
     fun saveDataPreference(keyPreference: PreferenceTypeKey, jsonData: String) {
+        editor = sharedPreferences!!.edit()
         editor!!.putString(keyPreference.name, jsonData)
         editor!!.commit()
     }
@@ -118,7 +131,7 @@ open class DottysBaseActivity : AppCompatActivity() {
 //        gpsTracker?.let { activity?.let { it1 -> getLocation(it, it1) } }
     }
 
-    fun getBeaconAtStoreLocation(): DottysBeacon {
+    fun getBeaconAtStoreLocation(): List<DottysBeacon>? {
         val textoDate = sharedPreferences!!.getString(PreferenceTypeKey.BEACON_AT_LOCATION.name, "")
 
         return try {
@@ -127,23 +140,30 @@ open class DottysBaseActivity : AppCompatActivity() {
                     textoDate!!
                 )
             try {
-                var beaconAtStore = person.beacons?.filter { it.location?.storeNumber ?: 0 == getUserNearsLocations().locations?.first()?.storeNumber ?: 0 }
-                    ?: ArrayList()
-               // val beaconLocation = beaconAtStore.filter { it.beaconType == BeaconType.Location }.first()
+                var beaconAtStore =
+                    person.beacons?.filter { it.location?.storeNumber ?: 0 == getUserNearsLocations().locations?.first()?.storeNumber ?: 0 }
+                        ?: ArrayList()
+                // val beaconLocation = beaconAtStore.filter { it.beaconType == BeaconType.Location }.first()
 
-                   beaconAtStore.filter { it.beaconType == BeaconType.Location }.first()
+                beaconAtStore//.filter { it.beaconType == BeaconType.Location }.first()
             } catch (e: Exception) {
                 println(e)
-                  DottysBeacon()
+                null
             }
 
         } catch (e: Exception) {
             println(e)
-            DottysBeacon()
+            null
         }
     }
 
     fun getUserPreference(): DottysLoginResponseModel {
+        if (sharedPreferences ==  null) {
+            sharedPreferences = this.getSharedPreferences(
+                PreferenceTypeKey.USER_DATA.name,
+                Context.MODE_PRIVATE
+            )
+        }
         val textoDate = sharedPreferences!!.getString(PreferenceTypeKey.USER_DATA.name, "")
 
         return try {
@@ -175,7 +195,7 @@ open class DottysBaseActivity : AppCompatActivity() {
         }
     }
 
-     fun getUserNearsLocations(): DottysLocationsStoresModel {
+    fun getUserNearsLocations(): DottysLocationsStoresModel {
         val textoDate = sharedPreferences!!.getString(PreferenceTypeKey.LOCATIONS.name, "")
 
         return try {
@@ -191,8 +211,10 @@ open class DottysBaseActivity : AppCompatActivity() {
         }
     }
 
-    fun showLoader(context: AppCompatActivity) {
-        progressBar = context.findViewById<ProgressBar>(R.id.progress_loader)
+    fun showLoader() {
+        if (progressBar?.visibility == View.VISIBLE){
+            return }
+        progressBar = this.findViewById<ProgressBar>(R.id.progress_loader)
         progressBar!!.visibility = View.VISIBLE
         window.setFlags(
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
@@ -201,7 +223,9 @@ open class DottysBaseActivity : AppCompatActivity() {
     }
 
     fun hideLoader(context: AppCompatActivity) {
-        progressBar = context.findViewById<ProgressBar>(R.id.progress_loader)
+        if (progressBar?.visibility == null){
+            return }
+        progressBar = this.findViewById<ProgressBar>(R.id.progress_loader)
         progressBar?.visibility = View.INVISIBLE
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
@@ -219,6 +243,7 @@ open class DottysBaseActivity : AppCompatActivity() {
         // mContext.finish()
 
     }
+
 
     /*
     * LOCATIONS PERMISSIONS
@@ -262,10 +287,11 @@ open class DottysBaseActivity : AppCompatActivity() {
     fun isValidPassword(data: String): Boolean {
         val str = data
         var valid = true
-
+        var mssg = String()
         // Password policy check
         // Password should be minimum minimum 8 characters long
         if (str.length < 8) {
+            mssg = "Must be have at least 7 characters"
             valid = false
         }
         // Password should contain at least one number
@@ -281,6 +307,7 @@ open class DottysBaseActivity : AppCompatActivity() {
         var pattern = Pattern.compile(exp)
         var matcher = pattern.matcher(str)
         if (!matcher.matches()) {
+            mssg = "Must be have at least one capital letter"
             valid = false
         }
 
@@ -289,6 +316,7 @@ open class DottysBaseActivity : AppCompatActivity() {
         pattern = Pattern.compile(exp)
         matcher = pattern.matcher(str)
         if (!matcher.matches()) {
+            mssg = "Must be have at least one small letter"
             valid = false
         }
 
@@ -306,51 +334,29 @@ open class DottysBaseActivity : AppCompatActivity() {
 //            val error: String? = if (valid) null else PASSWORD_POLICY
 //            setError(data, error)
 //        }
-
+        if (!valid) {
+            Toast.makeText(this, mssg, Toast.LENGTH_LONG).show()
+        }
         return valid
     }
 
-/*
-    private val keyboardLayoutListener = OnGlobalLayoutListener {
-        val heightDiff = rootLayout!!.rootView.height - rootLayout!!.height
-        val contentViewTop =
-            window.findViewById<View>(Window.ID_ANDROID_CONTENT).top
-        val broadcastManager =
-            LocalBroadcastManager.getInstance(this)
-        if (heightDiff <= contentViewTop) {
-            onHideKeyboard()
-            val intent = Intent("KeyboardWillHide")
-            broadcastManager.sendBroadcast(intent)
-        } else {
-            val keyboardHeight = heightDiff - contentViewTop
-            onShowKeyboard(keyboardHeight)
-            val intent = Intent("KeyboardWillShow")
-            intent.putExtra("KeyboardHeight", keyboardHeight)
-            broadcastManager.sendBroadcast(intent)
-        }
-    }
+//    override fun getStoresLocation(locations: DottysLocationsStoresModel) {
+//
+//        editor = sharedPreferences!!.edit()
+//       saveDataPreference(PreferenceTypeKey.LOCATIONS,locations.toJson())
+////        val homeViewModel = DashboardViewModel()
+////         homeViewModel.getBeaconList(this as DottysMainNavigationActivity)
+//    }
+//
+//    override fun allItemsCollapse(isColappse: Boolean) {
+//    }
+}
 
-    private var keyboardListenersAttached = false
-    private var rootLayout: ViewGroup? = null
 
-    protected open fun onShowKeyboard(keyboardHeight: Int) {}
-    protected open fun onHideKeyboard() {}
-
-    protected open fun attachKeyboardListeners() {
-        if (keyboardListenersAttached) {
-            return
-        }
-        rootLayout = findViewById<View>(R.id.) as ViewGroup
-        rootLayout!!.viewTreeObserver.addOnGlobalLayoutListener(keyboardLayoutListener)
-        keyboardListenersAttached = true
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        if (keyboardListenersAttached) {
-            rootLayout!!.viewTreeObserver.removeGlobalOnLayoutListener(keyboardLayoutListener)
-        }
-    }
-    */
-
+//open class DottysBaseLocationActivity : AppCompatActivity()
+//
+//}
+  fun String.md5(): String {
+    val md = MessageDigest.getInstance("MD5")
+    return BigInteger(1, md.digest(toByteArray())).toString(16).padStart(32, '0')
 }

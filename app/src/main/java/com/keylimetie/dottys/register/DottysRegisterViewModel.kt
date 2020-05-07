@@ -1,8 +1,6 @@
 package com.keylimetie.dottys.register
 
-import android.app.Activity
 import android.app.DatePickerDialog
-import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.telephony.PhoneNumberFormattingTextWatcher
@@ -10,7 +8,6 @@ import android.text.InputType
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModel
@@ -18,16 +15,12 @@ import com.android.volley.NetworkResponse
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.keylimetie.dottys.DottysErrorModel
-import com.keylimetie.dottys.DottysLoginResponseModel
-import com.keylimetie.dottys.DottysRegisterRequestModel
-import com.keylimetie.dottys.GpsTracker
 import com.keylimetie.dottys.R.id
+import com.keylimetie.dottys.*
 import com.keylimetie.dottys.forgot_password.DottysEnterVerificationCodeActivity
 import com.keylimetie.dottys.register.volley_multipart.VolleyMultipartRequest
 import org.json.JSONObject
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 import kotlin.properties.Delegates
 
@@ -45,14 +38,14 @@ open class DottysRegisterViewModel : ViewModel() {
     private var phoneEditText: EditText? = null
     private var emailEditText: EditText? = null
     private var passwordEditText: EditText? = null
-    private var passwordConfirmEditText: EditText? = null
+    //private var passwordConfirmEditText: EditText? = null
     var birthdateEditText: EditText? = null
     private var legalAgeCheckBox: CheckBox? = null
     private var termsAndConditionsCheckBox: CheckBox? = null
     private var showPasswordButon: Button? = null
-    private var showConfirmPasswordButon: Button? = null
+   // private var showConfirmPasswordButon: Button? = null
     private var showPasswordButonState = false
-    private var showConfirmPasswordButonState = false
+   // private var showConfirmPasswordButonState = false
     private var submitRegisterButon: Button? = null
     private var phantonBirthdayButton: Button? = null
     //endregion
@@ -82,20 +75,20 @@ open class DottysRegisterViewModel : ViewModel() {
         phoneEditText = activityRegister.findViewById<EditText>(id.phone_register_edit_text)
         emailEditText = activityRegister.findViewById<EditText>(id.email_register_edit_text)
         passwordEditText = activityRegister.findViewById<EditText>(id.password_register_edit_text)
-        passwordConfirmEditText =
-            activityRegister.findViewById<EditText>(id.confirm_password_register_edit_text)
+       // passwordConfirmEditText =
+           // activityRegister.findViewById<EditText>(id.confirm_password_register_edit_text)
         birthdateEditText =
             activityRegister.findViewById<EditText>(id.birthdate_register_edit_text)
         legalAgeCheckBox = activityRegister.findViewById<CheckBox>(id.legal_age_register_checkbox)
         termsAndConditionsCheckBox =
             activityRegister.findViewById<CheckBox>(id.privacy_policy_register_checkbox)
         showPasswordButon = activityRegister.findViewById<Button>(id.show_password_button)
-        showConfirmPasswordButon =
-            activityRegister.findViewById<Button>(id.show_password_confirm_button)
+        //showConfirmPasswordButon =
+           // activityRegister.findViewById<Button>(id.show_password_confirm_button)
         submitRegisterButon = activityRegister.findViewById<Button>(id.submit_register_button)
         phantonBirthdayButton = activityRegister.findViewById<Button>(id.phanton_birthdate_button)
         verificationLayout =
-            activityRegister.findViewById<ConstraintLayout>(id.verification_layout)
+            activityRegister.findViewById<ConstraintLayout>(id.verification_constraint_layout)
 
         var paramsLayout = verificationLayout?.layoutParams
         paramsLayout?.height = 2
@@ -117,15 +110,15 @@ open class DottysRegisterViewModel : ViewModel() {
             }
         }
 
-        showConfirmPasswordButon?.setOnClickListener {
-            showConfirmPasswordButonState = !(showConfirmPasswordButonState)
-            if (showConfirmPasswordButonState) {
-                passwordConfirmEditText?.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-            } else {
-                passwordConfirmEditText?.inputType =
-                    (InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD)
-            }
-        }
+//        showConfirmPasswordButon?.setOnClickListener {
+//            showConfirmPasswordButonState = !(showConfirmPasswordButonState)
+//            if (showConfirmPasswordButonState) {
+//                passwordConfirmEditText?.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+//            } else {
+//                passwordConfirmEditText?.inputType =
+//                    (InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD)
+//            }
+//        }
 
     }
 
@@ -139,6 +132,7 @@ open class DottysRegisterViewModel : ViewModel() {
                 it, activityRegister, year - 18, month, day
             )
         }
+
 //        birthdateEditText?.setOnFocusChangeListener { v, hasFocus ->
 //            if (hasFocus) {
 //                //    v.clearFocus()
@@ -146,7 +140,9 @@ open class DottysRegisterViewModel : ViewModel() {
 //                datePickerDialog?.show()
 //            }
 //        }
-        phantonBirthdayButton?.setOnClickListener { datePickerDialog?.show() }
+        phantonBirthdayButton?.setOnClickListener {
+
+            datePickerDialog?.show() }
     }
 
     fun addCustomsSettings() {
@@ -156,7 +152,7 @@ open class DottysRegisterViewModel : ViewModel() {
             phoneEditText,
             emailEditText,
             passwordEditText,
-            passwordConfirmEditText,
+            //passwordConfirmEditText,
             birthdateEditText
         )
         for (item in editTextData!!) {
@@ -193,12 +189,7 @@ open class DottysRegisterViewModel : ViewModel() {
                 return false
             }
         }
-        if (passwordEditText?.text.toString() != passwordConfirmEditText?.text.toString()) {
-            Toast.makeText(activityRegister, "Password must match!", Toast.LENGTH_LONG).show()
-            return false
-        } else if (!activityRegister.isValidPassword(passwordEditText?.text.toString()) ||
-            !activityRegister.isValidPassword(passwordConfirmEditText?.text.toString())
-        ) {
+        if (!activityRegister.isValidPassword(passwordEditText?.text.toString())) {
             Toast.makeText(
                 activityRegister,
                 "Password must be at least 6 characters in length and contain 1 uppercase and 1 lowercase letter.",
@@ -218,9 +209,10 @@ open class DottysRegisterViewModel : ViewModel() {
             ).show()
             return false
         }
-        //fillDataForRegisterRequest(editTextData)
-        val gpsTracker = GpsTracker(activityRegister)
-        val location = activityRegister.getLocation(gpsTracker, activityRegister)
+        fillDataForRegisterRequest(editTextData)
+       // val gpsTracker = GpsTracker(activityRegister)
+        /*GET DEVICE LOCATION ON REGISTER*/
+      //  val location = activityRegister.getLocation(gpsTracker, activityRegister)
         return true
     }
 
@@ -275,9 +267,9 @@ open class DottysRegisterViewModel : ViewModel() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
 
-        val goToVerification = activityRegister.findViewById<Button>(id.go_to_enter_verification)
+        val goToVerification = activityRegister.findViewById<Button>(R.id.go_to_enter_verification)
         goToVerification.setOnClickListener {
-            activityRegisterObserver?.registerUser?.email = "pruebaemail@mail.com"/*FIXME*/
+           // activityRegisterObserver?.registerUser?.email = //"pruebaemail@mail.com"/*FIXME*/
             if (activityRegisterObserver?.registerUser?.email != null) {
                 var intent =
                     Intent(activityRegister, DottysEnterVerificationCodeActivity::class.java)
@@ -295,7 +287,7 @@ open class DottysRegisterViewModel : ViewModel() {
         registerData: DottysRegisterRequestModel
     ) {
         val mQueue = Volley.newRequestQueue(activityRegister)
-        activityRegister.showLoader(activityRegister)
+        activityRegister.showLoader()
 
         val jsonObject = JSONObject(registerData.toJson())
         val jsonObjectRequest = object : JsonObjectRequest(Method.POST,
@@ -338,7 +330,7 @@ open class DottysRegisterViewModel : ViewModel() {
     }
 
     fun uploadImgage(context: DottysProfilePictureActivity, imageData: ByteArray) {
-        context.showLoader(context)
+        context.showLoader()
         val mQueue = Volley.newRequestQueue(context)
         val params = HashMap<String, String>()
         params["Authorization"] = context.getUserPreference().token ?: ""

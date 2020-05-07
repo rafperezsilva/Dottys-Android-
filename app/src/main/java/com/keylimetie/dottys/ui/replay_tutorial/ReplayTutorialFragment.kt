@@ -25,9 +25,9 @@ class ReplayTutorialFragment : Fragment() {
             ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         val root = inflater.inflate(R.layout.replay_tutorial_fragment, container, false)
         val textView: TextView = root.findViewById(R.id.replay_tutorial_textview)
-        profileViewModel.text.observe(this, Observer {
-            textView.text = it
-        })
+//        profileViewModel.text.observe(this, Observer {
+//            textView.text = it
+//        })
         return root
     }
 

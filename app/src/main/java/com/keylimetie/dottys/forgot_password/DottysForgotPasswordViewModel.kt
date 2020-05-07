@@ -104,7 +104,7 @@ open class DottysForgotPasswordViewModel : ViewModel() {
              resesetPassword(verificationActivity, email, EMAIL)
         }
         phoneVerificationButton?.setOnClickListener {
-            resesetPassword(verificationActivity, null, SMS)
+            resesetPassword(verificationActivity, verificationActivity.strUser, SMS)
         }
     }
 
@@ -160,7 +160,7 @@ open class DottysForgotPasswordViewModel : ViewModel() {
     }
 
     fun onSuccessCodeManager(verificationCodeActivity: DottysEnterVerificationCodeActivity, email:String,isRegisterView: Boolean){
-        Toast.makeText(verificationCodeActivity,"COMPLETE CODE", Toast.LENGTH_LONG).show()
+       // Toast.makeText(verificationCodeActivity,"COMPLETE CODE", Toast.LENGTH_LONG).show()
         if (isRegisterView){
             /*GO TO VERIFY CODE */
 //            var intent = Intent(verificationCodeActivity, DottysProfilePictureActivity::class.java)
@@ -172,6 +172,7 @@ open class DottysForgotPasswordViewModel : ViewModel() {
                     Intent(verificationCodeActivity, DottysEnterPasswordActivity::class.java)
                 intent.putExtra("EMAIL_FORGOT", email)
                 intent.putExtra("DATA_CODE", codeCollector(editTextArray))
+                intent.putExtra("VIEW_FROM_PROFILE", verificationCodeActivity.viewFromProfile)
                 verificationCodeActivity.startActivity(intent)
                 clearDataInFields(editTextArray)
             }
@@ -187,6 +188,7 @@ open class DottysForgotPasswordViewModel : ViewModel() {
         }
         return true
     }
+
     fun codeCollector(editTextArray: Array<EditText?>): String{
         var textCode = StringBuilder()
         if (codeFieldValidator(editTextArray)){
@@ -217,7 +219,7 @@ open class DottysForgotPasswordViewModel : ViewModel() {
 
     ) {
         val mQueue = Volley.newRequestQueue(verificationActivity)
-        verificationActivity.showLoader(verificationActivity)
+        verificationActivity.showLoader()
         val params = HashMap<String, String>()
 
         params["verificationKey"] = verifiationCode
@@ -236,7 +238,7 @@ open class DottysForgotPasswordViewModel : ViewModel() {
                     Toast.makeText(verificationActivity, errorRes.error?.messages?.first() ?: "", Toast.LENGTH_LONG).show()
                 }
                 Log.e("ERROR VOLLEY ", error.message, error)
-                Log.e("ERROR VOLLEY ", error.message, error)
+                Log.e("ERROR VOLLEY ", error.message, error)/*FIXME*/
             }) { //no semicolon or coma
 
             override fun parseNetworkResponse(response: NetworkResponse?): Response<JSONObject> {
@@ -252,6 +254,12 @@ open class DottysForgotPasswordViewModel : ViewModel() {
                 return super.parseNetworkResponse(response)
             }
 
+            override fun getParams(): MutableMap<String, String> {
+                val params = HashMap<String, String>()
+                params["Authorization"] = verificationActivity.user?.token ?: ""
+
+                return params
+            }
 
         }
         mQueue.add(jsonObjectRequest)
@@ -264,7 +272,7 @@ open class DottysForgotPasswordViewModel : ViewModel() {
         methodType: VerificationMethodType
     ) {
         val mQueue = Volley.newRequestQueue(verificationActivity)
-        verificationActivity.showLoader(verificationActivity)
+        verificationActivity.showLoader()
         val params = HashMap<String, String>()
         var method = String()
         method = if (methodType == EMAIL) {
@@ -283,7 +291,17 @@ open class DottysForgotPasswordViewModel : ViewModel() {
                 verificationActivity.hideLoader(verificationActivity) },
             Response.ErrorListener { error ->
                 verificationActivity.hideLoader(verificationActivity)
-
+                if (error.networkResponse != null) {
+                val errorRes =
+                    DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
+                if (errorRes.error?.messages?.size ?: 0 > 0) {
+                    Toast.makeText(
+                        verificationActivity,
+                        errorRes.error?.messages?.first() ?: "",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+                }
                 Log.e("ERROR VOLLEY ", error.message, error)
             }) { //no semicolon or coma
 
@@ -315,6 +333,8 @@ open class DottysForgotPasswordViewModel : ViewModel() {
         submitNewPasswordButton?.setOnClickListener {
             if (newPasswordEditText?.text.toString() == enterNewPasswordEditText?.text.toString() && changePassActivity.isValidPassword(newPasswordEditText?.text.toString())) {
                 changePassword(changePassActivity, mail, newPasswordEditText?.text.toString(), code)
+            } else {
+                Toast.makeText(changePassActivity, "Password must match", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -325,10 +345,8 @@ open class DottysForgotPasswordViewModel : ViewModel() {
         email: String, password: String, code: String
     ) {
         val mQueue = Volley.newRequestQueue(verificationActivity)
-        verificationActivity.showLoader(verificationActivity)
+        verificationActivity.showLoader()
         val params = HashMap<String, String>()
-
-
         params["email"] = email
         params["password"] = password
         params["resetKey"] = code
@@ -341,6 +359,19 @@ open class DottysForgotPasswordViewModel : ViewModel() {
                 verificationActivity.hideLoader(verificationActivity) },
             Response.ErrorListener { error ->
                 verificationActivity.hideLoader(verificationActivity)
+                 if (error.networkResponse !=  null) {
+
+                     val errorRes =
+                         DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
+                     if (errorRes.error?.messages?.size ?: 0 > 0) {
+                         Toast.makeText(
+                             verificationActivity,
+                             errorRes.error?.messages?.first() ?: "",
+                             Toast.LENGTH_LONG
+                         ).show()
+                     }
+                 }
+                     verificationActivity.finish()
 
                 Log.e("TAG", error.message, error)
             }) { //no semicolon or coma

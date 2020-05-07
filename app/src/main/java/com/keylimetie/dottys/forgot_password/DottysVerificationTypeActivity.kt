@@ -13,6 +13,7 @@ import com.keylimetie.dottys.R
 import com.keylimetie.dottys.register.DottysProfilePictureActivity
 
 class DottysVerificationTypeActivity : DottysBaseActivity(), DottysForgotPasswordDelegates {
+    private var viewFromProfile: Boolean? = null
     private val forgotViewModel = DottysForgotPasswordViewModel()
     var strUser: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,13 +22,9 @@ class DottysVerificationTypeActivity : DottysBaseActivity(), DottysForgotPasswor
         val titleBar = actionBarView!!.findViewById<TextView>(R.id.title_bar)
         titleBar.text = "Forgot Password"
         setContentView(R.layout.activity_dottys_verification_type)
-//        var bundle: Bundle? = intent.extras
-//         message =
-//            bundle?.get("EMAIL_FORGOT") as SpannableString //?.getString("EMAIL_FORGOT", "")
-          strUser = intent.getStringExtra("EMAIL_FORGOT") // 2
-
+          strUser = intent.getStringExtra("EMAIL_FORGOT")
+          viewFromProfile = intent.getBooleanExtra("VIEW_FROM_PROFILE", false)
         forgotViewModel.initValidationView(this, strUser ?: "")
-        //  Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
     }
 
@@ -35,6 +32,7 @@ class DottysVerificationTypeActivity : DottysBaseActivity(), DottysForgotPasswor
         if(isSucces){
             var intent = Intent(this, DottysEnterVerificationCodeActivity::class.java)
             intent.putExtra("EMAIL_FORGOT", strUser)
+            intent.putExtra("VIEW_FROM_PROFILE",   viewFromProfile)
             startActivity(intent)
         }
     }

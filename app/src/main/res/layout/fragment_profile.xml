@@ -1,19 +1,340 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/text_send"
+
+
+    <ScrollView
+
+        android:id="@+id/scrollView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout2">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="17dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="top"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@mipmap/user_icon" />
+
+                <TextView
+                    style="@style/TextViewRegisterStyle"
+                    android:text="First name" />
+
+                <EditText
+                    android:id="@+id/first_name_profile_edit_text"
+                    style="@style/TextViewProfileStyle"
+                    android:layout_width="match_parent"
+                    android:inputType="textPersonName"
+                    android:textAlignment="textEnd" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:background="#6D2B2B2B" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@mipmap/user_icon"
+                    android:visibility="invisible" />
+
+                <TextView
+                    style="@style/TextViewRegisterStyle"
+                    android:text="Last name" />
+
+                <EditText
+                    android:id="@+id/last_name_profile_edit_text"
+                    style="@style/TextViewProfileStyle"
+                    android:layout_width="match_parent"
+                    android:inputType="textPersonName"
+                    android:textAlignment="textEnd" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:background="#6D2B2B2B" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@mipmap/email_icon" />
+
+                <TextView
+                    style="@style/TextViewRegisterStyle"
+                    android:text="Email" />
+
+                <EditText
+                    android:id="@+id/email_profile_edit_text"
+                    style="@style/TextViewProfileStyle"
+                    android:layout_width="match_parent"
+                    android:inputType="textEmailAddress"
+                    android:textAlignment="textEnd" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:background="#6D2B2B2B" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@mipmap/phone_icon" />
+
+                <TextView
+                    style="@style/TextViewRegisterStyle"
+                    android:text="Phone number" />
+
+                <EditText
+                    android:id="@+id/phone_profile_edit_text"
+                    style="@style/TextViewProfileStyle"
+                    android:layout_width="match_parent"
+                    android:enabled="false"
+                    android:inputType="phone"
+                    android:textAlignment="textEnd" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:background="#6D2B2B2B" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@mipmap/password_icon_red"
+                    android:tint="#525252" />
+
+                <TextView
+                    style="@style/TextViewRegisterStyle"
+                    android:text="Password" />
+
+                <Button
+                    android:id="@+id/password_profile_edit_text"
+                    style="@style/TextViewProfileStyle"
+                    android:layout_width="match_parent"
+                    android:inputType="phone"
+                    android:text="Change password"
+                    android:textAlignment="textEnd" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:background="#6D2B2B2B" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@mipmap/location_icon"
+                    android:tint="#525252" />
+
+                <TextView
+                    style="@style/TextViewRegisterStyle"
+                    android:text="My play location" />
+
+                <EditText
+                    android:enabled="false"
+                    android:id="@+id/play_location_profile_edit_text"
+                    style="@style/TextViewProfileStyle"
+                    android:layout_width="match_parent"
+                    android:inputType="phone"
+                    android:textAlignment="textEnd" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/user_location_textview"
+                    style="@style/TextViewRegisterStyle"
+                    android:layout_marginTop="10dp"
+                    android:paddingBottom="5dp"
+                    android:text="Dotty’s\n  6188 Cass Ave \nWestmont, IL 60559" />
+
+                <Button
+                    style="@style/TextViewProfileStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#00000000"
+                    android:text="Change"
+                    android:textAlignment="textEnd"
+                    android:textAllCaps="false" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:background="#6D2B2B2B" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@mipmap/notification_icon" />
+
+                <TextView
+                    style="@style/TextViewRegisterStyle"
+                    android:text="Notifications" />
+
+                <Switch
+                    android:buttonTint="@color/colorGreen"
+                    android:buttonTintMode="screen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="25dp" />
+            </LinearLayout>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="55dp"/>
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
+        android:layout_height="126dp"
+        android:background="@color/colorDottysGrey"
+        android:gravity="left|center_vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            app:civ_border_color="#FFF"
+            app:civ_border_width="5dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_toEndOf="@+id/profile_image"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/name_user_profile_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/proxima_nova_regular"
+                android:textAlignment="textStart"
+                android:textColor="#FFF"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/since_profile_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/proxima_nova_regular"
+                android:textAlignment="textStart"
+                android:textColor="#FFF"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

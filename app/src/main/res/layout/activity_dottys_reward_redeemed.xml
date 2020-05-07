@@ -8,7 +8,7 @@
     android:background="@color/colorPrimary">
 
     <TextView
-        android:id="@+id/congrats_textview"
+        android:id="@+id/host_id_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
@@ -33,13 +33,14 @@
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/congrats_textview" />
+        app:layout_constraintTop_toBottomOf="@+id/host_id_textview" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ticket_redemeed_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="45dp"
+        android:layout_marginTop="35dp"
         android:layout_marginEnd="45dp"
         android:layout_marginBottom="25dp"
         app:layout_constraintBottom_toTopOf="@+id/start_swipe"
@@ -48,12 +49,12 @@
         app:layout_constraintTop_toBottomOf="@+id/you_earned_label">
 
         <ImageView
-            android:scaleType="fitXY"
             android:id="@+id/ticket_redemeed_container2"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
+            android:scaleType="fitXY"
             android:src="@mipmap/ticket_redemeed_image"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -66,7 +67,7 @@
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="10dp"
             android:fontFamily="@font/proxima_nova_extrabold"
             android:text="10$"
             android:textColor="#1E1E1E"
@@ -76,33 +77,120 @@
             app:layout_constraintTop_toTopOf="@+id/ticket_redemeed_container2" />
 
         <ImageView
-            android:scaleY="0.9"
-            android:scaleX="0.9"
             android:id="@+id/reward_barcode"
             android:layout_width="220dp"
             android:layout_height="0dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            app:layout_constraintBottom_toTopOf="@+id/redemeed_code_textview"
+            android:scaleX="0.9"
+            android:scaleY="0.9"
             app:layout_constraintEnd_toEndOf="@+id/ticket_redemeed_container2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
         <TextView
-            android:letterSpacing="0.2"
             android:id="@+id/redemeed_code_textview"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="25dp"
+            android:layout_marginStart="35dp"
+            android:layout_marginEnd="35dp"
+            android:layout_marginBottom="35dp"
             android:fontFamily="@font/proxima_nova_semibold"
+            android:letterSpacing="0.2"
             android:text="4455577"
             android:textColor="#1E1E1E"
             android:textSize="35sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/reward_barcode"
-            app:layout_constraintStart_toStartOf="@+id/reward_barcode" />
+            app:layout_constraintEnd_toEndOf="@+id/ticket_redemeed_container2"
+            app:layout_constraintStart_toStartOf="@+id/ticket_redemeed_container2" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/drawing_layout_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="#FFF"
+            app:layout_constraintEnd_toEndOf="@+id/ticket_redemeed_container2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/title_drawing_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/proxima_nova_extrabold"
+                android:text="Weekly Drawing"
+                android:textColor="#1E1E1E"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/subtitle_drawing_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="35dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="35dp"
+                android:fontFamily="@font/proxima_nova_regular"
+                android:text="Weekly Drawing"
+                android:textColor="#1E1E1E"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/title_drawing_textview" />
+
+            <TextView
+                android:id="@+id/wired_drawing_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="35dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="35dp"
+                android:fontFamily="@font/proxima_nova_regular"
+                android:text="Select your amount of entries"
+                android:textColor="#1E1E1E"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/subtitle_drawing_textview" />
+
+            <TextView
+                android:id="@+id/quantity_entries"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/proxima_nova_extrabold"
+                android:text="10$"
+                android:textColor="#1E1E1E"
+                android:textSize="80sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/wired_drawing_label" />
+
+            <TextView
+                android:id="@+id/tag_entries_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="35dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="35dp"
+                android:fontFamily="@font/proxima_nova_regular"
+                android:text="ENTRIES"
+                android:textColor="#1E1E1E"
+                android:textSize="26sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/quantity_entries" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     <com.agik.AGIKSwipeButton.View.Swipe_Button_View
         android:scaleY="0.8"
         android:scaleX="0.9"

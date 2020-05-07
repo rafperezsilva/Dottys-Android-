@@ -40,15 +40,23 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical">
-
+                         <RelativeLayout
+                             android:layout_width="120dp"
+                             android:layout_height="120dp">
                         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                             android:id="@+id/profile_dashboard_image"
-                            android:layout_width="120dp"
-                            android:layout_height="120dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:layout_marginTop="15dp"
                             app:civ_border_color="#FFF"
                             app:civ_border_width="5dp" />
+                        <Button
+                            android:id="@+id/phanton_profile_button"
+                            android:background="#00000000"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"/>
 
+                         </RelativeLayout>
                         <TextView
                             android:textSize="14sp"
                             android:fontFamily="@font/proxima_nova_regular"
@@ -113,6 +121,8 @@
                     android:orientation="horizontal">
 
                     <Button
+                        android:elevation="1dp"
+                        android:id="@+id/convert_points_dashboard_button"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_margin="3dp"
@@ -128,6 +138,7 @@
                         android:textColor="#202020" />
 
                     <Button
+                        android:elevation="1dp"
                         android:id="@+id/redeem_rewards_button"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
@@ -153,6 +164,7 @@
                 android:background="#FFF">
 
                 <androidx.viewpager.widget.ViewPager
+                    android:elevation="1dp"
                     android:id="@+id/pager_dashboard"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
@@ -348,5 +360,26 @@
 <!--        app:layout_constraintEnd_toEndOf="parent"-->
 <!--        app:layout_constraintStart_toStartOf="parent"-->
 <!--        app:layout_constraintTop_toTopOf="parent" />-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:elevation="10dp"
+        android:id="@+id/analitycs_floating_view"
+        android:background="#C1000000"
+        android:layout_width="match_parent"
+        android:layout_height="550dp"
+        android:layout_margin="55dp"
 
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/location_analitycs_store"
+            android:textColor="#FFF"
+            android:layout_margin="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CURRENT STORE"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

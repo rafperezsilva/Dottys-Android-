@@ -9,6 +9,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ExpandableListView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import com.android.volley.AuthFailureError
@@ -20,9 +21,9 @@ import com.arlib.floatingsearchview.FloatingSearchView
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.keylimetie.dottys.DottysMainNavigationActivity
-import com.keylimetie.dottys.GpsTracker
-import com.keylimetie.dottys.R
+import com.keylimetie.dottys.*
+import com.keylimetie.dottys.splash.DottysSplashActivity
+import com.keylimetie.dottys.ui.dashboard.DashboardFragment
 import org.json.JSONObject
 import java.util.*
 import kotlin.collections.ArrayList
@@ -50,7 +51,7 @@ class LocationsViewModel : ViewModel() {
         locationDataObserver = DottysLocationStoresObserver(locationFragment)
         this.rootView = rootView
 
-        val gpsTracker = locationFragment.context?.let { GpsTracker(it) }
+        val gpsTracker = locationFragment.context?.let { GpsTracker(it as DottysMainNavigationActivity) }
         var locationUser = gpsTracker?.let {
             locationFragment.context?.let { it1 ->
                 activityMain?.getLocation(
@@ -201,46 +202,60 @@ class LocationsViewModel : ViewModel() {
     }
 
     fun getLocationsDottysRequest(
-        mContext: DottysMainNavigationActivity,
+        mContext: DottysMainNavigationActivity ,//DottysMainNavigationActivity
         latitude: String,
-        longitude: String, fragment:Fragment
+        longitude: String, fragment:Fragment?
     ) {
+       // if (mContext is DottysSplashActivity){ return }
         val mQueue = Volley.newRequestQueue(mContext)
-        mContext.showLoader(mContext)
+//        var mContextCasted: DottysMainNavigationActivity? = null
+//        if (mContext !is DottysMainNavigationActivity){
+            locationDataObserver = DottysLocationStoresObserver(mContext)
+//              //  it.showLoader()
+//                mContextCasted = it
+//                DottysLocationStoresObserver(it)
+//            }
+//        }
+      ///  mContext.showLoader()
+      //  if (mContext !is DottysMainNavigationActivity) {return}
+        //  mContextCasted =  mContext as DottysMainNavigationActivity
+      //  mContextCasted.showLoader()
+
+   //         locationDataObserver = DottysLocationStoresObserver(mContext as DottysBaseLocationActivity)
+        mContext?.showLoader()
 /*MOCK LOCATION */
         val locationURL =
-            "locations?distance=150&limit=100&page=1&page=1&latitude=" + latitude + "&longitude=" + longitude
+            "locations?distance=150&limit=300&page=1&page=1&latitude=" + latitude + "&longitude=" + longitude
      //    val locationURL =
-            "locations?distance=150&limit=100&page=1&page=1&latitude=41.603161&longitude=-87.753459300000003"
+            "locations?distance=150&limit=300&page=1&page=1&latitude=41.603161&longitude=-87.753459300000003"
         val jsonObjectRequest = object : JsonObjectRequest(
             Method.GET,
-            mContext.baseUrl +locationURL,
+            mContext?.baseUrl +locationURL,
             null,
             object : Response.Listener<JSONObject> {
                 override fun onResponse(response: JSONObject) {
-                    mContext.hideLoader(mContext)
+                    mContext?.hideLoader(mContext)
 
-                    var user: DottysLocationsStoresModel =
+                    var stores: DottysLocationsStoresModel =
                         DottysLocationsStoresModel.fromLocationJson(
                             response.toString()
                         )
-                    locationDataObserver?.dottysLocationsModel = user
-                    user.locations?.let { initExpandableList(mContext, it) }
-                    locationsStores = user.locations as ArrayList<DottysStoresLocation>?
+                    locationDataObserver?.dottysLocationsModel = stores
+                    stores.locations?.let { initExpandableList(mContext, it) }
+                    locationsStores = stores.locations as ArrayList<DottysStoresLocation>?
                 }
             },
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {
-                    mContext.hideLoader(mContext)
+                    mContext?.hideLoader(mContext)
                     Toast.makeText(mContext, "Has no nearest locations", Toast.LENGTH_LONG).show()
                         .run {
-//                        if ( locationFragment.fragmentManager?.backStackEntryCount ?: 0 > 0) {
-//                            locationFragment.fragmentManager?.popBackStack()
-//                        }
-                            if(fragment  is LocationsFragment) {
-                                val intent =
-                                    Intent(mContext, DottysMainNavigationActivity::class.java)
-                                mContext.startActivity(intent)
+                            if (fragment != null) {
+                                if (fragment is LocationsFragment) {
+                                    val intent =
+                                        Intent(mContext, DottysMainNavigationActivity::class.java)
+                                    mContext?.startActivity(intent)
+                                }
                             }
                         }
 
@@ -260,7 +275,7 @@ class LocationsViewModel : ViewModel() {
             @Throws(AuthFailureError::class)
             override fun getHeaders(): Map<String, String> {
                 val params = HashMap<String, String>()
-                params["Authorization"] = mContext.getUserPreference().token!!
+                params["Authorization"] = mContext?.getUserPreference()?.token ?: ""
                 return params
             }
 

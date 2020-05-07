@@ -24,7 +24,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginRight="55dp">
                 <TextView
-                    android:textSize="17sp"
+                    android:textSize="22sp"
                     android:fontFamily="@font/proxima_nova_regular"
                     android:textColor="#FFF"
                     android:text="PRUEBA"

@@ -15,6 +15,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
@@ -25,6 +26,7 @@ import com.android.volley.Response
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.keylimetie.dottys.DottysErrorModel
 import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.R
 import com.keylimetie.dottys.ui.dashboard.DashboardFragment
@@ -37,7 +39,7 @@ enum class RewardsSegment {
    DRAWING_ENTRIES, CASH_REWARDS
 }
 class DrawingViewModel : ViewModel() {
-
+    var titleTotalPoints: TextView? = null
     private var subTitle: TextView? = null
     private var segmentSelected =  RewardsSegment.DRAWING_ENTRIES
     private val _text = MutableLiveData<String>().apply {
@@ -81,14 +83,11 @@ class DrawingViewModel : ViewModel() {
     }
 
     private fun initDrawingView(viewRoot: View?) {
-        val titleTotalPoints = viewRoot?.findViewById<TextView>(R.id.drawing_title_textview)
+         titleTotalPoints = viewRoot?.findViewById<TextView>(R.id.drawing_title_textview)
         drawingButton = viewRoot?.findViewById<Button>(R.id.drawing_entries_button)
         cashButton = viewRoot?.findViewById<Button>(R.id.cash_rewards_button)
         subTitle = viewRoot?.findViewById<TextView>(R.id.drawing_subtitle_textview)
-        titleTotalPoints?.text = attributedRedeemText(
-            NumberFormat.getIntegerInstance()
-                .format(activity?.getUserPreference()?.points)
-        )
+
     }
     fun segmentTabLisener(activity: DottysMainNavigationActivity){
         drawingButton?.setOnClickListener {
@@ -103,7 +102,7 @@ class DrawingViewModel : ViewModel() {
         }
     }
 
-    private fun attributedRedeemText(unclaimedRewards: String): SpannableString {
+     fun attributedRedeemText(unclaimedRewards: String): SpannableString {
         val spannable = SpannableString("You have " + unclaimedRewards + " points!")
         spannable.setSpan(
             ForegroundColorSpan(Color.YELLOW),
@@ -197,7 +196,7 @@ class DrawingViewModel : ViewModel() {
 
     private fun getDrawingSummary(mContext: DottysMainNavigationActivity, locationId: String) {
         val mQueue = Volley.newRequestQueue(mContext)
-        mContext.showLoader(mContext)
+        mContext.showLoader()
         val jsonObjectRequest = object : JsonObjectRequest(Method.GET,
             mContext.baseUrl+"locations/"+locationId,
             null,
@@ -216,6 +215,16 @@ class DrawingViewModel : ViewModel() {
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {
                     mContext.hideLoader(mContext)
+                    if (error.networkResponse ==  null){return}
+                    val errorRes =
+                        DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
+                    if (errorRes.error?.messages?.size ?: 0 > 0) {
+                        Toast.makeText(
+                            mContext,
+                            errorRes.error?.messages?.first() ?: "",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                      Log.e("TAG", error.message, error)
                 }
             }) { //no semicolon or coma
@@ -234,26 +243,40 @@ class DrawingViewModel : ViewModel() {
 
     private fun getUserDrawings(mContext: DottysMainNavigationActivity) {
         val mQueue = Volley.newRequestQueue(mContext)
-        mContext.showLoader(mContext)
+        mContext.showLoader()
         val jsonObjectRequest = object : JsonObjectRequest(Method.GET,
             mContext.baseUrl+"drawings/mydrawings",
             null,
             object : Response.Listener<JSONObject> {
                 override fun onResponse(response: JSONObject) {
                     mContext.hideLoader(mContext)
+                        try {
 
-                    var user: DottysDrawingUserModel =
-                        DottysDrawingUserModel.fromJson(
-                            response.toString()
-                        )
-                    // getDrawingSummary(mContext)
-                    userDrawing = user
-                    drawingObserver?.drawingsModel = user
+                            var user: DottysDrawingUserModel =
+                                DottysDrawingUserModel.fromJson(
+                                    response.toString()
+                                )
+                            // getDrawingSummary(mContext)
+                            userDrawing = user
+                            drawingObserver?.drawingsModel = user
+                        } catch (e: Error){
+                            Log.d("ERROR", e.localizedMessage)
+                        }
                 }
             },
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {
                     mContext.hideLoader(mContext)
+                    if (error.networkResponse ==  null){return}
+                    val errorRes =
+                        DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
+                    if (errorRes.error?.messages?.size ?: 0 > 0) {
+                        Toast.makeText(
+                            mContext,
+                            errorRes.error?.messages?.first() ?: "",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                      Log.e("TAG", error.message, error)
                 }
             }) { //no semicolon or coma
@@ -261,7 +284,7 @@ class DrawingViewModel : ViewModel() {
             @Throws(AuthFailureError::class)
             override fun getHeaders(): Map<String, String> {
                 val params = HashMap<String, String>()
-                params["Authorization"] = mContext.getUserPreference().token!!
+                params["Authorization"] = mContext.getUserPreference().token ?: ""
                 return params
             }
 

@@ -14,12 +14,9 @@ import com.android.volley.*
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.dottysrewards.dottys.service.VolleyService
-import com.keylimetie.dottys.DottysLoginResponseModel
-import com.keylimetie.dottys.DottysRegisterModel
-import com.keylimetie.dottys.PreferenceTypeKey
-import com.keylimetie.dottys.R
+import com.keylimetie.dottys.*
 import com.keylimetie.dottys.forgot_password.DottysForgotPasswordMainActivity
-import com.keylimetie.dottys.models.DottysRewardsModel
+import com.keylimetie.dottys.R
 import com.keylimetie.dottys.register.DottysRegisterActivity
 import org.json.JSONObject
 import kotlin.properties.Delegates
@@ -99,7 +96,7 @@ open class DottysLoginViewModel : ViewModel() {
         params["email"] = modelRegister.email!!
         params["password"] = modelRegister.password!!
         val mQueue = Volley.newRequestQueue(mContext)
-       mContext?.showLoader(mContext!!)
+       mContext?.showLoader()
         val jsonObject = JSONObject(params as Map<*, *>)
         val jsonObjectRequest = object : JsonObjectRequest(Method.POST,
             mContext?.baseUrl + "users/login",
@@ -125,7 +122,17 @@ open class DottysLoginViewModel : ViewModel() {
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {
                     mContext?.hideLoader(mContext!!)
-
+                    if (error.networkResponse ==  null){return
+                    }
+                    val errorRes =
+                        DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
+                    if (errorRes.error?.messages?.size ?: 0 > 0) {
+                        Toast.makeText(
+                            mContext,
+                            errorRes.error?.messages?.first() ?: "",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                     Log.e("TAG", error.message, error)
                 }
             }) { //no semicolon or coma

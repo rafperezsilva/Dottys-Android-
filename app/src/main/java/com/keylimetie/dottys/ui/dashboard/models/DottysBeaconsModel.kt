@@ -1,4 +1,4 @@
-package com.keylimetie.dottys.ui.dashboard
+package com.keylimetie.dottys.ui.dashboard.models
 
 import com.fasterxml.jackson.annotation.*
 import com.fasterxml.jackson.core.*
@@ -23,7 +23,11 @@ private fun <T> ObjectMapper.convert(k: kotlin.reflect.KClass<*>, fromJson: (Jso
 val mapperBeacons = jacksonObjectMapper().apply {
     propertyNamingStrategy = PropertyNamingStrategy.LOWER_CAMEL_CASE
     setSerializationInclusion(JsonInclude.Include.NON_NULL)
-    convert(BeaconType::class, { BeaconType.fromValue(it.asText()) }, { "\"${it.value}\"" })
+    convert(BeaconType::class, {
+        BeaconType.fromValue(
+            it.asText()
+        )
+    }, { "\"${it.value}\"" })
 }
 
 data class DottysBeaconsModel (

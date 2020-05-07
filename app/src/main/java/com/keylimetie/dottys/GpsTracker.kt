@@ -17,10 +17,12 @@ import android.os.IBinder
 import android.provider.Settings
 import android.util.Log
 import androidx.core.app.ActivityCompat
+import com.keylimetie.dottys.ui.dashboard.DottysDashboardDelegates
+import kotlin.properties.Delegates
 
-class GpsTracker(private val mContext: Context) : Service(),
+class GpsTracker(private val mContext: DottysMainNavigationActivity) : Service(),
     LocationListener {
-
+    var locationObserver: DottysLocationObserver? = null
     // flag for GPS status
     var isGPSEnabled = false
 
@@ -37,6 +39,8 @@ class GpsTracker(private val mContext: Context) : Service(),
     protected var locationGpsManager: LocationManager? = null
     fun getLocation(): Location? {
         try {
+            locationObserver = DottysLocationObserver(mContext)
+
             locationGpsManager =
                 mContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
             // getting GPS status
@@ -190,7 +194,10 @@ class GpsTracker(private val mContext: Context) : Service(),
         alertDialog.show()
     }
 
-    override fun onLocationChanged(locationGps: Location) {}
+    override fun onLocationChanged(locationGps: Location) {
+        print("Lat -- $locationGps?.latitude // Long -- $locationGps?.latitud")
+        locationObserver?.locationListener = locationGps
+    }
     override fun onProviderDisabled(provider: String) {}
     override fun onProviderEnabled(provider: String) {}
     override fun onStatusChanged(
@@ -209,11 +216,27 @@ class GpsTracker(private val mContext: Context) : Service(),
         private const val MIN_DISTANCE_CHANGE_FOR_UPDATES: Long = 10 // 10 meters
 
         // The minimum time between updates in milliseconds
-        private const val MIN_TIME_BW_UPDATES = 1000 * 60 * 1 // 1 minute
+        private const val MIN_TIME_BW_UPDATES = (1000 * 60 * 1) / 4 // 1 minute
             .toLong()
     }
 
     init {
         getLocation()
     }
+}
+
+
+/* LOCATION CHANGE PROTOCOL */
+//region
+interface DottysLocationDelegates {
+    fun onLocationChangeHandler(locationGps: Location?)
+
+}
+
+
+class DottysLocationObserver(lisener: DottysLocationDelegates) {
+    val location: Location? =  null
+    var locationListener: Location? by Delegates.observable(
+        initialValue = location,
+        onChange = { prop, old, new -> lisener.onLocationChangeHandler(new) })
 }

@@ -1,4 +1,4 @@
-//package com.keylimetie.dottys.ui.dashboard
+package com.keylimetie.dottys.ui.dashboard.models//package com.keylimetie.dottys.ui.dashboard
 //
 //import com.fasterxml.jackson.annotation.JsonProperty
 //

@@ -1,4 +1,4 @@
-package com.keylimetie.dottys.ui.dashboard
+package com.keylimetie.dottys.ui.dashboard.models
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.PropertyNamingStrategy

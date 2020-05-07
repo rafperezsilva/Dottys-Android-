@@ -11,7 +11,7 @@ val mapper = jacksonObjectMapper().apply {
     propertyNamingStrategy = PropertyNamingStrategy.LOWER_CAMEL_CASE
     setSerializationInclusion(JsonInclude.Include.NON_NULL)
 }
-
+@JsonIgnoreProperties
 data class DottysLoginResponseModel(
     @get:JsonProperty("_id") @field:JsonProperty("_id")
     val id: String? = null,
@@ -28,6 +28,7 @@ data class DottysLoginResponseModel(
     val lastName: String? = null,
     val state: String? = null,
     val zip: String? = null,
+    val lastKnownLocationId: String? = null,
     val lastLoginAt: String? = null,
 
     @get:JsonProperty("homeLocationId") @field:JsonProperty("homeLocationId")
@@ -41,7 +42,7 @@ data class DottysLoginResponseModel(
     val profilePicture: String? = null,
     val weeklyVisits: Long? = null,
     val weeklyPlayDuration: Long? = null,
-    val points: Long? = null,
+    var points: Long? = null,
     val monthlyPlayDuration: Long? = null,
     val lastPointsForCashRedeemed: Any? = null,
     val lastPointsForCashBought: Any? = null,
@@ -170,4 +171,3 @@ data class ErrorDottys (
     val messages: List<String>? = null,
     val stack: String? = null
 )
-

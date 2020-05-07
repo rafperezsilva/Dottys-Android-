@@ -1,12 +1,14 @@
 package com.keylimetie.dottys.ui.logout
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.android.volley.*
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.keylimetie.dottys.DottysErrorModel
 import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.models.DottysRewardsModel
 import kotlinx.serialization.json.JsonArray
@@ -20,7 +22,7 @@ import java.util.HashMap
 
     fun logoutRequest(mContext: DottysMainNavigationActivity) {
         val mQueue = Volley.newRequestQueue(mContext)
-        mContext.showLoader(mContext)
+        mContext.showLoader()
 
             val jsonObjectRequest = object : JsonObjectRequest(
                 Method.GET,
@@ -36,6 +38,16 @@ import java.util.HashMap
                     override fun onErrorResponse(error: VolleyError) {
                         mContext.hideLoader(mContext)
                         mContext.finishSession(mContext)
+                        if (error.networkResponse ==  null){return}
+                        val errorRes =
+                            DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
+                        if (errorRes.error?.messages?.size ?: 0 > 0) {
+                            Toast.makeText(
+                                mContext,
+                                errorRes.error?.messages?.first() ?: "",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                         Log.e("TAG", error.message, error)
                     }
                 }) { //no semicolon or coma

@@ -3,8 +3,10 @@ package com.keylimetie.dottys.ui.dashboard
 
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.viewpager.widget.ViewPager
@@ -16,37 +18,38 @@ import com.android.volley.toolbox.ImageRequest
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.keylimetie.dottys.DottysBaseActivity
-import com.keylimetie.dottys.DottysLoginResponseModel
-import com.keylimetie.dottys.DottysMainNavigationActivity
+import com.keylimetie.dottys.*
 import com.keylimetie.dottys.R.id
 import com.keylimetie.dottys.models.DottysGlobalDataModel
 import com.keylimetie.dottys.models.DottysRewardsModel
+import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconsModel
+import com.keylimetie.dottys.ui.dashboard.models.DottysDrawingSumaryModel
+import com.keylimetie.dottys.ui.dashboard.models.DottysDrawingSumaryModelElement
 import com.keylimetie.dottys.ui.drawing.DottysDrawingRewardsModel
 import com.keylimetie.dottys.ui.drawing.DrawingViewModel
 import de.hdodenhof.circleimageview.CircleImageView
 import org.json.JSONArray
 import org.json.JSONObject
-import java.math.BigInteger
-import java.security.MessageDigest
 import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
-import android.R as R1
 
 
-class DashboardViewModel : ViewModel() {
+class DashboardViewModel : ViewModel(), View.OnClickListener {
 
     var userCurrentUserDataObserver: DottysCurrentUserObserver? = null
    // private val displayMetrics = DisplayMetrics()
-
+    private var floatingAnalicsView: ConstraintLayout? = null
+    private var mainFragmentActivity: DottysMainNavigationActivity? = null
     fun initDashboardViewSetting(
         fragment: DashboardFragment,
         mContext: DottysMainNavigationActivity
     ) {
+
         userCurrentUserDataObserver = DottysCurrentUserObserver(fragment)
         mContext.hideLoader(mContext)
+
         // if (userCurrentUserDataObserver?.currentUserModel == null) {
         getCurrentUserRequest(mContext)
 //        } else {
@@ -56,7 +59,12 @@ class DashboardViewModel : ViewModel() {
 
     }
 
-    fun     initDashboardItemsView(rootView: View, rewardsLoaction: com.keylimetie.dottys.ui.drawing.DottysDrawingRewardsModel, activity:DottysMainNavigationActivity) {
+    fun initDashboardItemsView(
+        rootView: View,
+        rewardsLoaction: DottysDrawingRewardsModel,
+        activity: DottysMainNavigationActivity
+    ) {
+        mainFragmentActivity = activity
         val nameDashboard =
             rootView.findViewById<TextView>(id.profile_name_dashboard)
         val locationDashboard =
@@ -77,7 +85,12 @@ class DashboardViewModel : ViewModel() {
             rootView.findViewById<TextView>(id.monthly_end_days)
         val querterlyDays =
             rootView.findViewById<TextView>(id.quarterly_end_days)
-
+         val profilePhantonButton =
+            rootView.findViewById<Button>(id.phanton_profile_button)
+          floatingAnalicsView =
+            rootView.findViewById<ConstraintLayout>(id.analitycs_floating_view)
+        floatingAnalicsView?.setOnClickListener(this)
+        profilePhantonButton.setOnClickListener(this)
         nameDashboard.text = userCurrentUserDataObserver?.currentUserModel?.fullName
         val stringFormated: String = NumberFormat.getIntegerInstance()
             .format(userCurrentUserDataObserver?.currentUserModel?.points)
@@ -101,7 +114,7 @@ class DashboardViewModel : ViewModel() {
             ?.first()?.endDate?.let { activity.getDiferencesDays(it) }
 
 
-
+        hideAnalitycsView(activity)
     }
 
    fun getCashForDrawing(): String {
@@ -124,55 +137,41 @@ class DashboardViewModel : ViewModel() {
         return staticFirtsText + rewardsLoaction.address1 + ", " + rewardsLoaction.city + ", " + rewardsLoaction.state + " " + rewardsLoaction.zip
     }
 
-    fun String.md5(): String {
-        val md = MessageDigest.getInstance("MD5")
-        return BigInteger(1, md.digest(toByteArray())).toString(16).padStart(32, '0')
-    }
-
     fun addProfileImage(
         mContext: DottysMainNavigationActivity,
         rootView: View,
         fragment: Fragment
     ) {
+
         val imageView = rootView.findViewById<CircleImageView>(id.profile_dashboard_image)
         val email = userCurrentUserDataObserver?.currentUserModel?.email//"mrirenita@gmail.com"
-
-        //   mContext.showLoader(mContext)
-        var url = "https://www.gravatar.com/avatar/" + email?.md5()
+        var url = "https://www.gravatar.com/avatar/" + email?.md5() + "?s=400&r=pg&d=404"
         if (userCurrentUserDataObserver?.currentUserModel?.profilePicture != null){
              url =  userCurrentUserDataObserver?.currentUserModel?.profilePicture ?: ""
         }
-
         val mQueue = Volley.newRequestQueue(mContext)
-
         val request = ImageRequest(url,
             Response.Listener { bitmap ->
-                //   mContext.hideLoader(mContext)
                 imageView.setImageBitmap(bitmap)
-                //            Picasso.get().
-//            Picasso.get().transform(CircleTransform())
-//                .into(imageView)
                 getLocationDrawing(fragment)
-
             }, 0, 0, null,
             Response.ErrorListener {
-                //mContext.hideLoader(mContext)
-                imageView.setImageResource(R1.drawable.ic_menu_help)
+                imageView.setImageResource(R.mipmap.default_profile_image)
             })
-
 
 
         mQueue.add(request)
 
     }
 
-    private fun getDrawingSummary(mContext: DottysMainNavigationActivity) {
+    private fun getDrawingSummary(mContext: DottysBaseActivity) {
         val mQueue = Volley.newRequestQueue(mContext)
-        mContext.showLoader(mContext)
+        mContext.showLoader()
         val jsonArrayRequest =
             object : JsonArrayRequest(Method.GET, mContext.baseUrl + "drawings/summary", null,
                 Response.Listener<JSONArray> { response ->
                     mContext.hideLoader(mContext)
+                    println(response.toString())
                     val drawingSummary: DottysDrawingSumaryModel =
                         DottysDrawingSumaryModel.fromJson(
                             response.toString()
@@ -182,6 +181,18 @@ class DashboardViewModel : ViewModel() {
                     override fun onErrorResponse(error: VolleyError) {
                         mContext.hideLoader(mContext)
                         mContext.finishSession(mContext)
+                        if (error.networkResponse == null) {
+                            return
+                        }
+                        val errorRes =
+                            DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
+                        if (errorRes.error?.messages?.size ?: 0 > 0) {
+                            Toast.makeText(
+                                mContext,
+                                errorRes.error?.messages?.first() ?: "",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                     }
                 }) { //no semicolon or coma
 
@@ -196,9 +207,10 @@ class DashboardViewModel : ViewModel() {
         mQueue.add(jsonArrayRequest)
     }
 
-    private fun getCurrentUserRequest(mContext: DottysMainNavigationActivity) {
+    fun getCurrentUserRequest(mContext: DottysBaseActivity) {
         val mQueue = Volley.newRequestQueue(mContext)
-        mContext.showLoader(mContext)
+
+        mContext.showLoader()
 
         val jsonObjectRequest = object : JsonObjectRequest(Method.GET,
             mContext.baseUrl + "users/currentUser/",
@@ -206,7 +218,7 @@ class DashboardViewModel : ViewModel() {
             object : Response.Listener<JSONObject> {
                 override fun onResponse(response: JSONObject) {
                     mContext.hideLoader(mContext)
-
+                    println(response.toString())
                     var user: DottysLoginResponseModel =
                         DottysLoginResponseModel.fromJson(
                             response.toString()
@@ -219,6 +231,18 @@ class DashboardViewModel : ViewModel() {
                 override fun onErrorResponse(error: VolleyError) {
                     mContext.hideLoader(mContext)
                     mContext.finishSession(mContext)
+                    if (error.networkResponse == null) {
+                        return
+                    }
+                    val errorRes =
+                        DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
+                    if (errorRes.error?.messages?.size ?: 0 > 0) {
+                        Toast.makeText(
+                            mContext,
+                            errorRes.error?.messages?.first() ?: "",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                     Log.e("TAG", error.message, error)
                 }
             }) { //no semicolon or coma
@@ -235,9 +259,9 @@ class DashboardViewModel : ViewModel() {
 
     }
 
-     fun getGlobalDataRequest(mContext: DottysMainNavigationActivity) {
+    fun getGlobalDataRequest(mContext: DottysBaseActivity) {
         val mQueue = Volley.newRequestQueue(mContext)
-        mContext.showLoader(mContext)
+        mContext.showLoader()
 
         val jsonObjectRequest = object : JsonObjectRequest(Method.GET,
             mContext.baseUrl + "global",
@@ -245,7 +269,7 @@ class DashboardViewModel : ViewModel() {
             object : Response.Listener<JSONObject> {
                 override fun onResponse(response: JSONObject) {
                     mContext.hideLoader(mContext)
-
+                    println(response.toString())
                     var user: DottysGlobalDataModel =
                         DottysGlobalDataModel.fromJson(
                             response.toString()
@@ -257,6 +281,18 @@ class DashboardViewModel : ViewModel() {
                 override fun onErrorResponse(error: VolleyError) {
                     mContext.hideLoader(mContext)
                     mContext.finishSession(mContext)
+                    if (error.networkResponse == null) {
+                        return
+                    }
+                    val errorRes =
+                        DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
+                    if (errorRes.error?.messages?.size ?: 0 > 0) {
+                        Toast.makeText(
+                            mContext,
+                            errorRes.error?.messages?.first() ?: "",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                     Log.e("TAG", error.message, error)
                 }
             }) { //no semicolon or coma
@@ -277,7 +313,7 @@ class DashboardViewModel : ViewModel() {
    fun getNearsDottysLocations(mContext: DottysMainNavigationActivity) {
        val mQueue = Volley.newRequestQueue(mContext)
 
-       mContext.showLoader(mContext)
+       mContext.showLoader()
 
        val jsonObjectRequest = object : JsonObjectRequest(Method.GET,
            mContext.baseUrl + "locations/"+mContext.getUserPreference().homeLocationID,
@@ -298,6 +334,18 @@ class DashboardViewModel : ViewModel() {
            object : Response.ErrorListener {
                override fun onErrorResponse(error: VolleyError) {
                    println(error.networkResponse.data.toString(Charsets.UTF_8))
+                   if (error.networkResponse == null) {
+                       return
+                   }
+                   val errorRes =
+                       DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
+                   if (errorRes.error?.messages?.size ?: 0 > 0) {
+                       Toast.makeText(
+                           mContext,
+                           errorRes.error?.messages?.first() ?: "",
+                           Toast.LENGTH_LONG
+                       ).show()
+                   }
                    Log.e("TAG", error.message, error)
                }
            }) { //no semicolon or coma
@@ -332,7 +380,7 @@ class DashboardViewModel : ViewModel() {
 
     fun getUserRewards(mContext: DottysBaseActivity) {
         val mQueue = Volley.newRequestQueue(mContext)
-        mContext.showLoader(mContext)
+        mContext.showLoader()
 
         val jsonObjectRequest = object : JsonObjectRequest(Method.GET,
             mContext.baseUrl + "rewards/currentUser/?redeemed=true",
@@ -340,7 +388,7 @@ class DashboardViewModel : ViewModel() {
             object : Response.Listener<JSONObject> {
                 override fun onResponse(response: JSONObject) {
                     mContext.hideLoader(mContext)
-
+                    println(response.toString())
                     var user: DottysRewardsModel =
                         DottysRewardsModel.fromJson(
                             response.toString()
@@ -355,6 +403,18 @@ class DashboardViewModel : ViewModel() {
                 override fun onErrorResponse(error: VolleyError) {
                     mContext.hideLoader(mContext)
                     mContext.finishSession(mContext)
+                    if (error.networkResponse == null) {
+                        return
+                    }
+                    val errorRes =
+                        DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
+                    if (errorRes.error?.messages?.size ?: 0 > 0) {
+                        Toast.makeText(
+                            mContext,
+                            errorRes.error?.messages?.first() ?: "",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                     Log.e("TAG", error.message, error)
                 }
             }) { //no semicolon or coma
@@ -379,15 +439,15 @@ class DashboardViewModel : ViewModel() {
 /*BEACON LIST REQUEST */
     fun getBeaconList(mContext: DottysMainNavigationActivity) {
         val mQueue = Volley.newRequestQueue(mContext)
-        mContext.showLoader(mContext)
+        mContext.showLoader()
 
         val jsonObjectRequest = object : JsonObjectRequest(Method.GET,
-            mContext.baseUrl + "beacons",
+            mContext.baseUrl + "beacons/?limit=500",
             null,
             object : Response.Listener<JSONObject> {
                 override fun onResponse(response: JSONObject) {
                     mContext.hideLoader(mContext)
-
+                    println(response.toString())
                     var user: DottysBeaconsModel =
                         DottysBeaconsModel.fromJson(
                             response.toString()
@@ -399,6 +459,18 @@ class DashboardViewModel : ViewModel() {
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {
                     mContext.hideLoader(mContext)
+                    if (error.networkResponse == null) {
+                        return
+                    }
+                    val errorRes =
+                        DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
+                    if (errorRes.error?.messages?.size ?: 0 > 0) {
+                        Toast.makeText(
+                            mContext,
+                            errorRes.error?.messages?.first() ?: "",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                     Log.e("TAG", error.message, error)
                 }
             }) { //no semicolon or coma
@@ -439,6 +511,37 @@ class DashboardViewModel : ViewModel() {
         getUserRewards(view)
     }
 
+    override fun onClick(v: View?) {
+        when(v?.id){
+            R.id.analitycs_floating_view -> {
+                mainFragmentActivity?.let { hideAnalitycsView(it) }
+            }
+            R.id.phanton_profile_button -> {
+                showAnalitycsView()
+            }
+            else -> {return}
+        }
+    }
+
+    private fun hideAnalitycsView(activity:DottysMainNavigationActivity){
+        var screenHeigth = activity.resources.displayMetrics?.heightPixels ?: 0
+        floatingAnalicsView?.animate()?.translationY(screenHeigth.toFloat())?.setDuration(250)?.start()
+    }
+    private fun showAnalitycsView(){
+        floatingAnalicsView?.visibility = View.VISIBLE
+        floatingAnalicsView?.animate()?.translationY(0.0f)?.setDuration(450)?.start()
+        initAnalitycsItems()
+    }
+
+     fun initAnalitycsItems(){
+         val storeLocation = mainFragmentActivity?.findViewById<TextView>(R.id.location_analitycs_store)
+         if (storeLocation != null) {
+             storeLocation?.text =
+                 "${mainFragmentActivity?.getBeaconAtStoreLocation()?.first()?.location?.name ?: "Has no near location"} \n ${mainFragmentActivity?.getBeaconAtStoreLocation()?.first()?.location?.storeNumber.toString()}"
+
+         }
+    }
+
 }
 
         /* CURRENT USER PROTOCOL */
@@ -455,7 +558,9 @@ class DashboardViewModel : ViewModel() {
         class DottysCurrentUserObserver(lisener: DottysDashboardDelegates) {
             private val element = ArrayList<DottysDrawingSumaryModelElement>()
             var dawingSummaryModel: DottysDrawingSumaryModel by Delegates.observable(
-                initialValue = DottysDrawingSumaryModel(element),
+                initialValue = DottysDrawingSumaryModel(
+                    element
+                ),
                 onChange = { prop, old, new -> lisener.getDrawingSummary(new) })
 
             var currentUserModel: DottysLoginResponseModel by Delegates.observable(
