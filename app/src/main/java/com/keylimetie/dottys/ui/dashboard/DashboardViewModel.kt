@@ -4,6 +4,7 @@ package com.keylimetie.dottys.ui.dashboard
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -537,8 +538,17 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
          val storeLocation = mainFragmentActivity?.findViewById<TextView>(R.id.location_analitycs_store)
          if (storeLocation != null) {
              storeLocation?.text =
-                 "${mainFragmentActivity?.getBeaconAtStoreLocation()?.first()?.location?.name ?: "Has no near location"} \n ${mainFragmentActivity?.getBeaconAtStoreLocation()?.first()?.location?.storeNumber.toString()}"
+                 "Store #${mainFragmentActivity?.getBeaconAtStoreLocation()?.first()?.location?.storeNumber.toString()}"
 
+         }
+         val listViewRewards = mainFragmentActivity?.findViewById<ListView>(R.id.beacons_analytics_listview)
+
+         listViewRewards?.adapter = mainFragmentActivity?.baseContext?.let {
+             mainFragmentActivity?.getBeaconAtStoreLocation()?.let { it1 ->
+                 AnalyticBeacoonsAdapter(
+                     it, it1
+                 )
+             }
          }
     }
 

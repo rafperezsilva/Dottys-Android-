@@ -206,22 +206,8 @@ class LocationsViewModel : ViewModel() {
         latitude: String,
         longitude: String, fragment:Fragment?
     ) {
-       // if (mContext is DottysSplashActivity){ return }
         val mQueue = Volley.newRequestQueue(mContext)
-//        var mContextCasted: DottysMainNavigationActivity? = null
-//        if (mContext !is DottysMainNavigationActivity){
-            locationDataObserver = DottysLocationStoresObserver(mContext)
-//              //  it.showLoader()
-//                mContextCasted = it
-//                DottysLocationStoresObserver(it)
-//            }
-//        }
-      ///  mContext.showLoader()
-      //  if (mContext !is DottysMainNavigationActivity) {return}
-        //  mContextCasted =  mContext as DottysMainNavigationActivity
-      //  mContextCasted.showLoader()
-
-   //         locationDataObserver = DottysLocationStoresObserver(mContext as DottysBaseLocationActivity)
+        locationDataObserver = DottysLocationStoresObserver(mContext)
         mContext?.showLoader()
 /*MOCK LOCATION */
         val locationURL =

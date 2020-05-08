@@ -60,6 +60,7 @@ data class DottysBeacon (
     val beaconType: BeaconType? = null,
     val createdBy: String? = null,
     val updatedBy: String? = null,
+    val isConected: Boolean? = null,
 
     @get:JsonProperty("isDeleted")@field:JsonProperty("isDeleted")
     val isDeleted: Boolean? = null,
