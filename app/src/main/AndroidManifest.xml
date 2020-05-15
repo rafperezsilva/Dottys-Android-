@@ -70,6 +70,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--        <service-->
+
+        <!--            android:name=".beacon_service.DottysBeaconService"-->
+        <!--            android:enabled="true"/>-->
     </application>
 
 </manifest>

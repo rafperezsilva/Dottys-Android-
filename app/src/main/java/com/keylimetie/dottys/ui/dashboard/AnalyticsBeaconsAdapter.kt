@@ -1,7 +1,7 @@
 package com.keylimetie.dottys.ui.dashboard
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
@@ -11,15 +11,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.keylimetie.dottys.R
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeacon
-import de.hdodenhof.circleimageview.CircleImageView
 
 class AnalyticBeacoonsAdapter(
     private val mContext: Context,
-    val list: List<DottysBeacon>) : BaseAdapter() {
+    val list: ArrayList<DottysBeacon>) : BaseAdapter() {
 
-    var idBeacon: TextView? = null
-    var typeBeacon: TextView? = null
-    var statusColorBeacon: ImageView? = null
+    private var idBeacon: TextView? = null
+    private var typeBeacon: TextView? = null
+    private var statusColorBeacon: ImageView? = null
 
 
     private val inflater: LayoutInflater =
@@ -41,6 +40,7 @@ class AnalyticBeacoonsAdapter(
     }
 
     //4
+    @SuppressLint("ViewHolder")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val rowView = inflater.inflate(R.layout.beacon_analytics_item, parent, false)
         val params = rowView.layoutParams
@@ -55,16 +55,15 @@ class AnalyticBeacoonsAdapter(
     }
 
 
-    fun fillItemsInView(beacon: DottysBeacon) {
+    private fun fillItemsInView(beacon: DottysBeacon) {
          idBeacon?.text = beacon.id
-         typeBeacon?.text = beacon.beaconType?.value
- var conectionStatusColor: Drawable? = null
-        when(beacon.isConected) {
+         typeBeacon?.text = "${beacon.beaconType?.value} | Major: ${beacon.major.toString()} - Minor:${beacon.minor.toString()}"
+        var conectionStatusColor: Drawable? = when(beacon.isConected) {
             true -> {
-                conectionStatusColor =  mContext.resources.getDrawable(R.drawable.shape_circular_conected)
+                mContext.resources.getDrawable(R.drawable.shape_circular_conected)
             }
             else -> {
-                conectionStatusColor =  mContext.resources.getDrawable(R.drawable.shape_circular_disconected)
+                mContext.resources.getDrawable(R.drawable.shape_circular_disconected)
 
             }
         }

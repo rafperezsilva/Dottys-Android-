@@ -34,8 +34,7 @@ open class DottysLoginViewModel : ViewModel() {
     private var passwordEditText: EditText? = null
 
     fun initView(activityLogin: DottysLoginActivity) {
-
-        val titleBar = activityLogin.actionBarView?.findViewById<TextView>(R.id.title_bar)
+         val titleBar = activityLogin.actionBarView?.findViewById<TextView>(R.id.title_bar)
         titleBar?.text = "Log in"
         submitLoginButtom = activityLogin.findViewById(R.id.submit_login_button) as Button
         emailEditText = activityLogin.findViewById(R.id.email_login_edittext) as EditText

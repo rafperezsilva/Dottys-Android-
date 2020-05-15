@@ -9,9 +9,14 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.keylimetie.dottys.*
+import com.keylimetie.dottys.beacon_service.DottysBeaconActivityDelegate
+import com.keylimetie.dottys.beacon_service.DottysBeaconService
+import com.keylimetie.dottys.beacon_service.DottysBeaconServiceDelegate
 import com.keylimetie.dottys.models.DottysGlobalDataModel
 import com.keylimetie.dottys.models.DottysRewardsModel
 import com.keylimetie.dottys.redeem.DottysRedeemRewardsActivity
+import com.keylimetie.dottys.ui.dashboard.models.DottysBeacon
+import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconArray
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconsModel
 import com.keylimetie.dottys.ui.dashboard.models.DottysDrawingSumaryModel
 import com.keylimetie.dottys.ui.drawing.DottysDrawingDelegates
@@ -24,10 +29,11 @@ import com.keylimetie.dottys.ui.locations.LocationsViewModel
 
 
 class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDelegates,
-    DottysLocationDelegates {
+    DottysLocationDelegates, DottysBeaconActivityDelegate {
 
     var homeViewModel = DashboardViewModel()
     var viewFragment: View? = null
+    //var serviceBeacon = DottysBeaconService()
    // var gsp: GpsTracker? = null
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,13 +56,14 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
 
         activity?.requestLocation( activity?.gpsTracker, activity)
         activity?.gpsTracker?.locationGps?.let { activity?.gpsTracker?.onLocationChanged(it) }
+        activity?. initEstimoteBeaconManager(this)
     }
 
     override fun onStart() {
         super.onStart()
         var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
         if (activity != null) {
-            homeViewModel.initDashboardViewSetting(this, activity)
+            homeViewModel.initDashboardViewSetting(this, activity, viewFragment)
         }
         activity?.hideCustomKeyboard()
 
@@ -143,5 +150,25 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
       print(drawing)
      }
 
-    override fun allItemsCollapse(isColappse: Boolean) {  }
+    override fun allItemsCollapse(isColappse: Boolean) {}
+
+//    override fun onBeaconsChange(beaconsData: ArrayList<DottysBeacon>) {
+//        var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
+//        homeViewModel.initAnalitycsItems(DottysBeaconArray(beaconsData),activity)
+//    }
+
+//    override fun onBeaconsServiceChange(beaconsData: java.util.ArrayList<DottysBeacon>) {
+//
+//    }
+
+    override fun onBeaconsServiceChange(beaconsData: DottysBeaconArray) {
+        var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
+        if (beaconsData != activity?.getBeaconStatus()) {
+            activity?.saveDataPreference(PreferenceTypeKey.BEACON_AT_CONECTION,beaconsData.toJson())
+        }
+
+        homeViewModel.initAnalitycsItems(beaconsData,activity)
+    }
+
+
 }

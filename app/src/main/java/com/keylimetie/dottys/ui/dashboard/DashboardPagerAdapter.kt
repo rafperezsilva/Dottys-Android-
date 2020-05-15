@@ -15,9 +15,7 @@ import com.keylimetie.dottys.models.Monthly
 
 class DashboardPagerAdapter(
     private val mContext: Context,
-    val list: DottysGlobalDataModel,
-    var metrics: DisplayMetrics? = null
-) : PagerAdapter() {
+    val list: DottysGlobalDataModel) : PagerAdapter() {
 
 
     override fun instantiateItem(collection: ViewGroup, position: Int): Any {

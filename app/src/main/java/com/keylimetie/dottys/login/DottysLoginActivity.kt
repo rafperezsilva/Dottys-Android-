@@ -14,10 +14,15 @@ class DottysLoginActivity : DottysBaseActivity(), DottysLoginDelegate {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dottys_login)
+
+    }
+
+    override fun onStart() {
+        super.onStart()
         viewModel.initView(this)
-         this.supportActionBar?.let { actionBarSetting(it, ColorDrawable(resources.getColor(R.color.colorPrimary))) }
-         val titleBar = actionBarView!!.findViewById<TextView>(R.id.title_bar)
-         titleBar.text = "Login"
+        this.supportActionBar?.let { actionBarSetting(it, ColorDrawable(resources.getColor(R.color.colorPrimary))) }
+        val titleBar = actionBarView!!.findViewById<TextView>(R.id.title_bar)
+        titleBar.text = "Login"
     }
 
     override fun onUserLogin(registerUserData: DottysLoginResponseModel) {
@@ -26,5 +31,8 @@ class DottysLoginActivity : DottysBaseActivity(), DottysLoginDelegate {
         startActivity(intent)
 
     }
+
+
+
 
 }

@@ -23,9 +23,7 @@ import com.keylimetie.dottys.*
 import com.keylimetie.dottys.R.id
 import com.keylimetie.dottys.models.DottysGlobalDataModel
 import com.keylimetie.dottys.models.DottysRewardsModel
-import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconsModel
-import com.keylimetie.dottys.ui.dashboard.models.DottysDrawingSumaryModel
-import com.keylimetie.dottys.ui.dashboard.models.DottysDrawingSumaryModelElement
+import com.keylimetie.dottys.ui.dashboard.models.*
 import com.keylimetie.dottys.ui.drawing.DottysDrawingRewardsModel
 import com.keylimetie.dottys.ui.drawing.DrawingViewModel
 import de.hdodenhof.circleimageview.CircleImageView
@@ -40,17 +38,21 @@ import kotlin.properties.Delegates
 class DashboardViewModel : ViewModel(), View.OnClickListener {
 
     var userCurrentUserDataObserver: DottysCurrentUserObserver? = null
-   // private val displayMetrics = DisplayMetrics()
-    private var floatingAnalicsView: ConstraintLayout? = null
+    var dashboardView: View? = null
+
+    var floatingAnalicsView: ConstraintLayout? = null
     private var mainFragmentActivity: DottysMainNavigationActivity? = null
+    var fragmentDashBoard: DashboardFragment? = null
     fun initDashboardViewSetting(
         fragment: DashboardFragment,
-        mContext: DottysMainNavigationActivity
+        mContext: DottysMainNavigationActivity,
+        dashboardView: View?
     ) {
-
+        this.dashboardView = dashboardView
         userCurrentUserDataObserver = DottysCurrentUserObserver(fragment)
+      //  mContext.beaconsStatusObserver = DottysBeaconStatusObserver(fragment)
         mContext.hideLoader(mContext)
-
+        fragmentDashBoard = fragment
         // if (userCurrentUserDataObserver?.currentUserModel == null) {
         getCurrentUserRequest(mContext)
 //        } else {
@@ -117,6 +119,25 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
 
         hideAnalitycsView(activity)
     }
+
+//    fun onBeaconsStatusChange(beaconsData: ArrayList<DottysBeacon>) {
+//        var beaconList = DottysBeaconArray(beaconsData)
+//
+//        mainFragmentActivity?.beaconsStatusObserver = fragmentDashBoard?.let {
+//            DottysBeaconStatusObserver(
+//                it
+//            )
+//        }
+//        if (mainFragmentActivity?.getBeaconStatus() != beaconList) {
+//            mainFragmentActivity?.saveDataPreference(PreferenceTypeKey.BEACON_AT_CONECTION, beaconList.toJson())
+//        }
+//
+//
+//
+//            initAnalitycsItems(beaconList, mainFragmentActivity)
+//      //  }
+//
+//    }
 
    fun getCashForDrawing(): String {
         val drawingUser =
@@ -448,7 +469,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
             object : Response.Listener<JSONObject> {
                 override fun onResponse(response: JSONObject) {
                     mContext.hideLoader(mContext)
-                    println(response.toString())
+                    Log.d("BEACON LIST -->",response.toString())
                     var user: DottysBeaconsModel =
                         DottysBeaconsModel.fromJson(
                             response.toString()
@@ -508,7 +529,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
     ) {
         view.windowManager.defaultDisplay.getMetrics(view.displayMetrics)
         val pager = view.findViewById<ViewPager>(id.pager_dashboard)
-        pager.adapter = DashboardPagerAdapter(view, drawingSummary, view.displayMetrics)
+        pager.adapter = DashboardPagerAdapter(view, drawingSummary)
         getUserRewards(view)
     }
 
@@ -528,26 +549,29 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
         var screenHeigth = activity.resources.displayMetrics?.heightPixels ?: 0
         floatingAnalicsView?.animate()?.translationY(screenHeigth.toFloat())?.setDuration(250)?.start()
     }
+
     private fun showAnalitycsView(){
         floatingAnalicsView?.visibility = View.VISIBLE
         floatingAnalicsView?.animate()?.translationY(0.0f)?.setDuration(450)?.start()
-        initAnalitycsItems()
+        mainFragmentActivity?.getBeaconStatus()?.let { initAnalitycsItems(it, mainFragmentActivity) }
     }
 
-     fun initAnalitycsItems(){
-         val storeLocation = mainFragmentActivity?.findViewById<TextView>(R.id.location_analitycs_store)
+     fun initAnalitycsItems(beaconList: DottysBeaconArray,viewFragment: DottysMainNavigationActivity?){
+         val storeLocation = mainFragmentActivity?.findViewById<TextView>(R.id.location_analitycs_store) //?: return
          if (storeLocation != null) {
              storeLocation?.text =
                  "Store #${mainFragmentActivity?.getBeaconAtStoreLocation()?.first()?.location?.storeNumber.toString()}"
 
          }
-         val listViewRewards = mainFragmentActivity?.findViewById<ListView>(R.id.beacons_analytics_listview)
+         val listViewRewards = viewFragment?.findViewById<ListView>(R.id.beacons_analytics_listview)
 
-         listViewRewards?.adapter = mainFragmentActivity?.baseContext?.let {
-             mainFragmentActivity?.getBeaconAtStoreLocation()?.let { it1 ->
-                 AnalyticBeacoonsAdapter(
-                     it, it1
-                 )
+         listViewRewards?.adapter = viewFragment?.baseContext?.let {
+             beaconList?.beaconArray.let { it1 ->
+                 it1?.let { it2 ->
+                     AnalyticBeacoonsAdapter(
+                         it, it2
+                     )
+                 }
              }
          }
     }

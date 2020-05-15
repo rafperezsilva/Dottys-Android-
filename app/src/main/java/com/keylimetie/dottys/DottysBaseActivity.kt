@@ -1,13 +1,14 @@
 package com.keylimetie.dottys
 
 import android.Manifest
+import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.drawable.ColorDrawable
-import android.location.Location
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.DisplayMetrics
@@ -23,28 +24,34 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.dottysrewards.dottys.service.VolleyService
+import com.estimote.sdk.EstimoteSDK
+import com.estimote.sdk.SystemRequirementsChecker
+import com.estimote.sdk.cloud.internal.ApiUtils.getSharedPreferences
 import com.google.android.gms.maps.model.LatLng
+import com.keylimetie.dottys.beacon_service.DottysBeaconActivity
+import com.keylimetie.dottys.beacon_service.DottysBeaconService
 import com.keylimetie.dottys.models.DottysGlobalDataModel
 import com.keylimetie.dottys.splash.DottysSplashActivity
+import com.keylimetie.dottys.ui.dashboard.DashboardFragment
 import com.keylimetie.dottys.ui.dashboard.DashboardViewModel
-import com.keylimetie.dottys.ui.dashboard.models.BeaconType
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeacon
+import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconArray
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconsModel
 import com.keylimetie.dottys.ui.locations.DottysLocationsStoresModel
-import com.keylimetie.dottys.ui.locations.LocationsViewModel
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
 import kotlin.collections.ArrayList
+import kotlin.properties.Delegates
 
 
 enum class PreferenceTypeKey {
-    USER_DATA, GLOBAL_DATA, LOCATIONS, DOTTYS_USER_LOCATION, BEACON_AT_LOCATION
+    USER_DATA, GLOBAL_DATA, LOCATIONS, DOTTYS_USER_LOCATION, BEACON_AT_LOCATION, BEACON_AT_CONECTION
 }
 
-open class DottysBaseActivity : AppCompatActivity(){//,    com.keylimetie.dottys.ui.locations.DottysLocationDelegates {
+open class DottysBaseActivity : AppCompatActivity() {
     var backButton: ImageButton? = null
     var sharedPreferences: SharedPreferences? = null
     var editor: SharedPreferences.Editor? = null
@@ -52,8 +59,17 @@ open class DottysBaseActivity : AppCompatActivity(){//,    com.keylimetie.dottys
     var baseUrl: String? = null
     var progressBar: ProgressBar? = null
     val displayMetrics = DisplayMetrics()
+    var gpsTracker : GpsTracker? = null
+    var beaconsStatusObserver: DottysBeaconStatusObserver? = null
+//    val beaconService: DottysBeaconService
+//        get() {
+//            return DottysBeaconService()
+//        }
 
-     var gpsTracker : GpsTracker? = null
+    companion object {
+       const val APP_ID = "appsupport-icsdottys-com-s-00i"
+       val APP_TOKEN = "3279b08f8557362e2d6bb7901b83ed17"
+   }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,19 +83,28 @@ open class DottysBaseActivity : AppCompatActivity(){//,    com.keylimetie.dottys
             Context.MODE_PRIVATE
         )
         println(getUserPreference().token)
-        //println("PERMISION LOCATION "+checkPermission())
-        //mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-//        getLastLocation()
+
 
     }
 
-    override fun onStart() {
-        super.onStart()
-//        if (gpsTracker == null) {
-//            gpsTracker = GpsTracker(this)
-//        }
-//        gpsTracker?.onLocationChanged(gpsTracker?.locationGps!!)
+    fun initEstimoteBeaconManager(context: DashboardFragment){
+        EstimoteSDK.initialize(applicationContext, APP_ID, APP_TOKEN)
+        EstimoteSDK.enableDebugLogging(true)
+       val beaconService = DottysBeaconActivity(this)
+        beaconService.mainNavActivity =  context
+        beaconService.initBeaconManager()
+
+       // beaconService.baseActivity = this
+         //   beaconService.currentBeacon = getBeaconAtStoreLocation()?.first()
+
+       // startService(Intent(context, beaconService::class.java))
     }
+
+    override fun onResume() {
+        super.onResume()
+        SystemRequirementsChecker.checkWithDefaultDialogs(this)
+    }
+
 
     fun actionBarSetting(actionBar: ActionBar, coloBackground: ColorDrawable) {
         actionBar.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
@@ -104,6 +129,18 @@ open class DottysBaseActivity : AppCompatActivity(){//,    com.keylimetie.dottys
         editor = sharedPreferences!!.edit()
         editor!!.putString(keyPreference.name, jsonData)
         editor!!.commit()
+        when(keyPreference){
+            PreferenceTypeKey.BEACON_AT_CONECTION -> {
+                getBeaconStatus()?.beaconArray.let {
+                    if (it != null) {
+                        beaconsStatusObserver?.listOfBeacons = it
+                    }
+                }
+
+            }
+            else -> {return}
+        }
+
     }
 
     fun removeReferenceData(keyPreference: PreferenceTypeKey) {
@@ -131,7 +168,7 @@ open class DottysBaseActivity : AppCompatActivity(){//,    com.keylimetie.dottys
 //        gpsTracker?.let { activity?.let { it1 -> getLocation(it, it1) } }
     }
 
-    fun getBeaconAtStoreLocation(): List<DottysBeacon>? {
+    fun getBeaconAtStoreLocation(): ArrayList<DottysBeacon>? {
         val textoDate = sharedPreferences!!.getString(PreferenceTypeKey.BEACON_AT_LOCATION.name, "")
 
         return try {
@@ -142,15 +179,37 @@ open class DottysBaseActivity : AppCompatActivity(){//,    com.keylimetie.dottys
             try {
                 var beaconAtStore =
                     person.beacons?.filter { it.location?.storeNumber ?: 0 == getUserNearsLocations().locations?.first()?.storeNumber ?: 0 }
-                        ?: ArrayList()
+                         as ArrayList ?: ArrayList()
                 // val beaconLocation = beaconAtStore.filter { it.beaconType == BeaconType.Location }.first()
-
+//                var beaconArray = DottysBeaconArray(beaconAtStore)
+//                //val dasboardFragment = DashboardFragment()
+//                 // beaconsStatusObserver = DottysBeaconStatusObserver(dasboardFragment)
+//                if (getBeaconStatus() != beaconArray) {
+//                    saveDataPreference(PreferenceTypeKey.BEACON_AT_CONECTION, beaconArray.toJson())
+//                }
                 beaconAtStore//.filter { it.beaconType == BeaconType.Location }.first()
             } catch (e: Exception) {
                 println(e)
                 null
             }
 
+        } catch (e: Exception) {
+            println(e)
+            null
+        }
+    }
+
+   fun getBeaconStatus():  DottysBeaconArray? {
+       if (sharedPreferences == null){
+           sharedPreferences = this.getSharedPreferences(
+           PreferenceTypeKey.USER_DATA.name,
+           Context.MODE_PRIVATE
+       )}
+        val textoDate = sharedPreferences!!.getString(PreferenceTypeKey.BEACON_AT_CONECTION.name, "")
+        return try {
+            var person: DottysBeaconArray? =
+                textoDate?.let { DottysBeaconArray.fromJson(it) }
+            person
         } catch (e: Exception) {
             println(e)
             null
@@ -223,8 +282,8 @@ open class DottysBaseActivity : AppCompatActivity(){//,    com.keylimetie.dottys
     }
 
     fun hideLoader(context: AppCompatActivity) {
-        if (progressBar?.visibility == null){
-            return }
+//        if (progressBar?.visibility == null){
+//            return }
         progressBar = this.findViewById<ProgressBar>(R.id.progress_loader)
         progressBar?.visibility = View.INVISIBLE
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
@@ -284,7 +343,7 @@ open class DottysBaseActivity : AppCompatActivity(){//,    com.keylimetie.dottys
             .matches()
     }
 
-    fun isValidPassword(data: String): Boolean {
+    fun  isValidPassword(data: String): Boolean {
         val str = data
         var valid = true
         var mssg = String()
@@ -339,24 +398,33 @@ open class DottysBaseActivity : AppCompatActivity(){//,    com.keylimetie.dottys
         }
         return valid
     }
+//
+//      fun onBeaconsConectionManager(beaconsData:  ArrayList<DottysBeacon>) {
+//      //   beaconsStatusObserver?.listOfBeacons = beaconsData
+//        var beaconList = DottysBeaconArray(beaconsData)
+//          val activity = DashboardViewModel()
+//         // activity.onBeaconsStatusChange(beaconsData)
+//          if (getBeaconStatus() != beaconList) {
+//              saveDataPreference(PreferenceTypeKey.BEACON_AT_CONECTION, beaconList.toJson())
+//          }
+//    }
 
-//    override fun getStoresLocation(locations: DottysLocationsStoresModel) {
-//
-//        editor = sharedPreferences!!.edit()
-//       saveDataPreference(PreferenceTypeKey.LOCATIONS,locations.toJson())
-////        val homeViewModel = DashboardViewModel()
-////         homeViewModel.getBeaconList(this as DottysMainNavigationActivity)
-//    }
-//
-//    override fun allItemsCollapse(isColappse: Boolean) {
-//    }
 }
 
 
-//open class DottysBaseLocationActivity : AppCompatActivity()
-//
-//}
   fun String.md5(): String {
     val md = MessageDigest.getInstance("MD5")
     return BigInteger(1, md.digest(toByteArray())).toString(16).padStart(32, '0')
+  }
+
+
+interface DottysBeaconStatusDelegate {
+    fun onBeaconsChange(beaconsData: ArrayList<DottysBeacon>)
+}
+
+class DottysBeaconStatusObserver(lisener: DottysBeaconStatusDelegate) {
+
+    var listOfBeacons: ArrayList<DottysBeacon> by Delegates.observable(
+        initialValue = ArrayList<DottysBeacon>(),
+        onChange = { _, _, new -> lisener.onBeaconsChange(new) })
 }

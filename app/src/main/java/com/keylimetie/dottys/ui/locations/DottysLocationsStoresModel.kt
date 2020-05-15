@@ -83,7 +83,13 @@ data class DottysStoresLocation(
     val updatedBy: String? = null
 
 
-)
+){
+    fun toJson() = mapper.writeValueAsString(this)
+
+    companion object {
+        fun fromLocationJson(json: String) = mapper.readValue<DottysStoresLocation>(json)
+    }
+}
 
 
 

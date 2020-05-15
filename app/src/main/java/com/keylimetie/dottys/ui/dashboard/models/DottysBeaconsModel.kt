@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.databind.ser.std.StdSerializer
 import com.fasterxml.jackson.module.kotlin.*
+import com.keylimetie.dottys.beacon_service.DottysBeaconServiceDelegate
 import com.keylimetie.dottys.ui.locations.DottysStoresLocation
 
 
@@ -43,7 +44,16 @@ data class DottysBeaconsModel (
         fun fromJson(json: String) = mapperBeacons.readValue<DottysBeaconsModel>(json)
     }
 }
+data class DottysBeaconArray (
 
+    var beaconArray: ArrayList<DottysBeacon>? = null
+){
+    fun toJson() = mapperBeacons.writeValueAsString(this)
+
+    companion object {
+        fun fromJson(json: String) = mapperBeacons.readValue<DottysBeaconArray>(json)
+    }
+}
 data class DottysBeacon (
     @get:JsonProperty("_id")@field:JsonProperty("_id")
     val id: String? = null,
@@ -60,13 +70,21 @@ data class DottysBeacon (
     val beaconType: BeaconType? = null,
     val createdBy: String? = null,
     val updatedBy: String? = null,
-    val isConected: Boolean? = null,
+    var isConected: Boolean? = null,
 
     @get:JsonProperty("isDeleted")@field:JsonProperty("isDeleted")
     val isDeleted: Boolean? = null,
 
     val location: DottysStoresLocation? = null
-)
+
+
+){
+    fun toJson() = mapperBeacons.writeValueAsString(this)
+
+    companion object {
+        fun fromJson(json: String) = mapperBeacons.readValue<DottysBeacon>(json)
+    }
+}
 
 enum class BeaconType(val value: String) {
     Gaming("GAMING"),
