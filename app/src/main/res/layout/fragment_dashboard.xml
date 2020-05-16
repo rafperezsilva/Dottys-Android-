@@ -376,7 +376,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
+        <Button
+            android:id="@+id/close_analytics_buttom"
+            android:textColor="#FFF"
+            android:text="X"
+            android:background="@color/colorTransparent"
+            android:layout_width="35dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
         <TextView
             android:id="@+id/title_analytics"
             android:textSize="22sp"
@@ -428,11 +436,13 @@
                 android:textSize="16sp" />
 
             <TextView
+                android:maxLines="1"
+                android:id="@+id/user_host_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/proxima_nova_light    "
-                android:text="56468"
+                android:text=""
                 android:textAlignment="textEnd"
                 android:textColor="#FFF"
                 android:textSize="16sp" />
@@ -461,11 +471,12 @@
                 android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/location_enable_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:fontFamily="@font/proxima_nova_light    "
-                android:text="Enable"
+                android:text=""
                 android:textAlignment="textEnd"
                 android:textColor="#FFF"
                 android:textSize="16sp" />
@@ -498,7 +509,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:fontFamily="@font/proxima_nova_light    "
-                android:text="Enable"
+                android:text=""
                 android:textAlignment="textEnd"
                 android:textColor="#FFF"
                 android:textSize="16sp" />
@@ -558,7 +569,7 @@
                 android:textSize="16sp" />
         </LinearLayout>
             <TextView
-
+android:id="@+id/location_device_analytic_textview"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="3dp"
                 android:layout_marginEnd="25dp"
@@ -566,7 +577,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/proxima_nova_light    "
-                android:text="Lat: -44.344  |  Long: 99.334"
+                android:text=""
                 android:textAlignment="textStart"
                 android:textColor="#8BFFFFFF"
                 android:textSize="14sp" />

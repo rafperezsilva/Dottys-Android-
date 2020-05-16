@@ -16,7 +16,7 @@ enum class LocationViewType {
 class DottysLocationsStoreAdapter(
     private val activity: Context,
     private val dataSource: ArrayList<DottysStoresLocation>,
-    val mapFragment: DottysLocationsMapFragment
+    private val mapFragment: DottysLocationsMapFragment
 ) : BaseExpandableListAdapter() {
     //  private val inflater: LayoutInflater
     // = activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -94,8 +94,8 @@ class DottysLocationsStoreAdapter(
         var paramsView = convertView?.layoutParams
 
         convertView?.layoutParams = paramsView
-        val child_textvew = convertView!!.findViewById(R.id.child_textview) as TextView
-        child_textvew.text =
+        val childTextvew = convertView!!.findViewById(R.id.child_textview) as TextView
+        childTextvew.text =
             dataSource[parent].hours?.let { getDataHours(it.filter { it1 -> it1 != "" }) }
         paramsView?.height =
             (dataSource[parent].hours?.filter { it != "" }?.size?.times(50) ?: 0) + 50
@@ -106,7 +106,7 @@ class DottysLocationsStoreAdapter(
         return false
     }
 
-    fun getDataHours(hours: List<String>): String {
+    private fun getDataHours(hours: List<String>): String {
         var hoursString = StringBuilder()
         for (hsItem in hours.indices) {
             if (hsItem == hours.size - 1 && hours[hsItem] != "") {

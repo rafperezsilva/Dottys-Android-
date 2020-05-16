@@ -24,17 +24,18 @@ import com.keylimetie.dottys.beacon_service.DottysBeaconActivityDelegate
 import com.keylimetie.dottys.beacon_service.DottysBeaconService
 import com.keylimetie.dottys.beacon_service.DottysBeaconServiceDelegate
 import com.keylimetie.dottys.beacon_service.DottysBeaconServiceObserver
+import com.keylimetie.dottys.ui.dashboard.DashboardFragment
 import com.keylimetie.dottys.ui.dashboard.DashboardViewModel
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeacon
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconArray
 import com.keylimetie.dottys.ui.drawing.RewardsSegment
+import com.keylimetie.dottys.ui.locations.DottysLocationStoresObserver
 import com.keylimetie.dottys.ui.locations.DottysLocationsStoresModel
 import com.keylimetie.dottys.ui.locations.LocationsViewModel
 import java.util.ArrayList
 
 
-class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationDelegates,
-    com.keylimetie.dottys.ui.locations.DottysLocationDelegates  {//, DottysBeaconStatusDelegate {
+class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationDelegates   {//, DottysBeaconStatusDelegate {
 
     private var navView: NavigationView? = null
     var segmentSelect: RewardsSegment? =  null
@@ -187,13 +188,6 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationDelegat
         controller.removeOnDestinationChangedListener(listener)
     }
 
-
-//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        menuInflater.inflate(R.menu.dottys_main_navigation, menu)
-//        return true
-//    }
-
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
@@ -206,64 +200,26 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationDelegat
     override fun onLocationChangeHandler(locationGps: Location?) {
         print(locationGps?.latitude)
        Toast.makeText(this, "Location has chande to \n Lat: ${locationGps?.latitude}\nLong: ${locationGps?.longitude}", Toast.LENGTH_LONG).show()
-         val locationsViewModel = LocationsViewModel()
-//        val vcMain = DottysMainNavigationActivity()
+        val dashboardFragment = DashboardFragment()
+        val locationsViewModel = LocationsViewModel()
+        locationsViewModel.locationDataObserver = DottysLocationStoresObserver(dashboardFragment)
        locationsViewModel.getLocationsDottysRequest(this,locationGps?.latitude.toString(),locationGps?.longitude.toString(), null)
 
     }
 
-    override fun getStoresLocation(locations: DottysLocationsStoresModel) {
-       // var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
-        editor =  sharedPreferences!!.edit()
-        saveDataPreference(PreferenceTypeKey.LOCATIONS,locations.toJson())
-        val currentFragment = DashboardViewModel()
-        var beaconsArray = DottysBeaconArray(getBeaconStatus()?.beaconArray)
-        currentFragment.initAnalitycsItems(beaconsArray, null)
-       //  beaconService.mainNavActivity = this
-
-
-    }
-
-    override fun allItemsCollapse(isColappse: Boolean) {
-
-    }
-//      fun onBeaconsStatusChange(beaconsData: ArrayList<DottysBeacon>) {
-//        var beaconList = DottysBeaconArray(beaconsData)
-//         val activity = DashboardViewModel()
-//        // beaconsStatusObserver = DottysBeaconStatusObserver(dasboardFragment)
-////        if (getBeaconStatus() != beaconList) {
-////            saveDataPreference(PreferenceTypeKey.BEACON_AT_CONECTION, beaconList.toJson())
-////        }
-//          val navHostFragment: Fragment? =
-//              supportFragmentManager.findFragmentById(R.id.nav_dashboard)
-//            navHostFragment?.childFragmentManager?.fragments?.get(0)
-//
-//          if (navHostFragment != null) {
-//              activity.initAnalitycsItems(beaconList, this)
-//          }
+//    override fun getStoresLocation(locations: DottysLocationsStoresModel) {
+//       // var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
+//        editor =  sharedPreferences!!.edit()
+//        saveDataPreference(PreferenceTypeKey.LOCATIONS,locations.toJson())
+//        val currentFragment = DashboardViewModel()
+//        var beaconsArray = DottysBeaconArray(getBeaconStatus()?.beaconArray)
+//        currentFragment.initAnalitycsItems(beaconsArray, null)
 //
 //    }
-//    override fun onLocationChangeHandler(locationGps: Location?) {
-//        Toast.makeText(this, "Location has chande to \n Lat: ${locationGps?.latitude}\nLong: ${locationGps?.longitude}", Toast.LENGTH_LONG).show()
-//        val locationsViewModel = LocationsViewModel()
-//        val vcMain = DottysMainNavigationActivity()
-//        locationsViewModel.getLocationsDottysRequest(vcMain,locationGps?.latitude.toString(),locationGps?.longitude.toString(), null)
+
+//    override fun allItemsCollapse(isColappse: Boolean) {
+//
 //    }
-
-    fun getForegroundFragment(): Fragment? {
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_dashboard)
-        return navHostFragment?.childFragmentManager?.fragments?.get(0)
-    }
-
-//    override fun onBeaconsServiceChange(beaconsData: DottysBeaconArray) {
-//        Log.d("BEACON DELEGATE ", beaconsData.toString())
-//    }
-
-//    override fun onBeaconsServiceChange(beaconsData: ArrayList<DottysBeacon>) {
-//        Log.d("BEACON DELEGATE ", beaconsData.toString())
-//    }
-
 
 }
 

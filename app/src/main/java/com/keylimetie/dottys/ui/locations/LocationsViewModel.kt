@@ -79,6 +79,7 @@ class LocationsViewModel : ViewModel() {
                 )
             }
         })
+        locationDataObserver = DottysLocationStoresObserver(locationFragment)
         getLocationsDottysRequest(
             activityDrawing,
             locationUser?.latitude.toString(),
@@ -167,9 +168,10 @@ class LocationsViewModel : ViewModel() {
             locationFragment.childFragmentManager.findFragmentById(R.id.map_view_fragment) as DottysLocationsMapFragment
         fragmentMap.markersList = markersDottysLocation(locations)
         fragmentMap.lcoationStore = locations as ArrayList<DottysStoresLocation>
+        fragmentMap.getMapAsync(fragmentMap)
 
         System.err.println("OnCreate end")
-        fragmentMap.getMapAsync(fragmentMap)
+
     }
 
     private fun markersDottysLocation(locations: List<DottysStoresLocation>): ArrayList<MarkerOptions> {
@@ -207,21 +209,21 @@ class LocationsViewModel : ViewModel() {
         longitude: String, fragment:Fragment?
     ) {
         val mQueue = Volley.newRequestQueue(mContext)
-        locationDataObserver = DottysLocationStoresObserver(mContext)
+
         mContext?.showLoader()
 /*MOCK LOCATION */
-     //   val locationURL = "locations?distance=150&limit=300&page=1&page=1&latitude=" + latitude + "&longitude=" + longitude
+       // val locationURL = "locations?distance=150&limit=300&page=1&page=1&latitude=" + latitude + "&longitude=" + longitude
         val locationURL =
             "locations?distance=150&limit=300&page=1&page=1&latitude=41.603161&longitude=-87.753459300000003"
         val jsonObjectRequest = object : JsonObjectRequest(
             Method.GET,
-            mContext?.baseUrl +locationURL,
+            mContext.baseUrl +locationURL,
             null,
             object : Response.Listener<JSONObject> {
                 override fun onResponse(response: JSONObject) {
-                    mContext?.hideLoader(mContext)
+                    mContext.hideLoader(mContext)
 
-                    var stores: DottysLocationsStoresModel =
+                    val stores: DottysLocationsStoresModel =
                         DottysLocationsStoresModel.fromLocationJson(
                             response.toString()
                         )
@@ -230,21 +232,18 @@ class LocationsViewModel : ViewModel() {
                     locationsStores = stores.locations as ArrayList<DottysStoresLocation>?
                 }
             },
-            object : Response.ErrorListener {
-                override fun onErrorResponse(error: VolleyError) {
-                    mContext?.hideLoader(mContext)
-                    Toast.makeText(mContext, "Has no nearest locations", Toast.LENGTH_LONG).show()
-                        .run {
-                            if (fragment != null) {
-                                if (fragment is LocationsFragment) {
-                                    val intent =
-                                        Intent(mContext, DottysMainNavigationActivity::class.java)
-                                    mContext?.startActivity(intent)
-                                }
+            Response.ErrorListener {
+                mContext?.hideLoader(mContext)
+                Toast.makeText(mContext, "Has no nearest locations", Toast.LENGTH_LONG).show()
+                    .run {
+                        if (fragment != null) {
+                            if (fragment is LocationsFragment) {
+                                val intent =
+                                    Intent(mContext, DottysMainNavigationActivity::class.java)
+                                mContext?.startActivity(intent)
                             }
                         }
-
-                }
+                    }
             }) { //no semicolon or coma
 
 
@@ -260,7 +259,7 @@ class LocationsViewModel : ViewModel() {
             @Throws(AuthFailureError::class)
             override fun getHeaders(): Map<String, String> {
                 val params = HashMap<String, String>()
-                params["Authorization"] = mContext?.getUserPreference()?.token ?: ""
+                params["Authorization"] = mContext.getUserPreference().token ?: ""
                 return params
             }
 
@@ -277,9 +276,9 @@ interface DottysLocationDelegates {
 class DottysLocationStoresObserver(lisener: DottysLocationDelegates) {
     var dottysLocationsModel: DottysLocationsStoresModel by Delegates.observable(
         initialValue = DottysLocationsStoresModel(),
-        onChange = { prop, old, new -> lisener.getStoresLocation(new) })
+        onChange = { _, _, new -> lisener.getStoresLocation(new) })
     var colapseItems: Boolean by Delegates.observable(
         initialValue = false,
-        onChange = { prop, old, new -> lisener.allItemsCollapse(new) })
+        onChange = { _, _, new -> lisener.allItemsCollapse(new) })
 
 }

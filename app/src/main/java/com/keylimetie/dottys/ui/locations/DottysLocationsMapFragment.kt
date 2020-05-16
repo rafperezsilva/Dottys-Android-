@@ -28,22 +28,22 @@ class DottysLocationsMapFragment : SupportMapFragment(), OnMapReadyCallback,
 
         attrs
         context
-        val typed_array = context.obtainStyledAttributes(
+        val typedArray = context.obtainStyledAttributes(
             attrs,
             R.styleable.MyyMap, 0, 0
         )
 
         try {
             val provided_latitude =
-                typed_array.getFloat(R.styleable.MyyMap_latitude, initial_latitude.toFloat())
+                typedArray.getFloat(R.styleable.MyyMap_latitude, initial_latitude.toFloat())
             initial_latitude = provided_latitude.toDouble()
 
             val provided_longitude =
-                typed_array.getFloat(R.styleable.MyyMap_longitude, initial_longitude.toFloat())
+                typedArray.getFloat(R.styleable.MyyMap_longitude, initial_longitude.toFloat())
             initial_longitude = provided_longitude.toDouble()
 
             val provided_marker =
-                typed_array.getString(R.styleable.MyyMap_marker)
+                typedArray.getString(R.styleable.MyyMap_marker)
             provided_marker?.apply { initial_marker = provided_marker }
 
         } catch (e: Exception) {
@@ -51,7 +51,7 @@ class DottysLocationsMapFragment : SupportMapFragment(), OnMapReadyCallback,
         }
 
 
-        typed_array.recycle()
+        typedArray.recycle()
     }
 
 

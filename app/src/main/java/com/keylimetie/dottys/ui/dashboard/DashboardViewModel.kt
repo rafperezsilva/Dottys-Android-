@@ -1,6 +1,7 @@
 package com.keylimetie.dottys.ui.dashboard
 
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -139,7 +140,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
 //
 //    }
 
-   fun getCashForDrawing(): String {
+   private fun getCashForDrawing(): String {
         val drawingUser =
             userCurrentUserDataObserver?.currentUserRewards?.rewards?.filter { it.redeemed == false }
         var cash = 0
@@ -154,7 +155,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
 
     }
 
-    fun addressLocationFotmatted(rewardsLoaction: com.keylimetie.dottys.ui.drawing.DottysDrawingRewardsModel): String {
+    private fun addressLocationFotmatted(rewardsLoaction: DottysDrawingRewardsModel): String {
         val staticFirtsText = "Your drawing entries are entered at "
         return staticFirtsText + rewardsLoaction.address1 + ", " + rewardsLoaction.city + ", " + rewardsLoaction.state + " " + rewardsLoaction.zip
     }
@@ -292,7 +293,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
                 override fun onResponse(response: JSONObject) {
                     mContext.hideLoader(mContext)
                     println(response.toString())
-                    var user: DottysGlobalDataModel =
+                    val user: DottysGlobalDataModel =
                         DottysGlobalDataModel.fromJson(
                             response.toString()
                         )
@@ -340,18 +341,15 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
        val jsonObjectRequest = object : JsonObjectRequest(Method.GET,
            mContext.baseUrl + "locations/"+mContext.getUserPreference().homeLocationID,
            null,
-           object : Response.Listener<JSONObject> {
-               override fun onResponse(response: JSONObject) {
-                   mContext.hideLoader(mContext)
+           Response.Listener<JSONObject> { response ->
+               mContext.hideLoader(mContext)
 
-                   var dottysLocation: DottysDrawingRewardsModel =
-                       DottysDrawingRewardsModel.fromJson(
-                           response.toString()
-                       )
-                   userCurrentUserDataObserver?.dottysLocation = dottysLocation
-                   // getDrawingSummary(mContext)
-
-               }
+               var dottysLocation: DottysDrawingRewardsModel =
+                   DottysDrawingRewardsModel.fromJson(
+                       response.toString()
+                   )
+               userCurrentUserDataObserver?.dottysLocation = dottysLocation
+               // getDrawingSummary(mContext)
            },
            object : Response.ErrorListener {
                override fun onErrorResponse(error: VolleyError) {
@@ -407,19 +405,16 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
         val jsonObjectRequest = object : JsonObjectRequest(Method.GET,
             mContext.baseUrl + "rewards/currentUser/?redeemed=true",
             null,
-            object : Response.Listener<JSONObject> {
-                override fun onResponse(response: JSONObject) {
-                    mContext.hideLoader(mContext)
-                    println(response.toString())
-                    var user: DottysRewardsModel =
-                        DottysRewardsModel.fromJson(
-                            response.toString()
-                        )
-                    // getDrawingSummary(mContext)
-                  //  user.rewards = user.rewards?.filter { it.locationID != null }
-                    userCurrentUserDataObserver?.currentUserRewards = user
-
-                }
+            Response.Listener<JSONObject> { response ->
+                mContext.hideLoader(mContext)
+                println(response.toString())
+                var user: DottysRewardsModel =
+                    DottysRewardsModel.fromJson(
+                        response.toString()
+                    )
+                // getDrawingSummary(mContext)
+                //  user.rewards = user.rewards?.filter { it.locationID != null }
+                userCurrentUserDataObserver?.currentUserRewards = user
             },
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {
@@ -535,12 +530,13 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when(v?.id){
-            R.id.analitycs_floating_view -> {
+            id.analitycs_floating_view,  id.close_analytics_buttom -> {
                 mainFragmentActivity?.let { hideAnalitycsView(it) }
             }
-            R.id.phanton_profile_button -> {
+            id.phanton_profile_button -> {
                 showAnalitycsView()
             }
+
             else -> {return}
         }
     }
@@ -553,27 +549,37 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
     private fun showAnalitycsView(){
         floatingAnalicsView?.visibility = View.VISIBLE
         floatingAnalicsView?.animate()?.translationY(0.0f)?.setDuration(450)?.start()
-        mainFragmentActivity?.getBeaconStatus()?.let { initAnalitycsItems(it, mainFragmentActivity) }
+        mainFragmentActivity?.getBeaconStatus()?.let { initAnalitycsItems(it, dashboardView) }
     }
 
-     fun initAnalitycsItems(beaconList: DottysBeaconArray,viewFragment: DottysMainNavigationActivity?){
+     @SuppressLint("SetTextI18n")
+     fun initAnalitycsItems(beaconList: DottysBeaconArray, viewFragment: View?){
          val storeLocation = mainFragmentActivity?.findViewById<TextView>(R.id.location_analitycs_store) //?: return
+         val closeAnalyticButton = mainFragmentActivity?.findViewById<Button>(R.id.close_analytics_buttom) //?: return
+         val userHostIdTextView = mainFragmentActivity?.findViewById<TextView>(R.id.user_host_id) //?: return
+         val locationEnableTextView = mainFragmentActivity?.findViewById<TextView>(R.id.location_enable_textview) //?: return
+         val locationDeviceTextView = mainFragmentActivity?.findViewById<TextView>(R.id.location_device_analytic_textview) //?: return
+         closeAnalyticButton?.setOnClickListener(this)
+         userHostIdTextView?.text = mainFragmentActivity?.getUserPreference()?.id ?: ""
+         val trackerLocation = mainFragmentActivity?.gpsTracker
+         var isEnableLocation = "Disable"
+         if(trackerLocation?.isGPSEnabled == true){
+             isEnableLocation = "Enable"
+         }
+         locationDeviceTextView?.text = "Lat: ${trackerLocation?.locationGps?.latitude} | Long: ${trackerLocation?.locationGps?.longitude}"
+         locationEnableTextView?.text =  isEnableLocation
          if (storeLocation != null) {
              storeLocation?.text =
                  "Store #${mainFragmentActivity?.getBeaconAtStoreLocation()?.first()?.location?.storeNumber.toString()}"
 
          }
-         val listViewRewards = viewFragment?.findViewById<ListView>(R.id.beacons_analytics_listview)
+         val listViewRewards = mainFragmentActivity?.findViewById<ListView>(R.id.beacons_analytics_listview)
 
-         listViewRewards?.adapter = viewFragment?.baseContext?.let {
-             beaconList?.beaconArray.let { it1 ->
-                 it1?.let { it2 ->
-                     AnalyticBeacoonsAdapter(
-                         it, it2
-                     )
-                 }
-             }
-         }
+         listViewRewards?.adapter = beaconList.beaconArray?.let {
+             mainFragmentActivity?.baseContext?.let { it1 ->
+                 AnalyticBeacoonsAdapter(
+                     it1,
+                     it)}}
     }
 
 }

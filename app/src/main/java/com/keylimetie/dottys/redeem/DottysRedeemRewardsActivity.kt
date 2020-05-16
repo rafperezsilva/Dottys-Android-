@@ -10,7 +10,6 @@ import com.keylimetie.dottys.ui.dashboard.DashboardViewModel
 class DottysRedeemRewardsActivity : DottysBaseActivity() {
 
     private val viewModel = DottysRedeemRewardsViewmodel()
-    private var dashboardViewModel =  DashboardViewModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dottys_redeem_rewards)

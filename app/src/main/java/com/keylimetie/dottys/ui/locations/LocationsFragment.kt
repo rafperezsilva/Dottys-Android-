@@ -31,7 +31,10 @@ class LocationsFragment : Fragment(), DottysLocationDelegates {
 
 
     override fun getStoresLocation(locations: DottysLocationsStoresModel) {
-        locations.locations?.let { locationViewModel.initMapWHitMarker(it) }
+
+        locations.locations?.let {
+            locationViewModel.initMapWHitMarker(it)
+        }
         locationViewModel.screenDimensionManager(LocationViewType.COLLAPSE_TYPE)
     }
 

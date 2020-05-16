@@ -29,10 +29,10 @@ import com.keylimetie.dottys.ui.locations.LocationsViewModel
 
 
 class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDelegates,
-    DottysLocationDelegates, DottysBeaconActivityDelegate {
+    DottysLocationDelegates, DottysBeaconActivityDelegate  {
 
-    var homeViewModel = DashboardViewModel()
-    var viewFragment: View? = null
+    private var homeViewModel = DashboardViewModel()
+    private var viewFragment: View? = null
     //var serviceBeacon = DottysBeaconService()
    // var gsp: GpsTracker? = null
     override fun onCreateView(
@@ -141,9 +141,13 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
     }
 
     override fun getDottysUserLocation(locationData: DottysDrawingRewardsModel) {
-        var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
+        val activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
         activity?.editor = activity?.sharedPreferences!!.edit()
         activity?.saveDataPreference(PreferenceTypeKey.DOTTYS_USER_LOCATION,locationData.toJson())
+
+        var beaconsArray = DottysBeaconArray(activity?.getBeaconStatus()?.beaconArray)
+        homeViewModel.initAnalitycsItems(beaconsArray, viewFragment)
+
     }
 
     override fun getUserDrawings(drawing: DottysDrawingUserModel) {
@@ -162,12 +166,12 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
 //    }
 
     override fun onBeaconsServiceChange(beaconsData: DottysBeaconArray) {
-        var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
+        val activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
         if (beaconsData != activity?.getBeaconStatus()) {
             activity?.saveDataPreference(PreferenceTypeKey.BEACON_AT_CONECTION,beaconsData.toJson())
         }
 
-        homeViewModel.initAnalitycsItems(beaconsData,activity)
+        homeViewModel.initAnalitycsItems(beaconsData,null)
     }
 
 
