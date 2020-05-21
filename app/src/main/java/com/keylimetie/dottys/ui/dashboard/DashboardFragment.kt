@@ -111,6 +111,8 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
     /*5*/// -- /*03*/
     override fun getUserRewards(rewards: DottysRewardsModel) {
         var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
+        homeViewModel.drawingBadgeCounter = rewards.rewards?.filter { it.redeemed == false }?.size ?: 0
+        homeViewModel.badgeCounterDrawingManager(homeViewModel.drawingBadgeCounter ?: 0)
         viewFragment?.let { activity?.let { it1 -> homeViewModel.addProfileImage(it1, it, this) } }
     }
 

@@ -16,7 +16,181 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        />
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/enter_code_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary">
+
+            <TextView
+                android:id="@+id/title_enter_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:fontFamily="@font/proxima_nova_semibold"
+                android:text="ENTER HOST ID"
+                android:textColor="#FFF"
+
+                android:textSize="28sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/subtitle_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/proxima_nova_regular"
+                android:text="To complete Validation and Redemption."
+                android:textColor="#FFF"
+
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/title_enter_code" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="35dp"
+                android:layout_marginEnd="25dp"
+                android:gravity="top"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/subtitle_textview">
+
+                <EditText
+                    android:id="@+id/firts_host_code_edittext"
+                    style="@style/EditTextEnterCodeStyle" />
+
+                <EditText
+                    android:id="@+id/second_host_code_edittext"
+                    style="@style/EditTextEnterCodeStyle" />
+
+                <EditText
+
+                    android:id="@+id/third_host_code_edittext"
+                    style="@style/EditTextEnterCodeStyle" />
+
+                <EditText
+                    android:id="@+id/fourth_host_code_edittext"
+                    style="@style/EditTextEnterCodeStyle" />
+
+                <EditText
+                    android:id="@+id/fifth_host_code_edittext"
+                    style="@style/EditTextEnterCodeStyle" />
+
+                <EditText
+                    android:id="@+id/sixth_host_code_edittext"
+                    style="@style/EditTextEnterCodeStyle" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/linearLayout7"
+                app:layout_constraintStart_toStartOf="@+id/linearLayout7"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout7">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/button_one"
+                        style="@style/ButtonPadStyle"
+                        android:text="1" />
+
+                    <Button
+                        android:id="@+id/button_two"
+                        style="@style/ButtonPadStyle"
+                        android:text="2" />
+
+                    <Button
+                        android:id="@+id/button_three"
+                        style="@style/ButtonPadStyle"
+                        android:text="3" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/button_four"
+                        style="@style/ButtonPadStyle"
+                        android:text="4" />
+
+                    <Button
+                        android:id="@+id/button_five"
+                        style="@style/ButtonPadStyle"
+                        android:text="5" />
+
+                    <Button
+                        android:id="@+id/button_six"
+                        style="@style/ButtonPadStyle"
+                        android:text="6" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/button_seven"
+                        style="@style/ButtonPadStyle"
+                        android:text="7" />
+
+                    <Button
+                        android:id="@+id/button_eigth"
+                        style="@style/ButtonPadStyle"
+                        android:text="8" />
+
+                    <Button
+                        android:id="@+id/button_nine"
+                        style="@style/ButtonPadStyle"
+                        android:text="9" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#00000000"
+                        android:fontFamily="@font/proxima_nova_semibold"
+                        android:text="9"
+                        android:textColor="#FFF"
+                        android:textSize="28sp"
+                        android:visibility="invisible" />
+
+                    <Button
+                        android:id="@+id/button_zero"
+                        style="@style/ButtonPadStyle"
+                        android:text="0" />
+
+                    <Button
+                        android:id="@+id/button_backspace"
+                        style="@style/ButtonPadStyle"
+                        android:text="@string/backspace_pad" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
     <RelativeLayout
         android:id="@+id/circle_layout_one"
         android:layout_width="350dp"
@@ -106,182 +280,6 @@
         app:sb_swipe_animate_text="true"
         app:sb_swipe_text="Host Swipe to Redeem"
         app:layout_constraintCircleAngle="15"  />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/enter_code_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/title_enter_code"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:fontFamily="@font/proxima_nova_semibold"
-            android:text="ENTER HOST ID"
-            android:textColor="#FFF"
-
-            android:textSize="28sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/subtitle_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/proxima_nova_regular"
-            android:text="To complete Validation and Redemption."
-            android:textColor="#FFF"
-
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title_enter_code" />
-
-        <LinearLayout
-            android:id="@+id/linearLayout7"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="35dp"
-            android:layout_marginEnd="25dp"
-            android:gravity="top"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/subtitle_textview">
-
-            <EditText
-                android:id="@+id/firts_host_code_edittext"
-                style="@style/EditTextEnterCodeStyle" />
-
-            <EditText
-                android:id="@+id/second_host_code_edittext"
-                style="@style/EditTextEnterCodeStyle" />
-
-            <EditText
-
-                android:id="@+id/third_host_code_edittext"
-                style="@style/EditTextEnterCodeStyle" />
-
-            <EditText
-                android:id="@+id/fourth_host_code_edittext"
-                style="@style/EditTextEnterCodeStyle" />
-
-            <EditText
-                android:id="@+id/fifth_host_code_edittext"
-                style="@style/EditTextEnterCodeStyle" />
-
-            <EditText
-                android:id="@+id/sixth_host_code_edittext"
-                style="@style/EditTextEnterCodeStyle" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/linearLayout7"
-            app:layout_constraintStart_toStartOf="@+id/linearLayout7"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout7">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/button_one"
-                    style="@style/ButtonPadStyle"
-                    android:text="1" />
-
-                <Button
-                    android:id="@+id/button_two"
-                    style="@style/ButtonPadStyle"
-                    android:text="2" />
-
-                <Button
-                    android:id="@+id/button_three"
-                    style="@style/ButtonPadStyle"
-                    android:text="3" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/button_four"
-                    style="@style/ButtonPadStyle"
-                    android:text="4" />
-
-                <Button
-                    android:id="@+id/button_five"
-                    style="@style/ButtonPadStyle"
-                    android:text="5" />
-
-                <Button
-                    android:id="@+id/button_six"
-                    style="@style/ButtonPadStyle"
-                    android:text="6" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/button_seven"
-                    style="@style/ButtonPadStyle"
-                    android:text="7" />
-
-                <Button
-                    android:id="@+id/button_eigth"
-                    style="@style/ButtonPadStyle"
-                    android:text="8" />
-
-                <Button
-                    android:id="@+id/button_nine"
-                    style="@style/ButtonPadStyle"
-                    android:text="9" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="#00000000"
-                    android:fontFamily="@font/proxima_nova_semibold"
-                    android:text="9"
-                    android:textColor="#FFF"
-                    android:textSize="28sp"
-                    android:visibility="invisible" />
-
-                <Button
-                    android:id="@+id/button_zero"
-                    style="@style/ButtonPadStyle"
-                    android:text="0" />
-
-                <Button
-                    android:id="@+id/button_backspace"
-                    style="@style/ButtonPadStyle"
-                    android:text="@string/backspace_pad" />
-            </LinearLayout>
-        </LinearLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ProgressBar
         android:id="@+id/progress_loader"

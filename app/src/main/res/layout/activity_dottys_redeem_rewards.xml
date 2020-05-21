@@ -23,7 +23,7 @@
 
         <LinearLayout
             android:background="#41000000"
-            android:id="@+id/linearLayout3"
+            android:id="@+id/segment_drawing_layout"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:gravity="center"
@@ -72,7 +72,7 @@
             android:textColor="#FFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+            app:layout_constraintTop_toBottomOf="@+id/segment_drawing_layout" />
     </androidx.constraintlayout.widget.ConstraintLayout>
     <ProgressBar
         android:id="@+id/progress_loader"

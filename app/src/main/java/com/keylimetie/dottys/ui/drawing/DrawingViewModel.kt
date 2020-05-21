@@ -12,10 +12,7 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.ListView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
@@ -41,6 +38,7 @@ enum class RewardsSegment {
 class DrawingViewModel : ViewModel() {
     var titleTotalPoints: TextView? = null
     private var subTitle: TextView? = null
+    var segmentLayout: LinearLayout? = null
     private var segmentSelected =  RewardsSegment.DRAWING_ENTRIES
     private val _text = MutableLiveData<String>().apply {
         value = "This is tools Fragment"
@@ -80,14 +78,15 @@ class DrawingViewModel : ViewModel() {
         fragment.context.let {
             it?.let { it1 -> viewSegmentSelectedHandler(segmentSelected, it1) }
         }
+
     }
 
     private fun initDrawingView(viewRoot: View?) {
-         titleTotalPoints = viewRoot?.findViewById<TextView>(R.id.drawing_title_textview)
+        titleTotalPoints = viewRoot?.findViewById<TextView>(R.id.drawing_title_textview)
         drawingButton = viewRoot?.findViewById<Button>(R.id.drawing_entries_button)
         cashButton = viewRoot?.findViewById<Button>(R.id.cash_rewards_button)
         subTitle = viewRoot?.findViewById<TextView>(R.id.drawing_subtitle_textview)
-
+        segmentLayout?.visibility = View.VISIBLE
     }
     fun segmentTabLisener(activity: DottysMainNavigationActivity){
         drawingButton?.setOnClickListener {
@@ -103,7 +102,7 @@ class DrawingViewModel : ViewModel() {
     }
 
      fun attributedRedeemText(unclaimedRewards: String): SpannableString {
-        val spannable = SpannableString("You have " + unclaimedRewards + " points!")
+        val spannable = SpannableString("You have $unclaimedRewards points!")
         spannable.setSpan(
             ForegroundColorSpan(Color.YELLOW),
             8, 9 + unclaimedRewards.length,
@@ -192,6 +191,7 @@ class DrawingViewModel : ViewModel() {
 
             }
         }
+        fragment?.view?.visibility = View.VISIBLE
     }
 
     private fun getDrawingSummary(mContext: DottysMainNavigationActivity, locationId: String) {
@@ -200,17 +200,15 @@ class DrawingViewModel : ViewModel() {
         val jsonObjectRequest = object : JsonObjectRequest(Method.GET,
             mContext.baseUrl+"locations/"+locationId,
             null,
-            object : Response.Listener<JSONObject> {
-                override fun onResponse(response: JSONObject) {
-                    mContext.hideLoader(mContext)
+            Response.Listener<JSONObject> { response ->
+                mContext.hideLoader(mContext)
 
-                    var user: DottysDrawingRewardsModel =
-                        DottysDrawingRewardsModel.fromJson(
-                            response.toString()
-                        )
-                    // getDrawingSummary(mContext)
-                    drawingObserver?.rewardsModel = user
-                }
+                var user: DottysDrawingRewardsModel =
+                    DottysDrawingRewardsModel.fromJson(
+                        response.toString()
+                    )
+                // getDrawingSummary(mContext)
+                drawingObserver?.rewardsModel = user
             },
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {
@@ -247,21 +245,19 @@ class DrawingViewModel : ViewModel() {
         val jsonObjectRequest = object : JsonObjectRequest(Method.GET,
             mContext.baseUrl+"drawings/mydrawings",
             null,
-            object : Response.Listener<JSONObject> {
-                override fun onResponse(response: JSONObject) {
-                    mContext.hideLoader(mContext)
-                        try {
+            Response.Listener<JSONObject> { response ->
+                mContext.hideLoader(mContext)
+                try {
 
-                            var user: DottysDrawingUserModel =
-                                DottysDrawingUserModel.fromJson(
-                                    response.toString()
-                                )
-                            // getDrawingSummary(mContext)
-                            userDrawing = user
-                            drawingObserver?.drawingsModel = user
-                        } catch (e: Error){
-                            Log.d("ERROR", e.localizedMessage)
-                        }
+                    var user: DottysDrawingUserModel =
+                        DottysDrawingUserModel.fromJson(
+                            response.toString()
+                        )
+                    // getDrawingSummary(mContext)
+                    userDrawing = user
+                    drawingObserver?.drawingsModel = user
+                } catch (e: Error){
+                    Log.d("ERROR", e.localizedMessage)
                 }
             },
             object : Response.ErrorListener {

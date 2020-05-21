@@ -18,7 +18,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-             android:gravity="top"
+            android:gravity="top"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -41,32 +41,36 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical">
-                         <RelativeLayout
-                             android:layout_width="120dp"
-                             android:layout_height="120dp">
-                        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                            android:id="@+id/profile_dashboard_image"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="15dp"
-                            app:civ_border_color="#FFF"
-                            app:civ_border_width="5dp" />
-                        <Button
-                            android:id="@+id/phanton_profile_button"
-                            android:background="#00000000"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
 
-                         </RelativeLayout>
+                        <RelativeLayout
+                            android:layout_width="120dp"
+                            android:layout_height="120dp">
+
+                            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                                android:id="@+id/profile_dashboard_image"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="15dp"
+                                app:civ_border_color="#FFF"
+                                app:civ_border_width="5dp" />
+
+                            <Button
+                                android:id="@+id/phanton_profile_button"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="#00000000" />
+
+                        </RelativeLayout>
+
                         <TextView
-                            android:textSize="14sp"
-                            android:fontFamily="@font/proxima_nova_regular"
-                             android:textColor="#FFF"
                             android:id="@+id/profile_name_dashboard"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:layout_marginBottom="15dp" />
+                            android:layout_marginBottom="15dp"
+                            android:fontFamily="@font/proxima_nova_regular"
+                            android:textColor="#FFF"
+                            android:textSize="14sp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -116,44 +120,100 @@
                 </LinearLayout>
 
                 <LinearLayout
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="horizontal">
 
-                    <Button
-                        android:elevation="1dp"
-                        android:id="@+id/convert_points_dashboard_button"
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="45dp"
-                        android:layout_margin="3dp"
-                        android:layout_marginBottom="10dp"
-                        android:layout_weight="1"
-                        android:background="@color/colorSecundary"
-                        android:fontFamily="@font/proxima_nova_regular"
-                        android:shadowColor="#FFF"
-                        android:shadowDx="-1"
-                        android:shadowDy="-1"
-                        android:shadowRadius="0.5"
-                        android:text="CONVERT POINTS"
-                        android:textColor="#202020" />
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
 
-                    <Button
-                        android:elevation="1dp"
-                        android:id="@+id/redeem_rewards_button"
+                        <Button
+
+                            android:id="@+id/convert_points_dashboard_button"
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+
+                            android:layout_marginStart="3dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="3dp"
+                            android:layout_weight="1"
+
+                            android:background="@color/colorSecundary"
+                            android:elevation="1dp"
+                            android:fontFamily="@font/proxima_nova_regular"
+                            android:shadowColor="#FFF"
+                            android:shadowDx="-1"
+                            android:shadowDy="-1"
+                            android:shadowRadius="0.5"
+                            android:text="CONVERT POINTS"
+                            android:textColor="#202020"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="45dp"
-                        android:layout_margin="3dp"
-                        android:layout_marginBottom="10dp"
-                        android:layout_weight="1"
-                        android:background="@color/colorSecundary"
-                        android:fontFamily="@font/proxima_nova_regular"
-                        android:shadowColor="#FFF"
-                        android:shadowDx="-1"
-                        android:shadowDy="-1"
-                        android:shadowRadius="0.5"
-                        android:text="REDEEM REWARDS"
-                        android:textColor="#202020" />
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <Button
+
+                            android:id="@+id/redeem_rewards_button"
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+                            android:layout_marginStart="3dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="3dp"
+                            android:layout_weight="1"
+                            android:background="@color/colorSecundary"
+                            android:elevation="1dp"
+                            android:fontFamily="@font/proxima_nova_regular"
+                            android:shadowColor="#FFF"
+                            android:shadowDx="-1"
+                            android:shadowDy="-1"
+                            android:shadowRadius="0.5"
+                            android:text="REDEEM REWARDS"
+                            android:textColor="#202020"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:visibility="invisible"
+                             android:layout_marginRight="1dp"
+                            android:id="@+id/background_badge"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:background="@drawable/shape_circular_badge"
+                            android:elevation="20dp"
+                            android:text="5"
+                            android:textSize="25sp"
+                            android:textColor="#FFF"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"></TextView>
+
+                        <TextView
+                            android:visibility="invisible"
+                            android:textStyle="bold"
+                            android:layout_marginRight="1dp"
+                            android:id="@+id/badge_counter"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:elevation="21dp"
+                            android:text="5"
+
+                            android:textColor="#FFF"
+                            android:textSize="10sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"  />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
 
             </LinearLayout>
@@ -165,16 +225,16 @@
                 android:background="#FFF">
 
                 <androidx.viewpager.widget.ViewPager
-                    android:elevation="1dp"
                     android:id="@+id/pager_dashboard"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:elevation="1dp" />
             </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                 android:layout_weight="1"
+                android:layout_weight="1"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -200,11 +260,11 @@
                         android:orientation="horizontal">
 
                         <LinearLayout
-                            android:layout_marginTop="15dp"
-                            android:gravity="top|center_horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:layout_marginTop="15dp"
                             android:layout_weight="1"
+                            android:gravity="top|center_horizontal"
                             android:orientation="vertical">
 
                             <TextView
@@ -237,19 +297,19 @@
                         </LinearLayout>
 
                         <RelativeLayout
-                            android:alpha="0.5"
                             android:layout_width="1dp"
                             android:layout_height="match_parent"
                             android:layout_marginTop="15dp"
                             android:layout_marginBottom="15dp"
+                            android:alpha="0.5"
                             android:background="#FFF" />
 
                         <LinearLayout
-                            android:layout_marginTop="15dp"
-                            android:gravity="top|center_horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:layout_marginTop="15dp"
                             android:layout_weight="1"
+                            android:gravity="top|center_horizontal"
                             android:orientation="vertical">
 
                             <TextView
@@ -282,19 +342,19 @@
                         </LinearLayout>
 
                         <RelativeLayout
-                            android:alpha="0.5"
                             android:layout_width="1dp"
                             android:layout_height="match_parent"
                             android:layout_marginTop="15dp"
                             android:layout_marginBottom="15dp"
+                            android:alpha="0.5"
                             android:background="#FFF" />
 
                         <LinearLayout
-                            android:layout_marginTop="15dp"
-                            android:gravity="top|center_horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:layout_marginTop="15dp"
                             android:layout_weight="1"
+                            android:gravity="top|center_horizontal"
                             android:orientation="vertical">
 
                             <TextView
@@ -331,7 +391,6 @@
 
                     <TextView
                         android:id="@+id/location_dashboard_textview"
-                        android:textFontWeight="0"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="30dp"
@@ -341,62 +400,68 @@
                         android:gravity="center"
                         android:text="Your drawing entries are entered at 75th St, Darien, IL 60561"
                         android:textColor="#FFF"
+                        android:textFontWeight="0"
                         android:textSize="14sp" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 
     </RelativeLayout>
-<!--    <ProgressBar-->
-<!--        android:id="@+id/progress_loader"-->
-<!--        style="?android:attr/progressBarStyleLarge"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_centerInParent="true"-->
-<!--        android:layout_marginStart="8dp"-->
-<!--        android:layout_marginTop="8dp"-->
-<!--        android:layout_marginEnd="8dp"-->
-<!--        android:layout_marginBottom="8dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
+    <!--    <ProgressBar-->
+    <!--        android:id="@+id/progress_loader"-->
+    <!--        style="?android:attr/progressBarStyleLarge"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_centerInParent="true"-->
+    <!--        android:layout_marginStart="8dp"-->
+    <!--        android:layout_marginTop="8dp"-->
+    <!--        android:layout_marginEnd="8dp"-->
+    <!--        android:layout_marginBottom="8dp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
-<!--    ANALYTICS VIEW-->
+    <!--    ANALYTICS VIEW-->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:elevation="10dp"
         android:id="@+id/analitycs_floating_view"
-        android:background="#C1000000"
-        android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="550dp"
         android:layout_margin="55dp"
+        android:background="#C1000000"
+        android:elevation="10dp"
+        android:visibility="invisible"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
         <Button
             android:id="@+id/close_analytics_buttom"
-            android:textColor="#FFF"
-            android:text="X"
+            android:gravity="right|top"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:background="@color/colorTransparent"
-            android:layout_width="35dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            android:text="X"
+            android:textColor="#FFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/title_analytics"
-            android:textSize="22sp"
-            android:fontFamily="@font/proxima_nova_light    "
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
             android:layout_marginStart="15dp"
             android:layout_marginTop="25dp"
             android:layout_marginEnd="15dp"
+            android:fontFamily="@font/proxima_nova_light    "
             android:text="Device Analytics"
             android:textColor="#FFF"
+            android:textSize="22sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -412,7 +477,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title_analytics" />
-<!--USER ID -->
+        <!--USER ID -->
         <LinearLayout
             android:id="@+id/layout_user_id"
             android:layout_width="match_parent"
@@ -436,18 +501,18 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:maxLines="1"
                 android:id="@+id/user_host_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/proxima_nova_light    "
+                android:maxLines="1"
                 android:text=""
                 android:textAlignment="textEnd"
                 android:textColor="#FFF"
                 android:textSize="16sp" />
         </LinearLayout>
-<!--LOCATION SERVICE -->
+        <!--LOCATION SERVICE -->
         <LinearLayout
             android:id="@+id/layout_location_service"
             android:layout_width="match_parent"
@@ -481,7 +546,7 @@
                 android:textColor="#FFF"
                 android:textSize="16sp" />
         </LinearLayout>
-<!--PUSH NOTIFICATION -->
+        <!--PUSH NOTIFICATION -->
         <LinearLayout
             android:id="@+id/layout_push_notification"
             android:layout_width="match_parent"
@@ -527,54 +592,54 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layout_push_notification" />
 
-<!-- CURRENT LOCATION -->
+        <!-- CURRENT LOCATION -->
         <LinearLayout
             android:id="@+id/layout_current_location"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintTop_toBottomOf="@+id/layout_divider">
-
-              <LinearLayout
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="25dp"
-            android:orientation="horizontal"
-            >
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_divider">
 
-            <TextView
+            <LinearLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/proxima_nova_light    "
-                android:text="Current Location:"
-                android:textAlignment="textStart"
-                android:textColor="#FFF"
-                android:textSize="16sp" />
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="25dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/proxima_nova_light    "
+                    android:text="Current Location:"
+                    android:textAlignment="textStart"
+                    android:textColor="#FFF"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/location_analitycs_store"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:fontFamily="@font/proxima_nova_light    "
+                    android:text="Store #224"
+                    android:textAlignment="textEnd"
+                    android:textColor="#FFF"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/location_analitycs_store"
+                android:id="@+id/location_device_analytic_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:fontFamily="@font/proxima_nova_light    "
-                android:text="Store #224"
-                android:textAlignment="textEnd"
-                android:textColor="#FFF"
-                android:textSize="16sp" />
-        </LinearLayout>
-            <TextView
-android:id="@+id/location_device_analytic_textview"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="3dp"
                 android:layout_marginEnd="25dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/proxima_nova_light    "
                 android:text=""
@@ -608,20 +673,21 @@ android:id="@+id/location_device_analytic_textview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layout_divider3">
+
             <ListView
                 android:id="@+id/beacons_analytics_listview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
         </RelativeLayout>
 
         <Button
-            android:background="#7A838383"
             android:id="@+id/send_to_support_button"
-            android:textColor="#FFF"
-            android:layout_margin="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:background="#7A838383"
             android:text="SEND TO SUPPORT"
+            android:textColor="#FFF"
             app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

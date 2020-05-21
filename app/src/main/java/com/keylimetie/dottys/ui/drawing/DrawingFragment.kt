@@ -30,7 +30,8 @@ class DrawingFragment : Fragment(), DottysDrawingDelegates, DottysDashboardDeleg
         drawingViewModel =
             ViewModelProviders.of(this).get(DrawingViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_drawing, container, false)
-
+         drawingViewModel.segmentLayout = root.findViewById(R.id.segment_drawing_layout)
+         drawingViewModel.segmentLayout?.visibility = View.INVISIBLE
          viewRoot = root
         return root
     }

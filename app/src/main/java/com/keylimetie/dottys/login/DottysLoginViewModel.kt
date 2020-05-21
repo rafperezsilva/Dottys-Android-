@@ -103,15 +103,13 @@ open class DottysLoginViewModel : ViewModel() {
             object : Response.Listener<JSONObject> {
                 override fun onResponse(response: JSONObject) {
                     mContext?.hideLoader(mContext!!)
-
+                    Log.d("LOGIN RESPONSE", response.toString())
                 try {
                     var person: DottysLoginResponseModel =
                         DottysLoginResponseModel.fromJson(
                             response.toString()
                         )
                     userLoginDataObserver?.registerUserModel = person
-                   Toast.makeText(mContext, "FULL NAME: \n" + person.fullName, Toast.LENGTH_SHORT).show()
-
                 } catch (e: Exception) {
                     println(e)
                     mContext?.hideLoader(mContext!!)

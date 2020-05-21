@@ -198,8 +198,8 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationDelegat
 
     }
     override fun onLocationChangeHandler(locationGps: Location?) {
-        print(locationGps?.latitude)
-       Toast.makeText(this, "Location has chande to \n Lat: ${locationGps?.latitude}\nLong: ${locationGps?.longitude}", Toast.LENGTH_LONG).show()
+        //print(locationGps?.latitude)
+       //Toast.makeText(this, "Location has chande to \n Lat: ${locationGps?.latitude}\nLong: ${locationGps?.longitude}", Toast.LENGTH_LONG).show()
         val dashboardFragment = DashboardFragment()
         val locationsViewModel = LocationsViewModel()
         locationsViewModel.locationDataObserver = DottysLocationStoresObserver(dashboardFragment)

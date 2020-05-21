@@ -68,7 +68,7 @@ open class DottysBaseActivity : AppCompatActivity(), DottysBeaconDelegates {
         super.onCreate(savedInstanceState)
         VolleyService.initialize(this)
         baseUrl = this.resources.getString(R.string.url_base_development)
-        //baseUrl = this.resources.getString(R.string.url_base_development)
+       // baseUrl = this.resources.getString(R.string.url_base_production)
         progressBar = findViewById(R.id.progress_loader)
         //hideLoader(this)
         sharedPreferences = this.getSharedPreferences(

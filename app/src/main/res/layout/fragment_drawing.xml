@@ -15,7 +15,7 @@
 
         <LinearLayout
             android:background="#41000000"
-            android:id="@+id/linearLayout3"
+            android:id="@+id/segment_drawing_layout"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:gravity="center"
@@ -58,12 +58,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/proxima_nova_semibold"
-            android:text="You have"
             android:layout_marginTop="5dp"
             android:textColor="#FFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+            app:layout_constraintTop_toBottomOf="@+id/segment_drawing_layout" />
           <TextView
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
@@ -72,7 +71,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/proxima_nova_regular"
-            android:text="You have"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="15dp"
             android:textColor="#FFF"

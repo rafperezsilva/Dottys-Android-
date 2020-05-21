@@ -38,12 +38,15 @@ import kotlin.properties.Delegates
 
 class DashboardViewModel : ViewModel(), View.OnClickListener {
 
+    private var backgroundLabelBadge: TextView? = null
+    private var counterLabelBadge: TextView? = null
     var userCurrentUserDataObserver: DottysCurrentUserObserver? = null
     var dashboardView: View? = null
 
     var floatingAnalicsView: ConstraintLayout? = null
     private var mainFragmentActivity: DottysMainNavigationActivity? = null
     var fragmentDashBoard: DashboardFragment? = null
+    var drawingBadgeCounter: Int? = 0
     fun initDashboardViewSetting(
         fragment: DashboardFragment,
         mContext: DottysMainNavigationActivity,
@@ -54,13 +57,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
       //  mContext.beaconsStatusObserver = DottysBeaconStatusObserver(fragment)
         mContext.hideLoader(mContext)
         fragmentDashBoard = fragment
-        // if (userCurrentUserDataObserver?.currentUserModel == null) {
         getCurrentUserRequest(mContext)
-//        } else {
-//            initDashboardItemsView(fragment.viewFragment!!)
-//            getUserRewards(mContext)
-//        }
-
     }
 
     fun initDashboardItemsView(
@@ -69,30 +66,20 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
         activity: DottysMainNavigationActivity
     ) {
         mainFragmentActivity = activity
-        val nameDashboard =
-            rootView.findViewById<TextView>(id.profile_name_dashboard)
-        val locationDashboard =
-            rootView.findViewById<TextView>(id.location_dashboard_textview)
-        val pointsEarned =
-            rootView.findViewById<TextView>(id.points_earned_textview)
-        val cashRewards =
-            rootView.findViewById<TextView>(id.cash_rewards_textview)
-        val weeklyRewards =
-            rootView.findViewById<TextView>(id.weekly_count_textview)
-        val monthlyRewards =
-            rootView.findViewById<TextView>(id.monthly_count_textview)
-        val querterlyRewards =
-            rootView.findViewById<TextView>(id.quarterly_count_textview)
-         val weeklyDays =
-            rootView.findViewById<TextView>(id.weekly_end_days)
-        val monthlyDays =
-            rootView.findViewById<TextView>(id.monthly_end_days)
-        val querterlyDays =
-            rootView.findViewById<TextView>(id.quarterly_end_days)
-         val profilePhantonButton =
-            rootView.findViewById<Button>(id.phanton_profile_button)
-          floatingAnalicsView =
-            rootView.findViewById<ConstraintLayout>(id.analitycs_floating_view)
+        val nameDashboard = rootView.findViewById<TextView>(id.profile_name_dashboard)
+        val locationDashboard = rootView.findViewById<TextView>(id.location_dashboard_textview)
+        val pointsEarned = rootView.findViewById<TextView>(id.points_earned_textview)
+        val cashRewards = rootView.findViewById<TextView>(id.cash_rewards_textview)
+        val weeklyRewards = rootView.findViewById<TextView>(id.weekly_count_textview)
+        val monthlyRewards = rootView.findViewById<TextView>(id.monthly_count_textview)
+        val querterlyRewards = rootView.findViewById<TextView>(id.quarterly_count_textview)
+         val weeklyDays = rootView.findViewById<TextView>(id.weekly_end_days)
+        val monthlyDays = rootView.findViewById<TextView>(id.monthly_end_days)
+        val querterlyDays = rootView.findViewById<TextView>(id.quarterly_end_days)
+         val profilePhantonButton =  rootView.findViewById<Button>(id.phanton_profile_button)
+        backgroundLabelBadge = rootView.findViewById<TextView>(id.background_badge)
+        counterLabelBadge = rootView.findViewById<TextView>(id.badge_counter)
+        floatingAnalicsView = rootView.findViewById<ConstraintLayout>(id.analitycs_floating_view)
         floatingAnalicsView?.setOnClickListener(this)
         profilePhantonButton.setOnClickListener(this)
         nameDashboard.text = userCurrentUserDataObserver?.currentUserModel?.fullName
@@ -116,9 +103,19 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
             ?.first()?.endDate?.let { activity.getDiferencesDays(it) }
         querterlyDays.text = userCurrentUserDataObserver?.dawingSummaryModel?.filter { it.drawingType == "QUARTERLY" }
             ?.first()?.endDate?.let { activity.getDiferencesDays(it) }
-
-
         hideAnalitycsView(activity)
+        badgeCounterDrawingManager(drawingBadgeCounter ?: 0)
+    }
+
+    fun badgeCounterDrawingManager(badgeCounter:Int){
+        if(badgeCounter == 0){
+            backgroundLabelBadge?.visibility = View.INVISIBLE
+            counterLabelBadge?.visibility = View.INVISIBLE
+        } else {
+            backgroundLabelBadge?.visibility = View.VISIBLE
+            counterLabelBadge?.visibility = View.VISIBLE
+            counterLabelBadge?.text = badgeCounter.toString()
+        }
     }
 
 //    fun onBeaconsStatusChange(beaconsData: ArrayList<DottysBeacon>) {
@@ -238,17 +235,15 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
         val jsonObjectRequest = object : JsonObjectRequest(Method.GET,
             mContext.baseUrl + "users/currentUser/",
             null,
-            object : Response.Listener<JSONObject> {
-                override fun onResponse(response: JSONObject) {
-                    mContext.hideLoader(mContext)
-                    println(response.toString())
-                    var user: DottysLoginResponseModel =
-                        DottysLoginResponseModel.fromJson(
-                            response.toString()
-                        )
-                    getDrawingSummary(mContext)
-                    userCurrentUserDataObserver?.currentUserModel = user
-                }
+            Response.Listener<JSONObject> { response ->
+                mContext.hideLoader(mContext)
+                println(response.toString())
+                var user: DottysLoginResponseModel =
+                    DottysLoginResponseModel.fromJson(
+                        response.toString()
+                    )
+                getDrawingSummary(mContext)
+                userCurrentUserDataObserver?.currentUserModel = user
             },
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {
@@ -289,16 +284,14 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
         val jsonObjectRequest = object : JsonObjectRequest(Method.GET,
             mContext.baseUrl + "global",
             null,
-            object : Response.Listener<JSONObject> {
-                override fun onResponse(response: JSONObject) {
-                    mContext.hideLoader(mContext)
-                    println(response.toString())
-                    val user: DottysGlobalDataModel =
-                        DottysGlobalDataModel.fromJson(
-                            response.toString()
-                        )
-                    userCurrentUserDataObserver?.currentGlobalData = user
-                }
+            Response.Listener<JSONObject> { response ->
+                mContext.hideLoader(mContext)
+                println(response.toString())
+                val user: DottysGlobalDataModel =
+                    DottysGlobalDataModel.fromJson(
+                        response.toString()
+                    )
+                userCurrentUserDataObserver?.currentGlobalData = user
             },
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {
@@ -549,7 +542,8 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
     private fun showAnalitycsView(){
         floatingAnalicsView?.visibility = View.VISIBLE
         floatingAnalicsView?.animate()?.translationY(0.0f)?.setDuration(450)?.start()
-        mainFragmentActivity?.getBeaconStatus()?.let { initAnalitycsItems(it, dashboardView) }
+        initAnalitycsItems( mainFragmentActivity?.getBeaconStatus() ?: DottysBeaconArray(), dashboardView)
+
     }
 
      @SuppressLint("SetTextI18n")
@@ -560,6 +554,9 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
          val locationEnableTextView = mainFragmentActivity?.findViewById<TextView>(R.id.location_enable_textview) //?: return
          val locationDeviceTextView = mainFragmentActivity?.findViewById<TextView>(R.id.location_device_analytic_textview) //?: return
          closeAnalyticButton?.setOnClickListener(this)
+         closeAnalyticButton?.setOnClickListener{
+             mainFragmentActivity?.let { it1 -> hideAnalitycsView(it1) }
+         }
          userHostIdTextView?.text = mainFragmentActivity?.getUserPreference()?.id ?: ""
          val trackerLocation = mainFragmentActivity?.gpsTracker
          var isEnableLocation = "Disable"
