@@ -9,21 +9,19 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ExpandableListView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import com.android.volley.AuthFailureError
 import com.android.volley.Response
-import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.arlib.floatingsearchview.FloatingSearchView
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.keylimetie.dottys.*
-import com.keylimetie.dottys.splash.DottysSplashActivity
-import com.keylimetie.dottys.ui.dashboard.DashboardFragment
+import com.keylimetie.dottys.DottysMainNavigationActivity
+import com.keylimetie.dottys.GpsTracker
+import com.keylimetie.dottys.R
 import org.json.JSONObject
 import java.util.*
 import kotlin.collections.ArrayList
@@ -53,10 +51,9 @@ class LocationsViewModel : ViewModel() {
 
         val gpsTracker = locationFragment.context?.let { GpsTracker(it as DottysMainNavigationActivity) }
         var locationUser = gpsTracker?.let {
-            locationFragment.context?.let { it1 ->
+            locationFragment.context?.let { _ ->
                 activityMain?.getLocation(
-                    it,
-                    it1
+                    it
                 )
             }
         }
@@ -210,37 +207,34 @@ class LocationsViewModel : ViewModel() {
     ) {
         val mQueue = Volley.newRequestQueue(mContext)
 
-        mContext?.showLoader()
+        mContext.showLoader()
 /*MOCK LOCATION */
-       // val locationURL = "locations?distance=150&limit=300&page=1&page=1&latitude=" + latitude + "&longitude=" + longitude
-        val locationURL =
-            "locations?distance=150&limit=300&page=1&page=1&latitude=41.603161&longitude=-87.753459300000003"
+ //         val locationURL = "locations?distance=150&limit=300&page=1&page=1&latitude=" + latitude + "&longitude=" + longitude
+         val locationURL = "locations?distance=150&limit=300&page=1&page=1&latitude=41.6030093&longitude=-87.75345159999999"
         val jsonObjectRequest = object : JsonObjectRequest(
             Method.GET,
             mContext.baseUrl +locationURL,
             null,
-            object : Response.Listener<JSONObject> {
-                override fun onResponse(response: JSONObject) {
-                    mContext.hideLoader(mContext)
+            Response.Listener<JSONObject> { response ->
+                mContext.hideLoader()
 
-                    val stores: DottysLocationsStoresModel =
-                        DottysLocationsStoresModel.fromLocationJson(
-                            response.toString()
-                        )
-                    locationDataObserver?.dottysLocationsModel = stores
-                    stores.locations?.let { initExpandableList(mContext, it) }
-                    locationsStores = stores.locations as ArrayList<DottysStoresLocation>?
-                }
+                val stores: DottysLocationsStoresModel =
+                    DottysLocationsStoresModel.fromLocationJson(
+                        response.toString()
+                    )
+                locationDataObserver?.dottysLocationsModel = stores
+                stores.locations?.let { initExpandableList(mContext, it) }
+                locationsStores = stores.locations as ArrayList<DottysStoresLocation>?
             },
             Response.ErrorListener {
-                mContext?.hideLoader(mContext)
+                mContext.hideLoader()
                 Toast.makeText(mContext, "Has no nearest locations", Toast.LENGTH_LONG).show()
                     .run {
                         if (fragment != null) {
                             if (fragment is LocationsFragment) {
                                 val intent =
                                     Intent(mContext, DottysMainNavigationActivity::class.java)
-                                mContext?.startActivity(intent)
+                                mContext.startActivity(intent)
                             }
                         }
                     }

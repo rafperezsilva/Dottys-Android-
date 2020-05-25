@@ -1,15 +1,12 @@
 package com.keylimetie.dottys.ui.logout
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.android.volley.NetworkResponse
-import com.android.volley.Request
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import com.keylimetie.dottys.DottysMainNavigationActivity
-
 import com.keylimetie.dottys.R
 
 class LogoutFragment: Fragment() {

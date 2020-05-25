@@ -6,7 +6,6 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.*
-import androidx.core.content.res.TypedArrayUtils.getText
 import androidx.lifecycle.ViewModel
 import com.android.volley.NetworkResponse
 import com.android.volley.Response
@@ -16,9 +15,7 @@ import com.keylimetie.dottys.DottysErrorModel
 import com.keylimetie.dottys.R
 import com.keylimetie.dottys.forgot_password.VerificationMethodType.EMAIL
 import com.keylimetie.dottys.forgot_password.VerificationMethodType.SMS
-import com.keylimetie.dottys.register.DottysProfilePictureActivity
 import org.json.JSONObject
-import java.util.regex.Pattern
 import kotlin.properties.Delegates
 
 
@@ -74,7 +71,7 @@ open class DottysForgotPasswordViewModel : ViewModel() {
 
     /* VERIFICATION CODE VIEW */
     fun initValidationView(verificationActivity: DottysVerificationTypeActivity, email: String) {
-        verificationActivity.hideLoader(verificationActivity)
+        verificationActivity.hideLoader()
         verificationCodeObserver   = DottysForgotPasswordObserver(verificationActivity)
         emailVerificationTextview  = verificationActivity.findViewById<TextView>(R.id.email_verification_password_edittext)
         phoneVerificationTextview  = verificationActivity.findViewById<TextView>(R.id.phone_verification_password_edittext)
@@ -110,7 +107,7 @@ open class DottysForgotPasswordViewModel : ViewModel() {
 
     /* ENTER CODE VERIFICATION VIEW */
     fun initVerificationCodeView(verificationCodeActivity: DottysEnterVerificationCodeActivity, email:String, isRegisterView: Boolean){
-        verificationCodeActivity.hideLoader(verificationCodeActivity)
+        verificationCodeActivity.hideLoader()
         firtsEditTextCode  = verificationCodeActivity.findViewById<EditText>(R.id.firts_code_edittext)
         secondsEditTextCode  = verificationCodeActivity.findViewById<EditText>(R.id.second_code_edittext)
         thirdEditTextCode  = verificationCodeActivity.findViewById<EditText>(R.id.third_code_edittext)
@@ -230,9 +227,10 @@ open class DottysForgotPasswordViewModel : ViewModel() {
             verificationActivity.baseUrl + "users/verifyPhone",
             jsonObject,
             Response.Listener<JSONObject> {
-                verificationActivity.hideLoader(verificationActivity) },
+                verificationActivity.hideLoader()
+            },
             Response.ErrorListener { error ->
-                verificationActivity.hideLoader(verificationActivity)
+                verificationActivity.hideLoader()
                 val errorRes = DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                 if (errorRes.error?.messages?.size ?: 0 > 0) {
                     Toast.makeText(verificationActivity, errorRes.error?.messages?.first() ?: "", Toast.LENGTH_LONG).show()
@@ -288,9 +286,10 @@ open class DottysForgotPasswordViewModel : ViewModel() {
             verificationActivity.baseUrl + "users/resetPassword",
             jsonObject,
             Response.Listener<JSONObject> {
-                verificationActivity.hideLoader(verificationActivity) },
+                verificationActivity.hideLoader()
+            },
             Response.ErrorListener { error ->
-                verificationActivity.hideLoader(verificationActivity)
+                verificationActivity.hideLoader()
                 if (error.networkResponse != null) {
                 val errorRes =
                     DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
@@ -325,7 +324,7 @@ open class DottysForgotPasswordViewModel : ViewModel() {
 
     /* CHANGE PASWORD VIEW */
     fun initChangePasswordView(changePassActivity: DottysEnterPasswordActivity, code: String, mail: String){
-        changePassActivity.hideLoader(changePassActivity)
+        changePassActivity.hideLoader()
         verificationCodeObserver = DottysForgotPasswordObserver(changePassActivity)
         newPasswordEditText  = changePassActivity.findViewById<EditText>(R.id.new_password_login_edittext)
         enterNewPasswordEditText  = changePassActivity.findViewById<EditText>(R.id.confirm_new_password_login_edittext)
@@ -356,9 +355,10 @@ open class DottysForgotPasswordViewModel : ViewModel() {
             verificationActivity.baseUrl + "users/changePassword",
             jsonObject,
             Response.Listener<JSONObject> {
-                verificationActivity.hideLoader(verificationActivity) },
+                verificationActivity.hideLoader()
+            },
             Response.ErrorListener { error ->
-                verificationActivity.hideLoader(verificationActivity)
+                verificationActivity.hideLoader()
                  if (error.networkResponse !=  null) {
 
                      val errorRes =

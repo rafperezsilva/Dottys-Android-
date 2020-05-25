@@ -1,7 +1,6 @@
 package com.keylimetie.dottys.ui.dashboard
 
 import android.content.Context
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

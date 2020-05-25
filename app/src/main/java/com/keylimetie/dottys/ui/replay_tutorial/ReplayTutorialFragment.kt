@@ -1,14 +1,12 @@
 package com.keylimetie.dottys.ui.replay_tutorial
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.lifecycle.Observer
-
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import com.keylimetie.dottys.R
 import com.keylimetie.dottys.ui.profile.ProfileViewModel
 

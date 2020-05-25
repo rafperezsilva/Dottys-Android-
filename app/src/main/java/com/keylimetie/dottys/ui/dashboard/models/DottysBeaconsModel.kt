@@ -1,13 +1,15 @@
 package com.keylimetie.dottys.ui.dashboard.models
 
-import com.fasterxml.jackson.annotation.*
-import com.fasterxml.jackson.core.*
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.*
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.databind.ser.std.StdSerializer
-import com.fasterxml.jackson.module.kotlin.*
-import com.keylimetie.dottys.beacon_service.DottysBeaconServiceDelegate
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.keylimetie.dottys.ui.locations.DottysStoresLocation
 
 

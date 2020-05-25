@@ -2,20 +2,18 @@ package com.keylimetie.dottys.ui.logout
 
 import android.util.Log
 import android.widget.Toast
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.android.volley.*
+import com.android.volley.AuthFailureError
+import com.android.volley.Response
+import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.keylimetie.dottys.DottysErrorModel
 import com.keylimetie.dottys.DottysMainNavigationActivity
-import com.keylimetie.dottys.models.DottysRewardsModel
-import kotlinx.serialization.json.JsonArray
 import org.json.JSONObject
-import java.util.HashMap
+import java.util.*
 
-  class LogoutViewModel: ViewModel() {
+class LogoutViewModel: ViewModel() {
 
 
 
@@ -30,13 +28,13 @@ import java.util.HashMap
                 null,
                 object : Response.Listener<JSONObject> {
                     override fun onResponse(response: JSONObject) {
-                        mContext.hideLoader(mContext)
+                        mContext.hideLoader()
                         mContext.finishSession(mContext)
                     }
                 },
                 object : Response.ErrorListener {
                     override fun onErrorResponse(error: VolleyError) {
-                        mContext.hideLoader(mContext)
+                        mContext.hideLoader()
                         mContext.finishSession(mContext)
                         if (error.networkResponse ==  null){return}
                         val errorRes =

@@ -1,24 +1,18 @@
 package com.keylimetie.dottys.beacon_service
 
  import android.widget.Toast
-import androidx.lifecycle.ViewModel
-import com.android.volley.AuthFailureError
-import com.android.volley.Response
-import com.android.volley.VolleyError
+ import androidx.lifecycle.ViewModel
+ import com.android.volley.AuthFailureError
+ import com.android.volley.Response
+ import com.android.volley.VolleyError
  import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
-import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.annotation.JsonProperty
-
-import com.fasterxml.jackson.databind.PropertyNamingStrategy
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
-import com.keylimetie.dottys.DottysBaseActivity
-import com.keylimetie.dottys.DottysErrorModel
-import com.keylimetie.dottys.ui.dashboard.models.DottysDrawingSumaryModel
+ import com.android.volley.toolbox.Volley
+ import com.keylimetie.dottys.DottysBaseActivity
+ import com.keylimetie.dottys.DottysErrorModel
  import org.json.JSONObject
-import java.util.HashMap
-import kotlin.properties.Delegates
+ import java.util.*
+ import kotlin.properties.Delegates
+
 enum class BeaconEventType{ENTER,EXIT}
 class DottysBeaconViewModel: ViewModel(){
     private var beaconDataObserver: DottysBeaconObserver? = null
@@ -34,7 +28,7 @@ class DottysBeaconViewModel: ViewModel(){
             mContext.baseUrl + "beaconEventSummaries/event",
             jsonObject,
             Response.Listener<JSONObject> { response ->
-                    mContext.hideLoader(mContext)
+                mContext.hideLoader()
                     println(response.toString())
                     val beaconSummary: DottysBeaconResponseModel =
                         DottysBeaconResponseModel.fromJson(
@@ -43,7 +37,7 @@ class DottysBeaconViewModel: ViewModel(){
                     beaconDataObserver?.beaconData = beaconSummary
                 }, object : Response.ErrorListener {
                     override fun onErrorResponse(error: VolleyError) {
-                        mContext.hideLoader(mContext)
+                        mContext.hideLoader()
                         if (error.networkResponse == null) {
                             return
                         }

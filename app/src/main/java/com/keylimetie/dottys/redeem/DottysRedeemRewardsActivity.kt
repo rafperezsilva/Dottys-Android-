@@ -4,7 +4,6 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.R
-import com.keylimetie.dottys.ui.dashboard.DashboardViewModel
 
 
 class DottysRedeemRewardsActivity : DottysBaseActivity() {

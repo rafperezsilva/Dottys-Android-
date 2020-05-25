@@ -8,7 +8,10 @@ import android.text.Layout
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.Spanned
-import android.text.style.*
+import android.text.style.AbsoluteSizeSpan
+import android.text.style.AlignmentSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

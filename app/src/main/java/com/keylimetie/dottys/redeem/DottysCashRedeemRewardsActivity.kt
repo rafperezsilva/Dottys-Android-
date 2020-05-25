@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.R
-import com.keylimetie.dottys.models.DottysRewardsModel
 
 
 class DottysCashRedeemRewardsActivity : DottysBaseActivity(), DottysRedeemedRewardsDelegates {

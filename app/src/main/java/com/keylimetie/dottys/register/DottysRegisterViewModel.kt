@@ -15,8 +15,11 @@ import com.android.volley.NetworkResponse
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.keylimetie.dottys.DottysErrorModel
+import com.keylimetie.dottys.DottysLoginResponseModel
+import com.keylimetie.dottys.DottysRegisterRequestModel
+import com.keylimetie.dottys.R
 import com.keylimetie.dottys.R.id
-import com.keylimetie.dottys.*
 import com.keylimetie.dottys.forgot_password.DottysEnterVerificationCodeActivity
 import com.keylimetie.dottys.register.volley_multipart.VolleyMultipartRequest
 import org.json.JSONObject
@@ -67,7 +70,7 @@ open class DottysRegisterViewModel : ViewModel() {
 
     fun initItemsAtView(activityRegister: DottysRegisterActivity) {
         this.activityRegister = activityRegister
-        activityRegister.hideLoader(activityRegister)
+        activityRegister.hideLoader()
         firstNameEditText =
             activityRegister.findViewById<EditText>(id.first_name_register_edit_text)
         lastNameEditText =
@@ -296,7 +299,7 @@ open class DottysRegisterViewModel : ViewModel() {
             object : Response.Listener<JSONObject> {
                 // activityRegister.hideLoader(activityRegister)
                 override fun onResponse(response: JSONObject) {
-                    activityRegister.hideLoader(activityRegister)
+                    activityRegister.hideLoader()
 
                     var user: DottysLoginResponseModel =
                         DottysLoginResponseModel.fromJson(
@@ -307,7 +310,7 @@ open class DottysRegisterViewModel : ViewModel() {
                 }
             },
             Response.ErrorListener { error ->
-                activityRegister.hideLoader(activityRegister)
+                activityRegister.hideLoader()
                 if (error.networkResponse != null) {
                     val errorRes = DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                     if (errorRes.error?.messages?.size ?: 0 > 0) {
@@ -338,12 +341,12 @@ open class DottysRegisterViewModel : ViewModel() {
             context.baseUrl + "users/profilePicture",
             params,
             Response.Listener { response ->
-                context.hideLoader(context)
+                context.hideLoader()
                 activityRegisterObserver?.imageHasUploaded = true
                 print(response.statusCode)
             },
             Response.ErrorListener { error ->
-                context.hideLoader(context)
+                context.hideLoader()
                 activityRegisterObserver?.imageHasUploaded = false
                 val errorRes = DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                 if (errorRes.error?.messages?.size ?: 0 > 0) {

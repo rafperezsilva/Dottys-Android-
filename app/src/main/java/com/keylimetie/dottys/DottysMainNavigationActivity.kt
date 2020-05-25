@@ -2,39 +2,27 @@ package com.keylimetie.dottys
 
 import android.location.Location
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
-import com.keylimetie.dottys.beacon_service.DottysBeaconActivityDelegate
-import com.keylimetie.dottys.beacon_service.DottysBeaconService
-import com.keylimetie.dottys.beacon_service.DottysBeaconServiceDelegate
-import com.keylimetie.dottys.beacon_service.DottysBeaconServiceObserver
+import com.keylimetie.dottys.splash.getVersionApp
 import com.keylimetie.dottys.ui.dashboard.DashboardFragment
-import com.keylimetie.dottys.ui.dashboard.DashboardViewModel
-import com.keylimetie.dottys.ui.dashboard.models.DottysBeacon
-import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconArray
 import com.keylimetie.dottys.ui.drawing.RewardsSegment
 import com.keylimetie.dottys.ui.locations.DottysLocationStoresObserver
-import com.keylimetie.dottys.ui.locations.DottysLocationsStoresModel
 import com.keylimetie.dottys.ui.locations.LocationsViewModel
-import java.util.ArrayList
 
-
+@Suppress("DEPRECATION")
 class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationDelegates   {//, DottysBeaconStatusDelegate {
 
     private var navView: NavigationView? = null
@@ -77,13 +65,13 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationDelegat
                             logoAppBar.visibility = View.INVISIBLE
                         }
                     }
-                    toolbar.setBackgroundColor(resources.getColor(R.color.colorDottysGrey))
+                    toolbar.run { setBackgroundColor(resources.getColor(R.color.colorDottysGrey)) }
                     window.statusBarColor = ContextCompat.getColor(this, R.color.colorDottysGrey)
                 }
             }
         }
 
-    fun getToolbarTitle(itemId: Int): String {
+    private fun getToolbarTitle(itemId: Int): String {
         when (itemId) {
             R.id.nav_locations -> {
                 return "Locations"
@@ -130,10 +118,13 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationDelegat
        // getBeaconStatus()?.let { beaconService.listenerBeaconStatus(it, this) }
  }
 
-    fun initDrawerSetting() {
+    private fun initDrawerSetting() {
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
           navView  = findViewById(R.id.nav_view)
+        val footerLabel = findViewById<TextView>(R.id.footer_label)
+        footerLabel.text =
+            "© 2020 Laredo Hospitality Group.\nAll rights reserved.\n${getVersionApp(this)}"
         controller = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -173,8 +164,8 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationDelegat
         })
     }
 
-    fun setTitleToolbar(idItem: Int) {
-        var textTitle = findViewById<TextView>(R.id.title_tool_bar_textview)
+    private fun setTitleToolbar(idItem: Int) {
+        val textTitle = findViewById<TextView>(R.id.title_tool_bar_textview)
         textTitle.text = getToolbarTitle(idItem)
     }
 

@@ -10,7 +10,6 @@ import com.android.volley.Response
 import com.android.volley.toolbox.ImageRequest
 import com.android.volley.toolbox.Volley
 import com.keylimetie.dottys.*
-import com.keylimetie.dottys.forgot_password.DottysForgotPasswordMainActivity
 import com.keylimetie.dottys.forgot_password.DottysVerificationTypeActivity
 import de.hdodenhof.circleimageview.CircleImageView
 

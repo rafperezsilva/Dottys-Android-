@@ -28,7 +28,6 @@ import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.R
 import com.keylimetie.dottys.ui.dashboard.DashboardFragment
 import org.json.JSONObject
-import java.text.NumberFormat
 import kotlin.properties.Delegates
 
 
@@ -72,7 +71,7 @@ class DrawingViewModel : ViewModel() {
             getUserDrawings(activity!!)
         }
         if (locationId != null) {
-                getDrawingSummary(activity!!,locationId)
+                getDrawingSummary(activity ?: return,locationId)
             }
         activityFragment?.let { segmentTabLisener(it) }
         fragment.context.let {
@@ -147,7 +146,9 @@ class DrawingViewModel : ViewModel() {
         var currentDrawing = ArrayList<DottysDrawing>()
         when (segmentSelected) {
             RewardsSegment.DRAWING_ENTRIES -> {
-                currentDrawing = userDrawing?.drawings as ArrayList<DottysDrawing>
+                if (userDrawing?.drawings != null) {
+                    currentDrawing = userDrawing?.drawings as ArrayList<DottysDrawing>
+                }
             }
             RewardsSegment.CASH_REWARDS -> {
                 var rewardsWired0 = DottysDrawing()
@@ -201,7 +202,7 @@ class DrawingViewModel : ViewModel() {
             mContext.baseUrl+"locations/"+locationId,
             null,
             Response.Listener<JSONObject> { response ->
-                mContext.hideLoader(mContext)
+                mContext.hideLoader()
 
                 var user: DottysDrawingRewardsModel =
                     DottysDrawingRewardsModel.fromJson(
@@ -212,7 +213,7 @@ class DrawingViewModel : ViewModel() {
             },
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {
-                    mContext.hideLoader(mContext)
+                    mContext.hideLoader()
                     if (error.networkResponse ==  null){return}
                     val errorRes =
                         DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
@@ -246,7 +247,7 @@ class DrawingViewModel : ViewModel() {
             mContext.baseUrl+"drawings/mydrawings",
             null,
             Response.Listener<JSONObject> { response ->
-                mContext.hideLoader(mContext)
+                mContext.hideLoader()
                 try {
 
                     var user: DottysDrawingUserModel =
@@ -262,7 +263,7 @@ class DrawingViewModel : ViewModel() {
             },
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {
-                    mContext.hideLoader(mContext)
+                    mContext.hideLoader()
                     if (error.networkResponse ==  null){return}
                     val errorRes =
                         DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))

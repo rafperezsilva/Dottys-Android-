@@ -4,7 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.content.res.Configuration
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
@@ -21,7 +21,7 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.checkSelfPermission
 import com.dottysrewards.dottys.service.VolleyService
 import com.estimote.sdk.EstimoteSDK
 import com.estimote.sdk.SystemRequirementsChecker
@@ -36,6 +36,7 @@ import com.keylimetie.dottys.ui.dashboard.models.DottysBeacon
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconArray
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconsModel
 import com.keylimetie.dottys.ui.locations.DottysLocationsStoresModel
+import com.onesignal.OneSignal
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
@@ -48,6 +49,7 @@ enum class PreferenceTypeKey {
     USER_DATA, GLOBAL_DATA, LOCATIONS, DOTTYS_USER_LOCATION, BEACON_AT_LOCATION, BEACON_AT_CONECTION
 }
 
+@Suppress("DEPRECATED_IDENTITY_EQUALS", "NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 open class DottysBaseActivity : AppCompatActivity(), DottysBeaconDelegates {
     var backButton: ImageButton? = null
     var sharedPreferences: SharedPreferences? = null
@@ -68,7 +70,7 @@ open class DottysBaseActivity : AppCompatActivity(), DottysBeaconDelegates {
         super.onCreate(savedInstanceState)
         VolleyService.initialize(this)
         baseUrl = this.resources.getString(R.string.url_base_development)
-       // baseUrl = this.resources.getString(R.string.url_base_production)
+        // baseUrl = this.resources.getString(R.string.url_base_production)
         progressBar = findViewById(R.id.progress_loader)
         //hideLoader(this)
         sharedPreferences = this.getSharedPreferences(
@@ -76,7 +78,11 @@ open class DottysBaseActivity : AppCompatActivity(), DottysBeaconDelegates {
             Context.MODE_PRIVATE
         )
         println(getUserPreference().token)
-
+        // OneSignal Initialization
+        OneSignal.startInit(this)
+            .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+            .unsubscribeWhenNotificationsAreDisabled(true)
+            .init()
 
     }
 
@@ -121,7 +127,8 @@ open class DottysBaseActivity : AppCompatActivity(), DottysBeaconDelegates {
     }
 
     fun getDiferencesDays(dateString: String): String {
-        val date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSS").parse(dateString.replace("Z", ""))
+        val date: Date =
+            SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSS").parse(dateString.replace("Z", ""))
         val diferenceAtTime = date.time - Date().time
         return "end in " + (diferenceAtTime / (1000 * 3600 * 24)).toString() + " days"
     }
@@ -154,10 +161,10 @@ open class DottysBaseActivity : AppCompatActivity(), DottysBeaconDelegates {
 
     open fun requestLocation(gpsTracker: GpsTracker?, activity: AppCompatActivity?) {
         try {
-            if (ContextCompat.checkSelfPermission(
+            if (checkSelfPermission(
                     applicationContext,
                     Manifest.permission.ACCESS_FINE_LOCATION
-                ) !== PackageManager.PERMISSION_GRANTED
+                ) !== PERMISSION_GRANTED
             ) {
                 ActivityCompat.requestPermissions(
                     activity!!,
@@ -280,7 +287,7 @@ open class DottysBaseActivity : AppCompatActivity(), DottysBeaconDelegates {
         )
     }
 
-    fun hideLoader(context: AppCompatActivity) {
+    fun hideLoader() {
 //        if (progressBar?.visibility == null){
 //            return }
         progressBar = this.findViewById<ProgressBar>(R.id.progress_loader)
@@ -290,7 +297,7 @@ open class DottysBaseActivity : AppCompatActivity(), DottysBeaconDelegates {
 
 
     fun finishSession(mContext: DottysBaseActivity) {
-        Toast.makeText(mContext, "User Logout", Toast.LENGTH_LONG).show()
+        // Toast.makeText(mContext, "User Logout", Toast.LENGTH_LONG).show()
         val editPref = mContext.sharedPreferences?.edit()
         editPref?.clear()
         editPref?.apply()
@@ -308,7 +315,7 @@ open class DottysBaseActivity : AppCompatActivity(), DottysBeaconDelegates {
     * */
 
 
-    fun getLocation(gpsTracker: GpsTracker, activity: Context): LatLng {
+    fun getLocation(gpsTracker: GpsTracker): LatLng {
         //  gpsTracker = GpsTracker(activity);
         if (gpsTracker.canGetLocation()) {
             val latitude = gpsTracker.getLatitude()
@@ -399,7 +406,7 @@ open class DottysBaseActivity : AppCompatActivity(), DottysBeaconDelegates {
     }
 
     override fun getBeaconRecorded(beaconRecorded: DottysBeaconResponseModel) {
-           Toast.makeText(this, "Has ${beaconRecorded.eventType} to ${beaconRecorded.beaconType} Beacon",Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "Has ${beaconRecorded.eventType} to ${beaconRecorded.beaconType} Beacon",Toast.LENGTH_LONG).show()
     }
 }
 

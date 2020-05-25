@@ -1,16 +1,11 @@
 package com.keylimetie.dottys.forgot_password
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.text.SpannableString
 import android.widget.TextView
-import android.widget.Toast
 import com.keylimetie.dottys.DottysBaseActivity
-import com.keylimetie.dottys.PreferenceTypeKey
 import com.keylimetie.dottys.R
-import com.keylimetie.dottys.register.DottysProfilePictureActivity
 
 class DottysVerificationTypeActivity : DottysBaseActivity(), DottysForgotPasswordDelegates {
     private var viewFromProfile: Boolean? = null

@@ -11,7 +11,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Base64
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
@@ -39,7 +38,7 @@ class DottysProfilePictureActivity : DottysBaseActivity(), DottysRegisterUserDel
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
-        hideLoader(this)
+        hideLoader()
         val imageAccountCreated = findViewById<ImageView>(R.id.account_created_image)
         val skipTakePicture = findViewById<Button>(R.id.skip_for_now_button)
         var imageParams = imageAccountCreated.layoutParams

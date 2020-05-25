@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="navigation_view">
+    tools:showIn="navigation_view"
+
+    >
 
     <group
         android:checkableBehavior="none"
+
         >
         <item
              android:id="@+id/nav_dashboard"
             android:icon="@mipmap/dashboard_icon"
-            android:title="@string/menu_dashboard" />
+            android:title="@string/menu_dashboard"
+
+            />
         <item
             android:id="@+id/nav_locations"
             android:icon="@mipmap/location_icon"
-            android:title="@string/menu_locations" />
+            android:title="@string/menu_locations"
+            android:iconTint="#FFF"/>
         <item
             android:id="@+id/nav_rewards"
             android:icon="@mipmap/rewards_icon"
@@ -55,19 +61,8 @@
             android:visible="false"
             android:title="" />
 
+
     </group>
 
-<!--    <item android:title="Communicate">-->
-<!--        <menu>-->
-<!--            <item-->
-<!--                android:id="@+id/nav_share"-->
-<!--                android:icon="@drawable/ic_menu_share"-->
-<!--                android:title="@string/menu_share" />-->
-<!--            <item-->
-<!--                android:id="@+id/nav_send"-->
-<!--                android:icon="@drawable/ic_menu_send"-->
-<!--                android:title="@string/menu_send" />-->
-<!--        </menu>-->
-<!--    </item>-->
 
 </menu>

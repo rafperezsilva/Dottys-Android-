@@ -9,8 +9,8 @@ import com.keylimetie.dottys.PreferenceTypeKey
 import com.keylimetie.dottys.R
 import com.keylimetie.dottys.models.DottysGlobalDataModel
 import com.keylimetie.dottys.models.DottysRewardsModel
-import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconsModel
 import com.keylimetie.dottys.ui.dashboard.DottysDashboardDelegates
+import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconsModel
 import com.keylimetie.dottys.ui.dashboard.models.DottysDrawingSumaryModel
 import com.keylimetie.dottys.ui.drawing.DottysDrawing
 import com.keylimetie.dottys.ui.drawing.DottysDrawingRewardsModel

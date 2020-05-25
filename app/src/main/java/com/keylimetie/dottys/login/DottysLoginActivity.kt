@@ -2,10 +2,8 @@ package com.keylimetie.dottys.login
 
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.os.Bundle
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import com.keylimetie.dottys.*
 
 class DottysLoginActivity : DottysBaseActivity(), DottysLoginDelegate {

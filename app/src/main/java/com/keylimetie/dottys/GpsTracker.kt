@@ -11,13 +11,11 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-
 import android.os.Bundle
 import android.os.IBinder
 import android.provider.Settings
 import android.util.Log
 import androidx.core.app.ActivityCompat
-import com.keylimetie.dottys.ui.dashboard.DottysDashboardDelegates
 import kotlin.properties.Delegates
 
 class GpsTracker(private val mContext: DottysMainNavigationActivity) : Service(),

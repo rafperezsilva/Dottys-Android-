@@ -1,27 +1,19 @@
 package com.keylimetie.dottys.beacon_service
 
-import android.app.Service
 import android.content.Context
-import android.content.Intent
-import android.os.IBinder
 import android.util.Log
 import com.estimote.sdk.Beacon
 import com.estimote.sdk.BeaconManager
 import com.estimote.sdk.Region
 import com.keylimetie.dottys.DottysBaseActivity
-import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.PreferenceTypeKey
 import com.keylimetie.dottys.ui.dashboard.DashboardFragment
-import com.keylimetie.dottys.ui.dashboard.models.BeaconType
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeacon
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconArray
-import io.reactivex.disposables.Disposable
-
 import java.util.*
 import kotlin.properties.Delegates
 
 open class DottysBeaconActivity(baseActivity:DottysBaseActivity)    {
-  //var currentBeacon: DottysBeacon? = null
   var observer: DottysBeaconActivityObserver? = null
   var mainNavActivity: DashboardFragment? = null //DottysMainNavigationActivity()
   var baseActivity = baseActivity
@@ -52,10 +44,10 @@ open class DottysBeaconActivity(baseActivity:DottysBaseActivity)    {
                   if(beacon.isConected != true) {
                       beaconManager?.startMonitoring(
                           Region(
-                              beacon?.id,
-                              UUID.fromString(beacon?.uuid),
-                              beacon?.major?.toInt(),
-                              beacon?.minor?.toInt()
+                              beacon.id,
+                              UUID.fromString(beacon.uuid),
+                              beacon.major?.toInt(),
+                              beacon.minor?.toInt()
                           )
                       )
                   }
@@ -69,7 +61,7 @@ open class DottysBeaconActivity(baseActivity:DottysBaseActivity)    {
           observer = mainNavActivity?.let { DottysBeaconActivityObserver(it) }
          var beaconList = baseActivity.getBeaconStatus() ?: DottysBeaconArray(baseActivity.getBeaconAtStoreLocation())
          var currentBeacon = DottysBeacon()
-          for (beacon in beaconList?.beaconArray!!){
+          for (beacon in beaconList.beaconArray!!) {
               if (beacon.id == region.identifier){
                   beacon.isConected = true
                   currentBeacon = beacon
@@ -97,7 +89,7 @@ open class DottysBeaconActivity(baseActivity:DottysBaseActivity)    {
           observer = mainNavActivity?.let { DottysBeaconActivityObserver(it) }
           var beaconList = baseActivity.getBeaconStatus() ?: DottysBeaconArray(baseActivity.getBeaconAtStoreLocation())
           var currentBeacon = DottysBeacon()
-          for (beacon in beaconList?.beaconArray!!){
+          for (beacon in beaconList.beaconArray ?: return) {
               if (beacon.id == region.identifier){
                   beacon.isConected = false
                   currentBeacon = beacon

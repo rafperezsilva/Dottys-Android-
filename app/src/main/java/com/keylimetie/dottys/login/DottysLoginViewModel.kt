@@ -2,21 +2,20 @@ package com.keylimetie.dottys.login
 
 import android.content.Context
 import android.content.Intent
-import android.text.TextUtils
 import android.util.Log
-import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
-import com.android.volley.*
+import com.android.volley.NetworkResponse
+import com.android.volley.Response
+import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.dottysrewards.dottys.service.VolleyService
 import com.keylimetie.dottys.*
 import com.keylimetie.dottys.forgot_password.DottysForgotPasswordMainActivity
-import com.keylimetie.dottys.R
 import com.keylimetie.dottys.register.DottysRegisterActivity
 import org.json.JSONObject
 import kotlin.properties.Delegates
@@ -43,7 +42,7 @@ open class DottysLoginViewModel : ViewModel() {
         forgotPasswordTextView = activityLogin.findViewById(R.id.forgot_passwords_textview) as TextView
         mContext = activityLogin
         userLoginDataObserver = DottysLoginObserver(activityLogin)
-        activityLogin.hideLoader(activityLogin)
+        activityLogin.hideLoader()
         activityLogin.sharedPreferences = activityLogin.getSharedPreferences(
             PreferenceTypeKey.USER_DATA.name,
             Context.MODE_PRIVATE
@@ -90,7 +89,7 @@ open class DottysLoginViewModel : ViewModel() {
         return true
     }
 
-    fun loginUserRequest(modelRegister: DottysRegisterModel) {
+    private fun loginUserRequest(modelRegister: DottysRegisterModel) {
         val params = HashMap<String, String>()
         params["email"] = modelRegister.email!!
         params["password"] = modelRegister.password!!
@@ -100,10 +99,9 @@ open class DottysLoginViewModel : ViewModel() {
         val jsonObjectRequest = object : JsonObjectRequest(Method.POST,
             mContext?.baseUrl + "users/login",
             jsonObject,
-            object : Response.Listener<JSONObject> {
-                override fun onResponse(response: JSONObject) {
-                    mContext?.hideLoader(mContext!!)
-                    Log.d("LOGIN RESPONSE", response.toString())
+            Response.Listener<JSONObject> { response ->
+                mContext?.hideLoader()
+                Log.d("LOGIN RESPONSE", response.toString())
                 try {
                     var person: DottysLoginResponseModel =
                         DottysLoginResponseModel.fromJson(
@@ -112,14 +110,19 @@ open class DottysLoginViewModel : ViewModel() {
                     userLoginDataObserver?.registerUserModel = person
                 } catch (e: Exception) {
                     println(e)
-                    mContext?.hideLoader(mContext!!)
-                }
+                    mContext?.hideLoader()
                 }
             },
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {
-                    mContext?.hideLoader(mContext!!)
-                    if (error.networkResponse ==  null){return
+                    mContext?.hideLoader()
+                    if (error.networkResponse == null) {
+                        Toast.makeText(
+                            mContext,
+                            "Please, check your internet connection.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        return
                     }
                     val errorRes =
                         DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))

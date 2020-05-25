@@ -10,12 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.keylimetie.dottys.*
 import com.keylimetie.dottys.beacon_service.DottysBeaconActivityDelegate
-import com.keylimetie.dottys.beacon_service.DottysBeaconService
-import com.keylimetie.dottys.beacon_service.DottysBeaconServiceDelegate
 import com.keylimetie.dottys.models.DottysGlobalDataModel
 import com.keylimetie.dottys.models.DottysRewardsModel
 import com.keylimetie.dottys.redeem.DottysRedeemRewardsActivity
-import com.keylimetie.dottys.ui.dashboard.models.DottysBeacon
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconArray
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconsModel
 import com.keylimetie.dottys.ui.dashboard.models.DottysDrawingSumaryModel
@@ -56,7 +53,9 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
 
         activity?.requestLocation( activity?.gpsTracker, activity)
         activity?.gpsTracker?.locationGps?.let { activity?.gpsTracker?.onLocationChanged(it) }
-        activity?. initEstimoteBeaconManager(this)
+        if (activity?.getUserPreference() != null || activity?.progressBar?.visibility != 0) {
+            activity?.initEstimoteBeaconManager(this)
+        }
     }
 
     override fun onStart() {
@@ -73,7 +72,13 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
         var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
         var locationModel = LocationsViewModel()
         locationModel.locationDataObserver = DottysLocationStoresObserver(this)
-        val location = this.activity?.let { activity?.gpsTracker?.let { it1 -> activity?.getLocation(it1, it) } }
+        val location = this.activity?.let {
+            activity?.gpsTracker?.let { it1 ->
+                activity.getLocation(
+                    it1
+                )
+            }
+        }
         if(location != null){
             activity?.let { locationModel.getLocationsDottysRequest(it,location?.latitude.toString(), location?.longitude.toString(),this) }
         }

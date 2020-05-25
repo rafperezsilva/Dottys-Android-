@@ -3,9 +3,7 @@ package com.keylimetie.dottys.forgot_password
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.SpannableString
 import android.widget.TextView
 import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.DottysLoginResponseModel

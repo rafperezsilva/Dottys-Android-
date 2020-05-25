@@ -1,7 +1,6 @@
 package com.keylimetie.dottys.register
 
 import android.app.DatePickerDialog
-import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
@@ -10,7 +9,6 @@ import android.widget.TextView
 import android.widget.Toast
 import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.DottysLoginResponseModel
-import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.R
 import java.time.LocalDate
 import java.util.*

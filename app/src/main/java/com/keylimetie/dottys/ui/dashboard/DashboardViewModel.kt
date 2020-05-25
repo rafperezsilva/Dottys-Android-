@@ -24,7 +24,10 @@ import com.keylimetie.dottys.*
 import com.keylimetie.dottys.R.id
 import com.keylimetie.dottys.models.DottysGlobalDataModel
 import com.keylimetie.dottys.models.DottysRewardsModel
-import com.keylimetie.dottys.ui.dashboard.models.*
+import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconArray
+import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconsModel
+import com.keylimetie.dottys.ui.dashboard.models.DottysDrawingSumaryModel
+import com.keylimetie.dottys.ui.dashboard.models.DottysDrawingSumaryModelElement
 import com.keylimetie.dottys.ui.drawing.DottysDrawingRewardsModel
 import com.keylimetie.dottys.ui.drawing.DrawingViewModel
 import de.hdodenhof.circleimageview.CircleImageView
@@ -55,7 +58,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
         this.dashboardView = dashboardView
         userCurrentUserDataObserver = DottysCurrentUserObserver(fragment)
       //  mContext.beaconsStatusObserver = DottysBeaconStatusObserver(fragment)
-        mContext.hideLoader(mContext)
+        mContext.hideLoader()
         fragmentDashBoard = fragment
         getCurrentUserRequest(mContext)
     }
@@ -190,7 +193,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
         val jsonArrayRequest =
             object : JsonArrayRequest(Method.GET, mContext.baseUrl + "drawings/summary", null,
                 Response.Listener<JSONArray> { response ->
-                    mContext.hideLoader(mContext)
+                    mContext.hideLoader()
                     println(response.toString())
                     val drawingSummary: DottysDrawingSumaryModel =
                         DottysDrawingSumaryModel.fromJson(
@@ -199,8 +202,8 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
                     userCurrentUserDataObserver?.dawingSummaryModel = drawingSummary
                 }, object : Response.ErrorListener {
                     override fun onErrorResponse(error: VolleyError) {
-                        mContext.hideLoader(mContext)
-                        mContext.finishSession(mContext)
+                        mContext.hideLoader()
+                        //mContext.finishSession(mContext)
                         if (error.networkResponse == null) {
                             return
                         }
@@ -236,7 +239,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
             mContext.baseUrl + "users/currentUser/",
             null,
             Response.Listener<JSONObject> { response ->
-                mContext.hideLoader(mContext)
+                mContext.hideLoader()
                 println(response.toString())
                 var user: DottysLoginResponseModel =
                     DottysLoginResponseModel.fromJson(
@@ -247,8 +250,8 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
             },
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {
-                    mContext.hideLoader(mContext)
-                    mContext.finishSession(mContext)
+                    mContext.hideLoader()
+                  //  mContext.finishSession(mContext)
                     if (error.networkResponse == null) {
                         return
                     }
@@ -285,7 +288,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
             mContext.baseUrl + "global",
             null,
             Response.Listener<JSONObject> { response ->
-                mContext.hideLoader(mContext)
+                mContext.hideLoader()
                 println(response.toString())
                 val user: DottysGlobalDataModel =
                     DottysGlobalDataModel.fromJson(
@@ -295,7 +298,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
             },
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {
-                    mContext.hideLoader(mContext)
+                    mContext.hideLoader()
                     mContext.finishSession(mContext)
                     if (error.networkResponse == null) {
                         return
@@ -316,7 +319,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
             @Throws(AuthFailureError::class)
             override fun getHeaders(): Map<String, String> {
                 val params = HashMap<String, String>()
-                params["Authorization"] = mContext.getUserPreference().token!!
+                params["Authorization"] = mContext.getUserPreference().token ?: ""
                 return params
             }
 
@@ -335,7 +338,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
            mContext.baseUrl + "locations/"+mContext.getUserPreference().homeLocationID,
            null,
            Response.Listener<JSONObject> { response ->
-               mContext.hideLoader(mContext)
+               mContext.hideLoader()
 
                var dottysLocation: DottysDrawingRewardsModel =
                    DottysDrawingRewardsModel.fromJson(
@@ -399,7 +402,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
             mContext.baseUrl + "rewards/currentUser/?redeemed=true",
             null,
             Response.Listener<JSONObject> { response ->
-                mContext.hideLoader(mContext)
+                mContext.hideLoader()
                 println(response.toString())
                 var user: DottysRewardsModel =
                     DottysRewardsModel.fromJson(
@@ -411,7 +414,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
             },
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {
-                    mContext.hideLoader(mContext)
+                    mContext.hideLoader()
                     mContext.finishSession(mContext)
                     if (error.networkResponse == null) {
                         return
@@ -456,7 +459,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
             null,
             object : Response.Listener<JSONObject> {
                 override fun onResponse(response: JSONObject) {
-                    mContext.hideLoader(mContext)
+                    mContext.hideLoader()
                     Log.d("BEACON LIST -->",response.toString())
                     var user: DottysBeaconsModel =
                         DottysBeaconsModel.fromJson(
@@ -468,7 +471,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
             },
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {
-                    mContext.hideLoader(mContext)
+                    mContext.hideLoader()
                     if (error.networkResponse == null) {
                         return
                     }
@@ -567,17 +570,22 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
          locationEnableTextView?.text =  isEnableLocation
          if (storeLocation != null) {
              storeLocation?.text =
-                 "Store #${mainFragmentActivity?.getBeaconAtStoreLocation()?.first()?.location?.storeNumber.toString()}"
+                 "Store #${mainFragmentActivity?.getBeaconAtStoreLocation()
+                     ?.first()?.location?.storeNumber ?: ""}"
 
          }
-         val listViewRewards = mainFragmentActivity?.findViewById<ListView>(R.id.beacons_analytics_listview)
+         var listViewRewards =
+             mainFragmentActivity?.findViewById<ListView>(R.id.beacons_analytics_listview)
+         if (listViewRewards == null) {
+             listViewRewards =
+                 dashboardView?.findViewById<ListView>(R.id.beacons_analytics_listview)
+         }
 
-         listViewRewards?.adapter = beaconList.beaconArray?.let {
-             mainFragmentActivity?.baseContext?.let { it1 ->
-                 AnalyticBeacoonsAdapter(
-                     it1,
-                     it)}}
-    }
+         listViewRewards?.adapter =AnalyticBeacoonsAdapter(
+             mainFragmentActivity ?: DottysBaseActivity(),
+             mainFragmentActivity?.getBeaconStatus()?.beaconArray ?: mainFragmentActivity?.getBeaconAtStoreLocation() ?: return)
+
+     }
 
 }
 
