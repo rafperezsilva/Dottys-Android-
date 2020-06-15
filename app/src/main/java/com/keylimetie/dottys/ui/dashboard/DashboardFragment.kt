@@ -153,7 +153,7 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
         activity?.saveDataPreference(PreferenceTypeKey.DOTTYS_USER_LOCATION,locationData.toJson())
 
         var beaconsArray = DottysBeaconArray(activity?.getBeaconStatus()?.beaconArray)
-        homeViewModel.initAnalitycsItems(beaconsArray, viewFragment)
+        homeViewModel.initAnalitycsItems(beaconsArray)
 
     }
 
@@ -178,7 +178,7 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
             activity?.saveDataPreference(PreferenceTypeKey.BEACON_AT_CONECTION,beaconsData.toJson())
         }
 
-        homeViewModel.initAnalitycsItems(beaconsData,null)
+        homeViewModel.initAnalitycsItems(beaconsData)
     }
 
 

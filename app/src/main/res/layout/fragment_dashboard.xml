@@ -229,6 +229,34 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:elevation="1dp" />
+                <Button
+                    android:fontFamily="@font/proxima_nova_light"
+                    android:layout_marginLeft="-5dp"
+                     android:id="@+id/left_roll_pager_button"
+                    android:textColor="#060606"
+                    android:textAlignment="textStart"
+                    android:textSize="45sp"
+                    android:text="〈"
+                    android:background="@color/transparent"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"/>
+                <Button
+                    android:fontFamily="@font/proxima_nova_light"
+                    android:layout_marginRight="-5dp"
+                     android:id="@+id/rigth_roll_pager_button"
+                    android:textColor="#060606"
+                    android:textAlignment="textEnd"
+                    android:textSize="45sp"
+                    android:text="〉"
+                    android:background="@color/transparent"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"/>
             </RelativeLayout>
 
             <LinearLayout

@@ -15,21 +15,26 @@ import com.android.volley.NetworkResponse
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.keylimetie.dottys.DottysErrorModel
-import com.keylimetie.dottys.DottysLoginResponseModel
-import com.keylimetie.dottys.DottysRegisterRequestModel
-import com.keylimetie.dottys.R
+import com.keylimetie.dottys.*
 import com.keylimetie.dottys.R.id
+import com.keylimetie.dottys.TermsAndPrivacy.TermsAndPrivacyActivity
 import com.keylimetie.dottys.forgot_password.DottysEnterVerificationCodeActivity
+import com.keylimetie.dottys.login.DottysLoginDelegate
+import com.keylimetie.dottys.login.DottysLoginObserver
+import com.keylimetie.dottys.login.DottysLoginViewModel
 import com.keylimetie.dottys.register.volley_multipart.VolleyMultipartRequest
+import com.keylimetie.dottys.ui.dashboard.DashboardFragment
 import org.json.JSONObject
 import java.util.*
 import kotlin.math.roundToInt
 import kotlin.properties.Delegates
 
 
-open class DottysRegisterViewModel : ViewModel() {
+open class DottysRegisterViewModel: ViewModel(), View.OnClickListener, DottysLoginDelegate {
+    private var termsOfServiceLabel: TextView? = null
+    private var privacyPolicyLabel: TextView? = null
     private var verificationLayout: ConstraintLayout? = null
+    private var loginFloatingLayout: ConstraintLayout? = null
 
     //region
     var activityRegisterObserver: DottysRegisterUserObserver? = null
@@ -41,6 +46,8 @@ open class DottysRegisterViewModel : ViewModel() {
     private var phoneEditText: EditText? = null
     private var emailEditText: EditText? = null
     private var passwordEditText: EditText? = null
+    private var emailEditTextFloating   : EditText? = null
+    private var passwordEditTextFloating: EditText? = null
     //private var passwordConfirmEditText: EditText? = null
     var birthdateEditText: EditText? = null
     private var legalAgeCheckBox: CheckBox? = null
@@ -52,7 +59,7 @@ open class DottysRegisterViewModel : ViewModel() {
     private var submitRegisterButon: Button? = null
     private var phantonBirthdayButton: Button? = null
     //endregion
-
+    var heigth = 0f
     fun initRegisterView(activityRegister: DottysRegisterActivity) {
         activityRegisterObserver = DottysRegisterUserObserver(activityRegister)
         initItemsAtView(activityRegister)
@@ -68,41 +75,56 @@ open class DottysRegisterViewModel : ViewModel() {
         }
     }
 
-    fun initItemsAtView(activityRegister: DottysRegisterActivity) {
+   private fun initItemsAtView(activityRegister: DottysRegisterActivity) {
         this.activityRegister = activityRegister
         activityRegister.hideLoader()
         firstNameEditText =
             activityRegister.findViewById<EditText>(id.first_name_register_edit_text)
         lastNameEditText =
             activityRegister.findViewById<EditText>(id.last_name_register_edit_text)
-        phoneEditText = activityRegister.findViewById<EditText>(id.phone_register_edit_text)
+        phoneEditText = activityRegister.findViewById(id.phone_register_edit_text)
         emailEditText = activityRegister.findViewById<EditText>(id.email_register_edit_text)
         passwordEditText = activityRegister.findViewById<EditText>(id.password_register_edit_text)
-       // passwordConfirmEditText =
-           // activityRegister.findViewById<EditText>(id.confirm_password_register_edit_text)
+        passwordEditText = activityRegister.findViewById<EditText>(id.password_register_edit_text)
+        termsOfServiceLabel = activityRegister.findViewById<TextView>(id.terms_of_service_text_view)
+        privacyPolicyLabel = activityRegister.findViewById<TextView>(id.privacy_policy_text_view)
+        val singFromRegister = activityRegister.findViewById<TextView>(id.sign_from_register)
         birthdateEditText =
             activityRegister.findViewById<EditText>(id.birthdate_register_edit_text)
         legalAgeCheckBox = activityRegister.findViewById<CheckBox>(id.legal_age_register_checkbox)
         termsAndConditionsCheckBox =
             activityRegister.findViewById<CheckBox>(id.privacy_policy_register_checkbox)
         showPasswordButon = activityRegister.findViewById<Button>(id.show_password_button)
-        //showConfirmPasswordButon =
-           // activityRegister.findViewById<Button>(id.show_password_confirm_button)
         submitRegisterButon = activityRegister.findViewById<Button>(id.submit_register_button)
         phantonBirthdayButton = activityRegister.findViewById<Button>(id.phanton_birthdate_button)
         verificationLayout =
             activityRegister.findViewById<ConstraintLayout>(id.verification_constraint_layout)
-
+          loginFloatingLayout =
+            activityRegister.findViewById<ConstraintLayout>(id.login_floating_view)
+        heigth = activityRegister?.resources?.displayMetrics?.heightPixels?.toFloat() ?: 0.0f
+       loginFloatingLayout?.animate()?.translationY(-heigth)?.setDuration(0)?.start()
         var paramsLayout = verificationLayout?.layoutParams
         paramsLayout?.height = 2
         verificationLayout?.layoutParams = paramsLayout
         initDatePackerView()
         activityRegister.hideCustomKeyboard()
+       loginFloatingLayout?.setOnClickListener(this)
+       termsOfServiceLabel?.setOnClickListener(this)
+       privacyPolicyLabel?.setOnClickListener(this)
+       singFromRegister?.setOnClickListener(this)
+    }
 
+    private fun initLoginFloatinItems(){
+         emailEditTextFloating    = activityRegister?.findViewById<EditText>(R.id.email_floating_edit_text)
+         passwordEditTextFloating = activityRegister?.findViewById<EditText>(R.id.password_floating_edit_text)
+        val submitFloatingButton = activityRegister?.findViewById<Button>(R.id.submit_floating_button)
+        val cancelFloatingButton = activityRegister?.findViewById<Button>(R.id.cancel_floating_button)
+        submitFloatingButton?.setOnClickListener(this)
+        cancelFloatingButton?.setOnClickListener(this)
     }
 
 
-    fun showPasswordButtonAction() {
+    private fun showPasswordButtonAction() {
         showPasswordButon?.setOnClickListener {
             showPasswordButonState = !(showPasswordButonState)
             if (showPasswordButonState) {
@@ -369,6 +391,47 @@ open class DottysRegisterViewModel : ViewModel() {
         }
 
         mQueue.add(request)
+    }
+
+   private fun loginFromFloatingView(){
+        val loginViewModel = DottysLoginViewModel()
+        val registerModel = DottysRegisterModel()
+       loginViewModel.userLoginDataObserver = DottysLoginObserver(this)
+       registerModel.email = emailEditTextFloating?.text.toString()
+       registerModel.password = passwordEditTextFloating?.text.toString()
+       loginViewModel.loginUserRequest(registerModel, activityRegister ?: DottysBaseActivity())
+    }
+
+
+    override fun onClick(v: View?) {
+        val i = Intent(activityRegister,TermsAndPrivacyActivity::class.java)
+        when(v?.id){
+            R.id.terms_of_service_text_view -> {
+                i.putExtra("TERMS_PRIVACY","TERMS")
+                activityRegister?.startActivity(i)
+            }
+            R.id.privacy_policy_text_view -> {
+                i.putExtra("TERMS_PRIVACY","PRIVACY")
+                activityRegister?.startActivity(i)
+            }
+            R.id.sign_from_register -> {
+                initLoginFloatinItems()
+                loginFloatingLayout?.animate()?.translationY(0f)?.setDuration(450)?.start()
+            }
+            R.id.login_floating_view, R.id.cancel_floating_button -> {
+                loginFloatingLayout?.animate()?.translationY(-heigth)?.setDuration(450)?.start()
+            }
+            R.id.submit_floating_button -> {
+                loginFromFloatingView()
+            }
+        }
+    }
+
+    override fun onUserLogin(registerUserData: DottysLoginResponseModel) {
+        activityRegister?.saveDataPreference(PreferenceTypeKey.USER_DATA, registerUserData.toJson())
+        val intent = Intent(activityRegister, DottysMainNavigationActivity::class.java)
+        activityRegister?.startActivity(intent)
+
     }
 
 }

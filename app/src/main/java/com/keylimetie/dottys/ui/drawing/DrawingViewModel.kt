@@ -137,7 +137,7 @@ class DrawingViewModel : ViewModel() {
                         it,
                         cashRewardsWiredData(),
                         segmentSelected
-                    )
+                        )
                 }
             }
     }
@@ -240,7 +240,7 @@ class DrawingViewModel : ViewModel() {
         mQueue.add(jsonObjectRequest)
     }
 
-    private fun getUserDrawings(mContext: DottysMainNavigationActivity) {
+     fun getUserDrawings(mContext: DottysMainNavigationActivity) {
         val mQueue = Volley.newRequestQueue(mContext)
         mContext.showLoader()
         val jsonObjectRequest = object : JsonObjectRequest(Method.GET,
@@ -249,7 +249,7 @@ class DrawingViewModel : ViewModel() {
             Response.Listener<JSONObject> { response ->
                 mContext.hideLoader()
                 try {
-
+                    Log.d("MY DRAWINGS", response.toString())
                     var user: DottysDrawingUserModel =
                         DottysDrawingUserModel.fromJson(
                             response.toString()

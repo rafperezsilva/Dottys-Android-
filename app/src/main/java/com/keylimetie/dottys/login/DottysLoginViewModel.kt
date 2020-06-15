@@ -59,7 +59,7 @@ open class DottysLoginViewModel : ViewModel() {
             dataLogin.email = emailEditText?.text?.toString()
             dataLogin.password = passwordEditText?.text?.toString()
             if (checkUserLoginInfo()) {
-                loginUserRequest(dataLogin)
+                loginUserRequest(dataLogin,mContext ?: DottysBaseActivity())
             }
 
         }
@@ -89,7 +89,7 @@ open class DottysLoginViewModel : ViewModel() {
         return true
     }
 
-    private fun loginUserRequest(modelRegister: DottysRegisterModel) {
+      fun loginUserRequest(modelRegister: DottysRegisterModel, mContext: DottysBaseActivity) {
         val params = HashMap<String, String>()
         params["email"] = modelRegister.email!!
         params["password"] = modelRegister.password!!
@@ -116,6 +116,7 @@ open class DottysLoginViewModel : ViewModel() {
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {
                     mContext?.hideLoader()
+                    mContext.hideCustomKeyboard()
                     if (error.networkResponse == null) {
                         Toast.makeText(
                             mContext,

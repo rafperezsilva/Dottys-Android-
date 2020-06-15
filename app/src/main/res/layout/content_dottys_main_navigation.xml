@@ -18,6 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/mobile_navigation" />
     <ProgressBar
+        android:elevation="35dp"
         android:id="@+id/progress_loader"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"

@@ -21,6 +21,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.R
+import com.keylimetie.dottys.models.Monthly
 import com.keylimetie.dottys.redeem.DottysRewardRedeemedActivity
 import kotlin.math.roundToInt
 

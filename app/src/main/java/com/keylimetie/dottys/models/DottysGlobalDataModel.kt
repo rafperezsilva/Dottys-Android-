@@ -23,7 +23,9 @@ data class DottysGlobalDataModel (
     val privacyURL: String? = null,
 
     val statusText: String? = null,
-    val drawingTemplates: DrawingTemplates? = null
+    val drawingTemplates: Map<String,Monthly>?= null,
+   //val drawingTemplates: DrawingTemplates? = null,
+    var drawingDetail: ArrayList<Monthly?>? = null
 ) {
     fun toJson() = mapper.writeValueAsString(this)
 
@@ -33,6 +35,7 @@ data class DottysGlobalDataModel (
 
 
 }
+
 
 @kotlinx.serialization.Serializable
 data class DrawingTemplates(

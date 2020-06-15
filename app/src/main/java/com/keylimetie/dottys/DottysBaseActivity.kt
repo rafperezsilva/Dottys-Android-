@@ -26,9 +26,7 @@ import com.dottysrewards.dottys.service.VolleyService
 import com.estimote.sdk.EstimoteSDK
 import com.estimote.sdk.SystemRequirementsChecker
 import com.google.android.gms.maps.model.LatLng
-import com.keylimetie.dottys.beacon_service.DottysBeaconActivity
-import com.keylimetie.dottys.beacon_service.DottysBeaconDelegates
-import com.keylimetie.dottys.beacon_service.DottysBeaconResponseModel
+import com.keylimetie.dottys.beacon_service.*
 import com.keylimetie.dottys.models.DottysGlobalDataModel
 import com.keylimetie.dottys.splash.DottysSplashActivity
 import com.keylimetie.dottys.ui.dashboard.DashboardFragment
@@ -60,7 +58,7 @@ open class DottysBaseActivity : AppCompatActivity(), DottysBeaconDelegates {
     val displayMetrics = DisplayMetrics()
     var gpsTracker: GpsTracker? = null
     var beaconsStatusObserver: DottysBeaconStatusObserver? = null
-
+    var mainNavActivity: DashboardFragment? = null //DottysMainNavigationActivity()
     companion object {
         const val APP_ID = "appsupport-icsdottys-com-s-00i"
         val APP_TOKEN = "3279b08f8557362e2d6bb7901b83ed17"
@@ -93,7 +91,7 @@ open class DottysBaseActivity : AppCompatActivity(), DottysBeaconDelegates {
         EstimoteSDK.initialize(applicationContext, APP_ID, APP_TOKEN)
         EstimoteSDK.enableDebugLogging(true)
         val beaconService = DottysBeaconActivity(this)
-        beaconService.mainNavActivity = context
+        mainNavActivity = context
         beaconService.initBeaconManager()
     }
 
@@ -243,7 +241,7 @@ open class DottysBaseActivity : AppCompatActivity(), DottysBeaconDelegates {
         }
     }
 
-    fun getGLobalData(): DottysGlobalDataModel {
+    fun getGlobalData(): DottysGlobalDataModel {
         val textoDate = sharedPreferences!!.getString(PreferenceTypeKey.GLOBAL_DATA.name, "")
 
         return try {
@@ -405,7 +403,40 @@ open class DottysBaseActivity : AppCompatActivity(), DottysBeaconDelegates {
         return valid
     }
 
-    override fun getBeaconRecorded(beaconRecorded: DottysBeaconResponseModel) {
+    override fun getBeaconRecorded(beaconRecorded: DottysBeacon) {
+
+
+        var beaconAux = beaconRecorded
+        var observer =  DottysBeaconActivityObserver(mainNavActivity ?: DashboardFragment())
+        var beaconsTemp = ArrayList<DottysBeacon>()
+        if (getBeaconStatus()?.beaconArray?.size ?: 0 > 0){
+              beaconsTemp = (getBeaconStatus()!!).beaconArray ?: ArrayList<DottysBeacon>()
+        } else {
+            beaconsTemp =  DottysBeaconArray(getBeaconAtStoreLocation()).beaconArray ?: ArrayList<DottysBeacon>()
+        }
+
+        var beaconsTemp2 = beaconsTemp
+
+        for (x in 0 until beaconsTemp.size){
+            if (beaconsTemp[x].id == beaconRecorded.beaconIdentifier ||
+                beaconsTemp[x].beaconIdentifier == beaconRecorded.beaconIdentifier){
+                beaconAux.isConected = beaconRecorded.eventType?.equals("ENTER") == true
+                beaconsTemp2[x] = beaconAux
+            } else {
+                beaconsTemp2[x] = beaconsTemp[x]
+
+            }
+        }
+//                for ((index,beacon) in beaconsTemp.withIndex()) if (beacon.id == beaconRecorded.beaconIdentifier) {
+//                    if(beaconRecorded.eventType?.equals("ENTER") == true) {
+//                            beaconRecorded.isConected = true
+//                        } else {
+//                        beaconRecorded.isConected = false
+//                    }
+//                    beaconsTemp2[index] = beaconRecorded
+//
+//                }
+        observer.listOfBeacons = DottysBeaconArray(beaconsTemp2)
         Toast.makeText(this, "Has ${beaconRecorded.eventType} to ${beaconRecorded.beaconType} Beacon",Toast.LENGTH_LONG).show()
     }
 }

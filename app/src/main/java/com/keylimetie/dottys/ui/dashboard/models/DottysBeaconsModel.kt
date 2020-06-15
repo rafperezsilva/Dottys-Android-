@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.databind.ser.std.StdSerializer
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.keylimetie.dottys.beacon_service.BeaconEventType
 import com.keylimetie.dottys.ui.locations.DottysStoresLocation
 
 
@@ -58,18 +59,18 @@ data class DottysBeaconArray (
 }
 data class DottysBeacon (
     @get:JsonProperty("_id")@field:JsonProperty("_id")
-    val id: String? = null,
+    var id: String? = null,
 
-    val updatedAt: String? = null,
-    val createdAt: String? = null,
-    val uuid: String? = null,
+    var updatedAt: String? = null,
+    var createdAt: String? = null,
+    var uuid: String? = null,
 
     @get:JsonProperty("locationId")@field:JsonProperty("locationId")
-    val locationID: String? = null,
+    var locationID: String? = null,
 
-    val major: Long? = null,
-    val minor: Long? = null,
-    val beaconType: BeaconType? = null,
+    var major: Long? = null,
+    var minor: Long? = null,
+    var beaconType: BeaconType? = null,
     val createdBy: String? = null,
     val updatedBy: String? = null,
     var isConected: Boolean? = null,
@@ -77,7 +78,16 @@ data class DottysBeacon (
     @get:JsonProperty("isDeleted")@field:JsonProperty("isDeleted")
     val isDeleted: Boolean? = null,
 
-    val location: DottysStoresLocation? = null
+    var location: DottysStoresLocation? = null,
+    var beaconIdentifier: String? = null,
+    var eventType: String? = null,
+
+    @get:JsonProperty("userId")@field:JsonProperty("userId")
+    var userID: String? = null,
+
+    var locationSequence: Long? = null
+
+
 
 
 ){
@@ -85,6 +95,7 @@ data class DottysBeacon (
 
     companion object {
         fun fromJson(json: String) = mapperBeacons.readValue<DottysBeacon>(json)
+
     }
 }
 

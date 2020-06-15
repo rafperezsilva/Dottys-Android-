@@ -60,6 +60,7 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/sign_from_register"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
@@ -355,7 +356,7 @@ contain 1 uppercase and 1 lowercase letter."
                     android:id="@+id/legal_age_register_checkbox"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:buttonTint="#337EBE"
+                    android:buttonTint="#5A9402"
                     android:src="@mipmap/calendar_icon" />
 
                 <TextView
@@ -369,7 +370,8 @@ contain 1 uppercase and 1 lowercase letter."
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:gravity="left|center_vertical"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
                 android:layout_marginBottom="30dp"
@@ -380,16 +382,46 @@ contain 1 uppercase and 1 lowercase letter."
                     android:id="@+id/privacy_policy_register_checkbox"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:buttonTint="#337EBE"
+                    android:buttonTint="#FF5A9402"
                     android:src="@mipmap/calendar_icon" />
+                 <LinearLayout
 
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:orientation="horizontal">
                 <TextView
+                    android:textAlignment="textStart"
                     style="@style/TextViewRegisterStyle"
-                    android:layout_width="match_parent"
-                    android:text="I agree to the Terms of Service and Privacy Policy."
+                    android:layout_width="wrap_content"
+                    android:text="I agree to the"
                     android:textColor="#56585A"
-                    android:textSize="14sp" />
-
+                    android:textSize="14sp"
+                    android:maxLines="1"/>
+                     <TextView
+                         android:textAlignment="textStart"
+                         android:id="@+id/terms_of_service_text_view"
+                         style="@style/TextViewRegisterStyle"
+                         android:layout_width="wrap_content"
+                         android:text="Terms of Service"
+                         android:textColor="#5A9402"
+                         android:textSize="14sp"
+                         android:maxLines="1"/>
+                     <TextView
+                         style="@style/TextViewRegisterStyle"
+                         android:layout_width="wrap_content"
+                         android:text="and"
+                         android:textColor="#56585A"
+                         android:textSize="14sp"
+                         android:maxLines="1"/>
+                     <TextView
+                         android:id="@+id/privacy_policy_text_view"
+                         android:textColor="#5A9402"
+                         style="@style/TextViewRegisterStyle"
+                         android:layout_width="wrap_content"
+                         android:text="Privacy Policy."
+                         android:textSize="14sp"
+                         android:maxLines="1"/>
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -493,7 +525,131 @@ contain 1 uppercase and 1 lowercase letter."
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+<!-- LOGIN VIEW -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:elevation="20dp"
+        android:id="@+id/login_floating_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#75000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:elevation="35dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FFF"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:src="@mipmap/user_icon" />
+
+                <TextView
+                    android:textSize="18sp"
+                    android:textColor="#9B9B9B"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/proxima_nova_light"
+                    android:text="Looks like you already have an account.\nSign in below."
+                    android:textAlignment="center"
+                    />
+                <LinearLayout
+                    android:layout_marginTop="35dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@mipmap/user_icon"/>
+                    <EditText
+                        android:inputType="textEmailAddress"
+                        android:id="@+id/email_floating_edit_text"
+                        android:fontFamily="@font/proxima_nova_light"
+                        android:textAlignment="textStart"
+                        android:hint="Email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="25dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@mipmap/password_icon_red"
+                        android:tint="#9B9B9B"
+                        />
+
+                    <EditText
+                        android:inputType="textPassword"
+                        android:id="@+id/password_floating_edit_text"
+                        android:fontFamily="@font/proxima_nova_light"
+                        android:textAlignment="textStart"
+                        android:hint="Password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:elevation="40dp"
+                    android:layout_marginTop="35dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:orientation="horizontal">
+                    <Button
+                        android:id="@+id/cancel_floating_button"
+                        android:textColor="#FF9B9B9B"
+                        android:background="@color/WHITE"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="CANCEL"/>
+                    <Button
+
+                        android:id="@+id/submit_floating_button"
+                        android:textColor="@color/WHITE"
+                        android:background="#558211"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="SUBMIT"/>
+
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <ProgressBar
+        android:elevation="55dp"
         android:id="@+id/progress_loader"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"

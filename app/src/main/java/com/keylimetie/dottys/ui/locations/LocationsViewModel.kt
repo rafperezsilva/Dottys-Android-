@@ -209,8 +209,8 @@ class LocationsViewModel : ViewModel() {
 
         mContext.showLoader()
 /*MOCK LOCATION */
- //         val locationURL = "locations?distance=150&limit=300&page=1&page=1&latitude=" + latitude + "&longitude=" + longitude
-         val locationURL = "locations?distance=150&limit=300&page=1&page=1&latitude=41.6030093&longitude=-87.75345159999999"
+        // val locationURL = "locations?distance=150&limit=300&page=1&page=1&latitude=" + latitude + "&longitude=" + longitude
+          val locationURL = "locations?distance=150&limit=300&page=1&page=1&latitude=41.6030093&longitude=-87.75345159999999"
         val jsonObjectRequest = object : JsonObjectRequest(
             Method.GET,
             mContext.baseUrl +locationURL,
@@ -228,7 +228,11 @@ class LocationsViewModel : ViewModel() {
             },
             Response.ErrorListener {
                 mContext.hideLoader()
-                Toast.makeText(mContext, "Has no nearest locations", Toast.LENGTH_LONG).show()
+                if (it.networkResponse == null){
+                    Toast.makeText(mContext, "Has lost your internet connection", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(mContext, "Has no nearest locations", Toast.LENGTH_LONG).show()
+                }
                     .run {
                         if (fragment != null) {
                             if (fragment is LocationsFragment) {

@@ -9,11 +9,13 @@ package com.keylimetie.dottys.beacon_service
  import com.android.volley.toolbox.Volley
  import com.keylimetie.dottys.DottysBaseActivity
  import com.keylimetie.dottys.DottysErrorModel
+ import com.keylimetie.dottys.ui.dashboard.models.DottysBeacon
  import org.json.JSONObject
  import java.util.*
  import kotlin.properties.Delegates
 
 enum class BeaconEventType{ENTER,EXIT}
+
 class DottysBeaconViewModel: ViewModel(){
     private var beaconDataObserver: DottysBeaconObserver? = null
 
@@ -30,8 +32,8 @@ class DottysBeaconViewModel: ViewModel(){
             Response.Listener<JSONObject> { response ->
                 mContext.hideLoader()
                     println(response.toString())
-                    val beaconSummary: DottysBeaconResponseModel =
-                        DottysBeaconResponseModel.fromJson(
+                    val beaconSummary: DottysBeacon =
+                        DottysBeacon.fromJson(
                             response.toString()
                         )
                     beaconDataObserver?.beaconData = beaconSummary
@@ -71,12 +73,12 @@ class DottysBeaconViewModel: ViewModel(){
 /* CURRENT USER PROTOCOL */
 //region
 interface DottysBeaconDelegates {
-    fun getBeaconRecorded(beaconRecorded: DottysBeaconResponseModel)
+    fun getBeaconRecorded(beaconRecorded: DottysBeacon)
 
 }
 
 class DottysBeaconObserver(lisener: DottysBeaconDelegates) {
-     var beaconData: DottysBeaconResponseModel by Delegates.observable(
-        initialValue = DottysBeaconResponseModel(),
+     var beaconData: DottysBeacon by Delegates.observable(
+        initialValue = DottysBeacon(),
         onChange = { _, _, new -> lisener.getBeaconRecorded(new) })
 }

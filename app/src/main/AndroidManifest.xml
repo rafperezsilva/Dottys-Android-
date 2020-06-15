@@ -36,7 +36,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".redeem.DottysRewardRedeemedActivity"></activity>
+        <activity android:name=".TermsAndPrivacy.TermsAndPrivacyActivity"></activity>
+        <activity android:name=".redeem.DottysRewardRedeemedActivity" />
         <activity android:name=".redeem.DottysCashRedeemRewardsActivity" />
         <activity
             android:name=".register.DottysProfilePictureActivity"
@@ -70,10 +71,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--        <service-->
-
-        <!--            android:name=".beacon_service.DottysBeaconService"-->
-        <!--            android:enabled="true"/>-->
     </application>
 
 </manifest>

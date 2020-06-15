@@ -2,6 +2,7 @@ package com.keylimetie.dottys.ui.dashboard
 
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -24,23 +25,28 @@ import com.keylimetie.dottys.*
 import com.keylimetie.dottys.R.id
 import com.keylimetie.dottys.models.DottysGlobalDataModel
 import com.keylimetie.dottys.models.DottysRewardsModel
+ import com.keylimetie.dottys.models.Monthly
+import com.keylimetie.dottys.redeem.DottysRewardRedeemedActivity
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconArray
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconsModel
 import com.keylimetie.dottys.ui.dashboard.models.DottysDrawingSumaryModel
 import com.keylimetie.dottys.ui.dashboard.models.DottysDrawingSumaryModelElement
-import com.keylimetie.dottys.ui.drawing.DottysDrawingRewardsModel
-import com.keylimetie.dottys.ui.drawing.DrawingViewModel
+import com.keylimetie.dottys.ui.drawing.*
 import de.hdodenhof.circleimageview.CircleImageView
 import org.json.JSONArray
 import org.json.JSONObject
 import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.roundToLong
 import kotlin.properties.Delegates
 
 
-class DashboardViewModel : ViewModel(), View.OnClickListener {
+class DashboardViewModel : ViewModel(), View.OnClickListener, DottysDrawingDelegates {
 
+    private var pager: ViewPager? = null
+    private var leftRollPagerButton: Button? = null
+    private var rightRollPagerButton: Button? = null
     private var backgroundLabelBadge: TextView? = null
     private var counterLabelBadge: TextView? = null
     var userCurrentUserDataObserver: DottysCurrentUserObserver? = null
@@ -50,6 +56,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
     private var mainFragmentActivity: DottysMainNavigationActivity? = null
     var fragmentDashBoard: DashboardFragment? = null
     var drawingBadgeCounter: Int? = 0
+    var adapter: DashboardPagerAdapter? = null
     fun initDashboardViewSetting(
         fragment: DashboardFragment,
         mContext: DottysMainNavigationActivity,
@@ -57,7 +64,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
     ) {
         this.dashboardView = dashboardView
         userCurrentUserDataObserver = DottysCurrentUserObserver(fragment)
-      //  mContext.beaconsStatusObserver = DottysBeaconStatusObserver(fragment)
+        //  mContext.beaconsStatusObserver = DottysBeaconStatusObserver(fragment)
         mContext.hideLoader()
         fragmentDashBoard = fragment
         getCurrentUserRequest(mContext)
@@ -76,10 +83,12 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
         val weeklyRewards = rootView.findViewById<TextView>(id.weekly_count_textview)
         val monthlyRewards = rootView.findViewById<TextView>(id.monthly_count_textview)
         val querterlyRewards = rootView.findViewById<TextView>(id.quarterly_count_textview)
-         val weeklyDays = rootView.findViewById<TextView>(id.weekly_end_days)
+        val weeklyDays = rootView.findViewById<TextView>(id.weekly_end_days)
         val monthlyDays = rootView.findViewById<TextView>(id.monthly_end_days)
         val querterlyDays = rootView.findViewById<TextView>(id.quarterly_end_days)
-         val profilePhantonButton =  rootView.findViewById<Button>(id.phanton_profile_button)
+        val profilePhantonButton =  rootView.findViewById<Button>(id.phanton_profile_button)
+
+
         backgroundLabelBadge = rootView.findViewById<TextView>(id.background_badge)
         counterLabelBadge = rootView.findViewById<TextView>(id.badge_counter)
         floatingAnalicsView = rootView.findViewById<ConstraintLayout>(id.analitycs_floating_view)
@@ -121,26 +130,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
         }
     }
 
-//    fun onBeaconsStatusChange(beaconsData: ArrayList<DottysBeacon>) {
-//        var beaconList = DottysBeaconArray(beaconsData)
-//
-//        mainFragmentActivity?.beaconsStatusObserver = fragmentDashBoard?.let {
-//            DottysBeaconStatusObserver(
-//                it
-//            )
-//        }
-//        if (mainFragmentActivity?.getBeaconStatus() != beaconList) {
-//            mainFragmentActivity?.saveDataPreference(PreferenceTypeKey.BEACON_AT_CONECTION, beaconList.toJson())
-//        }
-//
-//
-//
-//            initAnalitycsItems(beaconList, mainFragmentActivity)
-//      //  }
-//
-//    }
-
-   private fun getCashForDrawing(): String {
+    private fun getCashForDrawing(): String {
         val drawingUser =
             userCurrentUserDataObserver?.currentUserRewards?.rewards?.filter { it.redeemed == false }
         var cash = 0
@@ -170,7 +160,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
         val email = userCurrentUserDataObserver?.currentUserModel?.email//"mrirenita@gmail.com"
         var url = "https://www.gravatar.com/avatar/" + email?.md5() + "?s=400&r=pg&d=404"
         if (userCurrentUserDataObserver?.currentUserModel?.profilePicture != null){
-             url =  userCurrentUserDataObserver?.currentUserModel?.profilePicture ?: ""
+            url =  userCurrentUserDataObserver?.currentUserModel?.profilePicture ?: ""
         }
         val mQueue = Volley.newRequestQueue(mContext)
         val request = ImageRequest(url,
@@ -251,7 +241,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {
                     mContext.hideLoader()
-                  //  mContext.finishSession(mContext)
+                    //  mContext.finishSession(mContext)
                     if (error.networkResponse == null) {
                         return
                     }
@@ -328,44 +318,44 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
 
     }
 
-     /**/
-   fun getNearsDottysLocations(mContext: DottysMainNavigationActivity) {
-       val mQueue = Volley.newRequestQueue(mContext)
+    /**/
+    fun getNearsDottysLocations(mContext: DottysMainNavigationActivity) {
+        val mQueue = Volley.newRequestQueue(mContext)
 
-       mContext.showLoader()
+        mContext.showLoader()
 
-       val jsonObjectRequest = object : JsonObjectRequest(Method.GET,
-           mContext.baseUrl + "locations/"+mContext.getUserPreference().homeLocationID,
-           null,
-           Response.Listener<JSONObject> { response ->
-               mContext.hideLoader()
+        val jsonObjectRequest = object : JsonObjectRequest(Method.GET,
+            mContext.baseUrl + "locations/"+mContext.getUserPreference().homeLocationID,
+            null,
+            Response.Listener<JSONObject> { response ->
+                mContext.hideLoader()
 
-               var dottysLocation: DottysDrawingRewardsModel =
-                   DottysDrawingRewardsModel.fromJson(
-                       response.toString()
-                   )
-               userCurrentUserDataObserver?.dottysLocation = dottysLocation
-               // getDrawingSummary(mContext)
-           },
-           object : Response.ErrorListener {
-               override fun onErrorResponse(error: VolleyError) {
-                   println(error.networkResponse.data.toString(Charsets.UTF_8))
-                   if (error.networkResponse == null) {
-                       return
-                   }
-                   val errorRes =
-                       DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
-                   if (errorRes.error?.messages?.size ?: 0 > 0) {
-                       Toast.makeText(
-                           mContext,
-                           errorRes.error?.messages?.first() ?: "",
-                           Toast.LENGTH_LONG
-                       ).show()
-                   }
-                   Log.e("TAG", error.message, error)
-               }
-           }) { //no semicolon or coma
-//           override fun getParams(): MutableMap<String, String> {
+                var dottysLocation: DottysDrawingRewardsModel =
+                    DottysDrawingRewardsModel.fromJson(
+                        response.toString()
+                    )
+                userCurrentUserDataObserver?.dottysLocation = dottysLocation
+                // getDrawingSummary(mContext)
+            },
+            object : Response.ErrorListener {
+                override fun onErrorResponse(error: VolleyError) {
+                    println(error.networkResponse.data.toString(Charsets.UTF_8))
+                    if (error.networkResponse == null) {
+                        return
+                    }
+                    val errorRes =
+                        DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
+                    if (errorRes.error?.messages?.size ?: 0 > 0) {
+                        Toast.makeText(
+                            mContext,
+                            errorRes.error?.messages?.first() ?: "",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    Log.e("TAG", error.message, error)
+                }
+            }) { //no semicolon or coma
+            //           override fun getParams(): MutableMap<String, String> {
 //               val location = mContext.getLocation(mContext.gpsTracker,mContext)
 //               val params = HashMap<String, String>()
 //               params["latitude"] = location.latitude.toString()
@@ -375,23 +365,23 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
 //               params["distance"] = "50"
 //               return params
 //           }
-           @Throws(AuthFailureError::class)
-           override fun getHeaders(): Map<String, String> {
-               val params = HashMap<String, String>()
-               params["Authorization"] = mContext.getUserPreference().token!!
-               return params
-           }
-           override fun parseNetworkResponse(response: NetworkResponse?): Response<JSONObject> {
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                val params = HashMap<String, String>()
+                params["Authorization"] = mContext.getUserPreference().token!!
+                return params
+            }
+            override fun parseNetworkResponse(response: NetworkResponse?): Response<JSONObject> {
 
 
-               return super.parseNetworkResponse(response)
-           }
+                return super.parseNetworkResponse(response)
+            }
 
 
-       }
-       mQueue.add(jsonObjectRequest)
+        }
+        mQueue.add(jsonObjectRequest)
 
-   }
+    }
     /**/
 
     fun getUserRewards(mContext: DottysBaseActivity) {
@@ -449,7 +439,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
         mQueue.add(jsonObjectRequest)
 
     }
-/*BEACON LIST REQUEST */
+    /*BEACON LIST REQUEST */
     fun getBeaconList(mContext: DottysMainNavigationActivity) {
         val mQueue = Volley.newRequestQueue(mContext)
         mContext.showLoader()
@@ -518,13 +508,48 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
         view: DottysMainNavigationActivity,
         drawingSummary: DottysGlobalDataModel
     ) {
+        DottysDrawing()
+        var drawingList = ArrayList<Monthly?>()
+        for (drawing in drawingSummary.drawingTemplates?.values!!) {
+            drawingList.add(drawing)
+        }
+
+        leftRollPagerButton = dashboardView?.findViewById<Button>(id.left_roll_pager_button)
+        rightRollPagerButton =  dashboardView?.findViewById<Button>(id.rigth_roll_pager_button)
+        leftRollPagerButton?.setOnClickListener(this)
+        rightRollPagerButton?.setOnClickListener(this)
         view.windowManager.defaultDisplay.getMetrics(view.displayMetrics)
-        val pager = view.findViewById<ViewPager>(id.pager_dashboard)
-        pager.adapter = DashboardPagerAdapter(view, drawingSummary)
+        pager = view.findViewById<ViewPager>(id.pager_dashboard)
+        pager?.adapter = DashboardPagerAdapter(view, drawingList)
+        adapter = DashboardPagerAdapter(view, drawingList)
+        pager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+
+            override fun onPageScrollStateChanged(state: Int) {
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            }
+            override fun onPageSelected(position: Int) {
+                adapter?.currentPages = position
+
+                Log.d("selected",position.toString())
+            }
+
+        })
+
+        val drawingViewModel = DrawingViewModel()
+        drawingViewModel.drawingObserver = DottysDrawingObserver(this)
+        pager?.setOnClickListener( object : View.OnClickListener { //this will log the page number that was click{
+            override fun onClick(v: View?) {
+
+                drawingViewModel.getUserDrawings(mainFragmentActivity ?: DottysMainNavigationActivity())
+            }
+        })
         getUserRewards(view)
     }
 
     override fun onClick(v: View?) {
+
         when(v?.id){
             id.analitycs_floating_view,  id.close_analytics_buttom -> {
                 mainFragmentActivity?.let { hideAnalitycsView(it) }
@@ -532,7 +557,12 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
             id.phanton_profile_button -> {
                 showAnalitycsView()
             }
-
+            id.rigth_roll_pager_button -> {
+                 pager?.setCurrentItem(adapter?.getCurrentPage()?.plus( 1) ?: 0, true);
+            }
+            id.left_roll_pager_button -> {
+                pager?.setCurrentItem( adapter?.getCurrentPage()?.minus(1) ?: 0, true);
+            }
             else -> {return}
         }
     }
@@ -545,84 +575,97 @@ class DashboardViewModel : ViewModel(), View.OnClickListener {
     private fun showAnalitycsView(){
         floatingAnalicsView?.visibility = View.VISIBLE
         floatingAnalicsView?.animate()?.translationY(0.0f)?.setDuration(450)?.start()
-        initAnalitycsItems( mainFragmentActivity?.getBeaconStatus() ?: DottysBeaconArray(), dashboardView)
+        initAnalitycsItems(mainFragmentActivity?.getBeaconStatus() ?: DottysBeaconArray())
 
     }
 
-     @SuppressLint("SetTextI18n")
-     fun initAnalitycsItems(beaconList: DottysBeaconArray, viewFragment: View?){
-         val storeLocation = mainFragmentActivity?.findViewById<TextView>(R.id.location_analitycs_store) //?: return
-         val closeAnalyticButton = mainFragmentActivity?.findViewById<Button>(R.id.close_analytics_buttom) //?: return
-         val userHostIdTextView = mainFragmentActivity?.findViewById<TextView>(R.id.user_host_id) //?: return
-         val locationEnableTextView = mainFragmentActivity?.findViewById<TextView>(R.id.location_enable_textview) //?: return
-         val locationDeviceTextView = mainFragmentActivity?.findViewById<TextView>(R.id.location_device_analytic_textview) //?: return
-         closeAnalyticButton?.setOnClickListener(this)
-         closeAnalyticButton?.setOnClickListener{
-             mainFragmentActivity?.let { it1 -> hideAnalitycsView(it1) }
-         }
-         userHostIdTextView?.text = mainFragmentActivity?.getUserPreference()?.id ?: ""
-         val trackerLocation = mainFragmentActivity?.gpsTracker
-         var isEnableLocation = "Disable"
-         if(trackerLocation?.isGPSEnabled == true){
-             isEnableLocation = "Enable"
-         }
-         locationDeviceTextView?.text = "Lat: ${trackerLocation?.locationGps?.latitude} | Long: ${trackerLocation?.locationGps?.longitude}"
-         locationEnableTextView?.text =  isEnableLocation
-         if (storeLocation != null) {
-             storeLocation?.text =
-                 "Store #${mainFragmentActivity?.getBeaconAtStoreLocation()
-                     ?.first()?.location?.storeNumber ?: ""}"
+    @SuppressLint("SetTextI18n")
+    fun initAnalitycsItems(beaconList: DottysBeaconArray){
+        val storeLocation = mainFragmentActivity?.findViewById<TextView>(R.id.location_analitycs_store) //?: return
+        val closeAnalyticButton = mainFragmentActivity?.findViewById<Button>(R.id.close_analytics_buttom) //?: return
+        val userHostIdTextView = mainFragmentActivity?.findViewById<TextView>(R.id.user_host_id) //?: return
+        val locationEnableTextView = mainFragmentActivity?.findViewById<TextView>(R.id.location_enable_textview) //?: return
+        val locationDeviceTextView = mainFragmentActivity?.findViewById<TextView>(R.id.location_device_analytic_textview) //?: return
+        closeAnalyticButton?.setOnClickListener(this)
+        closeAnalyticButton?.setOnClickListener{
+            mainFragmentActivity?.let { it1 -> hideAnalitycsView(it1) }
+        }
+        userHostIdTextView?.text = mainFragmentActivity?.getUserPreference()?.id ?: ""
+        val trackerLocation = mainFragmentActivity?.gpsTracker
+        var isEnableLocation = "Disable"
+        if(trackerLocation?.isGPSEnabled == true){
+            isEnableLocation = "Enable"
+        }
+        locationDeviceTextView?.text = "Lat: ${trackerLocation?.locationGps?.latitude ?: mainFragmentActivity?.gpsTracker?.getLatitude()?.roundToLong()} | Long: ${trackerLocation?.locationGps?.longitude ?: mainFragmentActivity?.gpsTracker?.getLongitude()?.roundToLong()}"
+        locationEnableTextView?.text =  isEnableLocation
+        if (storeLocation != null) {
+            storeLocation?.text =
+                "Store #${mainFragmentActivity?.getBeaconAtStoreLocation()
+                    ?.first()?.location?.storeNumber ?: ""}"
 
+        }
+        var listViewRewards =
+            mainFragmentActivity?.findViewById<ListView>(R.id.beacons_analytics_listview)
+        if (listViewRewards == null) {
+            listViewRewards =
+                dashboardView?.findViewById<ListView>(R.id.beacons_analytics_listview)
+        }
+         if (mainFragmentActivity ==  null) {
+             return
          }
-         var listViewRewards =
-             mainFragmentActivity?.findViewById<ListView>(R.id.beacons_analytics_listview)
-         if (listViewRewards == null) {
-             listViewRewards =
-                 dashboardView?.findViewById<ListView>(R.id.beacons_analytics_listview)
-         }
+        listViewRewards?.adapter = AnalyticBeacoonsAdapter(
+            mainFragmentActivity ?: DottysBaseActivity(),
+            beaconList.beaconArray ?: mainFragmentActivity?.getBeaconAtStoreLocation() ?: return)//mainFragmentActivity?.getBeaconStatus()?.beaconArray ?: mainFragmentActivity?.getBeaconAtStoreLocation() ?: return)
 
-         listViewRewards?.adapter =AnalyticBeacoonsAdapter(
-             mainFragmentActivity ?: DottysBaseActivity(),
-             mainFragmentActivity?.getBeaconStatus()?.beaconArray ?: mainFragmentActivity?.getBeaconAtStoreLocation() ?: return)
+    }
 
-     }
+    override fun getUserRewards(rewards: DottysDrawingRewardsModel) {
+
+    }
+
+    override fun getUserDrawings(drawing: DottysDrawingUserModel) {
+       val drawingSelected = adapter?.getCurrentPage()?.let { drawing.drawings?.get(it) }
+        var intent = Intent(mainFragmentActivity, DottysRewardRedeemedActivity::class.java)
+        intent.putExtra("DRAWING_DATA", drawingSelected?.toJson().toString())
+        mainFragmentActivity?.startActivity(intent)
+    }
 
 }
 
-        /* CURRENT USER PROTOCOL */
-        //region
-        interface DottysDashboardDelegates {
-            fun getDrawingSummary(dawingSummary: DottysDrawingSumaryModel)
-            fun getCurrentUser(currentUser: DottysLoginResponseModel)
-            fun getUserRewards(rewards: DottysRewardsModel)
-            fun getGlobalData(gloabalData: DottysGlobalDataModel)
-            fun getDottysUserLocation(locationData: DottysDrawingRewardsModel)
-            fun getBeaconList(beaconList: DottysBeaconsModel)
-        }
+/* CURRENT USER PROTOCOL */
+//region
+interface DottysDashboardDelegates {
+    fun getDrawingSummary(dawingSummary: DottysDrawingSumaryModel)
+    fun getCurrentUser(currentUser: DottysLoginResponseModel)
+    fun getUserRewards(rewards: DottysRewardsModel)
+    fun getGlobalData(gloabalData: DottysGlobalDataModel)
+    fun getDottysUserLocation(locationData: DottysDrawingRewardsModel)
+    fun getBeaconList(beaconList: DottysBeaconsModel)
+}
 
-        class DottysCurrentUserObserver(lisener: DottysDashboardDelegates) {
-            private val element = ArrayList<DottysDrawingSumaryModelElement>()
-            var dawingSummaryModel: DottysDrawingSumaryModel by Delegates.observable(
-                initialValue = DottysDrawingSumaryModel(
-                    element
-                ),
-                onChange = { prop, old, new -> lisener.getDrawingSummary(new) })
+class DottysCurrentUserObserver(lisener: DottysDashboardDelegates) {
+    private val element = ArrayList<DottysDrawingSumaryModelElement>()
+    var dawingSummaryModel: DottysDrawingSumaryModel by Delegates.observable(
+        initialValue = DottysDrawingSumaryModel(
+            element
+        ),
+        onChange = { prop, old, new -> lisener.getDrawingSummary(new) })
 
-            var currentUserModel: DottysLoginResponseModel by Delegates.observable(
-                initialValue = DottysLoginResponseModel(),
-                onChange = { prop, old, new -> lisener.getCurrentUser(new) })
+    var currentUserModel: DottysLoginResponseModel by Delegates.observable(
+        initialValue = DottysLoginResponseModel(),
+        onChange = { prop, old, new -> lisener.getCurrentUser(new) })
 
-            var currentUserRewards: DottysRewardsModel by Delegates.observable(
-                initialValue = DottysRewardsModel(),
-                onChange = { prop, old, new -> lisener.getUserRewards(new) })
+    var currentUserRewards: DottysRewardsModel by Delegates.observable(
+        initialValue = DottysRewardsModel(),
+        onChange = { prop, old, new -> lisener.getUserRewards(new) })
 
-            var currentGlobalData: DottysGlobalDataModel by Delegates.observable(
-                initialValue = DottysGlobalDataModel(),
-                onChange = { prop, old, new -> lisener.getGlobalData(new) })
-            var dottysLocation: DottysDrawingRewardsModel by Delegates.observable(
-                initialValue = DottysDrawingRewardsModel(),
-                onChange = { prop, old, new -> lisener.getDottysUserLocation(new) })
-             var dottysBeaconList: DottysBeaconsModel by Delegates.observable(
-                initialValue = DottysBeaconsModel(),
-                onChange = { prop, old, new -> lisener.getBeaconList(new) })
-        }
+    var currentGlobalData: DottysGlobalDataModel by Delegates.observable(
+        initialValue = DottysGlobalDataModel(),
+        onChange = { prop, old, new -> lisener.getGlobalData(new) })
+    var dottysLocation: DottysDrawingRewardsModel by Delegates.observable(
+        initialValue = DottysDrawingRewardsModel(),
+        onChange = { prop, old, new -> lisener.getDottysUserLocation(new) })
+    var dottysBeaconList: DottysBeaconsModel by Delegates.observable(
+        initialValue = DottysBeaconsModel(),
+        onChange = { prop, old, new -> lisener.getBeaconList(new) })
+}

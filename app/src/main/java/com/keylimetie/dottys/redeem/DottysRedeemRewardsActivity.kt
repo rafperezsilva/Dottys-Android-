@@ -4,10 +4,11 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.R
+import com.keylimetie.dottys.ui.drawing.DottysDrawing
 
 
 class DottysRedeemRewardsActivity : DottysBaseActivity() {
-
+    val sd = DottysDrawing()
     private val viewModel = DottysRedeemRewardsViewmodel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

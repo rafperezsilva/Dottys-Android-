@@ -27,7 +27,7 @@ class ReusableFragment : Fragment() {
 
 
         val root = inflater.inflate(R.layout.reusable_fragment, container, false)
-        viewModel.initViewSetting(root,activity?.getSelectedItem()!!,context!!, activity)
+        viewModel.initViewSetting(root, activity?.getSelectedItem()!!, activity)
 
         return root
     }

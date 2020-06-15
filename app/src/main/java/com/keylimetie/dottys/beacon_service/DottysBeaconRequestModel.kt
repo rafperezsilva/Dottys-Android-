@@ -32,8 +32,8 @@ data class DottysBeaconResponseModel (
     val uuid: String? = null,
     val major: Long? = null,
     val minor: Long? = null,
-    val eventType: String? = null,
-    val beaconType: String? = null,
+    val eventType: BeaconEventType? = null,
+    val beaconType: BeaconEventType? = null,
     val createdBy: String? = null,
     val updatedBy: String? = null,
 
