@@ -60,6 +60,19 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <style name="ButtonDefaultStyle">
+        <item name="android:textColor">#FFF</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:shadowColor">#C1000000</item>
+        <item name="android:shadowDx">3</item>
+        <item name="android:shadowDy">3</item>
+        <item name="android:shadowRadius">2</item>
+         <item name="android:background">@color/colorSecundary</item>
+        <item name="android:fontFamily">@font/proxima_nova_semibold</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
     <style name="EditTextEnterCodeStyle">
         <item name="android:enabled">false</item>
         <item name="android:textColor">#FFF</item>

@@ -23,6 +23,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.keylimetie.dottys.*
 import com.keylimetie.dottys.R.id
+import com.keylimetie.dottys.game_play.DottysMainGamePlayActivity
 import com.keylimetie.dottys.models.DottysGlobalDataModel
 import com.keylimetie.dottys.models.DottysRewardsModel
  import com.keylimetie.dottys.models.Monthly
@@ -563,6 +564,10 @@ class DashboardViewModel : ViewModel(), View.OnClickListener, DottysDrawingDeleg
             id.left_roll_pager_button -> {
                 pager?.setCurrentItem( adapter?.getCurrentPage()?.minus(1) ?: 0, true);
             }
+            id.send_to_support_button -> {
+                var intent = Intent(mainFragmentActivity, DottysMainGamePlayActivity::class.java)
+                 mainFragmentActivity?.startActivity(intent)
+            }
             else -> {return}
         }
     }
@@ -586,6 +591,8 @@ class DashboardViewModel : ViewModel(), View.OnClickListener, DottysDrawingDeleg
         val userHostIdTextView = mainFragmentActivity?.findViewById<TextView>(R.id.user_host_id) //?: return
         val locationEnableTextView = mainFragmentActivity?.findViewById<TextView>(R.id.location_enable_textview) //?: return
         val locationDeviceTextView = mainFragmentActivity?.findViewById<TextView>(R.id.location_device_analytic_textview) //?: return
+        val sendToSupportButton = mainFragmentActivity?.findViewById<Button>(R.id.send_to_support_button) //?: return
+        sendToSupportButton?.setOnClickListener(this)
         closeAnalyticButton?.setOnClickListener(this)
         closeAnalyticButton?.setOnClickListener{
             mainFragmentActivity?.let { it1 -> hideAnalitycsView(it1) }
