@@ -18,6 +18,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
+import com.keylimetie.dottys.game_play.DottysScratchAndWinActivity
 import com.keylimetie.dottys.redeem.DottysRewardRedeemedActivity
 import com.keylimetie.dottys.splash.getVersionApp
 import com.keylimetie.dottys.ui.dashboard.DashboardFragment
@@ -110,6 +111,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationDelegat
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dottys_main_navigation)
         toolbar = findViewById(R.id.toolbar)
+
         setSupportActionBar(toolbar)
         initDrawerSetting()
         if(intent.getBooleanExtra("VIEW_FROM_PROFILE", false)) {

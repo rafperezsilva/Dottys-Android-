@@ -278,7 +278,7 @@ open class DottysBaseActivity : AppCompatActivity(), DottysBeaconDelegates {
             return
         }
         progressBar = this.findViewById<ProgressBar>(R.id.progress_loader)
-        progressBar!!.visibility = View.VISIBLE
+        progressBar?.visibility = View.VISIBLE
         window.setFlags(
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
