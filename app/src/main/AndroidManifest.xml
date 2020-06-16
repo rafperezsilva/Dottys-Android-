@@ -36,7 +36,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".game_play.DottysScratchAndWinActivity"></activity>
+        <activity android:name=".game_play.DottysBubbleGameActivity"></activity>
+        <activity android:name=".game_play.DottysScratchAndWinActivity" />
         <activity android:name=".game_play.DottysMainGamePlayActivity" />
         <activity android:name=".TermsAndPrivacy.TermsAndPrivacyActivity" />
         <activity android:name=".redeem.DottysRewardRedeemedActivity" />

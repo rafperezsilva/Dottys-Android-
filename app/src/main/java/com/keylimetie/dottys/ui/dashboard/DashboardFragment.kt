@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.keylimetie.dottys.*
 import com.keylimetie.dottys.beacon_service.DottysBeaconActivityDelegate
+import com.keylimetie.dottys.game_play.DottysBubbleGameActivity
 import com.keylimetie.dottys.game_play.DottysScratchAndWinActivity
 import com.keylimetie.dottys.models.DottysGlobalDataModel
 import com.keylimetie.dottys.models.DottysRewardsModel
@@ -42,6 +43,8 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
             ViewModelProviders.of(this).get(DashboardViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
         viewFragment = root
+        val intent = Intent(context,  DottysBubbleGameActivity::class.java)
+        startActivity(intent)
         return root
     }
 

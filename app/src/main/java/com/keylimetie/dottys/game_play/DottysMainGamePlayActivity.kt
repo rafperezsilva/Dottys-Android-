@@ -27,13 +27,16 @@ class DottysMainGamePlayActivity : DottysBaseActivity(), View.OnClickListener {
                val intent = Intent(this, DottysScratchAndWinActivity::class.java)
                startActivity(intent)
            }
-           R.id.bubble_game_button -> {}
+           R.id.bubble_game_button -> {
+               val intent = Intent(this,  DottysBubbleGameActivity::class.java)
+               startActivity(intent)
+           }
            R.id.slot_machine_button -> {}
            R.id.roulette_button -> {}
         }
     }
 
-    fun initItemsAtView(){
+   private fun initItemsAtView(){
         val scratchButton = findViewById<Button>(R.id.scratch_game_button)
         val bubbleGameButton = findViewById<Button>(R.id.bubble_game_button)
         val slotMachineGameButton = findViewById<Button>(R.id.slot_machine_button)

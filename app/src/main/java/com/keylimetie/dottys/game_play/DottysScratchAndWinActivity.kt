@@ -65,7 +65,7 @@ class DottysScratchAndWinActivity : DottysBaseActivity(), ScratchView.EraseStatu
         initScratchView()
 
         imageAtGameArray.clear()
-        imageAtGameArray = imagesAtGame()
+        imageAtGameArray = imagesAtGame(9)
         fillImages(imageAtGameArray)
     }
    private fun fillImages(imageAtGame: ArrayList<Int>){
@@ -78,11 +78,11 @@ class DottysScratchAndWinActivity : DottysBaseActivity(), ScratchView.EraseStatu
 
     }
 
-    private fun imagesAtGame():  ArrayList<Int>{
+     fun imagesAtGame(maxOfItems: Int):  ArrayList<Int>{
         val imagesAtGame: ArrayList<Int> = arrayListOf(R.mipmap.coffee_win,R.mipmap.sandwich_win,R.mipmap.no_win)
         var imagesForGame = ArrayList<Int>()
         imagesForGame.clear()
-        for(image in imageArray){
+        for(image in 0..maxOfItems){
             if (imagesForGame.filter { it == R.mipmap.coffee_win}.size >= 3 ||
                 imagesForGame.filter { it == R.mipmap.sandwich_win}.size >= 3) {
                 imagesForGame.add(R.mipmap.no_win)
