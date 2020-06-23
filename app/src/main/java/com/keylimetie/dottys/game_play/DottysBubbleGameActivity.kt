@@ -1,16 +1,18 @@
 package com.keylimetie.dottys.game_play
 
-import android.graphics.Bitmap
+import android.annotation.SuppressLint
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.R
 import pl.droidsonroids.gif.GifImageView
+
 
 class DottysBubbleGameActivity : DottysBaseActivity(), View.OnClickListener {
     var bubble1: GifImageView? = null
@@ -21,6 +23,8 @@ class DottysBubbleGameActivity : DottysBaseActivity(), View.OnClickListener {
     var imagesAtGame = ArrayList<Int>()
     var imagesGifArray = ArrayList<GifImageView?>()
     var popedBallons =  0
+    private  var mp: MediaPlayer? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dottys_bubble_game)
@@ -54,6 +58,7 @@ class DottysBubbleGameActivity : DottysBaseActivity(), View.OnClickListener {
     }
 
     private  fun initGame(){
+        initGifImages()
         popedBallons = 0
         val scratchActivity = DottysScratchAndWinActivity()
         imagesAtGame = scratchActivity.imagesAtGame(4)
@@ -67,40 +72,44 @@ class DottysBubbleGameActivity : DottysBaseActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
+        mp  = MediaPlayer.create(this, R.raw.pop_balloon_audio)
+        mp?.start()
+
         when(v?.id){
             R.id.bubble1 -> {
                 bubble1?.setImageResource(R.mipmap.pop_balloon)
-                bubble1 = null
-            }
+                v?.setOnClickListener(null)
+              }
             R.id.bubble2 -> {
                 bubble2?.setImageResource(R.mipmap.pop_balloon)
-                bubble2 = null
-            }
+                v?.setOnClickListener(null)
+             }
             R.id.bubble3 -> {
                 bubble3?.setImageResource(R.mipmap.pop_balloon)
-
-
-            }
+                v?.setOnClickListener(null)
+             }
             R.id.bubble4 -> {
                 bubble4?.setImageResource(R.mipmap.pop_balloon)
-                bubble4 = null
-            }
+                v?.setOnClickListener(null)
+             }
             R.id.bubble5 -> {
                 bubble5?.setImageResource(R.mipmap.pop_balloon)
-                bubble5 = null
-            }
+                v?.setOnClickListener(null)
+             }
         }
+
         replaceImage(v as GifImageView)
     }
 
+    @SuppressLint("ResourceAsColor")
     fun replaceImage(gif: GifImageView){
 
         Handler().postDelayed(
             {
-                gif.isClickable = false
-                gif?.adjustViewBounds = true
+
                 gif?.scaleX = 0.5f
                 gif?.scaleY = 0.5f
+                gif.scaleType = ImageView.ScaleType.CENTER_CROP
                 gif?.setImageResource(imagesAtGame[popedBallons])
                 popedBallons += 1
                  if (popedBallons == 5) {
@@ -123,7 +132,10 @@ class DottysBubbleGameActivity : DottysBaseActivity(), View.OnClickListener {
                 return  "Coffee Win"
             }
             imagesAtGame.filter { it == R.mipmap.sandwich_win}.size == 3 -> {
-                return   "Sandwinch Win"
+                return   "Sandwich Win"
+            }
+            imagesAtGame.filter { it == R.mipmap.soda_win}.size == 3 -> {
+                return   "Soda Win"
             }
             else -> {
                 return   "Loser"

@@ -1,6 +1,5 @@
 package com.keylimetie.dottys.game_play
 
-  import android.content.DialogInterface
   import android.graphics.drawable.ColorDrawable
   import android.os.Bundle
   import android.os.Handler
@@ -18,6 +17,7 @@ class DottysScratchAndWinActivity : DottysBaseActivity(), ScratchView.EraseStatu
     var scratchImageView: ScratchView? = null
     val imageArray = ArrayList<ImageView>()
     var imageAtGameArray = ArrayList<Int>()
+    var isComplete = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dottys_scratch_and_win)
@@ -63,10 +63,10 @@ class DottysScratchAndWinActivity : DottysBaseActivity(), ScratchView.EraseStatu
 
     private fun restoreGame(){
         initScratchView()
-
         imageAtGameArray.clear()
         imageAtGameArray = imagesAtGame(9)
         fillImages(imageAtGameArray)
+        isComplete = true
     }
    private fun fillImages(imageAtGame: ArrayList<Int>){
 
@@ -79,16 +79,27 @@ class DottysScratchAndWinActivity : DottysBaseActivity(), ScratchView.EraseStatu
     }
 
      fun imagesAtGame(maxOfItems: Int):  ArrayList<Int>{
-        val imagesAtGame: ArrayList<Int> = arrayListOf(R.mipmap.coffee_win,R.mipmap.sandwich_win,R.mipmap.no_win)
+         var itemsAtGame = maxOfItems
+        var imagesAtGame: ArrayList<Int> = arrayListOf(R.mipmap.coffee_win,R.mipmap.sandwich_win,R.mipmap.soda_win)
+         if (maxOfItems%3 == 0){
+             imagesAtGame.add(R.mipmap.no_win)
+             itemsAtGame = maxOfItems - 1
+         }
         var imagesForGame = ArrayList<Int>()
         imagesForGame.clear()
-        for(image in 0..maxOfItems){
-            if (imagesForGame.filter { it == R.mipmap.coffee_win}.size >= 3 ||
-                imagesForGame.filter { it == R.mipmap.sandwich_win}.size >= 3) {
-                imagesForGame.add(R.mipmap.no_win)
-            } else {
-                imagesForGame.add(imagesAtGame[(0 until imagesAtGame.size).random()])
-            }
+        var maxCount = 3
+        for(image in 0..itemsAtGame) {
+            var gambImage = imagesAtGame[(0 until imagesAtGame.size).random()]
+                for (gaming in imagesForGame){
+                    if (imagesForGame.filter { it == gaming }.size > 3){
+                        maxCount = 2
+                    }
+                }
+                while (imagesForGame.filter { it == gambImage }.size >= maxCount) {
+                    gambImage = imagesAtGame[(0 until imagesAtGame.size).random()]
+                }
+                imagesForGame.add(gambImage)
+
         }
 
 
@@ -96,11 +107,15 @@ class DottysScratchAndWinActivity : DottysBaseActivity(), ScratchView.EraseStatu
     }
 
     fun getWinner():String?{
+        isComplete = false
         if(imageAtGameArray.filter { it == R.mipmap.coffee_win }.size == 3){
             Toast.makeText(this,"COFFEE WINNER",Toast.LENGTH_LONG).show()
             "COFFEE WINNER"
         } else if (imageAtGameArray.filter { it == R.mipmap.sandwich_win }.size == 3){
             Toast.makeText(this,"SANDWICH WINNER",Toast.LENGTH_LONG).show()
+            "SANDWICH WINNER"
+        }else if (imageAtGameArray.filter { it == R.mipmap.soda_win }.size == 3){
+            Toast.makeText(this,"SODA WINNER",Toast.LENGTH_LONG).show()
             "SANDWICH WINNER"
         }else {
             Toast.makeText(this,"LOSER",Toast.LENGTH_LONG).show()
@@ -141,8 +156,9 @@ class DottysScratchAndWinActivity : DottysBaseActivity(), ScratchView.EraseStatu
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
         val viewS = view as ScratchView
-
-        getWinner()
+        if(isComplete){
+            getWinner()
+        }
         Handler().postDelayed({
             viewS.reset()
 

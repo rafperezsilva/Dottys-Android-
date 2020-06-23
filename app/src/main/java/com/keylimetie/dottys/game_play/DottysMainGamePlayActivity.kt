@@ -31,7 +31,12 @@ class DottysMainGamePlayActivity : DottysBaseActivity(), View.OnClickListener {
                val intent = Intent(this,  DottysBubbleGameActivity::class.java)
                startActivity(intent)
            }
-           R.id.slot_machine_button -> {}
+           R.id.slot_machine_button -> {
+               val intent = Intent(this,  DottysSlotMachineActivity::class.java)
+               startActivity(intent)
+
+
+           }
            R.id.roulette_button -> {}
         }
     }
