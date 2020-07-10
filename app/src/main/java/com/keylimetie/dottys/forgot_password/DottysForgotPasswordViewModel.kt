@@ -12,6 +12,8 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.keylimetie.dottys.DottysErrorModel
+import com.keylimetie.dottys.DottysMainNavigationActivity
+import com.keylimetie.dottys.PreferenceTypeKey
 import com.keylimetie.dottys.R
 import com.keylimetie.dottys.forgot_password.VerificationMethodType.EMAIL
 import com.keylimetie.dottys.forgot_password.VerificationMethodType.SMS
@@ -19,11 +21,11 @@ import org.json.JSONObject
 import kotlin.properties.Delegates
 
 
-open class DottysForgotPasswordViewModel : ViewModel() {
+open class DottysForgotPasswordViewModel : ViewModel()  {
     private var submitNewPasswordButton: Button? =  null
     private var newPasswordEditText: EditText? =  null
     private var enterNewPasswordEditText: EditText? =  null
-    private var editTextArray: Array<EditText?> = emptyArray()
+    var editTextArray: Array<EditText?> = emptyArray()
     private var verificationCodeObserver: DottysForgotPasswordObserver? = null
     private var phoneVerificationImageview: ImageView? = null
     private var phoneVerificationTextview: TextView? = null
@@ -40,8 +42,9 @@ open class DottysForgotPasswordViewModel : ViewModel() {
     private var fourthEditTextCode: EditText? = null
     private var fifthEditTextCode: EditText? = null
     private var sixththEditTextCode: EditText? = null
+    private var isRegisterView: Boolean = false
 
-   /* FORGOT PASSWORD VIEW */
+    /* FORGOT PASSWORD VIEW */
     fun initForgotPasswordView(forgotActivity: DottysForgotPasswordMainActivity) {
         emailTextview = forgotActivity.findViewById<TextView>(R.id.email_forgot_password_edittext)
         submitForfotPassword =
@@ -108,12 +111,17 @@ open class DottysForgotPasswordViewModel : ViewModel() {
     /* ENTER CODE VERIFICATION VIEW */
     fun initVerificationCodeView(verificationCodeActivity: DottysEnterVerificationCodeActivity, email:String, isRegisterView: Boolean){
         verificationCodeActivity.hideLoader()
+        this.isRegisterView = isRegisterView
         firtsEditTextCode  = verificationCodeActivity.findViewById<EditText>(R.id.firts_code_edittext)
         secondsEditTextCode  = verificationCodeActivity.findViewById<EditText>(R.id.second_code_edittext)
         thirdEditTextCode  = verificationCodeActivity.findViewById<EditText>(R.id.third_code_edittext)
         fourthEditTextCode  = verificationCodeActivity.findViewById<EditText>(R.id.fourth_code_edittext)
         fifthEditTextCode  = verificationCodeActivity.findViewById<EditText>(R.id.fifth_code_edittext)
         sixththEditTextCode  = verificationCodeActivity.findViewById<EditText>(R.id.sixthcode_edittext)
+        val resendCodeTextView  = verificationCodeActivity.findViewById<TextView>(R.id.resend_code_textview)
+        resendCodeTextView.setOnClickListener {
+            verificationCodeActivity.finish()
+        }
         firtsEditTextCode?.requestFocus()
         editTextArray = arrayOf(
                      firtsEditTextCode,
@@ -141,12 +149,29 @@ open class DottysForgotPasswordViewModel : ViewModel() {
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     if (s?.length ?: 0 > 0){
                         when(editTextItem){
-                            0 -> {secondsEditTextCode?.requestFocus()}
-                            1 -> {thirdEditTextCode?.requestFocus()}
-                            2 -> {fourthEditTextCode?.requestFocus()}
-                            3 -> {fifthEditTextCode?.requestFocus()}
-                            4 -> {sixththEditTextCode?.requestFocus()}
-                            5 -> {sixththEditTextCode?.clearFocus()
+                            0 -> {
+                                secondsEditTextCode?.setText("")
+                                secondsEditTextCode?.requestFocus()
+
+                            }
+                            1 -> {
+                                thirdEditTextCode?.setText("")
+                                thirdEditTextCode?.requestFocus()
+                            }
+                            2 -> {
+                                fourthEditTextCode?.setText("")
+                                fourthEditTextCode?.requestFocus()
+                            }
+                            3 -> {
+                                fifthEditTextCode?.setText("")
+                                fifthEditTextCode?.requestFocus()
+                            }
+                            4 -> {
+                                sixththEditTextCode?.setText("")
+                                sixththEditTextCode?.requestFocus()
+                            }
+                            5 -> {
+                                sixththEditTextCode?.clearFocus()
                                 onSuccessCodeManager(verificationCodeActivity, email,isRegisterView)
                             }
                         }
@@ -218,7 +243,7 @@ open class DottysForgotPasswordViewModel : ViewModel() {
         val mQueue = Volley.newRequestQueue(verificationActivity)
         verificationActivity.showLoader()
         val params = HashMap<String, String>()
-
+        verificationCodeObserver = DottysForgotPasswordObserver(verificationActivity)
         params["verificationKey"] = verifiationCode
 
         val jsonObject = JSONObject(params as Map<*, *>)
@@ -231,15 +256,17 @@ open class DottysForgotPasswordViewModel : ViewModel() {
             },
             Response.ErrorListener { error ->
                 verificationActivity.hideLoader()
+                verificationActivity.hideCustomKeyboard()
                 val errorRes = DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                 if (errorRes.error?.messages?.size ?: 0 > 0) {
                     Toast.makeText(verificationActivity, errorRes.error?.messages?.first() ?: "", Toast.LENGTH_LONG).show()
                 }
                 Log.e("ERROR VOLLEY ", error.message, error)
-                Log.e("ERROR VOLLEY ", error.message, error)/*FIXME*/
+                verificationCodeObserver?.sendVerificationRegistrationCode = false
             }) { //no semicolon or coma
 
             override fun parseNetworkResponse(response: NetworkResponse?): Response<JSONObject> {
+               // clearDataInFields(editTextArray)
                 when (response?.statusCode) {
                     200, 202 -> {
                         verificationCodeObserver?.sendVerificationRegistrationCode = true
@@ -252,7 +279,7 @@ open class DottysForgotPasswordViewModel : ViewModel() {
                 return super.parseNetworkResponse(response)
             }
 
-            override fun getParams(): MutableMap<String, String> {
+            override fun getHeaders(): MutableMap<String, String>  {
                 val params = HashMap<String, String>()
                 params["Authorization"] = verificationActivity.user?.token ?: ""
 
@@ -393,6 +420,8 @@ open class DottysForgotPasswordViewModel : ViewModel() {
         }
         mQueue.add(jsonObjectRequest)
     }
+
+
 
     /**/
 }

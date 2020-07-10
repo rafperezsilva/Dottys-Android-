@@ -126,5 +126,17 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"/>
     </LinearLayout>
+        <TextView
+            android:id="@+id/resend_code_textview"
+            android:fontFamily="@font/proxima_nova_regular"
+            android:layout_marginTop="45dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Didn't get a verification code?"
+            android:textColor="@color/colorGreen"
+            android:shadowColor="@color/colorDottysGrey"
+            android:shadowRadius="1"
+            android:shadowDx="1"
+            android:shadowDy="-1"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -195,7 +195,7 @@ class DrawingViewModel : ViewModel() {
         fragment?.view?.visibility = View.VISIBLE
     }
 
-    private fun getDrawingSummary(mContext: DottysMainNavigationActivity, locationId: String) {
+    fun getDrawingSummary(mContext: DottysMainNavigationActivity, locationId: String) {
         val mQueue = Volley.newRequestQueue(mContext)
         mContext.showLoader()
         val jsonObjectRequest = object : JsonObjectRequest(Method.GET,

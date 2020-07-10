@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "237254077256",
+    "firebase_url": "https://dottys-temporal.firebaseio.com",
+    "project_id": "dottys-temporal",
+    "storage_bucket": "dottys-temporal.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:237254077256:android:29a4fcc2284c353203217d",
+        "android_client_info": {
+          "package_name": "com.keylimetie.dottys"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "237254077256-m8qnhpa6ru8f66mhcc7gvuirbuis84nf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.keylimetie.dottys",
+            "certificate_hash": "8183ca338fbb4f160bb2a5f4a599a44626759341"
+          }
+        },
+        {
+          "client_id": "237254077256-3ffgr5oc0l98pvv4m3naumv0trmrvgqd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBF5qTuGrghD0cbPT61b0cN-fOTEbhVaiI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "237254077256-3ffgr5oc0l98pvv4m3naumv0trmrvgqd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "237254077256-t39kigesc3v4o52b00jskv3f2rcnigdq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.keylimetie.dottys"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

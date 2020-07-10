@@ -44,7 +44,7 @@ import kotlin.properties.Delegates
 
 
 class DashboardViewModel : ViewModel(), View.OnClickListener, DottysDrawingDelegates {
-
+    val drawingViewModel = DrawingViewModel()
     private var pager: ViewPager? = null
     private var leftRollPagerButton: Button? = null
     private var rightRollPagerButton: Button? = null
@@ -54,7 +54,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener, DottysDrawingDeleg
     var dashboardView: View? = null
 
     var floatingAnalicsView: ConstraintLayout? = null
-    private var mainFragmentActivity: DottysMainNavigationActivity? = null
+    var mainFragmentActivity: DottysMainNavigationActivity? = null
     var fragmentDashBoard: DashboardFragment? = null
     var drawingBadgeCounter: Int? = 0
     var adapter: DashboardPagerAdapter? = null
@@ -361,7 +361,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener, DottysDrawingDeleg
 //               val params = HashMap<String, String>()
 //               params["latitude"] = location.latitude.toString()
 //               params["longitude"] = location.longitude.toString()
-//               params["limit"] = "50"
+//               params["limit"] = "50"F
 //               params["page"] = "1"
 //               params["distance"] = "50"
 //               return params
@@ -627,8 +627,12 @@ class DashboardViewModel : ViewModel(), View.OnClickListener, DottysDrawingDeleg
     }
 
     override fun getUserRewards(rewards: DottysDrawingRewardsModel) {
-
+        initDashboardItemsView(dashboardView ?: return,rewards, mainFragmentActivity ?: return)
     }
+
+//    override fun getUserRewards(rewards: DottysDrawingRewardsModel) {
+//
+//    }
 
     override fun getUserDrawings(drawing: DottysDrawingUserModel) {
        val drawingSelected = adapter?.getCurrentPage()?.let { drawing.drawings?.get(it) }

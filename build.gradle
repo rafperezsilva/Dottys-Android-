@@ -16,6 +16,9 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
         classpath "gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.12.6, 0.99.99]"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.2.0-rc02"
+        classpath 'com.google.gms:google-services:4.3.3'
+        // Add the Crashlytics Gradle plugin.
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.2.0'
     }
 }
 //apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'

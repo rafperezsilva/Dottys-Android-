@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
@@ -25,7 +26,7 @@ import java.nio.ByteBuffer
 import kotlin.math.roundToInt
 
 
-class DottysProfilePictureActivity : DottysBaseActivity(), DottysRegisterUserDelegates {
+class DottysProfilePictureActivity: DottysBaseActivity(), DottysRegisterUserDelegates, View.OnClickListener {
     private val PERMISSION_CODE = 1000
     private val IMAGE_CAPTURE_CODE = 1001
     var image_uri: Uri? = null
@@ -47,33 +48,8 @@ class DottysProfilePictureActivity : DottysBaseActivity(), DottysRegisterUserDel
         imageAccountCreated.layoutParams = imageParams
 
         val takePicture = findViewById<Button>(R.id.add_photo_button)
-        skipTakePicture.setOnClickListener {
-
-        }
-        takePicture.setOnClickListener {
-            //if system os is Marshmallow or Above, we need to request runtime permission
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (checkSelfPermission(Manifest.permission.CAMERA)
-                    == PackageManager.PERMISSION_DENIED ||
-                    checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_DENIED
-                ) {
-                    //permission was not enabled
-                    val permission = arrayOf(
-                        Manifest.permission.CAMERA,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    )
-                    //show popup to request permission
-                    requestPermissions(permission, PERMISSION_CODE)
-                } else {
-                    //permission already granted
-                    openCamera()
-                }
-            } else {
-                //system os is < marshmallow
-                openCamera()
-            }
-        }
+        skipTakePicture.setOnClickListener (this)
+        takePicture.setOnClickListener(this)
     }
 
     override fun onRequestPermissionsResult(
@@ -134,5 +110,42 @@ class DottysProfilePictureActivity : DottysBaseActivity(), DottysRegisterUserDel
     override fun imageProfileHasUploaded(hasUploaded: Boolean) {
         val intent = Intent(this, DottysMainNavigationActivity::class.java)
         startActivity(intent)
+    }
+
+    override fun onClick(v: View?) {
+        when(v?.id){
+            R.id.add_photo_button -> {
+                requestCameraPermission()
+            }
+            R.id.skip_for_now_button -> {
+                registerViewModel.activityRegisterObserver = DottysRegisterUserObserver(this)
+                registerViewModel.activityRegisterObserver?.imageHasUploaded = true
+            }
+        }
+    }
+
+    fun requestCameraPermission(){
+        //if system os is Marshmallow or Above, we need to request runtime permission
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_DENIED ||
+                checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_DENIED
+            ) {
+                //permission was not enabled
+                val permission = arrayOf(
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+                //show popup to request permission
+                requestPermissions(permission, PERMISSION_CODE)
+            } else {
+                //permission already granted
+                openCamera()
+            }
+        } else {
+            //system os is < marshmallow
+            openCamera()
+        }
     }
 }

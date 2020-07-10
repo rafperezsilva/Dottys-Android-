@@ -90,9 +90,9 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationDelegat
             R.id.nav_contact_suppport -> {
                 return "Help"
             }
-            R.id.nav_replay_tutorial -> {
-                return "Replay Tutorial"
-            }
+//            R.id.nav_replay_tutorial -> {
+//                return "Replay Tutorial"
+//            }
             R.id.nav_drawing -> {
                 return "CONVERT POINTS"
             }
@@ -138,7 +138,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationDelegat
             setOf(
                 R.id.nav_dashboard, R.id.nav_locations, R.id.nav_rewards,
                 R.id.nav_drawing, R.id.nav_privacy_policy, R.id.nav_profile,
-                R.id.nav_terms_and_conditions, R.id.nav_replay_tutorial,
+                R.id.nav_terms_and_conditions, //R.id.nav_replay_tutorial,
                 R.id.nav_contact_suppport, R.id.nav_logout
             ), drawerLayout
         )

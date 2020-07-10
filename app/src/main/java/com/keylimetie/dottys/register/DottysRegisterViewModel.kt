@@ -334,6 +334,7 @@ open class DottysRegisterViewModel: ViewModel(), View.OnClickListener, DottysLog
             Response.ErrorListener { error ->
                 activityRegister.hideLoader()
                 if (error.networkResponse != null) {
+                    activityRegister.hideCustomKeyboard()
                     val errorRes = DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                     if (errorRes.error?.messages?.size ?: 0 > 0) {
                         Toast.makeText(activityRegister, errorRes.error?.messages?.first() ?: "", Toast.LENGTH_LONG).show()
@@ -356,6 +357,7 @@ open class DottysRegisterViewModel: ViewModel(), View.OnClickListener, DottysLog
 
     fun uploadImgage(context: DottysProfilePictureActivity, imageData: ByteArray) {
         context.showLoader()
+        activityRegisterObserver = DottysRegisterUserObserver(context)
         val mQueue = Volley.newRequestQueue(context)
         val params = HashMap<String, String>()
         params["Authorization"] = context.getUserPreference().token ?: ""

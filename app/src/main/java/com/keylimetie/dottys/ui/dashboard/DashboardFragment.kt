@@ -20,9 +20,7 @@ import com.keylimetie.dottys.redeem.DottysRedeemRewardsActivity
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconArray
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconsModel
 import com.keylimetie.dottys.ui.dashboard.models.DottysDrawingSumaryModel
-import com.keylimetie.dottys.ui.drawing.DottysDrawingDelegates
-import com.keylimetie.dottys.ui.drawing.DottysDrawingRewardsModel
-import com.keylimetie.dottys.ui.drawing.DottysDrawingUserModel
+import com.keylimetie.dottys.ui.drawing.*
 import com.keylimetie.dottys.ui.locations.DottysLocationDelegates
 import com.keylimetie.dottys.ui.locations.DottysLocationStoresObserver
 import com.keylimetie.dottys.ui.locations.DottysLocationsStoresModel
@@ -45,8 +43,7 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
             ViewModelProviders.of(this).get(DashboardViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
         viewFragment = root
-        val intent = Intent(context,  DottysMainGamePlayActivity::class.java)
-        startActivity(intent)
+
         return root
     }
 
@@ -124,6 +121,16 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
         homeViewModel.drawingBadgeCounter = rewards.rewards?.filter { it.redeemed == false }?.size ?: 0
         homeViewModel.badgeCounterDrawingManager(homeViewModel.drawingBadgeCounter ?: 0)
         viewFragment?.let { activity?.let { it1 -> homeViewModel.addProfileImage(it1, it, this) } }
+        homeViewModel.drawingViewModel.drawingObserver = DottysDrawingObserver(this)
+        val locationId =  activity?.getUserPreference()?.homeLocationID
+        homeViewModel.mainFragmentActivity = activity
+        homeViewModel.drawingViewModel.getDrawingSummary(activity ?: return, locationId ?: return)
+//
+//
+//        if (locationId != null) {
+//            drawingViewModel.getUserDrawings()
+//        }
+       // homeViewModel.initDashboardItemsView(viewFragment!!, dawing,activity!!)
     }
 
     /*6*/// -- /*04*/

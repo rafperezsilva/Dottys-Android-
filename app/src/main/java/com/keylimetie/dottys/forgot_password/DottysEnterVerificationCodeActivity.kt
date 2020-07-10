@@ -52,6 +52,8 @@ class DottysEnterVerificationCodeActivity : DottysBaseActivity(), DottysForgotPa
             user?.toJson()?.let { saveDataPreference(PreferenceTypeKey.USER_DATA, it) }
             var intent = Intent(this, DottysProfilePictureActivity::class.java)
             startActivity(intent)
+        } else {
+            forgotViewModel.clearDataInFields(forgotViewModel.editTextArray)
         }
     }
     override fun changePassword(isSucces: Boolean) {

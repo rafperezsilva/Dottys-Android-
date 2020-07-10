@@ -61,6 +61,7 @@ class DottysRegisterActivity : DottysBaseActivity(), DatePickerDialog.OnDateSetL
 
     override fun registerUser(userData: DottysLoginResponseModel) {
         //   Toast.makeText(this, "GO TO VERFY CODE", Toast.LENGTH_LONG).show()
+        hideCustomKeyboard()
         registerViewModel.showPreVerificationLayer(this)
     }
 
