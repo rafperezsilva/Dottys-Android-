@@ -16,7 +16,7 @@ package com.keylimetie.dottys.ui.reusable_fragment
  import android.widget.TextView
 
 
-class ReusableFragmentViewModel : ViewModel() {
+class ReusableFragmentViewModel : ViewModel(), DownloadListener {
     var textViewDescription: TextView? = null
     var webView: WebView? = null
     var textView: TextView? = null
@@ -36,31 +36,22 @@ class ReusableFragmentViewModel : ViewModel() {
     }
 
     private fun titleForView(itemId:Int, activity: DottysMainNavigationActivity){
+        activity.hideLoader()
+         when(itemId){
 
-        return when(itemId){
-            R.id.nav_privacy_policy -> {
+            R.id.nav_privacy_policy, R.id.nav_terms_and_conditions -> {
                 textViewDescription?.visibility = View.INVISIBLE
                 webView?.visibility = View.VISIBLE
                 webView?.settings?.javaScriptEnabled = true
-                webView?.loadUrl(activity.getGlobalData().privacyURL ?: DottysConstantItems.defaultPolicyURL)
-//                webView?.webViewClient = object : WebViewClient() {
-//                    override fun onPageStarted(view: WebView, url: String, favicon: Bitmap) {
-//                        super.onPageStarted(view, url, favicon)
-//                        activity.showLoader()
-//                    }
-//
-//                    override fun onPageFinished(view: WebView, url: String) {
-//                        super.onPageFinished(view, url)
-//                         activity.hideLoader()
-//                    }
-//
-//                }
-                textView?.text = "Privacy Policy"
-            }
-            R.id.nav_terms_and_conditions -> {
-                activity.hideLoader()
-                webView?.visibility = View.INVISIBLE
-                textView?.text =  "Terms & Conditions"
+                webView?.setDownloadListener(this)
+                if (itemId == R.id.nav_privacy_policy) {
+                    webView?.loadUrl(DottysConstantItems.privacyPolicyURL)
+                    textView?.text = "Privacy Policy"
+                } else {
+                    webView?.loadUrl(DottysConstantItems.termsAndConditionsURL)
+                    textView?.text =  "Terms & Conditions"
+                }
+
             }
             R.id.nav_contact_suppport -> {
                 textView?.text =   "Contact Suppport"
@@ -69,6 +60,16 @@ class ReusableFragmentViewModel : ViewModel() {
                 textView?.text =   ""
             }
         }
+    }
+
+    override fun onDownloadStart(
+        url: String?,
+        userAgent: String?,
+        contentDisposition: String?,
+        mimetype: String?,
+        contentLength: Long
+    ) {
+
     }
 
 
