@@ -21,6 +21,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.R
+import com.keylimetie.dottys.getleftDays
 import com.keylimetie.dottys.models.Monthly
 import com.keylimetie.dottys.redeem.DottysRewardRedeemedActivity
 import kotlin.math.roundToInt
@@ -104,7 +105,7 @@ class DottysDrawingAdapter(
                 descriptionRewards?.text =
                     rewards.priceInPoints.toString() + " Points for " + rewards.quantity + " Entries"
                 expireRewards?.text =
-                    "Expire in " + rewards.endDate?.let { activityFragment.getDiferencesDays(it) } + " days"
+                    "Expire in " + rewards.endDate?.let { it.getleftDays()  } + " days"
                 backImage?.setImageDrawable(activityFragment.resources.getDrawable(R.mipmap.ticket_background_image))
                 buttonRewards?.text = "Convert Points for Entries"
                 intent.putExtra("REDEEM_REWARDS_VIEW_TYPE", "DRAWING_ENTRIES")

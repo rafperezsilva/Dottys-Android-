@@ -111,11 +111,11 @@ class DashboardViewModel : ViewModel(), View.OnClickListener, DottysDrawingDeleg
             userCurrentUserDataObserver?.dawingSummaryModel?.filter { it.drawingType == "QUARTERLY" }
                 ?.first()?.numberOfEntries.toString()
         weeklyDays.text = userCurrentUserDataObserver?.dawingSummaryModel?.filter { it.drawingType == "WEEKLY" }
-            ?.first()?.endDate?.let {activity.getDiferencesDays(it) }
+            ?.first()?.endDate?.let {it.getleftDays() }
         monthlyDays.text = userCurrentUserDataObserver?.dawingSummaryModel?.filter { it.drawingType == "MONTHLY" }
-            ?.first()?.endDate?.let { activity.getDiferencesDays(it) }
+            ?.first()?.endDate?.let { it.getleftDays()  }
         querterlyDays.text = userCurrentUserDataObserver?.dawingSummaryModel?.filter { it.drawingType == "QUARTERLY" }
-            ?.first()?.endDate?.let { activity.getDiferencesDays(it) }
+            ?.first()?.endDate?.let { it.getleftDays() }
         hideAnalitycsView(activity)
         badgeCounterDrawingManager(drawingBadgeCounter ?: 0)
     }

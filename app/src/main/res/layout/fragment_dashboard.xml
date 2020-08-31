@@ -319,7 +319,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/proxima_nova_regular"
-                                android:text="ends in 4 days"
+                                android:text=""
                                 android:textColor="#E5BA4A"
                                 android:textSize="18sp" />
                         </LinearLayout>

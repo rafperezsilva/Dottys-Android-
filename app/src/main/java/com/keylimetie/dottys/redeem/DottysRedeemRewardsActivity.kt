@@ -7,7 +7,7 @@ import com.keylimetie.dottys.R
 import com.keylimetie.dottys.ui.drawing.DottysDrawing
 
 
-class DottysRedeemRewardsActivity : DottysBaseActivity() {
+class   DottysRedeemRewardsActivity : DottysBaseActivity() {
     val sd = DottysDrawing()
     private val viewModel = DottysRedeemRewardsViewmodel()
     override fun onCreate(savedInstanceState: Bundle?) {

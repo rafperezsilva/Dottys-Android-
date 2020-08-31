@@ -52,9 +52,9 @@ class LocationsViewModel : ViewModel() {
         val gpsTracker = locationFragment.context?.let { GpsTracker(it as DottysMainNavigationActivity) }
         var locationUser = gpsTracker?.let {
             locationFragment.context?.let { _ ->
-                activityMain?.getLocation(
-                    it
-                )
+                //activityMain?.getLocation(
+                    it.getLocation()
+                //)
             }
         }
 

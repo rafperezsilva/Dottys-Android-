@@ -16,6 +16,7 @@ class DottysCashRedeemRewardsActivity : DottysBaseActivity(), DottysRedeemedRewa
         window.statusBarColor = resources.getColor(R.color.colorDottysGrey)
         rewardID  = intent.getStringExtra("REWARD_ID")
         redeemReawrdsViewModel.initCashRewardsView(this)
+        setBackButton()
     }
 
     override fun getRedeemedRewards(dawingSummary: DottysRedeemResponseModel) {

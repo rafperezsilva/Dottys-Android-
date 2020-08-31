@@ -74,9 +74,9 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
         locationModel.locationDataObserver = DottysLocationStoresObserver(this)
         val location = this.activity?.let {
             activity?.gpsTracker?.let { it1 ->
-                activity.getLocation(
-                    it1
-                )
+                //activity.getLocation(
+                    it1.getLocation()
+                //)
             }
         }
         if(location != null){

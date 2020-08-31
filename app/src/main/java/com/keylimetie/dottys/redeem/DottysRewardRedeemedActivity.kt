@@ -34,6 +34,7 @@ class DottysRewardRedeemedActivity : DottysBaseActivity(), DottysDashboardDelega
             drawing =  DottysDrawing.fromJson(drawingData)
             redemeedViewModel.initDrawingEntriesView(this)
         }
+        setBackButton()
     }
 
     override fun getDrawingSummary(dawingSummary: DottysDrawingSumaryModel) { }

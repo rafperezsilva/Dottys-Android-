@@ -14,9 +14,14 @@ fun String.md5(): String {
 }
 
 fun String.stringToDate(): Date {
+    return SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSS").parse(this.replace("Z", ""))
+}
+
+fun String.getleftDays(): String {
     val date: Date =
         SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSS").parse(this.replace("Z", ""))
-    return date
+    val diferenceAtTime = date.time - Date().time
+    return "end in " + (diferenceAtTime / (1000 * 3600 * 24)).toString() + " days"
 }
 
 fun String.isValidPassword(): Boolean {

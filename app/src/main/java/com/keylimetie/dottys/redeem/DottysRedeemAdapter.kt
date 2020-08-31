@@ -6,12 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.keylimetie.dottys.R
+import com.keylimetie.dottys.*
 import com.keylimetie.dottys.models.DottysRewardModel
 import com.keylimetie.dottys.models.IconType
-import com.keylimetie.dottys.monthDayYear
-import com.keylimetie.dottys.stringToDate
-import com.keylimetie.dottys.timeFromDate
 import kotlin.math.roundToInt
 
 
@@ -55,7 +52,7 @@ class DottysRedeemAdapter(private val activity: DottysRedeemRewardsActivity,
 
         titleRewards.text = rewards.title
         descriptionRewards.text = rewards.description
-        expireRewards.text = "Expire in "+ rewards.endDate?.let { activity.getDiferencesDays(it) }+" days"
+        expireRewards.text = "Expire in "+ rewards.endDate?.let {it.getleftDays() }+" days"
         when (rewards.iconType) {
             IconType.PointsToDollars -> {
                 imageRewards.setImageResource(R.mipmap.cash_image)
