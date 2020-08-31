@@ -22,10 +22,7 @@ class DottysVerificationTypeActivity : DottysBaseActivity(), DottysForgotPasswor
           strUser = intent.getStringExtra("EMAIL_FORGOT")
           viewFromProfile = intent.getBooleanExtra("VIEW_FROM_PROFILE", false)
         forgotViewModel.initValidationView(this, strUser ?: "")
-         backButton = actionBarView?.findViewById<ImageButton>(R.id.back_image_button)
-        backButton?.setImageResource(R.drawable.back_icon_black)
-        backButton?.scaleY = 0.5f
-        backButton?.scaleX = 0.5f
+        setBackButton()
     }
 
     override fun sendVerificationPassword(isSucces: Boolean) {

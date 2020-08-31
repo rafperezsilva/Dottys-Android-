@@ -9,6 +9,9 @@ import android.widget.*
 import com.keylimetie.dottys.R
 import com.keylimetie.dottys.models.DottysRewardModel
 import com.keylimetie.dottys.models.IconType
+import com.keylimetie.dottys.monthDayYear
+import com.keylimetie.dottys.stringToDate
+import com.keylimetie.dottys.timeFromDate
 import kotlin.math.roundToInt
 
 
@@ -65,10 +68,12 @@ class DottysRedeemAdapter(private val activity: DottysRedeemRewardsActivity,
         }
         var paramsRelative = redeemRewardsLayout.layoutParams
         if (rewards.redeemed == true) {
+            val dateEndedString = rewards.redeemedDate?.stringToDate()?.monthDayYear()
+            val timeEndedString = rewards.redeemedDate?.stringToDate()?.timeFromDate()
             paramsRelative.height = params.height
             redeemRewardsLayout.visibility = View.VISIBLE
             rewardsForCashButton.isEnabled = false
-            redeemedDateTextView.text = rewards.redeemedDate
+            redeemedDateTextView.text = "$dateEndedString @ $timeEndedString"
             redeemedLocationTextView.text = rewards.location
         } else {
             rewardsForCashButton.isEnabled = true

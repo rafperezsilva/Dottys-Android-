@@ -203,7 +203,7 @@ open class DottysRegisterViewModel: ViewModel(), View.OnClickListener, DottysLog
         }
     }
 
-    fun validateEditTextData(
+    private fun validateEditTextData(
         activityRegister: DottysRegisterActivity,
         editTextData: Array<EditText?>
     ): Boolean {
@@ -214,7 +214,7 @@ open class DottysRegisterViewModel: ViewModel(), View.OnClickListener, DottysLog
                 return false
             }
         }
-        if (!activityRegister.isValidPassword(passwordEditText?.text.toString())) {
+        if (!passwordEditText?.text.toString().isValidPassword()) {
             Toast.makeText(
                 activityRegister,
                 "Password must be at least 6 characters in length and contain 1 uppercase and 1 lowercase letter.",

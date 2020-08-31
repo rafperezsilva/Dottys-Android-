@@ -11,10 +11,7 @@ import com.android.volley.NetworkResponse
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.keylimetie.dottys.DottysErrorModel
-import com.keylimetie.dottys.DottysMainNavigationActivity
-import com.keylimetie.dottys.PreferenceTypeKey
-import com.keylimetie.dottys.R
+import com.keylimetie.dottys.*
 import com.keylimetie.dottys.forgot_password.VerificationMethodType.EMAIL
 import com.keylimetie.dottys.forgot_password.VerificationMethodType.SMS
 import org.json.JSONObject
@@ -54,10 +51,9 @@ open class DottysForgotPasswordViewModel : ViewModel()  {
 
     fun buttonForgotClickLisener(forgotActivity: DottysForgotPasswordMainActivity) {
         submitForfotPassword?.setOnClickListener {
-            if (emailTextview?.text?.isNotEmpty() == true && forgotActivity.isValidEmail(
-                    emailTextview?.text
-                )
-            ) {
+            if (emailTextview?.text?.isNotEmpty() == true &&
+                    emailTextview?.text.toString().isValidPassword())
+             {
                 var intent = Intent(forgotActivity, DottysVerificationTypeActivity::class.java)
                 intent.putExtra("EMAIL_FORGOT",   emailTextview?.text.toString())
                 forgotActivity.startActivity(intent)
@@ -357,7 +353,7 @@ open class DottysForgotPasswordViewModel : ViewModel()  {
         enterNewPasswordEditText  = changePassActivity.findViewById<EditText>(R.id.confirm_new_password_login_edittext)
         submitNewPasswordButton  = changePassActivity.findViewById<Button>(R.id.submit_enter_password_button)
         submitNewPasswordButton?.setOnClickListener {
-            if (newPasswordEditText?.text.toString() == enterNewPasswordEditText?.text.toString() && changePassActivity.isValidPassword(newPasswordEditText?.text.toString())) {
+            if (newPasswordEditText?.text.toString() == enterNewPasswordEditText?.text.toString() && newPasswordEditText?.text.toString().isValidPassword()) {
                 changePassword(changePassActivity, mail, newPasswordEditText?.text.toString(), code)
             } else {
                 Toast.makeText(changePassActivity, "Password must match", Toast.LENGTH_LONG).show()
@@ -366,7 +362,7 @@ open class DottysForgotPasswordViewModel : ViewModel()  {
     }
 
 
-    fun changePassword(
+    private fun changePassword(
         verificationActivity: DottysEnterPasswordActivity,
         email: String, password: String, code: String
     ) {

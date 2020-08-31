@@ -19,6 +19,7 @@ class DottysRedeemRewardsActivity : DottysBaseActivity() {
        // dashboardViewModel.getCurrentUserRequest(this)
 
         viewModel.initViewRedeem(this)
+        setBackButton()
      }
 
 //    override fun getDrawingSummary(dawingSummary: DottysDrawingSumaryModel) {}
