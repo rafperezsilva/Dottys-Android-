@@ -32,6 +32,7 @@ data class DottysDrawingRewardsModel (
     val latitude: Double? = null,
     val longitude: Double? = null,
     val seq: Long? = null,
+    val company: String? = null,
     val address2: Any? = null,
 
     @get:JsonProperty("isDeleted")@field:JsonProperty("isDeleted")

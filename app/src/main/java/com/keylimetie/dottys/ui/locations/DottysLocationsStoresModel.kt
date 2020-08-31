@@ -80,6 +80,7 @@ data class DottysStoresLocation(
     val hours: List<String>? = null,
     val distance: Double? = null,
     val createdBy: String? = null,
+    val company: String? = null,
     val updatedBy: String? = null
 
 

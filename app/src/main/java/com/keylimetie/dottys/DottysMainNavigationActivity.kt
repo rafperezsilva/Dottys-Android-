@@ -1,13 +1,17 @@
 package com.keylimetie.dottys
 
+import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.location.Location
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -18,19 +22,27 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
-import com.keylimetie.dottys.game_play.DottysScratchAndWinActivity
 import com.keylimetie.dottys.redeem.DottysRewardRedeemedActivity
+import com.keylimetie.dottys.register.DottysProfilePictureActivity
+import com.keylimetie.dottys.register.DottysRegisterUserDelegates
+import com.keylimetie.dottys.register.DottysRegisterUserObserver
+import com.keylimetie.dottys.register.DottysRegisterViewModel
 import com.keylimetie.dottys.splash.getVersionApp
 import com.keylimetie.dottys.ui.dashboard.DashboardFragment
 import com.keylimetie.dottys.ui.dashboard.DottysPagerDelegates
 import com.keylimetie.dottys.ui.drawing.*
 import com.keylimetie.dottys.ui.locations.DottysLocationStoresObserver
 import com.keylimetie.dottys.ui.locations.LocationsViewModel
+import java.io.ByteArrayOutputStream
+import java.io.IOException
+import kotlin.properties.Delegates
+
 
 @Suppress("DEPRECATION")
-class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationDelegates,
-    DottysPagerDelegates, DottysDrawingDelegates {//, DottysBeaconStatusDelegate {
-
+class DottysMainNavigationActivity: DottysBaseActivity(), DottysLocationDelegates,
+    DottysPagerDelegates, DottysDrawingDelegates, DottysRegisterUserDelegates {//, DottysBeaconStatusDelegate {
+    val registerViewModel = DottysRegisterViewModel()
+    var cameraPictureObserver: DottysProfilePictureObserver? = null
     private var drawingItemSelected: Int? = 0
     private var navView: NavigationView? = null
     var segmentSelect: RewardsSegment? =  null
@@ -38,7 +50,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationDelegat
     lateinit var controller: NavController // don't forget to initialize
     private lateinit var toolbar: Toolbar
     var selectedItemId: Int? = 0
-
+    var image_uri: Uri?  = null
     private val listener =
         NavController.OnDestinationChangedListener { controller, destination, arguments ->
             val logoAppBar = findViewById<ImageView>(R.id.logo_appbar)
@@ -194,6 +206,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationDelegat
 
 
     }
+
     override fun onLocationChangeHandler(locationGps: Location?) {
         //print(locationGps?.latitude)
        //Toast.makeText(this, "Location has chande to \n Lat: ${locationGps?.latitude}\nLong: ${locationGps?.longitude}", Toast.LENGTH_LONG).show()
@@ -223,20 +236,50 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationDelegat
          startActivity(intent)
     }
 
-//    override fun getStoresLocation(locations: DottysLocationsStoresModel) {
-//       // var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
-//        editor =  sharedPreferences!!.edit()
-//        saveDataPreference(PreferenceTypeKey.LOCATIONS,locations.toJson())
-//        val currentFragment = DashboardViewModel()
-//        var beaconsArray = DottysBeaconArray(getBeaconStatus()?.beaconArray)
-//        currentFragment.initAnalitycsItems(beaconsArray, null)
-//
-//    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
-//    override fun allItemsCollapse(isColappse: Boolean) {
-//
-//    }
+        val pictureActivity = DottysProfilePictureActivity()
 
+        registerViewModel.activityRegisterObserver = DottysRegisterUserObserver(this)
+        if (resultCode == Activity.RESULT_OK) {
+            try {
+                val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, image_uri)
+                val stream = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream)
+                cameraPictureObserver?.imageFromCamera = bitmap
+                //val byteArray = pictureActivity.resizeBitmap(bitmap)
+                registerViewModel.uploadImgage(this, stream.toByteArray())
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    override fun registerUser(userData: DottysLoginResponseModel) { }
+
+    override fun imageProfileHasUploaded(hasUploaded: Boolean) { }
+
+}
+
+
+interface DottysOnProfilePictureTakenDelegate {
+    fun onPictureTaken(bitmap: Bitmap?)
+}
+
+class DottysProfilePictureObserver(lisener: DottysOnProfilePictureTakenDelegate) {
+
+    var imageFromCamera: Bitmap by Delegates.observable(
+        initialValue = emptyBitmap(),
+        onChange = { _, _, new -> lisener.onPictureTaken(new) })
+
+    private fun emptyBitmap():Bitmap {
+        val w = 1
+        val h = 1
+        val conf = Bitmap.Config.ARGB_8888
+       return  Bitmap.createBitmap(w, h, conf)
+//        val canvas = Canvas(bmp)
+    }
 }
 
 

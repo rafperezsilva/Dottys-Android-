@@ -9,7 +9,24 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorSecundary</item>
+
+
+
     </style>
+
+
+    <style name="WindowAnimations">
+        <item name="android:activityOpenEnterAnimation">
+            @anim/slide_in_left</item>
+        <item name="android:activityOpenExitAnimation">
+            @anim/slide_in_left</item>
+        <item name="android:activityCloseEnterAnimation">
+            @anim/slide_in_left</item>
+        <item name="android:activityCloseExitAnimation">
+            @anim/slide_in_left</item>
+    </style>
+
+
     <!-- Base application theme. -->
 <!--    <style name="swipeview" parent="Theme.AppCompat.Light.DarkActionBar">-->
 <!-- -->
@@ -33,6 +50,19 @@
         <item name="android:fontFamily">proxima_nova_regular</item>
     </style>
 
+    <style name="ImageRouletteStyle">
+        <item name="android:layout_width">55dp</item>
+        <item name="android:layout_height">55dp</item>
+<!--        <item name="android:layout_alignParentTop">true</item>-->
+<!--        <item name="android:layout_alignParentEnd">true</item>-->
+<!--        <item name="android:layout_alignParentBottom">true</item>-->
+<!--        <item name="android:layout_alignParentStart">true</item>-->
+<!--        <item name="android:layout_marginTop">0dp</item>-->
+<!--        <item name="android:layout_marginEnd">0dp</item>-->
+<!--        <item name="android:layout_marginBottom">0dp</item>-->
+        <item name="android:src">@mipmap/sandwich_win</item>
+
+    </style>
     <style name="ImageIconStyle">
         <item name="android:tint">#2556585A</item>
         <item name="android:scaleY">0.7</item>

@@ -38,7 +38,10 @@ class CustomPagerAdapter(private val mContext: Context, val list: ArrayList<Dott
                 title.layoutParams = param
                 imageTop.layoutParams.height = 0
                 when (position){
-
+                    1,2 -> {
+                        param.setMargins(25, 80, 25, 50)
+                        title.layoutParams = param
+                    }
                     3 -> {
                         param.setMargins(25,80,25,75)
                         title.layoutParams = param
@@ -70,8 +73,5 @@ class CustomPagerAdapter(private val mContext: Context, val list: ArrayList<Dott
     override fun isViewFromObject(view: View, `object`: Any): Boolean {
         return view === `object`
     }
-//    override fun getPageTitle(position: Int): CharSequence {
-//       // val customPagerEnum = Model.values()[position]
-//        //return mContext.getString(customPagerEnum.titleResId)
-//    }
+
 }

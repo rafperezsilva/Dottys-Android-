@@ -10,10 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.keylimetie.dottys.*
 import com.keylimetie.dottys.beacon_service.DottysBeaconActivityDelegate
-import com.keylimetie.dottys.game_play.DottysBubbleGameActivity
-import com.keylimetie.dottys.game_play.DottysMainGamePlayActivity
-import com.keylimetie.dottys.game_play.DottysScratchAndWinActivity
-import com.keylimetie.dottys.game_play.DottysSlotMachineActivity
 import com.keylimetie.dottys.models.DottysGlobalDataModel
 import com.keylimetie.dottys.models.DottysRewardsModel
 import com.keylimetie.dottys.redeem.DottysRedeemRewardsActivity
@@ -58,6 +54,8 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
         if (activity?.getUserPreference() != null || activity?.progressBar?.visibility != 0) {
             activity?.initEstimoteBeaconManager(this)
         }
+
+
     }
 
     override fun onStart() {

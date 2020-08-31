@@ -355,9 +355,9 @@ open class DottysRegisterViewModel: ViewModel(), View.OnClickListener, DottysLog
         mQueue.add(jsonObjectRequest)
     }
 
-    fun uploadImgage(context: DottysProfilePictureActivity, imageData: ByteArray) {
-        context.showLoader()
-        activityRegisterObserver = DottysRegisterUserObserver(context)
+    fun uploadImgage(context: DottysBaseActivity, imageData: ByteArray) {
+     // context.showLoader()
+
         val mQueue = Volley.newRequestQueue(context)
         val params = HashMap<String, String>()
         params["Authorization"] = context.getUserPreference().token ?: ""
@@ -365,18 +365,25 @@ open class DottysRegisterViewModel: ViewModel(), View.OnClickListener, DottysLog
             context.baseUrl + "users/profilePicture",
             params,
             Response.Listener { response ->
-                context.hideLoader()
+                 context.hideLoader()
                 activityRegisterObserver?.imageHasUploaded = true
                 print(response.statusCode)
             },
             Response.ErrorListener { error ->
-                context.hideLoader()
+               context.hideLoader()
                 activityRegisterObserver?.imageHasUploaded = false
-                val errorRes = DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
-                if (errorRes.error?.messages?.size ?: 0 > 0) {
-                    Toast.makeText(context, errorRes.error?.messages?.first() ?: "", Toast.LENGTH_LONG).show()
+                if(error.networkResponse != null ) {
+                    val errorRes =
+                        DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
+                    if (errorRes.error?.messages?.size ?: 0 > 0) {
+                        Toast.makeText(
+                            context,
+                            errorRes.error?.messages?.first() ?: "",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    Log.e("ERROR VOLLEY ", error.message, error)
                 }
-                Log.e("ERROR VOLLEY ", error.message, error)
 
             }) {
 

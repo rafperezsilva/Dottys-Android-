@@ -2,13 +2,13 @@ package com.keylimetie.dottys.game_play
 
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.R
+import com.keylimetie.dottys.game_play.roulette.DottysRouletteActivity
 
 class DottysMainGamePlayActivity : DottysBaseActivity(), View.OnClickListener {
 
@@ -37,7 +37,10 @@ class DottysMainGamePlayActivity : DottysBaseActivity(), View.OnClickListener {
 
 
            }
-           R.id.roulette_button -> {}
+           R.id.roulette_button -> {
+               val intent = Intent(this,  DottysRouletteActivity::class.java)
+               startActivity(intent)
+           }
         }
     }
 

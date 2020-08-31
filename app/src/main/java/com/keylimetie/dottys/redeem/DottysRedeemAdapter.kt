@@ -47,6 +47,8 @@ class DottysRedeemAdapter(private val activity: DottysRedeemRewardsActivity,
         val descriptionRewards = rowView.findViewById<TextView>(R.id.description_item_textview)
         val redeemRewardsLayout = rowView.findViewById<RelativeLayout>(R.id.redeem_rewards_relative)
         val rewardsForCashButton = rowView.findViewById<Button>(R.id.rewards_for_cash_button)
+        val redeemedDateTextView = rowView.findViewById<TextView>(R.id.redeemed_date_textview)
+        val redeemedLocationTextView = rowView.findViewById<TextView>(R.id.redeemed_location_textview)
 
         titleRewards.text = rewards.title
         descriptionRewards.text = rewards.description
@@ -66,6 +68,8 @@ class DottysRedeemAdapter(private val activity: DottysRedeemRewardsActivity,
             paramsRelative.height = params.height
             redeemRewardsLayout.visibility = View.VISIBLE
             rewardsForCashButton.isEnabled = false
+            redeemedDateTextView.text = rewards.redeemedDate
+            redeemedLocationTextView.text = rewards.location
         } else {
             rewardsForCashButton.isEnabled = true
             paramsRelative.height = 1

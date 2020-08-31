@@ -15,7 +15,8 @@ val mapper = jacksonObjectMapper().apply {
 data class DottysLoginResponseModel(
     @get:JsonProperty("_id") @field:JsonProperty("_id")
     val id: String? = null,
-
+    val deviceId: String? = null,
+    val appVersion: String? = null,
     val updatedAt: String? = null,
     val createdAt: String? = null,
     val address1: String? = null,
@@ -63,6 +64,58 @@ data class DottysLoginResponseModel(
     val acl: List<DottysACL>? = null,
     val fullName: String? = null,
     val token: String? = null
+//    @get:JsonProperty("_id")@field:JsonProperty("_id")
+//    val id: String? = null,
+//
+//    val updatedAt: String? = null,
+//    val createdAt: String? = null,
+//    val address1: String? = null,
+//    val address2: String? = null,
+//    val anniversaryDate: Any? = null,
+//    val cell: String? = null,
+//    val dob: String? = null,
+//    val email: String? = null,
+//    val firstName: String? = null,
+//    val lastName: String? = null,
+//    val state: String? = null,
+//    val zip: String? = null,
+//    val lastLoginAt: String? = null,
+//
+//    @get:JsonProperty("homeLocationId")@field:JsonProperty("homeLocationId")
+//    val homeLocationID: String? = null,
+//
+//    val updatedBy: String? = null,
+//    val city: String? = null,
+//    val timezone: String? = null,
+//    val totalMonthlyPlayDuration: Long? = null,
+//
+//    @get:JsonProperty("deviceId")@field:JsonProperty("deviceId")
+//    val deviceID: String? = null,
+//
+//    val appVersion: String? = null,
+//    val weeklyVisits: Long? = null,
+//    val weeklyPlayDuration: Long? = null,
+//    val points: Long? = null,
+//    val monthlyPlayDuration: Long? = null,
+//    val lastPointsForCashRedeemed: String? = null,
+//    val lastPointsForCashBought: String? = null,
+//    val termsAccepted: Boolean? = null,
+//
+//    @get:JsonProperty("isOptOutFromMailingList")@field:JsonProperty("isOptOutFromMailingList")
+//    val isOptOutFromMailingList: Boolean? = null,
+//
+//    @get:JsonProperty("isDeleted")@field:JsonProperty("isDeleted")
+//    val isDeleted: Boolean? = null,
+//
+//    val emailVerified: Boolean? = null,
+//    val deviceToken: String? = null,
+//    val cellVerified: Boolean? = null,
+//    val averageMonthlyPlayDuration: Double? = null,
+//    val averageMonthlyPlayDays: Double? = null,
+//    val averageDailyPlayDuration: Double? = null,
+//    val acl: List<DottysACL>? = null,
+//    val fullName: String? = null,
+//    val token: String? = null
 ) {
     fun toJson() = mapper.writeValueAsString(this)
 

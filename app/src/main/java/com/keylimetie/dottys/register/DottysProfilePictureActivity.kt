@@ -27,10 +27,11 @@ import kotlin.math.roundToInt
 
 
 class DottysProfilePictureActivity: DottysBaseActivity(), DottysRegisterUserDelegates, View.OnClickListener {
-    private val PERMISSION_CODE = 1000
-    private val IMAGE_CAPTURE_CODE = 1001
+      val PERMISSION_CODE = 1000
+      val IMAGE_CAPTURE_CODE = 1001
     var image_uri: Uri? = null
-    private val registerViewModel = DottysRegisterViewModel()
+
+      val registerViewModel = DottysRegisterViewModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dottys_profile_picture)
@@ -50,6 +51,7 @@ class DottysProfilePictureActivity: DottysBaseActivity(), DottysRegisterUserDele
         val takePicture = findViewById<Button>(R.id.add_photo_button)
         skipTakePicture.setOnClickListener (this)
         takePicture.setOnClickListener(this)
+        registerViewModel.activityRegisterObserver = DottysRegisterUserObserver(this)
     }
 
     override fun onRequestPermissionsResult(
@@ -71,7 +73,7 @@ class DottysProfilePictureActivity: DottysBaseActivity(), DottysRegisterUserDele
         }
     }
 
-    private fun openCamera() {
+     fun openCamera() {
         val values = ContentValues()
         values.put(MediaStore.Images.Media.TITLE, "New Picture")
         values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera")
@@ -80,7 +82,7 @@ class DottysProfilePictureActivity: DottysBaseActivity(), DottysRegisterUserDele
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri)
         startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE)
-    }
+     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -97,7 +99,7 @@ class DottysProfilePictureActivity: DottysBaseActivity(), DottysRegisterUserDele
         }
     }
 
-    private fun resizeBitmap(bitmap: Bitmap): ByteArray {
+      fun resizeBitmap(bitmap: Bitmap): ByteArray {
         val size: Int = bitmap.rowBytes * bitmap.height
         val byteBuffer: ByteBuffer = ByteBuffer.allocate(size)
         bitmap.copyPixelsToBuffer(byteBuffer)

@@ -81,6 +81,7 @@ class DottysSplashViewModel : ViewModel() {
         loginButton.setOnClickListener {
             val intentLogin = Intent(context, DottysLoginActivity::class.java)
             context.startActivity(intentLogin)
+
         }
         sigupButton.setOnClickListener {
             val intent = Intent(context, DottysRegisterActivity::class.java)

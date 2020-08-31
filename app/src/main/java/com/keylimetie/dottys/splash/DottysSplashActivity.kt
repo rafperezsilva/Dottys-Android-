@@ -1,10 +1,12 @@
 package com.keylimetie.dottys.splash
 
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.WindowManager
 import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.R
+import com.keylimetie.dottys.game_play.roulette.DottysRouletteActivity
 
 
 class DottysSplashActivity : DottysBaseActivity() {
@@ -18,8 +20,9 @@ class DottysSplashActivity : DottysBaseActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN
 
         )
-
-
+//        val intent = Intent(this,  DottysRouletteActivity::class.java)
+//        startActivity(intent)
+//  return
         viewModel.initView(this)
     }
 }

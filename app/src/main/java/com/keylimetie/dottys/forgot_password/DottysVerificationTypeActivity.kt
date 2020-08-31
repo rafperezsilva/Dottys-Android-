@@ -3,6 +3,8 @@ package com.keylimetie.dottys.forgot_password
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.R
@@ -20,7 +22,10 @@ class DottysVerificationTypeActivity : DottysBaseActivity(), DottysForgotPasswor
           strUser = intent.getStringExtra("EMAIL_FORGOT")
           viewFromProfile = intent.getBooleanExtra("VIEW_FROM_PROFILE", false)
         forgotViewModel.initValidationView(this, strUser ?: "")
-
+         backButton = actionBarView?.findViewById<ImageButton>(R.id.back_image_button)
+        backButton?.setImageResource(R.drawable.back_icon_black)
+        backButton?.scaleY = 0.5f
+        backButton?.scaleX = 0.5f
     }
 
     override fun sendVerificationPassword(isSucces: Boolean) {

@@ -36,7 +36,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".image_profile.DottysImageProfileActivity"></activity>
+        <activity android:name=".game_play.roulette.DottysRouletteActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
         <activity android:name=".game_play.DottysSlotMachineActivity" />
         <activity android:name=".game_play.DottysBubbleGameActivity" />
         <activity android:name=".game_play.DottysScratchAndWinActivity" />
