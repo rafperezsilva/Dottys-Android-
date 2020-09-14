@@ -19,6 +19,7 @@ import com.arlib.floatingsearchview.FloatingSearchView
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.keylimetie.dottys.DottysErrorModel
 import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.GpsTracker
 import com.keylimetie.dottys.R
@@ -209,8 +210,8 @@ class LocationsViewModel : ViewModel() {
 
         mContext.showLoader()
 /*MOCK LOCATION */
-        val locationURL = "locations?distance=150&limit=300&page=1&page=1&latitude=" + latitude + "&longitude=" + longitude
-        //   val locationURL = "locations?distance=150&limit=300&page=1&page=1&latitude=41.6030093&longitude=-87.75345159999999"
+          val locationURL = "locations?distance=150&limit=300&page=1&page=1&latitude=" + latitude + "&longitude=" + longitude
+        //  val locationURL = "locations?distance=150&limit=300&page=1&page=1&latitude=41.6030093&longitude=-87.75345159999999"
         val jsonObjectRequest = object : JsonObjectRequest(
             Method.GET,
             mContext.baseUrl +locationURL,
@@ -231,7 +232,17 @@ class LocationsViewModel : ViewModel() {
                 if (it.networkResponse == null){
                     Toast.makeText(mContext, "Has lost your internet connection", Toast.LENGTH_LONG).show()
                 } else {
-                    Toast.makeText(mContext, "Has no nearest locations", Toast.LENGTH_LONG).show()
+
+                    val errorRes =
+                        DottysErrorModel.fromJson(it.networkResponse.data.toString(Charsets.UTF_8))
+                    if (errorRes.error?.messages?.size ?: 0 > 0) {
+                        Toast.makeText(
+                            mContext,
+                            errorRes.error?.messages?.first() ?: "",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    return@ErrorListener
                 }
                     .run {
                         if (fragment != null) {

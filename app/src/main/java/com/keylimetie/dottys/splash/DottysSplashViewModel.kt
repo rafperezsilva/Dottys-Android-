@@ -39,13 +39,13 @@ class DottysSplashViewModel : ViewModel() {
          indicator.setViewPager(viewPager)
          buttonLisener(context)
 
-         if (context.getUserPreference().token != null) {
+         if ((context.getUserPreference().token?.isEmpty() != false).not()) {
              val intent = Intent(context, DottysMainNavigationActivity::class.java)
              context.startActivity(intent)
          }
     }
 
-    fun initSplashData(context:Activity):ArrayList<DottysPagerModel>{
+    private fun initSplashData(context:Activity):ArrayList<DottysPagerModel>{
         val firstSplash = DottysPagerModel(
             "",
             R.mipmap.dottys_splash_first_image,

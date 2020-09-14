@@ -98,7 +98,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#BFC0C1"/>
+                android:background="#D8D8D8"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -127,7 +127,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#BFC0C1"/>
+                android:background="#D8D8D8"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -156,7 +156,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#BFC0C1"/>
+                android:background="#D8D8D8"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -184,7 +184,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#BFC0C1"/>
+                android:background="#D8D8D8"/>
 
             <!--PASSWORD-->
             <LinearLayout
@@ -224,7 +224,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#BFC0C1"/>
+                android:background="#D8D8D8"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -287,7 +287,7 @@ contain 1 uppercase and 1 lowercase letter."
 <!--                android:layout_marginTop="5dp"-->
 <!--                android:layout_width="match_parent"-->
 <!--                android:layout_height="1dp"-->
-<!--                android:background="#BFC0C1"/>-->
+<!--                android:background="#D8D8D8"/>-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -343,7 +343,7 @@ contain 1 uppercase and 1 lowercase letter."
                 android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#BFC0C1"/>
+                android:background="#D8D8D8"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -362,7 +362,7 @@ contain 1 uppercase and 1 lowercase letter."
                 <TextView
                     style="@style/TextViewRegisterStyle"
                     android:layout_width="match_parent"
-                    android:text="I am 21 or older."
+                    android:text="I am at least 21 years old."
                     android:textColor="#56585A"
                     android:textSize="14sp" />
 

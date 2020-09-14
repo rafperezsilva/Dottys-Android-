@@ -2,6 +2,7 @@ package com.keylimetie.dottys.ui.dashboard
 
 
 import android.annotation.SuppressLint
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.util.Log
 import android.view.View
@@ -23,16 +24,18 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.keylimetie.dottys.*
 import com.keylimetie.dottys.R.id
-import com.keylimetie.dottys.game_play.DottysMainGamePlayActivity
 import com.keylimetie.dottys.models.DottysGlobalDataModel
 import com.keylimetie.dottys.models.DottysRewardsModel
- import com.keylimetie.dottys.models.Monthly
+import com.keylimetie.dottys.models.Monthly
+import com.keylimetie.dottys.redeem.DottysRedeemRewardsActivity
 import com.keylimetie.dottys.redeem.DottysRewardRedeemedActivity
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconArray
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconsModel
 import com.keylimetie.dottys.ui.dashboard.models.DottysDrawingSumaryModel
 import com.keylimetie.dottys.ui.dashboard.models.DottysDrawingSumaryModelElement
 import com.keylimetie.dottys.ui.drawing.*
+import com.keylimetie.dottys.utils.getleftDays
+import com.keylimetie.dottys.utils.md5
 import de.hdodenhof.circleimageview.CircleImageView
 import org.json.JSONArray
 import org.json.JSONObject
@@ -46,8 +49,23 @@ import kotlin.properties.Delegates
 class DashboardViewModel : ViewModel(), View.OnClickListener, DottysDrawingDelegates {
     val drawingViewModel = DrawingViewModel()
     private var pager: ViewPager? = null
+    /*DASHBOARD ITEMS */
+   private  var nameDashboard: TextView? = null
+   private  var locationDashboard: TextView? = null
+   private  var pointsEarned: TextView? = null
+   private  var cashRewards: TextView? = null
+   private  var weeklyRewards: TextView? = null
+   private  var monthlyRewards: TextView? = null
+   private  var querterlyRewards: TextView? = null
+   private  var weeklyDays: TextView? = null
+   private  var monthlyDays: TextView? = null
+   private  var querterlyDays: TextView? = null
+   private  var profilePhantonButton: Button? = null
+
+    /*LIST BUTTONS*/
     private var leftRollPagerButton: Button? = null
     private var rightRollPagerButton: Button? = null
+    /*BASDGE BUTTON ITEMS*/
     private var backgroundLabelBadge: TextView? = null
     private var counterLabelBadge: TextView? = null
     var userCurrentUserDataObserver: DottysCurrentUserObserver? = null
@@ -58,6 +76,40 @@ class DashboardViewModel : ViewModel(), View.OnClickListener, DottysDrawingDeleg
     var fragmentDashBoard: DashboardFragment? = null
     var drawingBadgeCounter: Int? = 0
     var adapter: DashboardPagerAdapter? = null
+
+    override fun onClick(v: View?) {
+
+        when(v?.id){
+            id.analitycs_floating_view,  id.close_analytics_buttom -> {
+                mainFragmentActivity?.let { hideAnalitycsView(it) }
+            }
+            id.phanton_profile_button -> {
+                showAnalitycsView()
+            }
+            id.rigth_roll_pager_button -> {
+                pager?.setCurrentItem(adapter?.getCurrentPage()?.plus( 1) ?: 0, true);
+            }
+            id.left_roll_pager_button -> {
+                pager?.setCurrentItem( adapter?.getCurrentPage()?.minus(1) ?: 0, true);
+            }
+            id.send_to_support_button -> {
+
+                sendMailToSupport()
+//                var intent = Intent(mainFragmentActivity, DottysMainGamePlayActivity::class.java)
+//                mainFragmentActivity?.startActivity(intent)
+            }
+            id.redeem_rewards_button -> {
+                val intent = Intent(mainFragmentActivity, DottysRedeemRewardsActivity::class.java)
+                intent.putExtra("REDEEM_REWARDS",  userCurrentUserDataObserver?.rewardsAtSession?.toJson().toString())
+                mainFragmentActivity?.startActivity(intent)
+            }
+            id.convert_points_dashboard_button -> {
+                mainFragmentActivity?.controller?.navigate(R.id.nav_rewards, mainFragmentActivity?.intent?.extras)
+            }
+            else -> {return}
+        }
+    }
+
     fun initDashboardViewSetting(
         fragment: DashboardFragment,
         mContext: DottysMainNavigationActivity,
@@ -69,6 +121,21 @@ class DashboardViewModel : ViewModel(), View.OnClickListener, DottysDrawingDeleg
         mContext.hideLoader()
         fragmentDashBoard = fragment
         getCurrentUserRequest(mContext)
+        initDashboardItemsView(dashboardView ?: return, mainFragmentActivity?.getDrawings() ?: DottysDrawingRewardsModel(),mContext)
+
+
+    }
+
+    private fun initDashboardButtons(){
+        val redeemButton =
+            dashboardView?.findViewById<Button>(id.redeem_rewards_button)
+        val convertPointButton =
+            dashboardView?.findViewById<Button>(id.convert_points_dashboard_button)
+        redeemButton?.setOnClickListener(this)
+        convertPointButton?.setOnClickListener(this)
+        if (mainFragmentActivity?.getBeaconAtStoreLocation()?.size ?: 0 <= 0 && mainFragmentActivity?.getUserNearsLocations()?.locations?.size ?: 0 > 0){
+            mainFragmentActivity?.let { getBeaconList(it) }
+        }
     }
 
     fun initDashboardItemsView(
@@ -77,47 +144,78 @@ class DashboardViewModel : ViewModel(), View.OnClickListener, DottysDrawingDeleg
         activity: DottysMainNavigationActivity
     ) {
         mainFragmentActivity = activity
-        val nameDashboard = rootView.findViewById<TextView>(id.profile_name_dashboard)
-        val locationDashboard = rootView.findViewById<TextView>(id.location_dashboard_textview)
-        val pointsEarned = rootView.findViewById<TextView>(id.points_earned_textview)
-        val cashRewards = rootView.findViewById<TextView>(id.cash_rewards_textview)
-        val weeklyRewards = rootView.findViewById<TextView>(id.weekly_count_textview)
-        val monthlyRewards = rootView.findViewById<TextView>(id.monthly_count_textview)
-        val querterlyRewards = rootView.findViewById<TextView>(id.quarterly_count_textview)
-        val weeklyDays = rootView.findViewById<TextView>(id.weekly_end_days)
-        val monthlyDays = rootView.findViewById<TextView>(id.monthly_end_days)
-        val querterlyDays = rootView.findViewById<TextView>(id.quarterly_end_days)
-        val profilePhantonButton =  rootView.findViewById<Button>(id.phanton_profile_button)
+        nameDashboard       = rootView.findViewById<TextView>(id.profile_name_dashboard)
+        locationDashboard   = rootView.findViewById<TextView>(id.location_dashboard_textview)
+        pointsEarned        = rootView.findViewById<TextView>(id.points_earned_textview)
+        cashRewards         = rootView.findViewById<TextView>(id.cash_rewards_textview)
+        weeklyRewards       = rootView.findViewById<TextView>(id.weekly_count_textview)
+        monthlyRewards      = rootView.findViewById<TextView>(id.monthly_count_textview)
+        querterlyRewards    = rootView.findViewById<TextView>(id.quarterly_count_textview)
+        weeklyDays          = rootView.findViewById<TextView>(id.weekly_end_days)
+        monthlyDays         = rootView.findViewById<TextView>(id.monthly_end_days)
+        querterlyDays       = rootView.findViewById<TextView>(id.quarterly_end_days)
+        profilePhantonButton  =  rootView.findViewById<Button>(id.phanton_profile_button)
 
 
         backgroundLabelBadge = rootView.findViewById<TextView>(id.background_badge)
         counterLabelBadge = rootView.findViewById<TextView>(id.badge_counter)
         floatingAnalicsView = rootView.findViewById<ConstraintLayout>(id.analitycs_floating_view)
         floatingAnalicsView?.setOnClickListener(this)
-        profilePhantonButton.setOnClickListener(this)
-        nameDashboard.text = userCurrentUserDataObserver?.currentUserModel?.fullName
+        profilePhantonButton?.setOnClickListener(this)
+        initDashboardButtons()
+        fillItemsAtDashboards(rewardsLoaction)
+    }
+
+
+    private fun fillItemsAtDashboards(rewardsLoaction: DottysDrawingRewardsModel){
+        nameDashboard?.text = userCurrentUserDataObserver?.currentUserModel?.fullName
         val stringFormated: String = NumberFormat.getIntegerInstance()
             .format(userCurrentUserDataObserver?.currentUserModel?.points)
-        cashRewards.text = "$" + getCashForDrawing()
-        pointsEarned.text = stringFormated
-        locationDashboard.text = addressLocationFotmatted(rewardsLoaction)
-        weeklyRewards.text =
-            userCurrentUserDataObserver?.dawingSummaryModel?.filter { it.drawingType == "WEEKLY" }
-                ?.first()?.numberOfEntries.toString()
-        monthlyRewards.text =
-            userCurrentUserDataObserver?.dawingSummaryModel?.filter { it.drawingType == "MONTHLY" }
-                ?.first()?.numberOfEntries.toString()
-        querterlyRewards.text =
-            userCurrentUserDataObserver?.dawingSummaryModel?.filter { it.drawingType == "QUARTERLY" }
-                ?.first()?.numberOfEntries.toString()
-        weeklyDays.text = userCurrentUserDataObserver?.dawingSummaryModel?.filter { it.drawingType == "WEEKLY" }
-            ?.first()?.endDate?.let {it.getleftDays() }
-        monthlyDays.text = userCurrentUserDataObserver?.dawingSummaryModel?.filter { it.drawingType == "MONTHLY" }
-            ?.first()?.endDate?.let { it.getleftDays()  }
-        querterlyDays.text = userCurrentUserDataObserver?.dawingSummaryModel?.filter { it.drawingType == "QUARTERLY" }
-            ?.first()?.endDate?.let { it.getleftDays() }
-        hideAnalitycsView(activity)
+        cashRewards?.text = "$" + getCashForDrawing()
+        pointsEarned?.text = stringFormated
+       if (!(userCurrentUserDataObserver?.dawingSummaryModel?.isEmpty() ?: true)) {
+           weeklyRewards?.text =
+               userCurrentUserDataObserver?.dawingSummaryModel?.filter { it.drawingType == "WEEKLY" }
+                   ?.first()?.numberOfEntries.toString()
+           monthlyRewards?.text =
+               userCurrentUserDataObserver?.dawingSummaryModel?.filter { it.drawingType == "MONTHLY" }
+                   ?.first()?.numberOfEntries.toString()
+           querterlyRewards?.text =
+               userCurrentUserDataObserver?.dawingSummaryModel?.filter { it.drawingType == "QUARTERLY" }
+                   ?.first()?.numberOfEntries.toString()
+           weeklyDays?.text =
+               userCurrentUserDataObserver?.dawingSummaryModel?.filter { it.drawingType == "WEEKLY" }
+                   ?.first()?.endDate?.let { it.getleftDays() }
+           monthlyDays?.text =
+               userCurrentUserDataObserver?.dawingSummaryModel?.filter { it.drawingType == "MONTHLY" }
+                   ?.first()?.endDate?.let { it.getleftDays() }
+           querterlyDays?.text =
+               userCurrentUserDataObserver?.dawingSummaryModel?.filter { it.drawingType == "QUARTERLY" }
+                   ?.first()?.endDate?.let { it.getleftDays() }
+       }
+        locationDashboard?.text = addressLocationFotmatted(rewardsLoaction)
         badgeCounterDrawingManager(drawingBadgeCounter ?: 0)
+        hideAnalitycsView(mainFragmentActivity ?: return)
+    }
+
+    private fun sendMailToSupport(){
+//        val intent = Intent(Intent.ACTION_SENDTO)
+//        intent.type = "text/plain"
+//        intent.putExtra(Intent.EXTRA_EMAIL, "support@playspinwinbrands.com")
+//        mainFragmentActivity?.startActivity(Intent.createChooser(intent, "Send Email"))
+        val i = Intent(Intent.ACTION_SEND)
+        i.type = "message/rfc822"
+        i.putExtra(Intent.EXTRA_EMAIL, arrayOf("support@playspinwinbrands.com"))
+
+        try {
+            mainFragmentActivity?.startActivity(Intent.createChooser(i, "Send mail..."))
+        } catch (ex: ActivityNotFoundException) {
+            Toast.makeText(
+                mainFragmentActivity,
+                "There are no email clients installed.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     fun badgeCounterDrawingManager(badgeCounter:Int){
@@ -132,8 +230,10 @@ class DashboardViewModel : ViewModel(), View.OnClickListener, DottysDrawingDeleg
     }
 
     private fun getCashForDrawing(): String {
+        val baseActivity = mainFragmentActivity as DottysBaseActivity
         val drawingUser =
-            userCurrentUserDataObserver?.currentUserRewards?.rewards?.filter { it.redeemed == false }
+
+            baseActivity.getRewardsAtSession().rewards?.filter { it.redeemed == false }
         var cash = 0
         if (drawingUser != null) {
             for (drawing in drawingUser) {
@@ -148,6 +248,9 @@ class DashboardViewModel : ViewModel(), View.OnClickListener, DottysDrawingDeleg
 
     private fun addressLocationFotmatted(rewardsLoaction: DottysDrawingRewardsModel): String {
         val staticFirtsText = "Your drawing entries are entered at "
+        if (rewardsLoaction.address1?.isEmpty() ?: true){
+            return ""
+        }
         return staticFirtsText + rewardsLoaction.address1 + ", " + rewardsLoaction.city + ", " + rewardsLoaction.state + " " + rewardsLoaction.zip
     }
 
@@ -242,9 +345,12 @@ class DashboardViewModel : ViewModel(), View.OnClickListener, DottysDrawingDeleg
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {
                     mContext.hideLoader()
-                    //  mContext.finishSession(mContext)
+
                     if (error.networkResponse == null) {
                         return
+                    }
+                    if (error.networkResponse.statusCode ==  401) {
+                        mContext.finishSession(mContext)
                     }
                     val errorRes =
                         DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
@@ -395,13 +501,12 @@ class DashboardViewModel : ViewModel(), View.OnClickListener, DottysDrawingDeleg
             Response.Listener<JSONObject> { response ->
                 mContext.hideLoader()
                 println(response.toString())
-                var user: DottysRewardsModel =
+                var rewards: DottysRewardsModel =
                     DottysRewardsModel.fromJson(
                         response.toString()
                     )
-                // getDrawingSummary(mContext)
-                //  user.rewards = user.rewards?.filter { it.locationID != null }
-                userCurrentUserDataObserver?.currentUserRewards = user
+                userCurrentUserDataObserver?.rewardsAtSession = rewards
+                mContext.saveDataPreference(PreferenceTypeKey.REWARDS, rewards.toJson())
             },
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {
@@ -549,28 +654,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener, DottysDrawingDeleg
         getUserRewards(view)
     }
 
-    override fun onClick(v: View?) {
 
-        when(v?.id){
-            id.analitycs_floating_view,  id.close_analytics_buttom -> {
-                mainFragmentActivity?.let { hideAnalitycsView(it) }
-            }
-            id.phanton_profile_button -> {
-                showAnalitycsView()
-            }
-            id.rigth_roll_pager_button -> {
-                 pager?.setCurrentItem(adapter?.getCurrentPage()?.plus( 1) ?: 0, true);
-            }
-            id.left_roll_pager_button -> {
-                pager?.setCurrentItem( adapter?.getCurrentPage()?.minus(1) ?: 0, true);
-            }
-            id.send_to_support_button -> {
-                var intent = Intent(mainFragmentActivity, DottysMainGamePlayActivity::class.java)
-                 mainFragmentActivity?.startActivity(intent)
-            }
-            else -> {return}
-        }
-    }
 
     private fun hideAnalitycsView(activity:DottysMainNavigationActivity){
         var screenHeigth = activity.resources.displayMetrics?.heightPixels ?: 0
@@ -627,6 +711,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener, DottysDrawingDeleg
     }
 
     override fun getUserRewards(rewards: DottysDrawingRewardsModel) {
+        mainFragmentActivity?.saveDataPreference(PreferenceTypeKey.DRAWINGS, rewards.toJson())
         initDashboardItemsView(dashboardView ?: return,rewards, mainFragmentActivity ?: return)
     }
 
@@ -660,23 +745,23 @@ class DottysCurrentUserObserver(lisener: DottysDashboardDelegates) {
         initialValue = DottysDrawingSumaryModel(
             element
         ),
-        onChange = { prop, old, new -> lisener.getDrawingSummary(new) })
+        onChange = { _, _, new -> lisener.getDrawingSummary(new) })
 
     var currentUserModel: DottysLoginResponseModel by Delegates.observable(
         initialValue = DottysLoginResponseModel(),
-        onChange = { prop, old, new -> lisener.getCurrentUser(new) })
+        onChange = { _, _, new -> lisener.getCurrentUser(new) })
 
-    var currentUserRewards: DottysRewardsModel by Delegates.observable(
+    var rewardsAtSession: DottysRewardsModel by Delegates.observable(
         initialValue = DottysRewardsModel(),
-        onChange = { prop, old, new -> lisener.getUserRewards(new) })
+        onChange = { _, _, new -> lisener.getUserRewards(new) })
 
     var currentGlobalData: DottysGlobalDataModel by Delegates.observable(
         initialValue = DottysGlobalDataModel(),
-        onChange = { prop, old, new -> lisener.getGlobalData(new) })
+        onChange = { _, _, new -> lisener.getGlobalData(new) })
     var dottysLocation: DottysDrawingRewardsModel by Delegates.observable(
         initialValue = DottysDrawingRewardsModel(),
-        onChange = { prop, old, new -> lisener.getDottysUserLocation(new) })
+        onChange = { _, _, new -> lisener.getDottysUserLocation(new) })
     var dottysBeaconList: DottysBeaconsModel by Delegates.observable(
         initialValue = DottysBeaconsModel(),
-        onChange = { prop, old, new -> lisener.getBeaconList(new) })
+        onChange = { _, _, new -> lisener.getBeaconList(new) })
 }

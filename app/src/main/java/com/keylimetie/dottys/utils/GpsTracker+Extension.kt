@@ -1,6 +1,7 @@
-package com.keylimetie.dottys
+package com.keylimetie.dottys.utils
 
 import com.google.android.gms.maps.model.LatLng
+import com.keylimetie.dottys.GpsTracker
 
 fun GpsTracker.getLocation(gps: GpsTracker): LatLng? {
     //  gpsTracker = GpsTracker(activity);

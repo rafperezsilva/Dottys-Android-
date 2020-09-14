@@ -34,6 +34,8 @@ data class DottysDrawing(
     var subtitle: String? = null,
     val startDate: String? = null,
     val regionName: String? = null,
+    val createdBy: String? = null,
+    val updatedBy: String? = null,
 
     @get:JsonProperty("regionId")@field:JsonProperty("regionId")
     val regionID: String? = null,
@@ -41,7 +43,7 @@ data class DottysDrawing(
     val quantity: Long? = null,
     val priceInPoints: Long? = null,
     val locationName: String? = null,
- //   val dummy: Boolean? = null,
+     val dummy: Boolean? = false,
 
     @get:JsonProperty("locationId")@field:JsonProperty("locationId")
     val locationID: String? = null,

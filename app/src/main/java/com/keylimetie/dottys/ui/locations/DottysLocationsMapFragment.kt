@@ -82,8 +82,6 @@ class DottysLocationsMapFragment : SupportMapFragment(), OnMapReadyCallback,
         })
         // mMap.addMarker(MarkerOptions().position(sydney).title(initial_marker).icon(BitmapDescriptorFactory.fromResource(R.mipmap.cash_image)))
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney2, 10.0f))
-
-        Toast.makeText(this.context, "OnMapReady end", Toast.LENGTH_LONG).show()
     }
 
     override fun onItemSelected(location: DottysStoresLocation) {

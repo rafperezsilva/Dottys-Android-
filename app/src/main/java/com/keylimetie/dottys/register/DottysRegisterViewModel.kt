@@ -23,7 +23,7 @@ import com.keylimetie.dottys.login.DottysLoginDelegate
 import com.keylimetie.dottys.login.DottysLoginObserver
 import com.keylimetie.dottys.login.DottysLoginViewModel
 import com.keylimetie.dottys.register.volley_multipart.VolleyMultipartRequest
-import com.keylimetie.dottys.ui.dashboard.DashboardFragment
+import com.keylimetie.dottys.utils.isValidPassword
 import org.json.JSONObject
 import java.util.*
 import kotlin.math.roundToInt
@@ -223,13 +223,13 @@ open class DottysRegisterViewModel: ViewModel(), View.OnClickListener, DottysLog
             return false
         }
         if (legalAgeCheckBox?.isChecked != true) {
-            Toast.makeText(activityRegister, "You must be of legal age", Toast.LENGTH_LONG).show()
+            Toast.makeText(activityRegister, "You must be 21 years old to participate.", Toast.LENGTH_LONG).show()
             return false
         }
         if (termsAndConditionsCheckBox?.isChecked != true) {
             Toast.makeText(
                 activityRegister,
-                "You must accept the terms and conditions\n",
+                "You must agree to the Terms & Conditions and Privacy Policy to proceed\n",
                 Toast.LENGTH_LONG
             ).show()
             return false

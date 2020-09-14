@@ -115,7 +115,7 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
 
     }
 
-    fun initListView() {
+    private fun initListView() {
         val listViewRewards = activityRedeem?.findViewById<ListView>(R.id.redeem_rewards_listview)
         var isRedeemed: Boolean = false
         if (segmentSelected == RedeemRewardsSegment.REDEEMED_REWARDS) {
@@ -628,7 +628,7 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
         val drawingViewModel = DrawingViewModel()
         descriptioDrawinTextView.text = drawingViewModel.attributedRedeemText(
             NumberFormat.getIntegerInstance()
-            .format(drawingActivity.getUserPreference()?.points))
+            .format(drawingActivity.getUserPreference()?.points ?: (0).toLong()))
         rewardsObserver = DottysRedeemedRewardsObserver(drawingActivity)
         if (drawingActivity.rewardsTypeView == "CASH_REWARDS"){
            subtitleDrawing.text = drawingActivity.drawing?.subtitle

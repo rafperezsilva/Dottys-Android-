@@ -45,8 +45,8 @@
             android:scaleType="centerInside" />
 
         <TextView
-            android:layout_marginRight="35dp"
-            android:layout_marginLeft="35dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
             android:layout_weight="0"
             android:textSize="17dp"
             android:fontFamily="@font/proxima_nova_regular"

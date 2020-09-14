@@ -20,8 +20,8 @@ class DottysDrawingSumaryModel(elements: ArrayList<DottysDrawingSumaryModelEleme
 }
 
 data class DottysDrawingSumaryModelElement(
-    val drawingType: String? = null,
-    val numberOfEntries: Int? = null,
-    val title: String? = null,
-    val endDate: String? = null
+    val drawingType: String? = "",
+    val numberOfEntries: Int? = 0,
+    val title: String? = "",
+    val endDate: String? = ""
 )

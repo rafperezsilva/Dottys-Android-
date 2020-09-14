@@ -1,5 +1,10 @@
 package com.keylimetie.dottys.ui.locations
 
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -43,4 +48,27 @@ class LocationsFragment : Fragment(), DottysLocationDelegates {
             this.locationViewModel.screenDimensionManager(LocationViewType.EXPANDED_TYPE)
         }
     }
+
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//
+//            if (requestCode == 42) {
+//                // If request is cancelled, the result arrays are empty.
+//                if (resultCode == Activity.RESULT_OK) {
+//                    // permission was granted, yay!
+//                    callPhone()
+//                } else {
+//                    // permission denied, boo! Disable the
+//                    // functionality
+//                }
+//                return
+//            }
+//
+//    }
+//
+//    @SuppressLint("MissingPermission")
+//    fun callPhone(){
+//        val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "1122334455"))
+//       startActivity(intent)
+//    }
 }

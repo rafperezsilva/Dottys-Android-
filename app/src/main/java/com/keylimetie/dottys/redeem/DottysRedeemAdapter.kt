@@ -9,6 +9,10 @@ import android.widget.*
 import com.keylimetie.dottys.*
 import com.keylimetie.dottys.models.DottysRewardModel
 import com.keylimetie.dottys.models.IconType
+import com.keylimetie.dottys.utils.getleftDays
+import com.keylimetie.dottys.utils.monthDayYear
+import com.keylimetie.dottys.utils.stringToDate
+import com.keylimetie.dottys.utils.timeFromDate
 import kotlin.math.roundToInt
 
 

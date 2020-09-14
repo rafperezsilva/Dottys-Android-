@@ -29,6 +29,8 @@ class DottysRegisterActivity : DottysBaseActivity(), DatePickerDialog.OnDateSetL
         titleBar.text = "Create Account"
         registerViewModel.initRegisterView(this)
         hideCustomKeyboard()
+        setBackButton()
+        backButton?.setImageResource(R.drawable.close_icon)
     }
 
     override fun onResume() {
@@ -53,7 +55,7 @@ class DottysRegisterActivity : DottysBaseActivity(), DatePickerDialog.OnDateSetL
         }
         if (dateSelected.isAfter(currentDate)) {
             registerViewModel.birthdateEditText?.setText("")
-            Toast.makeText(this, "Must be of legal age to register", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "You must be 21 years old to participate", Toast.LENGTH_LONG).show()
         } else {
             registerViewModel.birthdateEditText?.setText("$month / $dayOfMonth / $year")
         }

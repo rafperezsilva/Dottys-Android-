@@ -1,13 +1,26 @@
 package com.keylimetie.dottys.ui.locations
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
+import android.widget.Button
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
+import com.keylimetie.dottys.DottysMainNavigationActivity
+import com.keylimetie.dottys.GpsTracker
+import com.keylimetie.dottys.Manifest
 import com.keylimetie.dottys.R
 import kotlin.properties.Delegates
+
 
 enum class LocationViewType {
     SEARCH_TYPE, EXPANDED_TYPE, COLLAPSE_TYPE
@@ -17,7 +30,7 @@ class DottysLocationsStoreAdapter(
     private val activity: Context,
     private val dataSource: ArrayList<DottysStoresLocation>,
     private val mapFragment: DottysLocationsMapFragment
-) : BaseExpandableListAdapter() {
+) : BaseExpandableListAdapter(), View.OnClickListener {
     //  private val inflater: LayoutInflater
     // = activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     var locationObserver: DottysStoreListObserver? = null
@@ -95,10 +108,14 @@ class DottysLocationsStoreAdapter(
 
         convertView?.layoutParams = paramsView
         val childTextvew = convertView!!.findViewById(R.id.child_textview) as TextView
+        val getDirectionsButton = convertView!!.findViewById(R.id.get_directions_button) as Button
+        val callLocationButton = convertView!!.findViewById(R.id.call_location_button) as Button
+        getDirectionsButton.setOnClickListener(this)
+        callLocationButton.setOnClickListener(this)
         childTextvew.text =
             dataSource[parent].hours?.let { getDataHours(it.filter { it1 -> it1 != "" }) }
         paramsView?.height =
-            (dataSource[parent].hours?.filter { it != "" }?.size?.times(50) ?: 0) + 50
+            (dataSource[parent].hours?.filter { it != "" }?.size?.times(50) ?: 0) + 250
         return convertView
     }
 
@@ -135,6 +152,67 @@ class DottysLocationsStoreAdapter(
 
         print("GROUP COLAPSED ->" + groupPosition)
 
+    }
+
+    override fun onClick(v: View?) {
+        when(v?.id){
+            R.id.get_directions_button -> {
+                openMap()
+            }
+            R.id.call_location_button -> {
+                checkPermission()
+            }
+        }
+    }
+
+    private fun checkPermission() {
+
+        if (ContextCompat.checkSelfPermission(   activity,
+                Manifest.permission.CALL_PHONE)
+            != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    activity as Activity,
+                    Manifest.permission.CALL_PHONE)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(activity,
+                    arrayOf(Manifest.permission.CALL_PHONE),
+                    42)
+            }
+        } else {
+            // Permission has already been granted
+            callPhone()
+        }
+    }
+
+
+
+
+
+
+    @SuppressLint("MissingPermission")
+    fun callPhone(){
+        val phone = locationObserver?.hasSelected?.phone ?: ""
+        val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:$phone"))
+        activity.startActivity(intent)
+    }
+
+    fun openMap(){
+        if (locationObserver?.hasSelected?.latitude.toString().isNotEmpty()){
+         val lat =  locationObserver?.hasSelected?.latitude.toString()
+         val long =  locationObserver?.hasSelected?.longitude.toString()
+        val currentGps = GpsTracker(activity as DottysMainNavigationActivity)
+        val uri =
+            "http://maps.google.com/maps?saddr=${currentGps.getLatitude()},${currentGps.getLongitude()}&daddr=$lat,$long"
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+        activity.startActivity(intent)
+        }
     }
 
 }

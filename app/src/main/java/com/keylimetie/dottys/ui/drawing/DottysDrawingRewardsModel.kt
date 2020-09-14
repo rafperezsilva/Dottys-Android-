@@ -11,34 +11,54 @@ val mapper = jacksonObjectMapper().apply {
     setSerializationInclusion(JsonInclude.Include.NON_NULL)
 }
 
+
+data class DottysMainHomeLocationModel (
+    val total: Long? = (0).toLong(),
+    val limit: Long? = (0).toLong(),
+    val page: Long? = (0).toLong(),
+    val pages: Long? = (0).toLong(),
+    @get:JsonProperty("_id")@field:JsonProperty("_id")
+    val id: String? = "",
+    val locations: List<DottysDrawingRewardsModel>? = listOf(DottysDrawingRewardsModel())
+) {
+    fun toJson() = mapper.writeValueAsString(this)
+
+    companion object {
+        fun fromJson(json: String) = mapper.readValue<DottysMainHomeLocationModel>(json)
+    }
+}
+
+
 data class DottysDrawingRewardsModel (
     @get:JsonProperty("_id")@field:JsonProperty("_id")
-    val id: String? = null,
+    val id: String? = "",
 
-    val updatedAt: String? = null,
-    val createdAt: String? = null,
+    val updatedAt: String? = "",
+    val createdAt: String? = "",
+    val updatedBy: String? = "",
+    val createdBy: String? = "",
 
     @get:JsonProperty("regionId")@field:JsonProperty("regionId")
-    val regionID: String? = null,
+    val regionID: String? = "",
 
-    val name: String? = null,
-    val address1: String? = null,
-    val city: String? = null,
-    val state: String? = null,
-    val zip: String? = null,
-    val phone: String? = null,
-    val storeType: String? = null,
-    val storeNumber: Long? = null,
-    val latitude: Double? = null,
-    val longitude: Double? = null,
-    val seq: Long? = null,
-    val company: String? = null,
-    val address2: Any? = null,
+    val name: String? = "",
+    val address1: String? = "",
+    val city: String? = "",
+    val state: String? = "",
+    val zip: String? = "",
+    val phone: String? = "",
+    val storeType: String? = "",
+    val storeNumber: Long? = (0).toLong(),
+    val latitude: Double? = 0.0,
+    val longitude: Double? = 0.0,
+    val seq: Long? = (0).toLong(),
+    val company: String? = "",
+    val address2: String? = "",
 
     @get:JsonProperty("isDeleted")@field:JsonProperty("isDeleted")
-    val isDeleted: Boolean? = null,
+    val isDeleted: Boolean? = false,
 
-    val hours: List<String>? = null
+    val hours: List<String>? = listOf("")
 ) {
     fun toJson() = mapper.writeValueAsString(this)
 

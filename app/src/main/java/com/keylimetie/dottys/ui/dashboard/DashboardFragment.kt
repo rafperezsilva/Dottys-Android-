@@ -134,24 +134,8 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
     /*6*/// -- /*04*/
     override fun getUserRewards(dawing: DottysDrawingRewardsModel) {
         var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
-        homeViewModel.initDashboardItemsView(viewFragment!!, dawing,activity!!)
-        val redeemButton =
-            viewFragment?.findViewById<Button>(R.id.redeem_rewards_button)
-        val convertPointButton =
-            viewFragment?.findViewById<Button>(R.id.convert_points_dashboard_button)
-        redeemButton?.setOnClickListener {
+        homeViewModel.initDashboardItemsView(viewFragment ?: return, dawing,activity ?: return)
 
-            val intent = Intent(context, DottysRedeemRewardsActivity::class.java)
-            intent.putExtra("REDEEM_REWARDS", homeViewModel.userCurrentUserDataObserver?.currentUserRewards?.toJson().toString())
-            startActivity(intent)
-        }
-        convertPointButton?.setOnClickListener {
-            activity.controller.navigate(R.id.nav_rewards, activity.intent.extras)
-        }
-
-        if (activity.getBeaconAtStoreLocation()?.size ?: 0 <= 0 && activity.getUserNearsLocations().locations?.size ?: 0 > 0){
-             activity?.let { homeViewModel.getBeaconList(it) }
-        }
 //         gsp = GpsTracker(this)
 //        gsp?.stopUsingGPS()
 //        gsp.onLocationChanged(gpsTracker.locationGps!!)

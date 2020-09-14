@@ -212,7 +212,7 @@ class DottysMainNavigationActivity: DottysBaseActivity(), DottysLocationDelegate
        //Toast.makeText(this, "Location has chande to \n Lat: ${locationGps?.latitude}\nLong: ${locationGps?.longitude}", Toast.LENGTH_LONG).show()
         val dashboardFragment = DashboardFragment()
         val locationsViewModel = LocationsViewModel()
-        locationsViewModel.locationDataObserver = DottysLocationStoresObserver(dashboardFragment)
+       locationsViewModel.locationDataObserver = DottysLocationStoresObserver(dashboardFragment)
        locationsViewModel.getLocationsDottysRequest(this,locationGps?.latitude.toString(),locationGps?.longitude.toString(), null)
 
     }
@@ -238,9 +238,6 @@ class DottysMainNavigationActivity: DottysBaseActivity(), DottysLocationDelegate
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-        val pictureActivity = DottysProfilePictureActivity()
-
         registerViewModel.activityRegisterObserver = DottysRegisterUserObserver(this)
         if (resultCode == Activity.RESULT_OK) {
             try {

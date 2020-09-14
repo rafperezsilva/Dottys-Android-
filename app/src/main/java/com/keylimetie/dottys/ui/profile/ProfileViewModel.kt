@@ -1,23 +1,18 @@
 package com.keylimetie.dottys.ui.profile
 
 import android.Manifest
-import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.net.Uri
-import android.os.Build
 import android.provider.MediaStore
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.requestPermissions
-import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.lifecycle.ViewModel
 import com.android.volley.Response
 import com.android.volley.toolbox.ImageRequest
@@ -25,11 +20,8 @@ import com.android.volley.toolbox.Volley
 import com.keylimetie.dottys.*
 import com.keylimetie.dottys.forgot_password.DottysVerificationTypeActivity
 import com.keylimetie.dottys.register.DottysProfilePictureActivity
-import com.keylimetie.dottys.register.DottysRegisterUserDelegates
-import com.keylimetie.dottys.register.DottysRegisterUserObserver
+import com.keylimetie.dottys.utils.md5
 import de.hdodenhof.circleimageview.CircleImageView
-import java.io.ByteArrayOutputStream
-import java.io.IOException
 
 class ProfileViewModel : ViewModel(), View.OnClickListener, DottysOnProfilePictureTakenDelegate{
     var imageViewProfile : CircleImageView? = null

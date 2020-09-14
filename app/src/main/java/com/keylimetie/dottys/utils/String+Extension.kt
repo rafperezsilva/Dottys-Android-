@@ -1,6 +1,7 @@
-package com.keylimetie.dottys
+package com.keylimetie.dottys.utils
 
-import android.widget.Toast
+import android.text.TextUtils
+import android.util.Patterns
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
@@ -78,4 +79,12 @@ fun String.isValidPassword(): Boolean {
 //        Toast.makeText(this, mssg, Toast.LENGTH_LONG).show()
 //    }
     return valid
+}
+
+fun String.isValidEmail(): Boolean {
+    return if (TextUtils.isEmpty(this)) {
+        false
+    } else {
+        Patterns.EMAIL_ADDRESS.matcher(this).matches()
+    }
 }

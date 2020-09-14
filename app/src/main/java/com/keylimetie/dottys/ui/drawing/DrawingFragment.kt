@@ -63,7 +63,7 @@ class DrawingFragment : Fragment(), DottysDrawingDelegates, DottysDashboardDeleg
         activity?.saveDataPreference(PreferenceTypeKey.USER_DATA,userAux?.toJson().toString())
         drawingViewModel.titleTotalPoints?.text = drawingViewModel.attributedRedeemText(
             NumberFormat.getIntegerInstance()
-                .format(currentUser.points)
+                .format(currentUser.points ?: (0).toLong())
         )
     }
 

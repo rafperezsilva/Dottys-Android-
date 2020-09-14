@@ -14,6 +14,8 @@ import com.android.volley.toolbox.Volley
 import com.keylimetie.dottys.*
 import com.keylimetie.dottys.forgot_password.VerificationMethodType.EMAIL
 import com.keylimetie.dottys.forgot_password.VerificationMethodType.SMS
+import com.keylimetie.dottys.utils.isValidEmail
+import com.keylimetie.dottys.utils.isValidPassword
 import org.json.JSONObject
 import kotlin.properties.Delegates
 
@@ -52,7 +54,7 @@ open class DottysForgotPasswordViewModel : ViewModel()  {
     fun buttonForgotClickLisener(forgotActivity: DottysForgotPasswordMainActivity) {
         submitForfotPassword?.setOnClickListener {
             if (emailTextview?.text?.isNotEmpty() == true &&
-                    emailTextview?.text.toString().isValidPassword())
+                    emailTextview?.text.toString().isValidEmail())
              {
                 var intent = Intent(forgotActivity, DottysVerificationTypeActivity::class.java)
                 intent.putExtra("EMAIL_FORGOT",   emailTextview?.text.toString())

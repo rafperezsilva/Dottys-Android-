@@ -1,4 +1,4 @@
-package com.keylimetie.dottys
+package com.keylimetie.dottys.utils
 
 import java.text.SimpleDateFormat
 import java.util.*

@@ -64,7 +64,7 @@ class DrawingViewModel : ViewModel() {
         this.viewRoot = viewRoot
         this.fragment = fragment
         if (fragment is DashboardFragment) {
-            drawingObserver = DottysDrawingObserver(fragment as DashboardFragment)
+            drawingObserver = DottysDrawingObserver(fragment)
         } else {
             drawingObserver = DottysDrawingObserver(fragment as DrawingFragment)
             initDrawingView(viewRoot)
@@ -210,6 +210,8 @@ class DrawingViewModel : ViewModel() {
                     )
                 // getDrawingSummary(mContext)
                 drawingObserver?.rewardsModel = user
+
+
             },
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {

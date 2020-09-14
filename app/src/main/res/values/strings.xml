@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Dottys</string>
-    <string name="splash_first_text">Our Player Perks App was designed to enhance your experience while visiting any of our more than 40 locations.</string>
+    <string name="splash_first_text">Our Player Perks App was designed to\nenhance your experience while visiting any of\nour more than 40 locations.</string>
     <string name="splash_second_text">Get rewarded for playing at Dotty’s, earning\npoints that you can redeem them\nfor drawing entries or cash.</string>
     <string name="title_second_top_splas">The more you play,\nthe more you earn.</string>
     <string name="title_third_splash_item">Redeem points the way you\nwant.</string>
