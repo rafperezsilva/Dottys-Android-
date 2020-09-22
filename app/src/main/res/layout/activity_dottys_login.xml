@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".login.DottysLoginActivity">
+
+    <ProgressBar
+         android:id="@+id/progress_loader"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:layout_marginTop="80dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_weight="0"
+            android:layout_marginRight="80dp"
+            android:layout_marginLeft="80dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/dottys_image"/>
+            <TextView
+                android:layout_weight="0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                 android:textColor="@color/colorPrimary"
+                android:fontFamily="@font/proxima_nova_light"
+                android:text="Welcome back!"/>
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    style="@style/ImageIconStyle"
+                    android:src="@mipmap/email_icon"/>
+                <EditText
+                    android:id="@+id/email_login_edittext"
+                    style="@style/EditTextLoginStyle"
+                    android:hint="Email"
+
+                    android:inputType="textEmailAddress"
+
+                    />
+            </LinearLayout>
+            <RelativeLayout
+                android:layout_marginBottom="28dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:background="#D8D8D8"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"/>
+            <LinearLayout
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    style="@style/ImageIconStyle"
+                    android:src="@mipmap/trophy_icon"
+                    android:tint="#56585A"/>
+                <EditText
+                    android:id="@+id/password_login_edittext"
+                    style="@style/EditTextLoginStyle"
+                    android:hint="Password"
+
+                    android:inputType="textPassword"
+                     />
+            </LinearLayout>
+            <RelativeLayout
+                 android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:background="#D8D8D8"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"/>
+
+            <TextView
+                android:id="@+id/forgot_passwords_textview"
+                android:textColor="#5A9402"
+                android:layout_marginTop="30.5dp"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:text="Forgot password?"
+                android:textAlignment="textStart"
+                android:fontFamily="@font/proxima_nova_light"/>
+            <RelativeLayout
+                android:gravity="left"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="45dp">
+
+                <Button
+                    android:id="@+id/phanton_singup_button"
+                    android:background="@color/transparent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/sigup_textview"
+                    android:layout_alignStart="@+id/need_to_register"
+                    android:layout_alignParentTop="@+id/need_to_register"
+                    android:layout_alignParentBottom="@+id/need_to_register"
+                    />
+
+                <TextView
+                    android:id="@+id/need_to_register"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"
+
+                    android:layout_weight="0"
+                    android:fontFamily="@font/proxima_nova_light"
+                    android:text="Need to register?"
+                    android:textAlignment="textStart"
+                    android:textColor="#56585A" />
+
+                <TextView
+                    android:id="@+id/sigup_textview"
+                    android:lines="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                     android:layout_marginRight="35dp"
+                    android:layout_weight="0"
+                    android:fontFamily="@font/proxima_nova_light"
+                    android:text="Sign up for free?"
+                    android:textAlignment="textStart"
+                    android:textColor="#5A9402"
+                    android:layout_toRightOf="@+id/need_to_register"/>
+
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/submit_login_button"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_weight="0"
+            android:background="#5A9402"
+            android:elevation="1dp"
+            android:fontFamily="@font/proxima_nova_light"
+            android:letterSpacing="0.2"
+            android:shadowColor="#000"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="1"
+            android:text="SUBMIT"
+            android:textAlignment="center"
+            android:textColor="#FFF"
+            android:textSize="23sp" />
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

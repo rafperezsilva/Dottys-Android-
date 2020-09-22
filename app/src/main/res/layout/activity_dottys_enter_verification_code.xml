@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".forgot_password.DottysEnterVerificationCodeActivity">
+    <ProgressBar
+        android:id="@+id/progress_loader"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:gravity="top"
+        android:layout_marginTop="51dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+    <TextView
+        android:textAlignment="center"
+        android:layout_weight="0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:textColor="@color/colorPrimary"
+        android:fontFamily="@font/proxima_nova_light"
+        android:text="Verify Account"/>
+    <TextView
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:textSize="18sp"
+        android:layout_weight="0"
+        android:fontFamily="@font/proxima_nova_light"
+        android:text="An text message with a verification code has been sent to (xxx) xxx-8686."
+        android:textAlignment="center"
+        android:textColor="#56585A" />
+    <TextView
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:textSize="18sp"
+        android:layout_weight="0"
+        android:fontFamily="@font/proxima_nova_light"
+        android:text="Enter the code here:"
+        android:textAlignment="center"
+        android:textColor="#56585A" />
+
+    <LinearLayout
+        android:gravity="top"
+        android:layout_marginTop="51dp"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="horizontal">
+
+      <EditText
+          android:inputType="number"
+          android:textSize="45sp"
+          android:fontFamily="@font/proxima_nova_semibold"
+       android:id="@+id/firts_code_edittext"
+       android:layout_marginRight="10dp"
+        android:layout_weight="1"
+        android:background="@drawable/border_edittext"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"/>
+      <EditText
+          android:inputType="number"
+          android:textSize="45sp"
+          android:fontFamily="@font/proxima_nova_semibold"
+          android:id="@+id/second_code_edittext"
+          android:layout_marginRight="10dp"
+          android:layout_weight="1"
+        android:background="@drawable/border_edittext"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"/>
+      <EditText
+          android:inputType="number"
+          android:textSize="45sp"
+          android:fontFamily="@font/proxima_nova_semibold"
+          android:id="@+id/third_code_edittext"
+          android:layout_marginRight="10dp"
+          android:layout_weight="1"
+        android:background="@drawable/border_edittext"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"/>
+      <EditText
+          android:inputType="number"
+          android:textSize="45sp"
+          android:fontFamily="@font/proxima_nova_semibold"
+          android:id="@+id/fourth_code_edittext"
+          android:layout_marginRight="10dp"
+          android:layout_weight="1"
+        android:background="@drawable/border_edittext"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"/>
+      <EditText
+          android:textSize="45sp"
+          android:inputType="number"
+          android:fontFamily="@font/proxima_nova_semibold"
+          android:id="@+id/fifth_code_edittext"
+          android:layout_marginRight="10dp"
+          android:layout_weight="1"
+        android:background="@drawable/border_edittext"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"/>
+      <EditText
+          android:inputType="number"
+          android:textSize="45sp"
+          android:fontFamily="@font/proxima_nova_semibold"
+          android:id="@+id/sixthcode_edittext"
+          android:layout_weight="1"
+        android:background="@drawable/border_edittext"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"/>
+    </LinearLayout>
+        <TextView
+            android:id="@+id/resend_code_textview"
+            android:fontFamily="@font/proxima_nova_regular"
+            android:layout_marginTop="45dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Didn't get a verification code?"
+            android:textColor="@color/colorGreen"
+            android:shadowColor="@color/colorDottysGrey"
+            android:shadowRadius="1"
+            android:shadowDx="1"
+            android:shadowDy="-1"/>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".game_play.roulette.DottysRouletteActivity"
+    android:background="#ADAD"
+    android:id="@+id/parent_roulette_view">
+
+
+
+    <RelativeLayout
+        android:id="@+id/base_container"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:background="@drawable/base_circle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <ImageView
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/base_circle"
+            android:tint="#FFF"/>
+        <ImageView
+            android:layout_margin="55dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/base_circle"
+            android:tint="#FFC107"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/roulette_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/itemRoulette0"
+                style="@style/ImageRouletteStyle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/itemRoulette1"
+                style="@style/ImageRouletteStyle"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_alignParentStart="false"
+                android:layout_gravity="center_vertical|left"
+                app:layout_constraintBottom_toTopOf="@+id/itemRoulette2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.489"
+                app:layout_constraintStart_toEndOf="@+id/itemRoulette0"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.494" />
+
+            <ImageView
+                android:id="@+id/itemRoulette7"
+                style="@style/ImageRouletteStyle"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_alignParentStart="true"
+                android:layout_gravity="center_vertical|left"
+                app:layout_constraintBottom_toTopOf="@+id/itemRoulette6"
+                app:layout_constraintEnd_toStartOf="@+id/itemRoulette0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/itemRoulette6"
+                style="@style/ImageRouletteStyle"
+               android:layout_alignParentStart="true"
+                android:layout_gravity="center_vertical|right"
+                android:src="@mipmap/no_win"
+                app:layout_constraintBottom_toBottomOf="@+id/itemRoulette2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/itemRoulette2" />
+
+            <ImageView
+                android:id="@+id/itemRoulette2"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:src="@mipmap/no_win"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/itemRoulette5"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:src="@mipmap/sandwich_win"
+                app:layout_constraintBottom_toBottomOf="@+id/itemRoulette4"
+                app:layout_constraintEnd_toStartOf="@+id/itemRoulette4"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/itemRoulette6" />
+
+            <ImageView
+                android:id="@+id/itemRoulette3"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:src="@mipmap/sandwich_win"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/itemRoulette4"
+                app:layout_constraintTop_toBottomOf="@+id/itemRoulette2" />
+
+            <ImageView
+
+                android:id="@+id/itemRoulette4"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:src="@mipmap/sandwich_win"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/itemRoulette0"
+                app:layout_constraintStart_toStartOf="@+id/itemRoulette0" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </RelativeLayout>
+
+    <ImageView
+        android:visibility="invisible"
+        android:id="@+id/marker_image"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:rotation="180"
+        android:background="@color/colorPrimary"
+        app:layout_constraintBottom_toTopOf="@+id/base_container"
+        app:layout_constraintEnd_toStartOf="@+id/base_container"
+        app:layout_constraintStart_toStartOf="@+id/base_container"
+        app:layout_constraintTop_toBottomOf="@+id/base_container" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

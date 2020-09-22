@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view"
+
+    >
+
+    <group
+        android:checkableBehavior="none"
+
+        >
+        <item
+             android:id="@+id/nav_dashboard"
+            android:icon="@mipmap/dashboard_icon"
+            android:title="@string/menu_dashboard"
+
+            />
+        <item
+            android:id="@+id/nav_locations"
+            android:icon="@mipmap/location_icon"
+            android:title="@string/menu_locations"
+            android:iconTint="#FFF"/>
+        <item
+            android:id="@+id/nav_rewards"
+            android:icon="@mipmap/rewards_icon"
+            android:title="@string/menu_rewards" />
+        <item
+            android:id="@+id/nav_drawing"
+            android:icon="@mipmap/drawing_icon"
+            android:title="@string/menu_drawing" />
+        <item
+
+            android:id="@+id/nav_profile"
+            android:icon="@mipmap/profile_icon"
+            android:title="@string/menu_profile" />
+        <item
+            android:id="@+id/nav_privacy_policy"
+            android:icon="@mipmap/privacy_policy_icon"
+            android:title="@string/menu_privacy_policy" />
+
+        <item
+            android:id="@+id/nav_terms_and_conditions"
+            android:icon="@mipmap/terms_and_conditions_icon"
+            android:title="@string/menu_terms_and_conditions" />
+<!--        <item-->
+<!--            android:id="@+id/nav_replay_tutorial"-->
+<!--            android:icon="@mipmap/replay_tutorial_icon"-->
+<!--            android:title="@string/menu_replay_tutorial" />-->
+<!--        <item-->
+<!--            android:id="@+id/nav_contact_suppport"-->
+<!--            android:icon="@mipmap/contact_support_icon"-->
+<!--            android:title="@string/menu_contact_support" />-->
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@mipmap/logout_icon"
+            android:title="@string/menu_logout" />
+
+        <item
+            android:id="@+id/nav_redeem_rewards"
+            android:enabled="false"
+            android:visible="false"
+            android:title="" />
+
+
+    </group>
+
+
+</menu>

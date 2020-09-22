@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.reusable_fragment.ReusableFragment">
+
+     <androidx.constraintlayout.widget.ConstraintLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent">
+
+         <TextView
+             android:id="@+id/title_reusable_textview"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_marginStart="25dp"
+             android:layout_marginTop="25dp"
+             android:fontFamily="@font/proxima_nova_light"
+             android:text="Titulo"
+             android:textColor="@color/colorPrimary"
+             android:textSize="25dp"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toTopOf="parent" />
+
+         <ScrollView
+             android:layout_marginTop="25dp"
+             android:layout_marginBottom="25dp"
+             android:layout_width="0dp"
+             android:layout_height="0dp"
+             android:layout_marginStart="35dp"
+             android:layout_marginEnd="35dp"
+             app:layout_constraintBottom_toBottomOf="parent"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toBottomOf="@+id/title_reusable_textview">
+
+             <TextView
+                 android:id="@+id/description_reusable_textview"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:fontFamily="@font/proxima_nova_light"
+                 android:gravity="top"
+                 android:text="@string/default_wired_text"
+                 android:textAlignment="gravity"
+                 android:textSize="18dp" />
+
+         </ScrollView>
+
+         <WebView
+             android:id="@+id/fragment_web_view"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"/>
+<!--         <ProgressBar-->
+<!--             android:id="@+id/progress_loader"-->
+<!--             style="?android:attr/progressBarStyleLarge"-->
+<!--             android:layout_width="wrap_content"-->
+<!--             android:layout_height="wrap_content"-->
+<!--             android:layout_centerInParent="true"-->
+<!--             android:layout_marginStart="8dp"-->
+<!--             android:layout_marginTop="8dp"-->
+<!--             android:layout_marginEnd="8dp"-->
+<!--             android:layout_marginBottom="8dp"-->
+<!--             app:layout_constraintBottom_toBottomOf="parent"-->
+<!--             app:layout_constraintEnd_toEndOf="parent"-->
+<!--             app:layout_constraintStart_toStartOf="parent"-->
+<!--             app:layout_constraintTop_toTopOf="parent" />-->
+     </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

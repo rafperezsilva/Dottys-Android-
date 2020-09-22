@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/linearLayout8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="80dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="@font/proxima_nova_semibold"
+            android:text="Hours"
+            android:textAlignment="textStart"
+            android:textColor="#404040"
+            android:textFontWeight="1"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/child_textview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/proxima_nova_light"
+            android:text="assadadds\n fsddsfds\n d.dsflkjsljdfslfds"
+            android:textAlignment="textStart"
+            android:textColor="#404040"
+            android:textFontWeight="1"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout8">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="15dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:background="@color/colorTransparent"
+                android:scaleType="centerInside"
+                android:src="@mipmap/map_icon"
+                android:text="Get Directions" />
+
+            <Button
+                android:id="@+id/get_directions_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorTransparent"
+                android:fontFamily="@font/proxima_nova_light"
+                android:paddingLeft="5dp"
+                android:text="Get Directions"
+                android:textAlignment="textEnd"
+                android:textAllCaps="false"
+                android:textColor="#5AB202" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:paddingLeft="15dp">
+
+            <ImageButton
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:background="@color/colorTransparent"
+                android:scaleType="fitXY"
+                android:src="@mipmap/phone_icon"
+                android:text="Get Directions"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/call_location_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorTransparent"
+                android:fontFamily="@font/proxima_nova_light"
+                android:paddingLeft="5dp"
+                android:text="Call"
+                android:textAlignment="textStart"
+                android:textAllCaps="false"
+                android:textColor="#5AB202" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

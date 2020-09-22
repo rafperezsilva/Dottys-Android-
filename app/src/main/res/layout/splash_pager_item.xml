@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00000000">
+
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_weight="0"
+            android:id="@+id/title_pager"
+            style="@style/TextViewPrimaryStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:text="PRUEBS DE TEXTO"
+            android:textSize="26sp"
+            android:fontFamily="@font/proxima_nova_light"
+            />
+
+        <ImageView
+            android:src="@mipmap/dottys_image"
+            android:id="@+id/image_top_pager"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_weight="0"
+             android:scaleType="centerInside" />
+
+        <ImageView
+            android:id="@+id/image_pager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:scaleType="centerInside" />
+
+        <TextView
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="0"
+            android:textSize="17dp"
+            android:fontFamily="@font/proxima_nova_regular"
+            android:id="@+id/subtitle_pager"
+            style="@style/TextViewPrimaryStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:text="PRUEBS DE TEXTO"
+            />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
