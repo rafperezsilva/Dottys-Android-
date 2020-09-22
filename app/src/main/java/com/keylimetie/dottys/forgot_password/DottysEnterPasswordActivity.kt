@@ -22,7 +22,7 @@ class DottysEnterPasswordActivity : DottysBaseActivity(), DottysForgotPasswordDe
         val code = intent.getStringExtra("DATA_CODE")
         val mail = intent.getStringExtra("EMAIL_FORGOT")
         viewFromProfile = intent.getBooleanExtra("VIEW_FROM_PROFILE", false)
-        forgotViewModel.initChangePasswordView(this,code,mail)
+        code?.let { mail?.let { it1 -> forgotViewModel.initChangePasswordView(this, it, it1) } }
     }
 
     override fun sendVerificationPassword(isSucces: Boolean) {

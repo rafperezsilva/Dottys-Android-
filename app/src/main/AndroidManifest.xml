@@ -14,6 +14,7 @@
     <uses-permission android:name="com.keylimetie.dottys.permission.MAPS_RECEIVE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <permission
         android:name="android.permission.BLUETOOTH"
         android:required="false" />
@@ -40,8 +41,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".game_play.roulette.DottysRouletteActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+        <activity
+            android:name=".game_play.roulette.DottysRouletteActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".game_play.DottysSlotMachineActivity" />
         <activity android:name=".game_play.DottysBubbleGameActivity" />
         <activity android:name=".game_play.DottysScratchAndWinActivity" />
@@ -56,15 +58,19 @@
         <activity android:name=".forgot_password.DottysEnterPasswordActivity" />
         <activity android:name=".forgot_password.DottysEnterVerificationCodeActivity" />
         <activity android:name=".forgot_password.DottysVerificationTypeActivity" />
-        <activity android:name=".forgot_password.DottysForgotPasswordMainActivity" /> <!-- <meta-data -->
+        <activity android:name=".forgot_password.DottysForgotPasswordMainActivity" />
+
+        <meta-data android:name="com.onesignal.NotificationOpened.DEFAULT" android:value="DISABLE" />
+
+        <!-- <meta-data -->
         <!-- android:name="com.google.android.maps.v2.API_KEY" -->
         <!-- android:value="AIzaSyDbgunZHBK75Lb-jJmGKV9M6HmPbCn4U1E" /> -->
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBUH7AKtM5vEsx4IpST9tb6-l2LPu9SvtE" />
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+        <!--        <meta-data-->
+        <!--            android:name="com.google.android.geo.API_KEY"-->
+        <!--            android:value="AIzaSyBUH7AKtM5vEsx4IpST9tb6-l2LPu9SvtE" />-->
+        <!--        <meta-data-->
+        <!--            android:name="com.google.android.gms.version"-->
+        <!--            android:value="@integer/google_play_services_version" />-->
 
         <activity android:name=".redeem.DottysRedeemRewardsActivity" />
         <activity
@@ -73,11 +79,10 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".login.DottysLoginActivity" />
         <activity
-            android:name=".splash.DottysSplashActivity"
+            android:name="com.keylimetie.dottys.splash.DottysSplashActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

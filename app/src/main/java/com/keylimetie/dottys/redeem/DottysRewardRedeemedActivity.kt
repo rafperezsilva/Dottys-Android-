@@ -27,11 +27,11 @@ class DottysRewardRedeemedActivity : DottysBaseActivity(), DottysDashboardDelega
         rewardsTypeView = intent.getStringExtra("REDEEM_REWARDS_VIEW_TYPE") ?: ""
         if (rewardsTypeView?.isEmpty() ?: true) {
             var dataLocation = intent.getStringExtra("STORE_LOCATION")
-            rewardsRedemmed = DottysRedeemResponseModel.fromJson(dataLocation)
+            rewardsRedemmed = dataLocation?.let { DottysRedeemResponseModel.fromJson(it) }
             redemeedViewModel.initRewardRedeemedView(this)
         } else {
             var drawingData = intent.getStringExtra("DRAWING_DATA")
-            drawing =  DottysDrawing.fromJson(drawingData)
+            drawing = drawingData?.let { DottysDrawing.fromJson(it) }
             redemeedViewModel.initDrawingEntriesView(this)
         }
         setBackButton()

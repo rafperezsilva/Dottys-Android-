@@ -36,7 +36,7 @@ class DottysEnterVerificationCodeActivity : DottysBaseActivity(), DottysForgotPa
                 getUserPreference()
             }
 
-            forgotViewModel.initVerificationCodeView(this,mail, isRegisterType)
+            mail?.let { it1 -> forgotViewModel.initVerificationCodeView(this, it1, isRegisterType) }
         }
     }
 

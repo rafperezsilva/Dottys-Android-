@@ -8,6 +8,6 @@
     <color name="colorGreen">#5A9402</color>
     <color name="colorDottysGrey">#181818</color>
     <color name="colorTextGrey">#3A3A18</color>
-     <color name="colorSelectedSegment">#A4000000</color>
+    <color name="colorSelectedSegment">#A4000000</color>
     <color name="colorTransparent">#00181818</color>
 </resources>

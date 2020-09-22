@@ -1,5 +1,6 @@
 package com.keylimetie.dottys.ui.locations
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -14,10 +15,9 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
-import com.keylimetie.dottys.DottysMainNavigationActivity
+ import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.GpsTracker
-import com.keylimetie.dottys.Manifest
+
 import com.keylimetie.dottys.R
 import kotlin.properties.Delegates
 
@@ -167,7 +167,7 @@ class DottysLocationsStoreAdapter(
 
     private fun checkPermission() {
 
-        if (ContextCompat.checkSelfPermission(   activity,
+        if (ContextCompat.checkSelfPermission(activity,
                 Manifest.permission.CALL_PHONE)
             != PackageManager.PERMISSION_GRANTED) {
 
