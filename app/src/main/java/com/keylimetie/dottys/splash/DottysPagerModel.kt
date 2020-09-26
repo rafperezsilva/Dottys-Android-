@@ -12,13 +12,13 @@ val mapper = jacksonObjectMapper().apply {
 }
 
 data class DottysPagerModel (
-    @get:JsonProperty(required=true)@field:JsonProperty(required=true)
+    @get:JsonProperty(required=false)@field:JsonProperty(required=false)
     val title: String,
 
-    @get:JsonProperty(required=true)@field:JsonProperty(required=true)
+    @get:JsonProperty(required=false)@field:JsonProperty(required=false)
     val image: Int,
 
-    @get:JsonProperty(required=true)@field:JsonProperty(required=true)
+    @get:JsonProperty(required=false)@field:JsonProperty(required=false)
     val subtitle: String
 ) {
     fun toJson() = mapper.writeValueAsString(this)

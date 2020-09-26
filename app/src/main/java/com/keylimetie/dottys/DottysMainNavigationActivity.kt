@@ -38,7 +38,7 @@ import java.io.IOException
 import kotlin.properties.Delegates
 
 
-@Suppress("DEPRECATION")
+
 class DottysMainNavigationActivity: DottysBaseActivity(), DottysLocationDelegates,
     DottysPagerDelegates, DottysDrawingDelegates, DottysRegisterUserDelegates {//, DottysBeaconStatusDelegate {
     val registerViewModel = DottysRegisterViewModel()

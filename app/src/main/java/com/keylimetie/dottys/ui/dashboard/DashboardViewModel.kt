@@ -4,12 +4,11 @@ package com.keylimetie.dottys.ui.dashboard
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.icu.number.NumberFormatter.with
+import android.icu.number.NumberRangeFormatter.with
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.ListView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
@@ -29,13 +28,11 @@ import com.keylimetie.dottys.models.DottysRewardsModel
 import com.keylimetie.dottys.models.Monthly
 import com.keylimetie.dottys.redeem.DottysRedeemRewardsActivity
 import com.keylimetie.dottys.redeem.DottysRewardRedeemedActivity
-import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconArray
-import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconsModel
-import com.keylimetie.dottys.ui.dashboard.models.DottysDrawingSumaryModel
-import com.keylimetie.dottys.ui.dashboard.models.DottysDrawingSumaryModelElement
+import com.keylimetie.dottys.ui.dashboard.models.*
 import com.keylimetie.dottys.ui.drawing.*
 import com.keylimetie.dottys.utils.getleftDays
 import com.keylimetie.dottys.utils.md5
+import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import org.json.JSONArray
 import org.json.JSONObject
@@ -86,12 +83,12 @@ class DashboardViewModel : ViewModel(), View.OnClickListener, DottysDrawingDeleg
             id.phanton_profile_button -> {
                 showAnalitycsView()
             }
-            id.rigth_roll_pager_button -> {
-                pager?.setCurrentItem(adapter?.getCurrentPage()?.plus( 1) ?: 0, true);
-            }
-            id.left_roll_pager_button -> {
-                pager?.setCurrentItem( adapter?.getCurrentPage()?.minus(1) ?: 0, true);
-            }
+//            id.rigth_roll_pager_button -> {
+//                pager?.setCurrentItem(adapter?.getCurrentPage()?.plus( 1) ?: 0, true);
+//            }
+//            id.left_roll_pager_button -> {
+//                pager?.setCurrentItem( adapter?.getCurrentPage()?.minus(1) ?: 0, true);
+//            }
             id.send_to_support_button -> {
 
                 sendMailToSupport()
@@ -145,15 +142,15 @@ class DashboardViewModel : ViewModel(), View.OnClickListener, DottysDrawingDeleg
     ) {
         mainFragmentActivity = activity
         nameDashboard       = rootView.findViewById<TextView>(id.profile_name_dashboard)
-        locationDashboard   = rootView.findViewById<TextView>(id.location_dashboard_textview)
+//        locationDashboard   = rootView.findViewById<TextView>(id.location_dashboard_textview)
         pointsEarned        = rootView.findViewById<TextView>(id.points_earned_textview)
         cashRewards         = rootView.findViewById<TextView>(id.cash_rewards_textview)
-        weeklyRewards       = rootView.findViewById<TextView>(id.weekly_count_textview)
-        monthlyRewards      = rootView.findViewById<TextView>(id.monthly_count_textview)
-        querterlyRewards    = rootView.findViewById<TextView>(id.quarterly_count_textview)
-        weeklyDays          = rootView.findViewById<TextView>(id.weekly_end_days)
-        monthlyDays         = rootView.findViewById<TextView>(id.monthly_end_days)
-        querterlyDays       = rootView.findViewById<TextView>(id.quarterly_end_days)
+//        weeklyRewards       = rootView.findViewById<TextView>(id.weekly_count_textview)
+//        monthlyRewards      = rootView.findViewById<TextView>(id.monthly_count_textview)
+//        querterlyRewards    = rootView.findViewById<TextView>(id.quarterly_count_textview)
+//        weeklyDays          = rootView.findViewById<TextView>(id.weekly_end_days)
+//        monthlyDays         = rootView.findViewById<TextView>(id.monthly_end_days)
+//        querterlyDays       = rootView.findViewById<TextView>(id.quarterly_end_days)
         profilePhantonButton  =  rootView.findViewById<Button>(id.phanton_profile_button)
 
 
@@ -545,6 +542,66 @@ class DashboardViewModel : ViewModel(), View.OnClickListener, DottysDrawingDeleg
         mQueue.add(jsonObjectRequest)
 
     }
+
+    /* BANNER DASHBOARD */
+    fun getBannerDashboard(mContext: DottysMainNavigationActivity) {
+        val mQueue = Volley.newRequestQueue(mContext)
+        mContext.showLoader()
+
+        val jsonObjectRequest = object : JsonObjectRequest(Method.GET,
+            mContext.baseUrl + "banners/",
+            null,
+            object : Response.Listener<JSONObject> {
+                override fun onResponse(response: JSONObject) {
+                    mContext.hideLoader()
+                    Log.d("BEACON LIST -->",response.toString())
+                    var banners: DottysBannerModel =
+                        DottysBannerModel.fromJson(
+                            response.toString()
+                        )
+                   // userCurrentUserDataObserver?.dottysBeaconList = user
+                    banners.bannerList?.let { fragmentDashBoard?.addPagerDashboardImages(it) }
+
+
+                }
+            },
+            object : Response.ErrorListener {
+                override fun onErrorResponse(error: VolleyError) {
+                    mContext.hideLoader()
+                    if (error.networkResponse == null) {
+                        return
+                    }
+                    val errorRes =
+                        DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
+                    if (errorRes.error?.messages?.size ?: 0 > 0) {
+                        Toast.makeText(
+                            mContext,
+                            errorRes.error?.messages?.first() ?: "",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    Log.e("TAG", error.message, error)
+                }
+            }) { //no semicolon or coma
+
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                val params = HashMap<String, String>()
+                params["Authorization"] = mContext.getUserPreference().token!!
+                return params
+            }
+            override fun parseNetworkResponse(response: NetworkResponse?): Response<JSONObject> {
+                println(response.toString())
+
+                return super.parseNetworkResponse(response)
+            }
+
+
+        }
+        mQueue.add(jsonObjectRequest)
+
+    }
+
     /*BEACON LIST REQUEST */
     fun getBeaconList(mContext: DottysMainNavigationActivity) {
         val mQueue = Volley.newRequestQueue(mContext)
@@ -620,12 +677,12 @@ class DashboardViewModel : ViewModel(), View.OnClickListener, DottysDrawingDeleg
             drawingList.add(drawing)
         }
 
-        leftRollPagerButton = dashboardView?.findViewById<Button>(id.left_roll_pager_button)
-        rightRollPagerButton =  dashboardView?.findViewById<Button>(id.rigth_roll_pager_button)
+       // leftRollPagerButton = dashboardView?.findViewById<Button>(id.left_roll_pager_button)
+       // rightRollPagerButton =  dashboardView?.findViewById<Button>(id.rigth_roll_pager_button)
         leftRollPagerButton?.setOnClickListener(this)
         rightRollPagerButton?.setOnClickListener(this)
         view.windowManager.defaultDisplay.getMetrics(view.displayMetrics)
-        pager = view.findViewById<ViewPager>(id.pager_dashboard)
+       // pager = view.findViewById<ViewPager>(id.pager_dashboard)
         pager?.adapter = DashboardPagerAdapter(view, drawingList)
         adapter = DashboardPagerAdapter(view, drawingList)
         pager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
