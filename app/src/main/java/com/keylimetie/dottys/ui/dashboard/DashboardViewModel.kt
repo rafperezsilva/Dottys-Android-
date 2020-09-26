@@ -280,7 +280,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener, DottysDrawingDeleg
 
     private fun getDrawingSummary(mContext: DottysBaseActivity) {
         val mQueue = Volley.newRequestQueue(mContext)
-        mContext.showLoader()
+        //mContext.showLoader()
         val jsonArrayRequest =
             object : JsonArrayRequest(Method.GET, mContext.baseUrl + "drawings/summary", null,
                 Response.Listener<JSONArray> { response ->
@@ -324,7 +324,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener, DottysDrawingDeleg
     fun getCurrentUserRequest(mContext: DottysBaseActivity) {
         val mQueue = Volley.newRequestQueue(mContext)
 
-        mContext.showLoader()
+       // mContext.showLoader()
 
         val jsonObjectRequest = object : JsonObjectRequest(Method.GET,
             mContext.baseUrl + "users/currentUser/",
@@ -426,7 +426,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener, DottysDrawingDeleg
     fun getNearsDottysLocations(mContext: DottysMainNavigationActivity) {
         val mQueue = Volley.newRequestQueue(mContext)
 
-        mContext.showLoader()
+        //mContext.showLoader()
 
         val jsonObjectRequest = object : JsonObjectRequest(Method.GET,
             mContext.baseUrl + "locations/"+mContext.getUserPreference().homeLocationID,
@@ -490,7 +490,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener, DottysDrawingDeleg
 
     fun getUserRewards(mContext: DottysBaseActivity) {
         val mQueue = Volley.newRequestQueue(mContext)
-        mContext.showLoader()
+       // mContext.showLoader()
 
         val jsonObjectRequest = object : JsonObjectRequest(Method.GET,
             mContext.baseUrl + "rewards/currentUser/?redeemed=true",
@@ -546,7 +546,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener, DottysDrawingDeleg
     /* BANNER DASHBOARD */
     fun getBannerDashboard(mContext: DottysMainNavigationActivity) {
         val mQueue = Volley.newRequestQueue(mContext)
-        mContext.showLoader()
+        //mContext.showLoader()
 
         val jsonObjectRequest = object : JsonObjectRequest(Method.GET,
             mContext.baseUrl + "banners/",
@@ -605,7 +605,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener, DottysDrawingDeleg
     /*BEACON LIST REQUEST */
     fun getBeaconList(mContext: DottysMainNavigationActivity) {
         val mQueue = Volley.newRequestQueue(mContext)
-        mContext.showLoader()
+        //mContext.showLoader()
 
         val jsonObjectRequest = object : JsonObjectRequest(Method.GET,
             mContext.baseUrl + "beacons/?limit=500",

@@ -197,7 +197,7 @@ class DrawingViewModel : ViewModel() {
 
     fun getDrawingSummary(mContext: DottysMainNavigationActivity, locationId: String) {
         val mQueue = Volley.newRequestQueue(mContext)
-        mContext.showLoader()
+      //  mContext.showLoader()
         val jsonObjectRequest = object : JsonObjectRequest(Method.GET,
             mContext.baseUrl+"locations/"+locationId,
             null,

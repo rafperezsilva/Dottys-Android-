@@ -41,32 +41,39 @@ class DrawingFragment : Fragment(), DottysDrawingDelegates, DottysDashboardDeleg
     override fun onResume() {
         super.onResume()
         var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
-        dashboardViewModel.userCurrentUserDataObserver = DottysCurrentUserObserver(this)
-        activity?.let { dashboardViewModel.getCurrentUserRequest(it) }
+        activity?.let { drawingViewModel.initViewSetting(this, null, it, viewRoot) }
+        activity?.getUserPreference()?.let { fillItemsInView(it) }
+
+//        dashboardViewModel.userCurrentUserDataObserver = DottysCurrentUserObserver(this)
+//        activity?.let { dashboardViewModel.getCurrentUserRequest(it) }
 
     }
+
+
     override fun getUserRewards(rewards: DottysDrawingRewardsModel) {
     }
 
     override fun getUserDrawings(drawing: DottysDrawingUserModel) {
         drawingViewModel.initListView()
+        var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
+        dashboardViewModel.userCurrentUserDataObserver = DottysCurrentUserObserver(this)
+        activity?.let { dashboardViewModel.getCurrentUserRequest(it) }
     }
+
+
 
     override fun getDrawingSummary(dawingSummary: DottysDrawingSumaryModel) {}
 
     override fun getCurrentUser(currentUser: DottysLoginResponseModel) {
-        var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
-        activity?.let { drawingViewModel.initViewSetting(this, null, it, viewRoot) }
-        var userAux = activity?.getUserPreference()
-        userAux?.points = currentUser.points
-
+     var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
+//        activity?.let { drawingViewModel.initViewSetting(this, null, it, viewRoot) }
+         var userAux = activity?.getUserPreference()
+       userAux?.points = currentUser.points
         activity?.saveDataPreference(PreferenceTypeKey.USER_DATA,userAux?.toJson().toString())
-        drawingViewModel.titleTotalPoints?.text = drawingViewModel.attributedRedeemText(
-            NumberFormat.getIntegerInstance()
-                .format(currentUser.points ?: (0).toLong())
-        )
-    }
+        activity?.getUserPreference()?.let { fillItemsInView(it) }
 
+    }
+//region
     override fun getUserRewards(rewards: DottysRewardsModel) {}
 
     override fun getGlobalData(gloabalData: DottysGlobalDataModel) {}
@@ -75,4 +82,11 @@ class DrawingFragment : Fragment(), DottysDrawingDelegates, DottysDashboardDeleg
 
     override fun getBeaconList(beaconList: DottysBeaconsModel) { }
 
+//endregion
+  private fun fillItemsInView(currentUser: DottysLoginResponseModel){
+      drawingViewModel.titleTotalPoints?.text = drawingViewModel.attributedRedeemText(
+        NumberFormat.getIntegerInstance()
+            .format(currentUser.points ?: (0).toLong())
+    )
+}
 }
