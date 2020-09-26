@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ExpandableListView
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
@@ -39,7 +40,7 @@ class LocationsViewModel : ViewModel() {
     var fragmentMap = DottysLocationsMapFragment()
     var locationFragment = LocationsFragment()
     var rootView: View? = null
-    var searchView: FloatingSearchView? = null
+    var searchView: androidx.appcompat.widget.SearchView? = null
 
     fun initLocationView(
         locationFragment: LocationsFragment,
@@ -60,23 +61,32 @@ class LocationsViewModel : ViewModel() {
         }
 
         searchView =
-            rootView.findViewById<FloatingSearchView>(R.id.search_store_view)
-        searchView?.setOnQueryChangeListener(FloatingSearchView.OnQueryChangeListener { oldQuery, newQuery -> //get suggestions based on newQuery
-            println("$oldQuery / $newQuery")
-            // locationsStores?.let { filterQueryData(it,newQuery.toString()) }
-            if (newQuery == "") {
-                hideKeyboard()
-                screenDimensionManager(LocationViewType.EXPANDED_TYPE)
-            } else {
-                screenDimensionManager(LocationViewType.SEARCH_TYPE)
+            rootView.findViewById<androidx.appcompat.widget.SearchView>(R.id.search_store_view)
+        searchView?.setOnQueryTextListener(object: androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                TODO("Not yet implemented")
             }
-            locationsStores?.let { filterQueryData(it, newQuery.toString()) }?.let {
-                initExpandableList(
-                    activityDrawing,
-                    it
-                )
+
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText == "") {
+                    hideKeyboard()
+                    screenDimensionManager(LocationViewType.EXPANDED_TYPE)
+                } else {
+                    screenDimensionManager(LocationViewType.SEARCH_TYPE)
+                }
+                locationsStores?.let { filterQueryData(it, newText.toString()) }?.let {
+                    initExpandableList(
+                        activityDrawing,
+                        it
+                    )
+                }
+                return true
             }
+
         })
+
+
         locationDataObserver = DottysLocationStoresObserver(locationFragment)
         getLocationsDottysRequest(
             activityDrawing,

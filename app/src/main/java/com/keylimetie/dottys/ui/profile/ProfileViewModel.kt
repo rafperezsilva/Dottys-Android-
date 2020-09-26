@@ -7,23 +7,37 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.provider.MediaStore
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.requestPermissions
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModel
+import com.android.volley.AuthFailureError
 import com.android.volley.Response
+import com.android.volley.VolleyError
 import com.android.volley.toolbox.ImageRequest
+import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.keylimetie.dottys.*
 import com.keylimetie.dottys.forgot_password.DottysVerificationTypeActivity
 import com.keylimetie.dottys.register.DottysProfilePictureActivity
+import com.keylimetie.dottys.ui.locations.DottysLocationsStoresModel
 import com.keylimetie.dottys.utils.md5
+import com.keylimetie.dottys.utils.stringToDate
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.serialization.json.JsonObject
+import org.json.JSONObject
+import java.util.HashMap
 
-class ProfileViewModel : ViewModel(), View.OnClickListener, DottysOnProfilePictureTakenDelegate{
+class ProfileViewModel(fragmentProfile: ProfileFragment,profileData:DottysLoginResponseModel?) : ViewModel(), View.OnClickListener,
+    DottysOnProfilePictureTakenDelegate {
     var imageViewProfile : CircleImageView? = null
     var nameProfileTextView : TextView? = null
     var sinceProfileTextView : TextView? = null
@@ -37,10 +51,10 @@ class ProfileViewModel : ViewModel(), View.OnClickListener, DottysOnProfilePictu
     private var userLocation:      TextView? = null
     private var activity: DottysMainNavigationActivity? = null
     private var context: Context? = null
-    private var userData: DottysLoginResponseModel? = null
+    private var userData: DottysLoginResponseModel? = profileData
 
-    var fragent: ProfileFragment?  = null
-    val pictureActivity = DottysProfilePictureActivity()
+    var fragent: ProfileFragment?  = fragmentProfile
+    private val pictureActivity = DottysProfilePictureActivity()
 
     fun initProfileView(
        rootView: View,
@@ -72,21 +86,20 @@ class ProfileViewModel : ViewModel(), View.OnClickListener, DottysOnProfilePictu
 
 
 
-    fun setNameDataProfile(){
+    private fun setNameDataProfile(){
 
         nameProfileTextView?.text = userData?.fullName
-        sinceProfileTextView?.text = "Wired Member Since 2019"
-
-        firstNameEditText?.setText(userData?.firstName)
+        sinceProfileTextView?.text = "Member Since ${userData?.createdAt?.stringToDate()?.year}"
+        firstNameEditText?.setText(userData?.firstName ?: "")
         lastNameEditText?.setText(userData?.lastName)
         phoneEditText?.setText(userData?.cell)
         emailEditText?.setText(userData?.email)
-        passwordEditButton?.setText("Change Password")
+        passwordEditButton?.text = "Change Password"
         myPlayLocation?.setText(userData?.zip)
         userLocation?.text = "Dottys\n ${userData?.address1}\n${userData?.city}. ${userData?.state} ${userData?.zip}"
     }
 
-    fun setImageProfile(rootActivity: DottysBaseActivity){
+    private fun setImageProfile(rootActivity: DottysBaseActivity){
         val email = rootActivity?.getUserPreference()?.email//"mrirenita@gmail.com"
         var url = "https://www.gravatar.com/avatar/" + email?.md5() + "?s=400&r=pg&d=404"
         if (rootActivity?.getUserPreference()?.profilePicture != null){
@@ -94,15 +107,25 @@ class ProfileViewModel : ViewModel(), View.OnClickListener, DottysOnProfilePictu
         }
         val mQueue = Volley.newRequestQueue(rootActivity)
         val request = ImageRequest(url,
-            Response.Listener { bitmap ->
+            { bitmap ->
                 imageViewProfile?.setImageBitmap(bitmap)
                // getLocationDrawing(fragment)
             }, 0, 0, null,
-            Response.ErrorListener {
+            {
                 imageViewProfile?.setImageResource(R.mipmap.default_profile_image)
             })
         mQueue.add(request)
     }
+
+
+    fun getDataToUpdate() {
+        var data = activity?.getUserPreference()
+        data?.firstName = firstNameEditText?.text.toString()
+        data?.lastName = lastNameEditText?.text.toString()
+        data?.fullName = "${data?.firstName} ${data?.lastName}"
+        data?.let { uploadProfile(it) }
+    }
+
 
     override fun onClick(v: View?) {
         when (v?.id) {
@@ -118,7 +141,7 @@ class ProfileViewModel : ViewModel(), View.OnClickListener, DottysOnProfilePictu
         }
     }
 
-    fun openCamera() {
+    private fun openCamera() {
         val values = ContentValues()
         values.put(MediaStore.Images.Media.TITLE, "New Picture")
         values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera")
@@ -130,7 +153,7 @@ class ProfileViewModel : ViewModel(), View.OnClickListener, DottysOnProfilePictu
         activity?.startActivityForResult(cameraIntent, pictureActivity.IMAGE_CAPTURE_CODE)
     }
 
-    fun requestCameraPermission(){
+    private fun requestCameraPermission(){
         if (ActivityCompat.checkSelfPermission(
                 activity!!,
                 Manifest.permission.CAMERA
@@ -155,6 +178,56 @@ class ProfileViewModel : ViewModel(), View.OnClickListener, DottysOnProfilePictu
 
     override fun onPictureTaken(bitmap: Bitmap?) {
         imageViewProfile?.setImageBitmap(bitmap)
+    }
+
+
+
+    private fun uploadProfile(profileData: DottysLoginResponseModel) {
+        val mQueue = Volley.newRequestQueue(activity)
+     //   activity?.showLoader()
+        val jsonProfile = JSONObject(profileData.toJson())
+        val jsonObjectRequest = object : JsonObjectRequest(
+            Method.PATCH,
+            activity?.baseUrl + "users/updateProfile",
+            jsonProfile,
+            Response.Listener<JSONObject> { response ->
+                activity?.hideLoader()
+                val userData: DottysLoginResponseModel =
+                    DottysLoginResponseModel.fromJson(
+                        response.toString()
+                    )
+                var user = userData
+                user.token = activity?.getUserPreference()?.token
+                activity?.saveDataPreference(PreferenceTypeKey.USER_DATA, user.toJson())
+            },
+            object : Response.ErrorListener {
+                override fun onErrorResponse(error: VolleyError) {
+                    activity?.hideLoader()
+
+                    if (error.networkResponse ==  null){return}
+                    val errorRes =
+                        DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
+                    if (errorRes.error?.messages?.size ?: 0 > 0) {
+                        Toast.makeText(
+                            activity,
+                            errorRes.error?.messages?.first() ?: "",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    Log.e("TAG", error.message, error)
+                }
+            }) { //no semicolon or coma
+
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                val params = HashMap<String, String>()
+                params["Authorization"] = activity?.getUserPreference()?.token!!
+                return params
+            }
+
+        }
+        mQueue.add(jsonObjectRequest)
+
     }
 
 

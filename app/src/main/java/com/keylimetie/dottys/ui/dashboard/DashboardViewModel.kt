@@ -165,7 +165,7 @@ class DashboardViewModel : ViewModel(), View.OnClickListener, DottysDrawingDeleg
 
 
     private fun fillItemsAtDashboards(rewardsLoaction: DottysDrawingRewardsModel){
-        nameDashboard?.text = userCurrentUserDataObserver?.currentUserModel?.fullName
+        nameDashboard?.text = mainFragmentActivity?.getUserPreference()?.fullName
         val stringFormated: String = NumberFormat.getIntegerInstance()
             .format(userCurrentUserDataObserver?.currentUserModel?.points)
         cashRewards?.text = "$" + getCashForDrawing()

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
+
     tools:context=".splash.DottysSplashActivity">
 
     <!--    <TextView-->
@@ -17,74 +18,83 @@
     <!--        app:layout_constraintLeft_toLeftOf="parent"-->
     <!--        app:layout_constraintRight_toRightOf="parent"-->
     <!--        app:layout_constraintTop_toBottomOf="@+id/splashViewPager" />-->
-
-    <com.viewpagerindicator.CirclePageIndicator
-        android:id="@+id/indicator"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="15dp"
-        android:gravity="bottom"
-        android:padding="10dip"
-        app:centered="true"
-        app:layout_constraintBottom_toBottomOf="@+id/splashViewPager"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:pageColor="@color/colorSecundary"
-
-        app:strokeColor="@color/colorPrimary" />
-
-    <TextView
-        android:layout_marginBottom="3dp"
-        android:fontFamily="@font/proxima_nova_regular"
-        android:textColor="#FFF"
-        android:textAlignment="center"
-        android:id="@+id/version_app"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/splash_page_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/splashViewPager"
-        android:layout_width="409dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
-
-    </androidx.viewpager.widget.ViewPager>
-
-    <LinearLayout
-
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:background="@color/colorSecundary"
-        android:orientation="horizontal"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/login_splash_button"
-            style="@style/ButtonPrimaryStyle"
+        <com.viewpagerindicator.CirclePageIndicator
+            android:id="@+id/indicator"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="15dp"
+            android:gravity="bottom"
+            android:padding="10dip"
+            app:centered="true"
+            app:layout_constraintBottom_toBottomOf="@+id/splashViewPager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:pageColor="@color/colorSecundary"
+
+            app:strokeColor="@color/colorPrimary" />
+
+        <TextView
+            android:id="@+id/version_app"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#00000000"
-            android:text="LOG IN" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:fontFamily="@font/proxima_nova_regular"
+            android:textAlignment="center"
+            android:textColor="#FFF"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
-            android:id="@+id/sign_up_splash_button"
-            style="@style/ButtonPrimaryStyle"
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/splashViewPager"
+            android:layout_width="409dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </androidx.viewpager.widget.ViewPager>
+
+        <LinearLayout
+
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#00000000"
-            android:text="SIGN UP" />
-    </LinearLayout>
+            android:layout_height="65dp"
+            android:background="@color/colorSecundary"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
+            <Button
+                android:id="@+id/login_splash_button"
+                style="@style/ButtonPrimaryStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#00000000"
+                android:text="LOG IN" />
+
+            <Button
+                android:id="@+id/sign_up_splash_button"
+                style="@style/ButtonPrimaryStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#00000000"
+                android:text="SIGN UP" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

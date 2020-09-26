@@ -4,8 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.util.Log
 import android.widget.Button
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModel
 import androidx.viewpager.widget.ViewPager
 import com.keylimetie.dottys.DottysBaseActivity
@@ -20,13 +22,19 @@ class DottysSplashViewModel : ViewModel() {
     private lateinit var viewPager: ViewPager
     private lateinit var loginButton: Button
     private lateinit var sigupButton: Button
+      lateinit var conainer: ConstraintLayout
 
      fun initView(context: DottysSplashActivity){
         viewPager = context.findViewById(R.id.splashViewPager)
         loginButton = context.findViewById(R.id.login_splash_button)
         sigupButton = context.findViewById(R.id.sign_up_splash_button)
+         conainer = context.findViewById(R.id.splash_page_container)
 
-
+         conainer.alpha = 0f
+         if ((context.getUserPreference().token?.isEmpty() != false).not()) {
+             val intent = Intent(context, DottysMainNavigationActivity::class.java)
+             context.startActivity(intent)
+         }
          context.windowManager.defaultDisplay.getMetrics(context.displayMetrics)
          val appVersionLabel = context.findViewById<TextView>(R.id.version_app)
          appVersionLabel.text = context.getVersionApp(context)
@@ -39,13 +47,11 @@ class DottysSplashViewModel : ViewModel() {
          indicator.setViewPager(viewPager)
          buttonLisener(context)
 
-         if ((context.getUserPreference().token?.isEmpty() != false).not()) {
-             val intent = Intent(context, DottysMainNavigationActivity::class.java)
-             context.startActivity(intent)
-         }
+
     }
 
     private fun initSplashData(context:Activity):ArrayList<DottysPagerModel>{
+
         val firstSplash = DottysPagerModel(
             "",
             R.mipmap.dottys_splash_first_image,
@@ -87,6 +93,7 @@ class DottysSplashViewModel : ViewModel() {
             val intent = Intent(context, DottysRegisterActivity::class.java)
             context.startActivity(intent)
         }
+//        conainer.alpha = 1f
     }
 
 

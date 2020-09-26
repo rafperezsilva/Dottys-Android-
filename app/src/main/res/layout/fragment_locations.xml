@@ -32,45 +32,52 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/map_view_fragment">
 
-        <RelativeLayout
-
-            android:id="@+id/relativeLayout"
-            android:layout_width="0dp"
-            android:layout_height="55dp"
-            android:gravity="center"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="top|center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.arlib.floatingsearchview.FloatingSearchView
-                android:id="@+id/search_store_view"
+<!--            <com.arlib.floatingsearchview.FloatingSearchView-->
 
-                style="@style/SearchView"
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/search_store_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:backgroundTintMode="screen"
-                android:elevation="0dp"
-                android:textAlignment="textStart"
-                app:floatingSearch_actionMenuOverflowColor="#FFF"
+                android:layout_height="match_parent"
+
+                android:layout_weight="6"
+                android:minHeight="55dp"
+
+                app:floatingSearch_viewTextColor="@color/colorTextGrey"
+                app:floatingSearch_actionMenuOverflowColor="#000"
                 app:floatingSearch_close_search_on_keyboard_dismiss="true"
                 app:floatingSearch_dismissFocusOnItemSelection="true"
                 app:floatingSearch_leftActionMode="showSearch"
+                  android:baselineAligned="true"
+                android:orientation="horizontal"
+                android:gravity="left"
+
+                android:foregroundGravity="left"
                 app:floatingSearch_searchHint="Search for a place or address"
                 app:floatingSearch_showOverFlowMenu="false"
-                app:floatingSearch_showSearchKey="true" />
-        </RelativeLayout>
+                app:floatingSearch_showSearchKey="false"/>
 
-        <ExpandableListView
+            <ExpandableListView
+                android:id="@+id/list_stores"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:groupIndicator="@null"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </LinearLayout>
 
-            android:id="@+id/list_stores"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:groupIndicator="@null"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
