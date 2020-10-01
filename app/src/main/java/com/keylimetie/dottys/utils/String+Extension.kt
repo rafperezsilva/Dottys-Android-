@@ -17,6 +17,14 @@ fun String.md5(): String {
 fun String.stringToDate(): Date {
     return SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSS").parse(this.replace("Z", ""))
 }
+fun String.stringGetYear(): Int {
+    val date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSS").parse(this.replace("Z", ""))
+    val cal = Calendar.getInstance(TimeZone.getTimeZone("America/Los_Angeles"))
+
+    cal.time = date
+    return cal.get(Calendar.YEAR)
+
+}
 
 fun String.getleftDays(): String {
     val date: Date =

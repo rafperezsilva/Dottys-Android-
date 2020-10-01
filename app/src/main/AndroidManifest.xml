@@ -42,6 +42,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         android:usesCleartextTraffic="true">
+        <receiver android:name=".utils.geofence.GeofenceBroadcastReceiver"/>
         <activity
             android:name=".game_play.roulette.DottysRouletteActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />

@@ -37,11 +37,11 @@ val mapper = jacksonObjectMapper().apply {
 }
 
 data class DottysLocationsStoresModel(
-    val total: Long? = null,
-    val limit: Long? = null,
-    val page: Long? = null,
-    val pages: Long? = null,
-    val locations: List<DottysStoresLocation>? = null
+    var total: Long? = 0,
+    var limit: Long? = 0,
+    var page: Long? = 0,
+    var pages: Long? = 0,
+    var locations: ArrayList<DottysStoresLocation>? = ArrayList<DottysStoresLocation>()
 ) {
     fun toJson() = mapper.writeValueAsString(this)
 

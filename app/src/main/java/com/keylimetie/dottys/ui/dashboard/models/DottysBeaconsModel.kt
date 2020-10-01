@@ -57,7 +57,7 @@ data class DottysBeaconArray (
         fun fromJson(json: String) = mapperBeacons.readValue<DottysBeaconArray>(json)
     }
 }
-data class DottysBeacon (
+data class  DottysBeacon (
     @get:JsonProperty("_id")@field:JsonProperty("_id")
     var id: String? = null,
 

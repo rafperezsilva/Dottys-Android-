@@ -30,13 +30,14 @@ import com.keylimetie.dottys.forgot_password.DottysVerificationTypeActivity
 import com.keylimetie.dottys.register.DottysProfilePictureActivity
 import com.keylimetie.dottys.ui.locations.DottysLocationsStoresModel
 import com.keylimetie.dottys.utils.md5
+import com.keylimetie.dottys.utils.stringGetYear
 import com.keylimetie.dottys.utils.stringToDate
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.serialization.json.JsonObject
 import org.json.JSONObject
 import java.util.HashMap
 
-class ProfileViewModel(fragmentProfile: ProfileFragment,profileData:DottysLoginResponseModel?) : ViewModel(), View.OnClickListener,
+class ProfileViewModel(activityMain: DottysMainNavigationActivity?,profileData:DottysLoginResponseModel?) : ViewModel(), View.OnClickListener,
     DottysOnProfilePictureTakenDelegate {
     var imageViewProfile : CircleImageView? = null
     var nameProfileTextView : TextView? = null
@@ -49,11 +50,11 @@ class ProfileViewModel(fragmentProfile: ProfileFragment,profileData:DottysLoginR
     private var passwordEditButton:  Button? = null
     private var myPlayLocation:    EditText? = null
     private var userLocation:      TextView? = null
-    private var activity: DottysMainNavigationActivity? = null
+    private var activity: DottysMainNavigationActivity? = activityMain
     private var context: Context? = null
     private var userData: DottysLoginResponseModel? = profileData
 
-    var fragent: ProfileFragment?  = fragmentProfile
+    var fragent: ProfileFragment?  = null
     private val pictureActivity = DottysProfilePictureActivity()
 
     fun initProfileView(
@@ -89,7 +90,7 @@ class ProfileViewModel(fragmentProfile: ProfileFragment,profileData:DottysLoginR
     private fun setNameDataProfile(){
 
         nameProfileTextView?.text = userData?.fullName
-        sinceProfileTextView?.text = "Member Since ${userData?.createdAt?.stringToDate()?.year}"
+        sinceProfileTextView?.text = "Member Since ${userData?.createdAt?.stringGetYear()}"
         firstNameEditText?.setText(userData?.firstName ?: "")
         lastNameEditText?.setText(userData?.lastName)
         phoneEditText?.setText(userData?.cell)
@@ -123,7 +124,7 @@ class ProfileViewModel(fragmentProfile: ProfileFragment,profileData:DottysLoginR
         data?.firstName = firstNameEditText?.text.toString()
         data?.lastName = lastNameEditText?.text.toString()
         data?.fullName = "${data?.firstName} ${data?.lastName}"
-        data?.let { uploadProfile(it) }
+        data?.let { uploadProfile(it, activity) }
     }
 
 
@@ -182,7 +183,7 @@ class ProfileViewModel(fragmentProfile: ProfileFragment,profileData:DottysLoginR
 
 
 
-    private fun uploadProfile(profileData: DottysLoginResponseModel) {
+      fun uploadProfile(profileData: DottysLoginResponseModel, activity: DottysMainNavigationActivity?) {
         val mQueue = Volley.newRequestQueue(activity)
      //   activity?.showLoader()
         val jsonProfile = JSONObject(profileData.toJson())
@@ -199,6 +200,9 @@ class ProfileViewModel(fragmentProfile: ProfileFragment,profileData:DottysLoginR
                 var user = userData
                 user.token = activity?.getUserPreference()?.token
                 activity?.saveDataPreference(PreferenceTypeKey.USER_DATA, user.toJson())
+
+
+
             },
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {

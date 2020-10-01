@@ -20,7 +20,7 @@ android {
         minSdkVersion 24
         targetSdkVersion 30
         versionCode 1
-        versionName "1.0"
+        versionName "1"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
          manifestPlaceholders = [
@@ -81,7 +81,8 @@ dependencies {
     implementation 'com.clock.scratch:Scratch:1.0.0'
     implementation 'io.coil-kt:coil:1.0.0-rc3'
     implementation 'com.android.support:multidex:1.0.3'
-
+    implementation 'org.skyscreamer:jsonassert:1.5.0'
+   // implementation 'com.google.android.gms.location.Geofence:17.0.0'
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0-RC2") // JVM dependency
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

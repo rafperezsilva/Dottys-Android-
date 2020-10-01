@@ -44,12 +44,12 @@ class DottysRegisterActivity : DottysBaseActivity(), DatePickerDialog.OnDateSetL
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         val c: Calendar = Calendar.getInstance()
         val dateSelected = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            LocalDate.of(year,month,dayOfMonth)
+            LocalDate.of(year,month + 1,dayOfMonth)
         } else {
             return
         }
         val currentDate = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            LocalDate.of(c.get(Calendar.YEAR) - 18,c.get(Calendar.MONTH),c.get(Calendar.DAY_OF_MONTH))
+            LocalDate.of(c.get(Calendar.YEAR) - 18,c.get(Calendar.MONTH) + 1,c.get(Calendar.DAY_OF_MONTH))
         } else {
             return
         }
@@ -57,7 +57,7 @@ class DottysRegisterActivity : DottysBaseActivity(), DatePickerDialog.OnDateSetL
             registerViewModel.birthdateEditText?.setText("")
             Toast.makeText(this, "You must be 21 years old to participate", Toast.LENGTH_LONG).show()
         } else {
-            registerViewModel.birthdateEditText?.setText("$month / $dayOfMonth / $year")
+            registerViewModel.birthdateEditText?.setText("${month + 1} / $dayOfMonth / $year")
         }
     }
 

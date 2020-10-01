@@ -10,17 +10,20 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.keylimetie.dottys.DottysMainNavigationActivity
+import com.keylimetie.dottys.GpsTracker
 import com.keylimetie.dottys.R
+import com.keylimetie.dottys.utils.getLocation
 
 class DottysLocationsMapFragment : SupportMapFragment(), OnMapReadyCallback,
     DottysStoreListDelegates {
     private lateinit var mMap: GoogleMap
 
-    var initial_latitude = -34.0
-    var initial_longitude = 151.0
-    var initial_marker = "Seed nay"
+    var initialLatitude : Double? = 41.8563329
+    var initialLongitude: Double? =  -87.8488141
+    var initialMarker = "Seed nay"
     var markersList = ArrayList<MarkerOptions>()
-    var lcoationStore = ArrayList<DottysStoresLocation>()
+    var locationStore = ArrayList<DottysStoresLocation>()
 
 
     override fun onInflate(context: Context, attrs: AttributeSet, savedInstanceState: Bundle?) {
@@ -34,17 +37,17 @@ class DottysLocationsMapFragment : SupportMapFragment(), OnMapReadyCallback,
         )
 
         try {
-            val provided_latitude =
-                typedArray.getFloat(R.styleable.MyyMap_latitude, initial_latitude.toFloat())
-            initial_latitude = provided_latitude.toDouble()
+            val providedLatitude =
+                typedArray.getFloat(R.styleable.MyyMap_latitude, initialLatitude?.toFloat() ?: 0f)
+            initialLatitude = providedLatitude.toDouble()
 
-            val provided_longitude =
-                typedArray.getFloat(R.styleable.MyyMap_longitude, initial_longitude.toFloat())
-            initial_longitude = provided_longitude.toDouble()
+            val providedLongitude =
+                typedArray.getFloat(R.styleable.MyyMap_longitude, initialLongitude?.toFloat() ?: 0f)
+            initialLongitude = providedLongitude.toDouble()
 
-            val provided_marker =
+            val providedMarker =
                 typedArray.getString(R.styleable.MyyMap_marker)
-            provided_marker?.apply { initial_marker = provided_marker }
+            providedMarker?.apply { initialMarker = providedMarker }
 
         } catch (e: Exception) {
             Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show()
@@ -64,24 +67,26 @@ class DottysLocationsMapFragment : SupportMapFragment(), OnMapReadyCallback,
 //       } else {
         maxMarkers = markersList.size - 1
         //  }
-        var sydney: LatLng? = null
+ //       var sydney: LatLng? = null
         for (locationPosition in 0..maxMarkers) {
-            sydney = lcoationStore[locationPosition].longitude?.let {
-                lcoationStore[locationPosition].latitude?.let { it1 ->
-                    LatLng(
-                        it1,
-                        it
-                    )
-                }
-            }
+//            sydney = locationStore[locationPosition].longitude?.let {
+//                locationStore[locationPosition].latitude?.let { it1 ->
+//                    LatLng(
+//                        it1,
+//                        it
+//                    )
+//                }
+//            }
             mMap.addMarker(markersList[locationPosition])//sydney?.let { MarkerOptions().position(it) })
         }
-        val sydney2 = LatLng(41.587138, -88.309830)
-        mMap.addMarker(sydney2.let {
+        val gps = GpsTracker(activity as DottysMainNavigationActivity)
+        val loc = gps.getLocation(gps)
+        val currentPositionMarker = loc ?: return
+        mMap.addMarker(currentPositionMarker.let {
             MarkerOptions().position(it)
         })
-        // mMap.addMarker(MarkerOptions().position(sydney).title(initial_marker).icon(BitmapDescriptorFactory.fromResource(R.mipmap.cash_image)))
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney2, 10.0f))
+//        // mMap.addMarker(MarkerOptions().position(sydney).title(initial_marker).icon(BitmapDescriptorFactory.fromResource(R.mipmap.cash_image)))
+       mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPositionMarker, 10.0f))
     }
 
     override fun onItemSelected(location: DottysStoresLocation) {

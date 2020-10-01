@@ -37,7 +37,7 @@ import java.io.IOException
         val root = inflater.inflate(R.layout.fragment_profile, container, false)
         var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
         activity?.hideLoader()
-        profileViewModel = ProfileViewModel(this, activity?.getUserPreference())
+        profileViewModel = ProfileViewModel(activity, activity?.getUserPreference())
         profileViewModel?.initProfileView(root, activity, requireContext(), this )
         return root
     }

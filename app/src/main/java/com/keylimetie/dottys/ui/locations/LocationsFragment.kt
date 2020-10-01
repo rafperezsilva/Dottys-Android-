@@ -25,11 +25,13 @@ class LocationsFragment : Fragment(), DottysLocationDelegates {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        locationViewModel =
-            ViewModelProviders.of(this).get(LocationsViewModel::class.java)
+        //locationViewModel =
+       //     ViewModelProviders.of(this).get(LocationsViewModel::class.java)
+
         val root = inflater.inflate(R.layout.fragment_locations, container, false)
         rootView = root
-        var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
+        var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity
+        locationViewModel = activity?.let { LocationsViewModel(it) } ?: return root
         activity?.let { locationViewModel.initLocationView(this, it, root) }
         return root
     }

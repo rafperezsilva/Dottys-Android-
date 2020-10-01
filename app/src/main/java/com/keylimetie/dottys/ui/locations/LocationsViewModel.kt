@@ -5,10 +5,10 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import android.location.Location
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ExpandableListView
-import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
@@ -16,14 +16,11 @@ import com.android.volley.AuthFailureError
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.arlib.floatingsearchview.FloatingSearchView
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.keylimetie.dottys.DottysErrorModel
-import com.keylimetie.dottys.DottysMainNavigationActivity
-import com.keylimetie.dottys.GpsTracker
-import com.keylimetie.dottys.R
+import com.keylimetie.dottys.*
+import com.keylimetie.dottys.utils.geofence.DottysGeofenceActivity
 import org.json.JSONObject
 import java.util.*
 import kotlin.collections.ArrayList
@@ -32,14 +29,16 @@ import kotlin.math.roundToInt
 import kotlin.properties.Delegates
 
 
-class LocationsViewModel : ViewModel() {
+class LocationsViewModel(contextMain: DottysBaseActivity) : ViewModel(),
+    com.keylimetie.dottys.DottysLocationDelegates {
     var stateMapHeigth = 0
-    var activityMain: DottysMainNavigationActivity? = DottysMainNavigationActivity()
+    var activityMain: DottysBaseActivity? = contextMain
     var locationsStores: ArrayList<DottysStoresLocation>? = null
     var locationDataObserver: DottysLocationStoresObserver? = null
     var fragmentMap = DottysLocationsMapFragment()
     var locationFragment = LocationsFragment()
     var rootView: View? = null
+    var locationUser: Location? = null
     var searchView: androidx.appcompat.widget.SearchView? = null
 
     fun initLocationView(
@@ -51,8 +50,10 @@ class LocationsViewModel : ViewModel() {
         locationDataObserver = DottysLocationStoresObserver(locationFragment)
         this.rootView = rootView
 
+
         val gpsTracker = locationFragment.context?.let { GpsTracker(it as DottysMainNavigationActivity) }
-        var locationUser = gpsTracker?.let {
+        gpsTracker?.locationObserver = DottysLocationObserver(this)
+        locationUser = gpsTracker?.let {
             locationFragment.context?.let { _ ->
                 //activityMain?.getLocation(
                     it.getLocation()
@@ -99,12 +100,11 @@ class LocationsViewModel : ViewModel() {
         locations: ArrayList<DottysStoresLocation>,
         query: String
     ): List<DottysStoresLocation> {
-        var flocatinoList = locations.filter {
+        return locations.filter {
             it.address1?.toLowerCase()?.contains(query) ?: false ||
                     it.city?.toLowerCase()?.contains(query) ?: false ||
                     it.zip?.toLowerCase()?.contains(query) ?: false
         }
-        return flocatinoList
     }
 
     @SuppressLint("ServiceCast")
@@ -175,7 +175,9 @@ class LocationsViewModel : ViewModel() {
         fragmentMap =
             locationFragment.childFragmentManager.findFragmentById(R.id.map_view_fragment) as DottysLocationsMapFragment
         fragmentMap.markersList = markersDottysLocation(locations)
-        fragmentMap.lcoationStore = locations as ArrayList<DottysStoresLocation>
+        fragmentMap.locationStore = locations as ArrayList<DottysStoresLocation>
+        fragmentMap.initialLatitude = locationUser?.latitude ?: 41.8563329
+        fragmentMap.initialLongitude = locationUser?.longitude ?: -87.8488141
         fragmentMap.getMapAsync(fragmentMap)
 
         System.err.println("OnCreate end")
@@ -212,16 +214,17 @@ class LocationsViewModel : ViewModel() {
     }
 
     fun getLocationsDottysRequest(
-        mContext: DottysMainNavigationActivity ,//DottysMainNavigationActivity
+        mContext: DottysBaseActivity ,//DottysMainNavigationActivity
         latitude: String,
         longitude: String, fragment:Fragment?
     ) {
         val mQueue = Volley.newRequestQueue(mContext)
-
+        mContext.isUpdatingLocation = true
         mContext.showLoader()
 /*MOCK LOCATION */
-          val locationURL = "locations?distance=150&limit=300&page=1&page=1&latitude=" + latitude + "&longitude=" + longitude
+        val locationURL =  "locations?distance=999999&limit=200&page=1&page=1&latitude=$latitude&longitude=$longitude"
         //  val locationURL = "locations?distance=150&limit=300&page=1&page=1&latitude=41.6030093&longitude=-87.75345159999999"
+
         val jsonObjectRequest = object : JsonObjectRequest(
             Method.GET,
             mContext.baseUrl +locationURL,
@@ -236,9 +239,21 @@ class LocationsViewModel : ViewModel() {
                 locationDataObserver?.dottysLocationsModel = stores
                 stores.locations?.let { initExpandableList(mContext, it) }
                 locationsStores = stores.locations as ArrayList<DottysStoresLocation>?
+                mContext.geofencesAtStore =
+                    stores.locations?.let { DottysGeofenceActivity(mContext, it) }
+
+                mContext.isUpdatingLocation = false
             },
             Response.ErrorListener {
                 mContext.hideLoader()
+                mContext.isUpdatingLocation = false
+                if(mContext.taskAtBackground?.isOnBackground ==  true || it.networkResponse.statusCode == 400) {
+                    var stores = DottysLocationsStoresModel()
+                    stores.locations = ArrayList<DottysStoresLocation>()
+
+                    locationDataObserver?.dottysLocationsModel = stores
+
+                } else
                 if (it.networkResponse == null){
                     Toast.makeText(mContext, "Has lost your internet connection", Toast.LENGTH_LONG).show()
                 } else {
@@ -284,6 +299,14 @@ class LocationsViewModel : ViewModel() {
 
         }
         mQueue.add(jsonObjectRequest)
+    }
+
+
+
+    override fun onLocationChangeHandler(locationGps: Location?) {
+        getLocationsDottysRequest(activityMain ?: return,
+            locationGps?.latitude.toString(),
+            locationGps?.longitude.toString(), locationFragment)
     }
 }
 

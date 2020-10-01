@@ -2,22 +2,20 @@ package com.keylimetie.dottys.ui.dashboard
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.provider.Settings.Secure
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
 import android.widget.ImageView
 import android.widget.ViewFlipper
-import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.keylimetie.dottys.*
 import com.keylimetie.dottys.beacon_service.DottysBeaconActivityDelegate
 import com.keylimetie.dottys.models.DottysGlobalDataModel
 import com.keylimetie.dottys.models.DottysRewardsModel
+import com.keylimetie.dottys.splash.getVersionApp
 import com.keylimetie.dottys.ui.dashboard.models.DottysBanners
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconArray
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconsModel
@@ -30,15 +28,19 @@ import com.keylimetie.dottys.ui.locations.DottysLocationDelegates
 import com.keylimetie.dottys.ui.locations.DottysLocationStoresObserver
 import com.keylimetie.dottys.ui.locations.DottysLocationsStoresModel
 import com.keylimetie.dottys.ui.locations.LocationsViewModel
+import com.keylimetie.dottys.ui.profile.ProfileViewModel
 import com.squareup.picasso.Picasso
+import org.skyscreamer.jsonassert.JSONAssert
 
 
 class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDelegates,
     DottysLocationDelegates, DottysBeaconActivityDelegate , View.OnClickListener, View.OnLayoutChangeListener {
-    private var staticImagesResouerce = arrayListOf<Int>(R.id.dashboard_image_pager0,R.id.dashboard_image_pager1,R.id.dashboard_image_pager2,
-                                                         R.id.dashboard_image_pager3,R.id.dashboard_image_pager4,R.id.dashboard_image_pager5,
-                                                         R.id.dashboard_image_pager6,R.id.dashboard_image_pager7,R.id.dashboard_image_pager8,
-                                                         R.id.dashboard_image_pager9)
+    private var staticImagesResouerce = arrayListOf<Int>(
+        R.id.dashboard_image_pager0, R.id.dashboard_image_pager1, R.id.dashboard_image_pager2,
+        R.id.dashboard_image_pager3, R.id.dashboard_image_pager4, R.id.dashboard_image_pager5,
+        R.id.dashboard_image_pager6, R.id.dashboard_image_pager7, R.id.dashboard_image_pager8,
+        R.id.dashboard_image_pager9
+    )
     private var homeViewModel = DashboardViewModel()
     private var viewFragment: View? = null
     var maxChildFlipperView = 0
@@ -73,6 +75,23 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
 
     }
 
+    private fun updateDataAtProfile(activityMain: DottysMainNavigationActivity?){
+        val android_id = Secure.getString(
+            context?.contentResolver,
+            Secure.ANDROID_ID)
+        var profileData = activityMain?.getUserPreference()
+        profileData?.deviceId = android_id
+        profileData?.appVersion = "Android_${activityMain?.getVersionApp(activityMain)}"
+       try {
+           JSONAssert.assertEquals(profileData?.toJson(), activityMain?.getUserPreference()?.toJson(), false)
+       }
+       catch (e: Error){
+          val profileViewModel = ProfileViewModel(null,profileData)
+           profileData?.let { profileViewModel.uploadProfile(it, activityMain) }
+       }
+
+    }
+
     override fun onStart() {
         super.onStart()
         var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
@@ -85,7 +104,7 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
     /*0*/
     override fun getCurrentUser(currentUser: DottysLoginResponseModel) {
         var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
-        var locationModel = LocationsViewModel()
+        var locationModel = LocationsViewModel(activity ?: return)
         locationModel.locationDataObserver = DottysLocationStoresObserver(this)
         val location = this.activity?.let {
             activity?.gpsTracker?.let { it1 ->
@@ -102,6 +121,7 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
                 this
             ) }
         }
+        updateDataAtProfile(activity)
     }
 
     /*1*/
@@ -134,9 +154,10 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
             PreferenceTypeKey.BEACON_AT_LOCATION,
             beaconList.toJson().toString()
         )
+        homeViewModel.initAnalitycsItems(activity?.getBeaconStatus() ?: DottysBeaconArray())
     }
 
-    /*5*/// -- /*03*/
+    /*5*/// -- /    *03*/
     override fun getUserRewards(rewards: DottysRewardsModel) {
         var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
         homeViewModel.drawingBadgeCounter = rewards.rewards?.filter { it.redeemed == false }?.size ?: 0
@@ -211,11 +232,11 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.flipper_view_dashboard -> {
-              if (flipperViewDashboard?.displayedChild ?: 0 >= maxChildFlipperView - 1) {
-                  flipperViewDashboard?.displayedChild = 0
-                 } else {
-                     flipperViewDashboard?.showNext()
-                 }
+                if (flipperViewDashboard?.displayedChild ?: 0 >= maxChildFlipperView - 1) {
+                    flipperViewDashboard?.displayedChild = 0
+                } else {
+                    flipperViewDashboard?.showNext()
+                }
             }
         }
     }

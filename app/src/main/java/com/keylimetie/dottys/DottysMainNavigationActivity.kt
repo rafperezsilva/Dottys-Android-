@@ -3,7 +3,6 @@ package com.keylimetie.dottys
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
@@ -23,7 +22,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.keylimetie.dottys.redeem.DottysRewardRedeemedActivity
-import com.keylimetie.dottys.register.DottysProfilePictureActivity
 import com.keylimetie.dottys.register.DottysRegisterUserDelegates
 import com.keylimetie.dottys.register.DottysRegisterUserObserver
 import com.keylimetie.dottys.register.DottysRegisterViewModel
@@ -36,7 +34,6 @@ import com.keylimetie.dottys.ui.locations.LocationsViewModel
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import kotlin.properties.Delegates
-
 
 
 class DottysMainNavigationActivity: DottysBaseActivity(), DottysLocationDelegates,
@@ -211,7 +208,8 @@ class DottysMainNavigationActivity: DottysBaseActivity(), DottysLocationDelegate
         //print(locationGps?.latitude)
        //Toast.makeText(this, "Location has chande to \n Lat: ${locationGps?.latitude}\nLong: ${locationGps?.longitude}", Toast.LENGTH_LONG).show()
         val dashboardFragment = DashboardFragment()
-        val locationsViewModel = LocationsViewModel()
+        val locationsViewModel = LocationsViewModel(this)
+        if (getUserPreference().token?.isEmpty() ?: return){ return }
        locationsViewModel.locationDataObserver = DottysLocationStoresObserver(dashboardFragment)
        locationsViewModel.getLocationsDottysRequest(this,locationGps?.latitude.toString(),locationGps?.longitude.toString(), null)
 

@@ -18,7 +18,7 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import kotlin.properties.Delegates
 
-class GpsTracker(private val mContext: DottysMainNavigationActivity) : Service(),
+class GpsTracker(private val mContext: DottysBaseActivity) : Service(),
     LocationListener {
     var locationObserver: DottysLocationObserver? = null
     // flag for GPS status
@@ -37,7 +37,7 @@ class GpsTracker(private val mContext: DottysMainNavigationActivity) : Service()
     protected var locationGpsManager: LocationManager? = null
     fun getLocation(): Location? {
         try {
-            locationObserver = DottysLocationObserver(mContext)
+           // locationObserver = DottysLocationObserver(mContext)
 
             locationGpsManager =
                 mContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -193,7 +193,8 @@ class GpsTracker(private val mContext: DottysMainNavigationActivity) : Service()
     }
 
     override fun onLocationChanged(locationGps: Location) {
-        print("Lat -- $locationGps?.latitude // Long -- $locationGps?.latitud")
+        Log.d("LCOATION ","** Lat -- $locationGps?.latitude // Long -- $locationGps?.latitud")
+
         locationObserver?.locationListener = locationGps
     }
     override fun onProviderDisabled(provider: String) {}
@@ -203,7 +204,10 @@ class GpsTracker(private val mContext: DottysMainNavigationActivity) : Service()
         status: Int,
         extras: Bundle
     ) {
+      //  locationObserver?.locationListener = locationGps
     }
+
+
 
     override fun onBind(arg0: Intent): IBinder? {
         return null

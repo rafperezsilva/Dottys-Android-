@@ -17,6 +17,7 @@ import com.keylimetie.dottys.forgot_password.VerificationMethodType.SMS
 import com.keylimetie.dottys.utils.isValidEmail
 import com.keylimetie.dottys.utils.isValidPassword
 import org.json.JSONObject
+import kotlin.math.roundToInt
 import kotlin.properties.Delegates
 
 
@@ -82,14 +83,26 @@ open class DottysForgotPasswordViewModel : ViewModel()  {
 
         var params = phoneVerificationImageview?.layoutParams
         params?.width = 0
+        val newName = email.split("@")[0]
+        var index : Int = 0
+        if (newName.chars().count() > 1){
+            index = (newName.chars().count() / 2).toFloat().roundToInt()
+
+        }
+        val builder = StringBuilder()
+         for(char in index until  newName.chars().count()) {
+            builder.append("x")
+        }
+        val mailUser = builder?.let { newName.replaceRange(index, newName.lastIndex, it) } + "@${email.split("@")[1]}"
         phoneVerificationImageview?.layoutParams = params
-        emailVerificationTextview?.text = email
-        phoneVerificationTextview?.text = "Send a SMS to verify your account"
+        emailVerificationTextview?.text =  mailUser
+        val phone = verificationActivity.getUserPreference().cell
+        phoneVerificationTextview?.text = "Send a SMS to (XXX) XXX-${phone?.substring((phone?.chars()?.count() ?: 0).toInt() - 4, phone?.chars()?.count()?.toInt() ?: 0)}"
         phoneVerificationTextview?.textAlignment = View.TEXT_ALIGNMENT_CENTER
         buttonValidationClickLisener(verificationActivity, email)
     }
 
-    fun buttonValidationClickLisener(
+    private fun buttonValidationClickLisener(
         verificationActivity: DottysVerificationTypeActivity,
         email: String
     ) {
