@@ -71,7 +71,7 @@ class DrawingViewModel : ViewModel() {
             getUserDrawings(activity!!)
         }
         if (locationId != null) {
-                getDrawingSummary(activity ?: return,locationId)
+                getCurrentDrawingLocation(activity ?: return,locationId)
             }
         activityFragment?.let { segmentTabLisener(it) }
         fragment.context.let {
@@ -195,7 +195,7 @@ class DrawingViewModel : ViewModel() {
         fragment?.view?.visibility = View.VISIBLE
     }
 
-    fun getDrawingSummary(mContext: DottysMainNavigationActivity, locationId: String) {
+    fun getCurrentDrawingLocation(mContext: DottysMainNavigationActivity, locationId: String) {
         val mQueue = Volley.newRequestQueue(mContext)
       //  mContext.showLoader()
         val jsonObjectRequest = object : JsonObjectRequest(Method.GET,

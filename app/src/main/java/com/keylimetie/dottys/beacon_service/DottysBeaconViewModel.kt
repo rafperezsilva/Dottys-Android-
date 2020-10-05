@@ -1,5 +1,6 @@
 package com.keylimetie.dottys.beacon_service
 
+ import android.util.Log
  import android.widget.Toast
  import androidx.lifecycle.ViewModel
  import com.android.volley.AuthFailureError
@@ -24,14 +25,14 @@ class DottysBeaconViewModel: ViewModel(){
         val mQueue = Volley.newRequestQueue(mContext)
         beaconDataObserver = DottysBeaconObserver(mContext)
         val jsonObject = JSONObject(beaconData.toJson())
-        mContext.showLoader()
+      //  mContext.showLoader()
         val jsonObjectRequest = object : JsonObjectRequest(
             Method.POST,
             mContext.baseUrl + "beaconEventSummaries/event",
             jsonObject,
             Response.Listener<JSONObject> { response ->
                 mContext.hideLoader()
-                    println(response.toString())
+                    Log.d("BEACON RECORDED",response.toString())
                     val beaconSummary: DottysBeacon =
                         DottysBeacon.fromJson(
                             response.toString()

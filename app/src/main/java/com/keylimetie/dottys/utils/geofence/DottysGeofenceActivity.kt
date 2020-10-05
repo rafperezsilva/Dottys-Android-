@@ -53,7 +53,7 @@ import com.keylimetie.dottys.utils.geofence.GeofenceErrorMessages.getErrorString
  *
  *
  */
-class DottysGeofenceActivity(
+class DottysGeofenceActivity (
     activity: DottysBaseActivity,
     storeList: ArrayList<DottysStoresLocation>
 ) : OnCompleteListener<Void?> {
@@ -224,8 +224,8 @@ class DottysGeofenceActivity(
             }
             return
         }
-        mGeofencingClient!!.addGeofences(geofencingRequest, geofencePendingIntent)
-            .addOnCompleteListener(this)
+      //  mGeofencingClient!!.addGeofences(geofencingRequest, geofencePendingIntent)
+       //     .addOnCompleteListener(this)
     }
 
     /**

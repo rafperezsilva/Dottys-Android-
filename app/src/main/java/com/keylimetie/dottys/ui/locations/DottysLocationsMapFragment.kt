@@ -9,6 +9,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.GpsTracker
@@ -24,7 +25,7 @@ class DottysLocationsMapFragment : SupportMapFragment(), OnMapReadyCallback,
     var initialMarker = "Seed nay"
     var markersList = ArrayList<MarkerOptions>()
     var locationStore = ArrayList<DottysStoresLocation>()
-
+    var markerPosition: Marker? = null
 
     override fun onInflate(context: Context, attrs: AttributeSet, savedInstanceState: Bundle?) {
         super.onInflate(context, attrs, savedInstanceState)
@@ -79,14 +80,19 @@ class DottysLocationsMapFragment : SupportMapFragment(), OnMapReadyCallback,
 //            }
             mMap.addMarker(markersList[locationPosition])//sydney?.let { MarkerOptions().position(it) })
         }
+        updateMarker()
+    }
+
+    fun updateMarker(){
         val gps = GpsTracker(activity as DottysMainNavigationActivity)
         val loc = gps.getLocation(gps)
         val currentPositionMarker = loc ?: return
-        mMap.addMarker(currentPositionMarker.let {
+        markerPosition?.remove()
+        markerPosition =  mMap.addMarker(currentPositionMarker.let {
             MarkerOptions().position(it)
         })
 //        // mMap.addMarker(MarkerOptions().position(sydney).title(initial_marker).icon(BitmapDescriptorFactory.fromResource(R.mipmap.cash_image)))
-       mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPositionMarker, 10.0f))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPositionMarker, 10.0f))
     }
 
     override fun onItemSelected(location: DottysStoresLocation) {

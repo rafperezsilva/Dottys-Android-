@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.icu.math.BigDecimal
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -18,7 +19,7 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import kotlin.properties.Delegates
 
-class GpsTracker(private val mContext: DottysBaseActivity) : Service(),
+open class GpsTracker(private val mContext: DottysBaseActivity) : Service(),
     LocationListener {
     var locationObserver: DottysLocationObserver? = null
     // flag for GPS status
@@ -33,8 +34,9 @@ class GpsTracker(private val mContext: DottysBaseActivity) : Service(),
     var latitudeGps = 0.0
     var longitudeGps = 0.0
 
+
     // Declaring a Location Manager
-    protected var locationGpsManager: LocationManager? = null
+    private var locationGpsManager: LocationManager? = null
     fun getLocation(): Location? {
         try {
            // locationObserver = DottysLocationObserver(mContext)
@@ -118,6 +120,7 @@ class GpsTracker(private val mContext: DottysBaseActivity) : Service(),
                             if (locationGps != null) {
                                 latitudeGps = locationGps!!.latitude
                                 longitudeGps = locationGps!!.longitude
+
                             }
                         }
                     }
@@ -193,9 +196,14 @@ class GpsTracker(private val mContext: DottysBaseActivity) : Service(),
     }
 
     override fun onLocationChanged(locationGps: Location) {
-        Log.d("LCOATION ","** Lat -- $locationGps?.latitude // Long -- $locationGps?.latitud")
+        Log.d("LCOATION  ","** ON GPS TRACKER Lat -- $locationGps?.latitude // Long -- $locationGps?.latitud")
+        if(BigDecimal(locationGps.latitude).setScale(1,1) != BigDecimal(mContext.lastKnownLatitudeGps).setScale(1,1) ||
+            BigDecimal(locationGps.longitude).setScale(1,1) != BigDecimal(mContext.lastKnownLongitudeGps).setScale(1,1)){
+         mContext.lastKnownLatitudeGps = locationGps.latitude
+         mContext.lastKnownLongitudeGps = locationGps.longitude
+         locationObserver?.locationListener = locationGps
+        }
 
-        locationObserver?.locationListener = locationGps
     }
     override fun onProviderDisabled(provider: String) {}
     override fun onProviderEnabled(provider: String) {}
@@ -230,13 +238,13 @@ class GpsTracker(private val mContext: DottysBaseActivity) : Service(),
 
 /* LOCATION CHANGE PROTOCOL */
 //region
-interface DottysLocationDelegates {
+interface DottysLocationChangeDelegates {
     fun onLocationChangeHandler(locationGps: Location?)
 
 }
 
 
-class DottysLocationObserver(lisener: DottysLocationDelegates) {
+class DottysLocationObserver(lisener: DottysLocationChangeDelegates) {
     val location: Location? =  null
     var locationListener: Location? by Delegates.observable(
         initialValue = location,

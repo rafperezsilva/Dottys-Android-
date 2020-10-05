@@ -10,6 +10,7 @@ import com.keylimetie.dottys.R
 import com.keylimetie.dottys.models.DottysGlobalDataModel
 import com.keylimetie.dottys.models.DottysRewardsModel
 import com.keylimetie.dottys.ui.dashboard.DottysDashboardDelegates
+import com.keylimetie.dottys.ui.dashboard.models.DottysBanners
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconsModel
 import com.keylimetie.dottys.ui.dashboard.models.DottysDrawingSumaryModel
 import com.keylimetie.dottys.ui.drawing.DottysDrawing
@@ -51,16 +52,13 @@ class DottysRewardRedeemedActivity : DottysBaseActivity(), DottysDashboardDelega
         startActivity(intent)
     }
 
-    override fun getGlobalData(gloabalData: DottysGlobalDataModel) {
+    override fun getGlobalData(gloabalData: DottysGlobalDataModel) {}
 
-    }
+    override fun getDottysUserLocation(locationData: DottysDrawingRewardsModel) {}
 
-    override fun getDottysUserLocation(locationData: DottysDrawingRewardsModel) {
-    }
+    override fun getBeaconList(beaconList: DottysBeaconsModel) {}
 
-    override fun getBeaconList(beaconList: DottysBeaconsModel) {
-
-    }
+    override fun onDashboardBanners(banners: ArrayList<DottysBanners>) {}
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK && drawing == null) {

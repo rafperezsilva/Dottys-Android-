@@ -89,7 +89,7 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
     // private var swipeRedemeedItem: Swipe_Button_View? = null
 
     /* DRAWING ITEMS */
-    var dashBardViewModel = DashboardViewModel()
+    var dashBardViewModel = DashboardViewModel(null)
     var swipeType: RewardsSegment? = null
     /* REDEEEM REWARDS VIEW */
     fun initViewRedeem(activityRedeem: DottysRedeemRewardsActivity) {
@@ -375,7 +375,7 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
         val mQueue = Volley.newRequestQueue(activityRewards)
         activityRewards.showLoader()
         val params = HashMap<String, String>()
-        if (activityRewards.getBeaconAtStoreLocation()?.first()?.locationID ?: "" == "") {
+        if (activityRewards.getBeaconStatus()?.beaconArray?.first()?.locationID ?: "" == "") {
             Toast.makeText(
                 activityRewards,
                 "GO TO DOTTY'S LOCATION TO CHANGE CODE",
@@ -385,7 +385,7 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
             return
         }
         params["hostCode"] = hostCode
-        params["curLocationId"] = activityRewards.getBeaconAtStoreLocation()?.first()?.locationID ?: ""
+        params["curLocationId"] = activityRewards.getBeaconStatus()?.beaconArray?.first()?.locationID ?: ""
 
         val jsonObject = JSONObject(params as Map<*, *>)
         val jsonObjectRequest = object : JsonObjectRequest(

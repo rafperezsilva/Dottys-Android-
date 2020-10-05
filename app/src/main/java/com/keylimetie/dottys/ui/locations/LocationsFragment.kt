@@ -1,9 +1,5 @@
 package com.keylimetie.dottys.ui.locations
 
-import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -32,7 +28,7 @@ class LocationsFragment : Fragment(), DottysLocationDelegates {
         rootView = root
         var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity
         locationViewModel = activity?.let { LocationsViewModel(it) } ?: return root
-        activity?.let { locationViewModel.initLocationView(this, it, root) }
+        activity?.let { locationViewModel.initLocationView(this, activity,root) }
         return root
     }
 

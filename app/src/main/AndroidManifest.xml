@@ -14,7 +14,8 @@
     <uses-permission android:name="com.keylimetie.dottys.permission.MAPS_RECEIVE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <permission
         android:name="android.permission.BLUETOOTH"
         android:required="false" />
@@ -42,7 +43,16 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         android:usesCleartextTraffic="true">
-        <receiver android:name=".utils.geofence.GeofenceBroadcastReceiver"/>
+<!--        <receiver-->
+<!--            android:name=".utils.geofence.GeofenceBroadcastReceiver"-->
+<!--            android:enabled="true"-->
+<!--            android:exported="true" />-->
+
+<!--        <service-->
+<!--            android:name=".utils.geofence.GeofenceTransitionsJobIntentService"-->
+<!--            android:exported="true"-->
+<!--            android:permission="android.permission.BIND_JOB_SERVICE" />-->
+<!--        <receiver android:name=".utils.geofence.GeofenceBroadcastReceiver"/>-->
         <activity
             android:name=".game_play.roulette.DottysRouletteActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />

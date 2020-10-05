@@ -5,7 +5,7 @@ import com.fasterxml.jackson.module.kotlin.*
 
 data class DottysBannerModel (
     @get:JsonProperty("docs")@field:JsonProperty("docs")
-    val bannerList: List<DottysBanners>? = null,
+    val bannerList: ArrayList<DottysBanners>? = null,
     val total: Long? = null,
     val limit: Long? = null,
     val page: Long? = null,

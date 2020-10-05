@@ -1,32 +1,39 @@
 package com.keylimetie.dottys.beacon_service
 
+import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.util.Log
-import com.estimote.coresdk.observation.region.Region
 import com.estimote.coresdk.observation.region.beacon.BeaconRegion
 import com.estimote.coresdk.recognition.packets.Beacon
 import com.estimote.coresdk.recognition.packets.Nearable
 import com.estimote.coresdk.service.BeaconManager
-import com.estimote.mgmtsdk.feature.settings.api.EstimotePackets
-
 import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.PreferenceTypeKey
-import com.keylimetie.dottys.ui.dashboard.DashboardFragment
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeacon
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconArray
+import com.keylimetie.dottys.ui.locations.DottysLocationsStoresModel
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
 
-open class DottysBeaconActivity(baseActivity:DottysBaseActivity)    {
+
+open class DottysBeaconActivity(baseActivity: DottysBaseActivity)    {
   var observer: DottysBeaconActivityObserver? = null
 
   var baseActivity = baseActivity
   var beaconManager: BeaconManager? = null
   val beaconViewModel = DottysBeaconViewModel()
 
+      fun requestPermission()  {
+          val mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+          if (!mBluetoothAdapter.isEnabled) {
+              mBluetoothAdapter.enable()
+          }
+
+      }
     fun initBeaconManager() {
 
-
+        requestPermission()
     Log.d("BEACON ACTIVITY", "Beacon Service Started")
       baseActivity.sharedPreferences = baseActivity.getSharedPreferences(
           PreferenceTypeKey.USER_DATA.name,
@@ -35,31 +42,32 @@ open class DottysBeaconActivity(baseActivity:DottysBaseActivity)    {
      //currentBeacon =   baseActivity.getBeaconAtStoreLocation()
 
 
-    if (baseActivity.getBeaconAtStoreLocation()?.size ?: 0 == 0) {
+    if (baseActivity.getBeaconStatus()?.beaconArray?.size ?: 0 == 0) {
       Log.d("ERROR BEACON", "<<======== NULL BEACON ==============")
-        val emptyStatus = DottysBeaconArray(baseActivity.getBeaconAtStoreLocation())
-        baseActivity?.saveDataPreference(PreferenceTypeKey.BEACON_AT_CONECTION,emptyStatus.toJson())
-        observer?.listOfBeacons = DottysBeaconArray(emptyStatus.beaconArray)
+        val emptyStatus =  baseActivity.getBeaconsListz()?.filter { it.location?.storeNumber ?: 0 == baseActivity.getUserNearsLocations().locations?.first()?.storeNumber ?: 0} as ArrayList
+        baseActivity?.saveDataPreference(PreferenceTypeKey.BEACON_AT_CONECTION,
+            DottysBeaconArray(emptyStatus).toJson())
+        observer?.listOfBeacons = DottysBeaconArray(emptyStatus)
       return //START_REDELIVER_INTENT
     }
 
         beaconManager = BeaconManager(baseActivity)
         beaconManager?.connect {
-            for (beacon in baseActivity.getBeaconAtStoreLocation()!!) {
-                if(beacon.isConected != true) {
+            for (beacon in baseActivity.getBeaconStatus()?.beaconArray ?: baseActivity.getBeaconStatus()?.beaconArray ?: return@connect) {
+    //          if(beacon.isConected != true) {
                     beaconManager?.startMonitoring(BeaconRegion(
                         beacon.id,
                         UUID.fromString(beacon.uuid),
                         beacon.major?.toInt(),
                         beacon.minor?.toInt()))
-                }
+               // }
             }
 
         }
 
 
-        beaconManager?.setForegroundScanPeriod(5,30)
-        beaconManager?.setBackgroundScanPeriod(5,30)
+        beaconManager?.setForegroundScanPeriod(5, 30)
+        beaconManager?.setBackgroundScanPeriod(5, 30)
         startDiscoveringLisener()
         starMonitoringLisener()
   }
@@ -67,8 +75,9 @@ open class DottysBeaconActivity(baseActivity:DottysBaseActivity)    {
 
     fun startDiscoveringLisener(){
         beaconManager?.setNearableListener(object : BeaconManager.NearableListener {
-           override fun onNearablesDiscovered(nearables: MutableList<Nearable>?) {
-                Log.d("BEACON ACTIVITY", "Has nearable a reagion ${nearables?.first()?.identifier} beacons")
+            override fun onNearablesDiscovered(nearables: MutableList<Nearable>?) {
+                Log.d("BEACON ACTIVITY",
+                    "Has nearable a reagion ${nearables?.first()?.identifier} beacons")
             }
         })
     }
@@ -78,26 +87,30 @@ open class DottysBeaconActivity(baseActivity:DottysBaseActivity)    {
 
             override fun onEnteredRegion(
                 beaconRegion: BeaconRegion?,
-                beacons: MutableList<Beacon>?
+                beacons: MutableList<Beacon>?,
             ) {
                 var beaconList = DottysBeaconArray()
                 when {
                     baseActivity.getBeaconStatus()?.beaconArray?.size ?: 0 > 0 -> {
-                        beaconList =  DottysBeaconArray(baseActivity.getBeaconStatus()?.beaconArray ?: ArrayList<DottysBeacon>())
+                        beaconList = DottysBeaconArray(baseActivity.getBeaconStatus()?.beaconArray
+                            ?: ArrayList<DottysBeacon>())
                     }
-                    else -> beaconList =    DottysBeaconArray(baseActivity.getBeaconAtStoreLocation())
+                    else -> beaconList = DottysBeaconArray(baseActivity.getBeaconStatus()?.beaconArray)
                 }
 
                 var currentBeacon = DottysBeacon()
-                for (beacon in beaconList.beaconArray ?: baseActivity.getBeaconAtStoreLocation() ?: return) {
-                    if (beacon.id == beaconRegion?.identifier){
+                for (beacon in beaconList.beaconArray ?: baseActivity.getBeaconStatus()?.beaconArray
+                ?: return) {
+                    if (beacon.id == beaconRegion?.identifier) {
                         beacon.isConected = true
                         currentBeacon = beacon
                     }
                 }
-                Log.d("BEACON ACTIVITY ", "PROGRESS -- ${baseActivity.progressBar?.visibility.toString()}")
-                Log.d("BEACON ACTIVITY ", "${beaconRegion?.identifier} <<======== ENTER ON BEACON ==============")
-                if(baseActivity.progressBar?.visibility != 0) {
+                Log.d("BEACON ACTIVITY ",
+                    "PROGRESS -- ${baseActivity.progressBar?.visibility.toString()}")
+                Log.d("BEACON ACTIVITY ",
+                    "${beaconRegion?.identifier} <<======== ENTER ON BEACON ==============")
+                if (baseActivity.progressBar?.visibility != 0) {
                     beaconViewModel.recordBeacon(
                         baseActivity, DottysBeaconRequestModel(
                             beaconRegion?.identifier,
@@ -106,7 +119,7 @@ open class DottysBeaconActivity(baseActivity:DottysBaseActivity)    {
                             beaconRegion?.minor?.toLong(), BeaconEventType.ENTER.name
                         )
                     )
-                    //     observer?.listOfBeacons = DottysBeaconArray(beaconList.beaconArray)
+                        observer?.listOfBeacons = DottysBeaconArray(beaconList.beaconArray)
                 }
             }
 
@@ -114,20 +127,23 @@ open class DottysBeaconActivity(baseActivity:DottysBaseActivity)    {
                 var beaconList: DottysBeaconArray
                 when {
                     baseActivity.getBeaconStatus()?.beaconArray?.size ?: 0 > 0 -> {
-                        beaconList =  DottysBeaconArray(baseActivity.getBeaconStatus()?.beaconArray ?: ArrayList<DottysBeacon>())
+                        beaconList = DottysBeaconArray(baseActivity.getBeaconStatus()?.beaconArray
+                            ?: ArrayList<DottysBeacon>())
                     }
-                    else -> beaconList =    DottysBeaconArray(baseActivity.getBeaconAtStoreLocation())
+                    else -> beaconList = DottysBeaconArray(baseActivity.getBeaconStatus()?.beaconArray)
                 }
                 var currentBeacon = DottysBeacon()
                 for (beacon in beaconList.beaconArray ?: return) {
-                    if (beacon.id == beaconRegion?.identifier){
+                    if (beacon.id == beaconRegion?.identifier) {
                         beacon.isConected = false
                         currentBeacon = beacon
                     }
                 }
-                Log.d("BEACON ACTIVITY ", "PROGRESS -- ${baseActivity.progressBar?.visibility.toString()}")
-                Log.d("BEACON ACTIVITY ", "${beaconRegion?.identifier} <<======== EXIT ON BEACON ==============")
-                if(baseActivity.progressBar?.visibility != 0) {
+                Log.d("BEACON ACTIVITY ",
+                    "PROGRESS -- ${baseActivity.progressBar?.visibility.toString()}")
+                Log.d("BEACON ACTIVITY ",
+                    "${beaconRegion?.identifier} <<======== EXIT ON BEACON ==============")
+                if (baseActivity.progressBar?.visibility != 0) {
                     beaconViewModel.recordBeacon(
                         baseActivity, DottysBeaconRequestModel(
                             beaconRegion?.identifier,
@@ -136,7 +152,7 @@ open class DottysBeaconActivity(baseActivity:DottysBaseActivity)    {
                             beaconRegion?.minor?.toLong(), BeaconEventType.EXIT.name
                         )
                     )
-                    //     observer?.listOfBeacons = DottysBeaconArray(beaconList.beaconArray)
+                       observer?.listOfBeacons = DottysBeaconArray(beaconList.beaconArray)
                 }
             }
         })
@@ -156,5 +172,5 @@ interface DottysBeaconActivityDelegate {
 class DottysBeaconActivityObserver(listeners: DottysBeaconActivityDelegate) {
     var listOfBeacons: DottysBeaconArray by Delegates.observable(
         initialValue = DottysBeaconArray(),
-        onChange = { _, _, new -> listeners.onBeaconsServiceChange(new)})
+        onChange = { _, _, new -> listeners.onBeaconsServiceChange(new) })
 }

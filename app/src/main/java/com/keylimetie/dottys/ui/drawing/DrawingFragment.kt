@@ -15,6 +15,7 @@ import com.keylimetie.dottys.models.DottysRewardsModel
 import com.keylimetie.dottys.ui.dashboard.DashboardViewModel
 import com.keylimetie.dottys.ui.dashboard.DottysCurrentUserObserver
 import com.keylimetie.dottys.ui.dashboard.DottysDashboardDelegates
+import com.keylimetie.dottys.ui.dashboard.models.DottysBanners
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconsModel
 import com.keylimetie.dottys.ui.dashboard.models.DottysDrawingSumaryModel
 import java.text.NumberFormat
@@ -22,7 +23,7 @@ import java.text.NumberFormat
 class DrawingFragment : Fragment(), DottysDrawingDelegates, DottysDashboardDelegates {
 
     private lateinit var drawingViewModel: DrawingViewModel
-    private var dashboardViewModel =  DashboardViewModel()
+    private var dashboardViewModel:  DashboardViewModel? = null
     private var viewRoot: View? = null
      override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,6 +34,7 @@ class DrawingFragment : Fragment(), DottysDrawingDelegates, DottysDashboardDeleg
             ViewModelProviders.of(this).get(DrawingViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_drawing, container, false)
          drawingViewModel.segmentLayout = root.findViewById(R.id.segment_drawing_layout)
+         dashboardViewModel = DashboardViewModel(activity as DottysMainNavigationActivity)
          drawingViewModel.segmentLayout?.visibility = View.INVISIBLE
          viewRoot = root
         return root
@@ -56,8 +58,8 @@ class DrawingFragment : Fragment(), DottysDrawingDelegates, DottysDashboardDeleg
     override fun getUserDrawings(drawing: DottysDrawingUserModel) {
         drawingViewModel.initListView()
         var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
-        dashboardViewModel.userCurrentUserDataObserver = DottysCurrentUserObserver(this)
-        activity?.let { dashboardViewModel.getCurrentUserRequest(it) }
+        dashboardViewModel?.userCurrentUserDataObserver = DottysCurrentUserObserver(this)
+        activity?.let { dashboardViewModel?.getCurrentUserRequest(it) }
     }
 
 
@@ -68,7 +70,7 @@ class DrawingFragment : Fragment(), DottysDrawingDelegates, DottysDashboardDeleg
      var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
 //        activity?.let { drawingViewModel.initViewSetting(this, null, it, viewRoot) }
          var userAux = activity?.getUserPreference()
-       userAux?.points = currentUser.points
+        userAux?.points = currentUser.points
         activity?.saveDataPreference(PreferenceTypeKey.USER_DATA,userAux?.toJson().toString())
         activity?.getUserPreference()?.let { fillItemsInView(it) }
 
@@ -81,8 +83,9 @@ class DrawingFragment : Fragment(), DottysDrawingDelegates, DottysDashboardDeleg
     override fun getDottysUserLocation(locationData: DottysDrawingRewardsModel) {}
 
     override fun getBeaconList(beaconList: DottysBeaconsModel) { }
+    override fun onDashboardBanners(banners: ArrayList<DottysBanners>) { }
 
-//endregion
+    //endregion
   private fun fillItemsInView(currentUser: DottysLoginResponseModel){
       drawingViewModel.titleTotalPoints?.text = drawingViewModel.attributedRedeemText(
         NumberFormat.getIntegerInstance()

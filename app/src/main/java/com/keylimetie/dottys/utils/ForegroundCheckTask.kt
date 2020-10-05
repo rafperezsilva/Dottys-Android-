@@ -7,9 +7,8 @@ import android.os.AsyncTask
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import androidx.core.os.postDelayed
 import com.keylimetie.dottys.DottysBaseActivity
-import com.keylimetie.dottys.DottysLocationDelegates
+import com.keylimetie.dottys.DottysLocationChangeDelegates
 import com.keylimetie.dottys.DottysLocationObserver
 import com.keylimetie.dottys.GpsTracker
 import com.keylimetie.dottys.ui.locations.DottysLocationStoresObserver
@@ -22,7 +21,7 @@ enum class TaskBackgroundTimeInterval(val interval: Long) {
     ZERO_INTERVAL   ((1000 * 60* 15)) //25 Minutes  0 * 60
 }
 class ForegroundCheckTask(isAppOnBackground: Boolean, baseActivity: DottysBaseActivity) :
-    AsyncTask<Context?, Void?, Boolean?>(), DottysLocationDelegates {
+    AsyncTask<Context?, Void?, Boolean?>(), DottysLocationChangeDelegates {
      var isOnBackground = isAppOnBackground
      var activity = baseActivity
     var mainHandler:  Handler? = null
@@ -78,7 +77,9 @@ class ForegroundCheckTask(isAppOnBackground: Boolean, baseActivity: DottysBaseAc
       val locationsViewModel = LocationsViewModel(activity)
       if (activity.getUserPreference().token?.isEmpty() ?: return){ return }
       locationsViewModel.locationDataObserver = DottysLocationStoresObserver(activity)
-      locationsViewModel.getLocationsDottysRequest(activity,gps?.latitude.toString(),gps?.longitude.toString(), null)
+      locationsViewModel.getLocationsDottysRequest(activity,
+          gps?.latitude.toString(),
+          gps?.longitude.toString())
 
   }
     override fun doInBackground(vararg params: Context?): Boolean? {

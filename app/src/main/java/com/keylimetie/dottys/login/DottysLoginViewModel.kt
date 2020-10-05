@@ -138,7 +138,7 @@ open class DottysLoginViewModel : ViewModel() {
                 }
             }) { //no semicolon or coma
             override fun parseNetworkResponse(response: NetworkResponse?): Response<JSONObject> {
-                println(response.toString())
+                Log.d("ON LOGIN",response.toString())
 
                 return super.parseNetworkResponse(response)
             }

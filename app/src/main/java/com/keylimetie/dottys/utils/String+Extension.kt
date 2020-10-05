@@ -2,12 +2,21 @@ package com.keylimetie.dottys.utils
 
 import android.text.TextUtils
 import android.util.Patterns
+import org.skyscreamer.jsonassert.JSONAssert
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
 
+fun String.isEquivalentToString(jsonString:String?):Boolean{
+    return try {
+        JSONAssert.assertEquals(this, jsonString, false)
+        true
+    } catch (e: Error) {
+        false
+    }
+}
 
 fun String.md5(): String {
     val md = MessageDigest.getInstance("MD5")

@@ -27,6 +27,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.keylimetie.dottys.*
 import com.keylimetie.dottys.forgot_password.DottysVerificationTypeActivity
+import com.keylimetie.dottys.redeem.DottysRedeemResponseModel
 import com.keylimetie.dottys.register.DottysProfilePictureActivity
 import com.keylimetie.dottys.ui.locations.DottysLocationsStoresModel
 import com.keylimetie.dottys.utils.md5
@@ -36,6 +37,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.serialization.json.JsonObject
 import org.json.JSONObject
 import java.util.HashMap
+import kotlin.properties.Delegates
 
 class ProfileViewModel(activityMain: DottysMainNavigationActivity?,profileData:DottysLoginResponseModel?) : ViewModel(), View.OnClickListener,
     DottysOnProfilePictureTakenDelegate {
@@ -53,6 +55,7 @@ class ProfileViewModel(activityMain: DottysMainNavigationActivity?,profileData:D
     private var activity: DottysMainNavigationActivity? = activityMain
     private var context: Context? = null
     private var userData: DottysLoginResponseModel? = profileData
+    public  var profileUpdateObserver: DottysProfileObserver? = null
 
     var fragent: ProfileFragment?  = null
     private val pictureActivity = DottysProfilePictureActivity()
@@ -200,7 +203,7 @@ class ProfileViewModel(activityMain: DottysMainNavigationActivity?,profileData:D
                 var user = userData
                 user.token = activity?.getUserPreference()?.token
                 activity?.saveDataPreference(PreferenceTypeKey.USER_DATA, user.toJson())
-
+                profileUpdateObserver?.updateProfile =  userData
 
 
             },
@@ -219,6 +222,7 @@ class ProfileViewModel(activityMain: DottysMainNavigationActivity?,profileData:D
                         ).show()
                     }
                     Log.e("TAG", error.message, error)
+                    profileUpdateObserver?.updateProfile = DottysLoginResponseModel()
                 }
             }) { //no semicolon or coma
 
@@ -237,3 +241,17 @@ class ProfileViewModel(activityMain: DottysMainNavigationActivity?,profileData:D
 
 }
 
+/* UPDATE PROFILE PROTOCOL */
+//region
+interface DottysProfileDelegates {
+    fun onProfileUpdated(userProfile: DottysLoginResponseModel)
+
+
+}
+
+class DottysProfileObserver(lisener: DottysProfileDelegates) {
+    var updateProfile: DottysLoginResponseModel by Delegates.observable(
+        initialValue = DottysLoginResponseModel(),
+        onChange = { prop, old, new -> lisener.onProfileUpdated(new) })
+
+}

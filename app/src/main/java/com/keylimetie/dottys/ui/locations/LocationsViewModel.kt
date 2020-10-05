@@ -2,15 +2,12 @@ package com.keylimetie.dottys.ui.locations
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.location.Location
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ExpandableListView
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import com.android.volley.AuthFailureError
 import com.android.volley.Response
@@ -20,7 +17,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.keylimetie.dottys.*
-import com.keylimetie.dottys.utils.geofence.DottysGeofenceActivity
 import org.json.JSONObject
 import java.util.*
 import kotlin.collections.ArrayList
@@ -29,10 +25,10 @@ import kotlin.math.roundToInt
 import kotlin.properties.Delegates
 
 
-class LocationsViewModel(contextMain: DottysBaseActivity) : ViewModel(),
-    com.keylimetie.dottys.DottysLocationDelegates {
+class LocationsViewModel(val contextMain: DottysBaseActivity) : ViewModel(),
+    DottysLocationChangeDelegates {
     var stateMapHeigth = 0
-    var activityMain: DottysBaseActivity? = contextMain
+   // var activityMain: DottysBaseActivity? = contextMain
     var locationsStores: ArrayList<DottysStoresLocation>? = null
     var locationDataObserver: DottysLocationStoresObserver? = null
     var fragmentMap = DottysLocationsMapFragment()
@@ -49,7 +45,7 @@ class LocationsViewModel(contextMain: DottysBaseActivity) : ViewModel(),
         this.locationFragment = locationFragment
         locationDataObserver = DottysLocationStoresObserver(locationFragment)
         this.rootView = rootView
-
+        contextMain.locationsBaseViewModel = this
 
         val gpsTracker = locationFragment.context?.let { GpsTracker(it as DottysMainNavigationActivity) }
         gpsTracker?.locationObserver = DottysLocationObserver(this)
@@ -60,7 +56,7 @@ class LocationsViewModel(contextMain: DottysBaseActivity) : ViewModel(),
                 //)
             }
         }
-
+        gpsTracker?.locationObserver = DottysLocationObserver(this)
         searchView =
             rootView.findViewById<androidx.appcompat.widget.SearchView>(R.id.search_store_view)
         searchView?.setOnQueryTextListener(object: androidx.appcompat.widget.SearchView.OnQueryTextListener {
@@ -92,8 +88,7 @@ class LocationsViewModel(contextMain: DottysBaseActivity) : ViewModel(),
         getLocationsDottysRequest(
             activityDrawing,
             locationUser?.latitude.toString(),
-            locationUser?.longitude.toString()
-        ,locationFragment)
+            locationUser?.longitude.toString())
     }
 
     fun filterQueryData(
@@ -173,7 +168,8 @@ class LocationsViewModel(contextMain: DottysBaseActivity) : ViewModel(),
 
     fun initMapWHitMarker(locations: List<DottysStoresLocation>) {
         fragmentMap =
-            locationFragment.childFragmentManager.findFragmentById(R.id.map_view_fragment) as DottysLocationsMapFragment
+        locationFragment.childFragmentManager.findFragmentById(R.id.map_view_fragment) as DottysLocationsMapFragment
+        contextMain.mapFragmentBase = fragmentMap
         fragmentMap.markersList = markersDottysLocation(locations)
         fragmentMap.locationStore = locations as ArrayList<DottysStoresLocation>
         fragmentMap.initialLatitude = locationUser?.latitude ?: 41.8563329
@@ -214,16 +210,20 @@ class LocationsViewModel(contextMain: DottysBaseActivity) : ViewModel(),
     }
 
     fun getLocationsDottysRequest(
-        mContext: DottysBaseActivity ,//DottysMainNavigationActivity
+        mContext: DottysBaseActivity,//DottysMainNavigationActivity
         latitude: String,
-        longitude: String, fragment:Fragment?
+        longitude: String
     ) {
+//        if(BigDecimal(latitude.toDouble()).setScale(1,1) == BigDecimal(mContext.lastKnownLatitudeGps).setScale(1,1) &&
+//           BigDecimal(longitude.toDouble()).setScale(1,1) == BigDecimal(mContext.lastKnownLongitudeGps).setScale(1,1)){
+//            return
+//        }
         val mQueue = Volley.newRequestQueue(mContext)
         mContext.isUpdatingLocation = true
         mContext.showLoader()
 /*MOCK LOCATION */
-        val locationURL =  "locations?distance=999999&limit=200&page=1&page=1&latitude=$latitude&longitude=$longitude"
-        //  val locationURL = "locations?distance=150&limit=300&page=1&page=1&latitude=41.6030093&longitude=-87.75345159999999"
+          val locationURL =  "locations?distance=999999&limit=50&page=1&page=1&latitude=$latitude&longitude=$longitude"
+        // val locationURL = "locations?distance=150&limit=300&page=1&page=1&latitude=40.0998935&longitude=-87.6357274"
 
         val jsonObjectRequest = object : JsonObjectRequest(
             Method.GET,
@@ -236,48 +236,48 @@ class LocationsViewModel(contextMain: DottysBaseActivity) : ViewModel(),
                     DottysLocationsStoresModel.fromLocationJson(
                         response.toString()
                     )
+                mContext.saveDataPreference(PreferenceTypeKey.LOCATIONS, stores.toJson())
                 locationDataObserver?.dottysLocationsModel = stores
                 stores.locations?.let { initExpandableList(mContext, it) }
                 locationsStores = stores.locations as ArrayList<DottysStoresLocation>?
-                mContext.geofencesAtStore =
-                    stores.locations?.let { DottysGeofenceActivity(mContext, it) }
+                //mContext.geofencesAtStore = stores.locations?.let { DottysGeofenceActivity(mContext, it) }    /** TODO ADD GEOFENCING **/
 
                 mContext.isUpdatingLocation = false
             },
             Response.ErrorListener {
                 mContext.hideLoader()
                 mContext.isUpdatingLocation = false
-                if(mContext.taskAtBackground?.isOnBackground ==  true || it.networkResponse.statusCode == 400) {
+               // if(mContext.taskAtBackground?.isOnBackground ==  true || it.networkResponse.statusCode == 400) {
                     var stores = DottysLocationsStoresModel()
                     stores.locations = ArrayList<DottysStoresLocation>()
 
                     locationDataObserver?.dottysLocationsModel = stores
 
-                } else
-                if (it.networkResponse == null){
-                    Toast.makeText(mContext, "Has lost your internet connection", Toast.LENGTH_LONG).show()
-                } else {
-
-                    val errorRes =
-                        DottysErrorModel.fromJson(it.networkResponse.data.toString(Charsets.UTF_8))
-                    if (errorRes.error?.messages?.size ?: 0 > 0) {
-                        Toast.makeText(
-                            mContext,
-                            errorRes.error?.messages?.first() ?: "",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                    return@ErrorListener
-                }
-                    .run {
-                        if (fragment != null) {
-                            if (fragment is LocationsFragment) {
-                                val intent =
-                                    Intent(mContext, DottysMainNavigationActivity::class.java)
-                                mContext.startActivity(intent)
-                            }
-                        }
-                    }
+//                } else
+//                if (it.networkResponse == null){
+//                    Toast.makeText(mContext, "Has lost your internet connection", Toast.LENGTH_LONG).show()
+//                } else {
+//
+//                    val errorRes =
+//                        DottysErrorModel.fromJson(it.networkResponse.data.toString(Charsets.UTF_8))
+//                    if (errorRes.error?.messages?.size ?: 0 > 0) {
+//                        Toast.makeText(
+//                            mContext,
+//                            errorRes.error?.messages?.first() ?: "",
+//                            Toast.LENGTH_LONG
+//                        ).show()
+//                    }
+//                    return@ErrorListener
+//                }
+//                    .run {
+//                        if (fragment != null) {
+//                            if (fragment is LocationsFragment) {
+//                                val intent =
+//                                    Intent(mContext, DottysMainNavigationActivity::class.java)
+//                                mContext.startActivity(intent)
+//                            }
+//                        }
+//                    }
             }) { //no semicolon or coma
 
 
@@ -304,9 +304,9 @@ class LocationsViewModel(contextMain: DottysBaseActivity) : ViewModel(),
 
 
     override fun onLocationChangeHandler(locationGps: Location?) {
-        getLocationsDottysRequest(activityMain ?: return,
+        getLocationsDottysRequest(contextMain ?: return,
             locationGps?.latitude.toString(),
-            locationGps?.longitude.toString(), locationFragment)
+            locationGps?.longitude.toString())
     }
 }
 
