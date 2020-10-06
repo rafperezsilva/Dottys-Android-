@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:id="@+id/drawing_entries_layout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -41,13 +42,14 @@
 
 
         <ListView
-            android:layout_marginTop="15dp"
             android:id="@+id/drawings_listview"
             android:layout_width="357dp"
             android:layout_height="0dp"
             android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
             android:layout_marginRight="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/drawing_entries_bottom_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/drawing_subtitle_textview" />
@@ -63,7 +65,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/segment_drawing_layout" />
-          <TextView
+        <TextView
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:id="@+id/drawing_subtitle_textview"
@@ -77,5 +79,44 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/drawing_title_textview" />
+
+
+        <TextView
+            android:id="@+id/empty_drawing_textview"
+            style="@style/GenericDottysStyleText"
+            android:fontFamily="@font/proxima_nova_semibold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/drawings_listview"
+            app:layout_constraintTop_toTopOf="@+id/drawing_subtitle_textview" />
+
+        <LinearLayout
+            android:id="@+id/drawing_entries_bottom_layout"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+            <TextView
+                style="@style/GenericDottysStyleText"
+                android:text="Your drawing entries are entered at"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/proxima_nova_regular"
+                app:layout_constraintBottom_toBottomOf="@+id/drawings_listview"
+                app:layout_constraintTop_toTopOf="@+id/drawing_subtitle_textview" />
+            <TextView
+                android:id="@+id/drawing_entries_location"
+                style="@style/GenericDottysStyleText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/proxima_nova_bold"
+                app:layout_constraintBottom_toBottomOf="@+id/drawings_listview"
+                app:layout_constraintTop_toTopOf="@+id/drawing_subtitle_textview" />
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -220,6 +220,7 @@
             </LinearLayout>
 
             <ViewFlipper
+                android:background="#FFF"
                 android:id="@+id/flipper_view_dashboard"
                 android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
@@ -554,8 +555,8 @@
             android:gravity="right|top"
             android:layout_marginTop="8dp"
             android:layout_marginRight="0dp"
-            android:layout_width="25dp"
-            android:layout_height="45dp"
+            android:layout_width="30dp"
+            android:layout_height="50dp"
             android:background="@color/colorTransparent"
             android:text="X"
             android:textColor="#FFF"

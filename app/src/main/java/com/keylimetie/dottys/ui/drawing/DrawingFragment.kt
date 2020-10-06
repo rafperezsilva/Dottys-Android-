@@ -56,8 +56,9 @@ class DrawingFragment : Fragment(), DottysDrawingDelegates, DottysDashboardDeleg
     }
 
     override fun getUserDrawings(drawing: DottysDrawingUserModel) {
-        drawingViewModel.initListView()
-        var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
+        drawingViewModel.segmentSelected = RewardsSegment.DRAWING_ENTRIES
+         drawingViewModel.initListView()  
+          var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
         dashboardViewModel?.userCurrentUserDataObserver = DottysCurrentUserObserver(this)
         activity?.let { dashboardViewModel?.getCurrentUserRequest(it) }
     }

@@ -13,6 +13,7 @@ import android.text.style.StyleSpan
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
@@ -38,7 +39,8 @@ class DrawingViewModel : ViewModel() {
     var titleTotalPoints: TextView? = null
     private var subTitle: TextView? = null
     var segmentLayout: LinearLayout? = null
-    private var segmentSelected =  RewardsSegment.DRAWING_ENTRIES
+    var listViewRewards: ListView? =  null
+    var segmentSelected =  RewardsSegment.DRAWING_ENTRIES
     private val _text = MutableLiveData<String>().apply {
         value = "This is tools Fragment"
     }
@@ -87,7 +89,7 @@ class DrawingViewModel : ViewModel() {
         subTitle = viewRoot?.findViewById<TextView>(R.id.drawing_subtitle_textview)
         segmentLayout?.visibility = View.VISIBLE
     }
-    fun segmentTabLisener(activity: DottysMainNavigationActivity){
+    private fun segmentTabLisener(activity: DottysMainNavigationActivity){
         drawingButton?.setOnClickListener {
             segmentSelected = RewardsSegment.DRAWING_ENTRIES
             viewSegmentSelectedHandler(segmentSelected, activity)
@@ -98,6 +100,12 @@ class DrawingViewModel : ViewModel() {
             viewSegmentSelectedHandler(segmentSelected, activity)
             initListView()
         }
+    }
+
+    private fun emptyDrawingText(isVisible: Boolean) {
+        val tvDynamic = viewRoot?.findViewById<TextView>(R.id.empty_drawing_textview)
+        tvDynamic?.text = "There are no currently no active drawings.\nPlease check back later."
+        tvDynamic?.alpha = if(isVisible) 1f else 0f
     }
 
      fun attributedRedeemText(unclaimedRewards: String): SpannableString {
@@ -126,10 +134,24 @@ class DrawingViewModel : ViewModel() {
 
     }
 
-    fun initListView(){
-        val listViewRewards = viewRoot?.findViewById<ListView>(R.id.drawings_listview)
+    private fun drawingEntriesLocation(isVisiBle:Boolean){
+        val linearLayout = viewRoot?.findViewById<LinearLayout>(R.id.drawing_entries_bottom_layout)
+        linearLayout?.alpha = if(isVisiBle) 1f else 0f
+        val drawingEntriesLocationTextView = viewRoot?.findViewById<TextView>(R.id.drawing_entries_location)
+        activity?.getBeaconStatus().let {
+            if (!it?.beaconArray.isNullOrEmpty())
+            drawingEntriesLocationTextView?.text =  it?.beaconArray?.first()?.location?.address1
+        }
+    }
 
-        listViewRewards?.adapter =
+    fun initListView(){
+          listViewRewards = viewRoot?.findViewById<ListView>(R.id.drawings_listview)
+          emptyDrawingText(segmentSelected == RewardsSegment.DRAWING_ENTRIES)
+          listViewRewards?.alpha = if(segmentSelected == RewardsSegment.DRAWING_ENTRIES) 0f else 1f
+          drawingEntriesLocation(segmentSelected == RewardsSegment.DRAWING_ENTRIES)
+          emptyDrawingText(false)
+
+         listViewRewards?.adapter =
             activity?.let {
                 fragment?.context?.let { it1 ->
                     DottysDrawingAdapter(

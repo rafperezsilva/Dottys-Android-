@@ -73,6 +73,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/segment_drawing_layout" />
+
+
+        <TextView
+            android:layout_marginBottom="8dp"
+            style="@style/GenericDottysStyleText"
+            android:text="Limit maximum 5 Cash Rewards\nRedemptions In-Store Per Day, Per Guest."
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/proxima_nova_regular"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
     <ProgressBar
         android:id="@+id/progress_loader"

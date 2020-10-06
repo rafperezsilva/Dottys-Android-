@@ -115,7 +115,7 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
 
     }
 
-    private fun initListView() {
+      fun initListView() {
         val listViewRewards = activityRedeem?.findViewById<ListView>(R.id.redeem_rewards_listview)
         var isRedeemed: Boolean = false
         if (segmentSelected == RedeemRewardsSegment.REDEEMED_REWARDS) {
