@@ -19,7 +19,7 @@ import com.keylimetie.dottys.utils.getLocation
 class DottysLocationsMapFragment : SupportMapFragment(), OnMapReadyCallback,
     DottysStoreListDelegates {
     private lateinit var mMap: GoogleMap
-
+    private var mapIsReady = false
     var initialLatitude : Double? = 41.8563329
     var initialLongitude: Double? =  -87.8488141
     var initialMarker = "Seed nay"
@@ -80,10 +80,12 @@ class DottysLocationsMapFragment : SupportMapFragment(), OnMapReadyCallback,
 //            }
             mMap.addMarker(markersList[locationPosition])//sydney?.let { MarkerOptions().position(it) })
         }
+        mapIsReady = true
         updateMarker()
     }
 
     fun updateMarker(){
+       if (!mapIsReady){return}
         val gps = GpsTracker(activity as DottysMainNavigationActivity)
         val loc = gps.getLocation(gps)
         val currentPositionMarker = loc ?: return

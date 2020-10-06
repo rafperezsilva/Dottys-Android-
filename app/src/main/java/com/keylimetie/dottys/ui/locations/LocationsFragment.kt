@@ -1,14 +1,16 @@
 package com.keylimetie.dottys.ui.locations
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
-import com.keylimetie.dottys.DottysMainNavigationActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+ import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.R
+import kotlin.math.roundToInt
 
 
 class LocationsFragment : Fragment(), DottysLocationDelegates {
@@ -19,7 +21,7 @@ class LocationsFragment : Fragment(), DottysLocationDelegates {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         //locationViewModel =
        //     ViewModelProviders.of(this).get(LocationsViewModel::class.java)
@@ -28,21 +30,41 @@ class LocationsFragment : Fragment(), DottysLocationDelegates {
         rootView = root
         var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity
         locationViewModel = activity?.let { LocationsViewModel(it) } ?: return root
-        activity?.let { locationViewModel.initLocationView(this, activity,root) }
+        activity?.let { locationViewModel.initLocationView(this, activity, root) }
+        val stores : ArrayList<String>  = arrayListOf<String>(StoreType.DottyS.value,
+            StoreType.PaddyS.value,
+            StoreType.DelToro.value,
+            StoreType.BradleyS.value)
+// = activity.getUserNearsLocations().locations?.filter { it.storeType.name }
+//TODO
+//        for (location in  activity.getUserNearsLocations().locations ?: return root ){
+//            if (!stores.contains(location.storeType?.value)) {
+//                location.storeType?.value?.let { stores.add(it) }
+//            }
+//        }
+
         return root
     }
 
-
+    override fun onStop() {
+        super.onStop()
+        (activity as DottysMainNavigationActivity).mapFragmentBase = null
+    }
     override fun getStoresLocation(locations: DottysLocationsStoresModel) {
-
         locations.locations?.let {
             locationViewModel.initMapWHitMarker(it)
         }
         locationViewModel.screenDimensionManager(LocationViewType.COLLAPSE_TYPE)
     }
 
+
     override fun allItemsCollapse(isColappse: Boolean) {
-        if (isColappse) this.locationViewModel.screenDimensionManager(LocationViewType.COLLAPSE_TYPE) else {
+        if (isColappse)
+        {
+            this.locationViewModel.screenDimensionManager(LocationViewType.COLLAPSE_TYPE)
+        }
+        else
+        {
             this.locationViewModel.screenDimensionManager(LocationViewType.EXPANDED_TYPE)
         }
     }
@@ -70,3 +92,5 @@ class LocationsFragment : Fragment(), DottysLocationDelegates {
 //       startActivity(intent)
 //    }
 }
+
+//class DottysStoreListAdapter

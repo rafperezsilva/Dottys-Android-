@@ -8,6 +8,7 @@ import android.location.Location
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ExpandableListView
+import android.widget.SearchView
 import androidx.lifecycle.ViewModel
 import com.android.volley.AuthFailureError
 import com.android.volley.Response
@@ -27,7 +28,7 @@ import kotlin.properties.Delegates
 
 class LocationsViewModel(val contextMain: DottysBaseActivity) : ViewModel(),
     DottysLocationChangeDelegates {
-    var stateMapHeigth = 0
+   private var listStoresExpandable: ExpandableListView? = null
    // var activityMain: DottysBaseActivity? = contextMain
     var locationsStores: ArrayList<DottysStoresLocation>? = null
     var locationDataObserver: DottysLocationStoresObserver? = null
@@ -35,7 +36,7 @@ class LocationsViewModel(val contextMain: DottysBaseActivity) : ViewModel(),
     var locationFragment = LocationsFragment()
     var rootView: View? = null
     var locationUser: Location? = null
-    var searchView: androidx.appcompat.widget.SearchView? = null
+   private var searchView: SearchView? = null
 
     fun initLocationView(
         locationFragment: LocationsFragment,
@@ -58,8 +59,15 @@ class LocationsViewModel(val contextMain: DottysBaseActivity) : ViewModel(),
         }
         gpsTracker?.locationObserver = DottysLocationObserver(this)
         searchView =
-            rootView.findViewById<androidx.appcompat.widget.SearchView>(R.id.search_store_view)
-        searchView?.setOnQueryTextListener(object: androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            rootView.findViewById<SearchView>(R.id.search_store_view)
+
+
+        searchView?.setOnCloseListener {
+            hideKeyboard()
+            screenDimensionManager(LocationViewType.COLLAPSE_TYPE)
+            true
+        }
+        searchView?.setOnQueryTextListener(object:  SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 TODO("Not yet implemented")
             }
@@ -73,6 +81,7 @@ class LocationsViewModel(val contextMain: DottysBaseActivity) : ViewModel(),
                     screenDimensionManager(LocationViewType.SEARCH_TYPE)
                 }
                 locationsStores?.let { filterQueryData(it, newText.toString()) }?.let {
+                    fragmentMap.updateMarker()
                     initExpandableList(
                         activityDrawing,
                         it
@@ -82,8 +91,6 @@ class LocationsViewModel(val contextMain: DottysBaseActivity) : ViewModel(),
             }
 
         })
-
-
         locationDataObserver = DottysLocationStoresObserver(locationFragment)
         getLocationsDottysRequest(
             activityDrawing,
@@ -102,31 +109,39 @@ class LocationsViewModel(val contextMain: DottysBaseActivity) : ViewModel(),
         }
     }
 
+    fun isAllGroupCollapsed():Boolean {
+        for (group in locationsStores?.indices ?: return  false) {
+             if (listStoresExpandable?.isGroupExpanded(group) == true) return false
+        }
+        return true
+    }
+
     @SuppressLint("ServiceCast")
     fun initExpandableList(context: Context, locations: List<DottysStoresLocation>) {
-        var listView = rootView?.findViewById<ExpandableListView>(R.id.list_stores)
+        listStoresExpandable = rootView?.findViewById<ExpandableListView>(R.id.list_stores)
+
         var expandableAdapter: DottysLocationsStoreAdapter? = null
         expandableAdapter = context.let {
-            DottysLocationsStoreAdapter(
+            DottysLocationsStoreAdapter(this,
                 it,
                 locations as ArrayList<DottysStoresLocation>,
                 fragmentMap
             )
         }
-        listView?.setAdapter(expandableAdapter)
-        listView?.setOnGroupExpandListener {
+        listStoresExpandable?.setAdapter(expandableAdapter)
+        listStoresExpandable?.setOnGroupExpandListener {
             for (item in 0..locations.size) {
                 if (it != item) {
-                    listView.collapseGroup(item)
+                    listStoresExpandable?.collapseGroup(item)
                 }
             }
             hideKeyboard()
             screenDimensionManager(LocationViewType.EXPANDED_TYPE)
         }
 
-        listView?.setOnGroupCollapseListener {
+        listStoresExpandable?.setOnGroupCollapseListener {
             for (item in 0..locations.size) {
-                if (listView.isGroupExpanded(item)) {
+                if (listStoresExpandable?.isGroupExpanded(item) == true) {
                     locationDataObserver?.colapseItems = false
                 }
             }
@@ -157,14 +172,14 @@ class LocationsViewModel(val contextMain: DottysBaseActivity) : ViewModel(),
                 return 1.0
             }
         }
+
     }
 
     fun screenDimensionManager(viewType: LocationViewType) {
 
         var mapParams = fragmentMap.view?.layoutParams
         mapParams?.height = heightToViewType(viewType).roundToInt()
-
-    }
+     }
 
     fun initMapWHitMarker(locations: List<DottysStoresLocation>) {
         fragmentMap =

@@ -27,6 +27,7 @@ enum class LocationViewType {
 }
 
 class DottysLocationsStoreAdapter(
+    private val locationsViewModel: LocationsViewModel,
     private val activity: Context,
     private val dataSource: ArrayList<DottysStoresLocation>,
     private val mapFragment: DottysLocationsMapFragment
@@ -149,6 +150,7 @@ class DottysLocationsStoreAdapter(
     }
 
     override fun onGroupCollapsed(groupPosition: Int) {
+        if(locationsViewModel.isAllGroupCollapsed()){ locationsViewModel.fragmentMap.updateMarker()}
 
         print("GROUP COLAPSED ->" + groupPosition)
 
