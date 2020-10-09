@@ -13,7 +13,6 @@ import android.text.style.StyleSpan
 import android.util.Log
 import android.view.View
 import android.widget.*
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
@@ -33,14 +32,15 @@ import kotlin.properties.Delegates
 
 
 enum class RewardsSegment {
-   DRAWING_ENTRIES, CASH_REWARDS
+    DRAWING_ENTRIES, CASH_REWARDS
 }
+
 class DrawingViewModel : ViewModel() {
     var titleTotalPoints: TextView? = null
     private var subTitle: TextView? = null
     var segmentLayout: LinearLayout? = null
-    var listViewRewards: ListView? =  null
-    var segmentSelected =  RewardsSegment.DRAWING_ENTRIES
+    var listViewRewards: ListView? = null
+    var segmentSelected = RewardsSegment.DRAWING_ENTRIES
     private val _text = MutableLiveData<String>().apply {
         value = "This is tools Fragment"
     }
@@ -58,11 +58,11 @@ class DrawingViewModel : ViewModel() {
         fragment: Fragment,
         locationId: String?,
         activityFragment: DottysMainNavigationActivity?,
-        viewRoot: View?
+        viewRoot: View?,
     ) {
 
         activity = fragment.activity as? DottysMainNavigationActivity?
-        segmentSelected = activity?.segmentSelect ?:  RewardsSegment.DRAWING_ENTRIES
+        segmentSelected = activity?.segmentSelect ?: RewardsSegment.DRAWING_ENTRIES
         this.viewRoot = viewRoot
         this.fragment = fragment
         if (fragment is DashboardFragment) {
@@ -73,8 +73,8 @@ class DrawingViewModel : ViewModel() {
             getUserDrawings(activity!!)
         }
         if (locationId != null) {
-                getCurrentDrawingLocation(activity ?: return,locationId)
-            }
+            getCurrentDrawingLocation(activity ?: return, locationId)
+        }
         activityFragment?.let { segmentTabLisener(it) }
         fragment.context.let {
             it?.let { it1 -> viewSegmentSelectedHandler(segmentSelected, it1) }
@@ -89,7 +89,8 @@ class DrawingViewModel : ViewModel() {
         subTitle = viewRoot?.findViewById<TextView>(R.id.drawing_subtitle_textview)
         segmentLayout?.visibility = View.VISIBLE
     }
-    private fun segmentTabLisener(activity: DottysMainNavigationActivity){
+
+    private fun segmentTabLisener(activity: DottysMainNavigationActivity) {
         drawingButton?.setOnClickListener {
             segmentSelected = RewardsSegment.DRAWING_ENTRIES
             viewSegmentSelectedHandler(segmentSelected, activity)
@@ -105,10 +106,10 @@ class DrawingViewModel : ViewModel() {
     private fun emptyDrawingText(isVisible: Boolean) {
         val tvDynamic = viewRoot?.findViewById<TextView>(R.id.empty_drawing_textview)
         tvDynamic?.text = "There are no currently no active drawings.\nPlease check back later."
-        tvDynamic?.alpha = if(isVisible) 1f else 0f
+        tvDynamic?.alpha = if (isVisible) 1f else 0f
     }
 
-     fun attributedRedeemText(unclaimedRewards: String): SpannableString {
+    fun attributedRedeemText(unclaimedRewards: String): SpannableString {
         val spannable = SpannableString("You have $unclaimedRewards points!")
         spannable.setSpan(
             ForegroundColorSpan(Color.YELLOW),
@@ -134,24 +135,25 @@ class DrawingViewModel : ViewModel() {
 
     }
 
-    private fun drawingEntriesLocation(isVisiBle:Boolean){
+    private fun drawingEntriesLocation(isVisiBle: Boolean) {
         val linearLayout = viewRoot?.findViewById<LinearLayout>(R.id.drawing_entries_bottom_layout)
-        linearLayout?.alpha = if(isVisiBle) 1f else 0f
-        val drawingEntriesLocationTextView = viewRoot?.findViewById<TextView>(R.id.drawing_entries_location)
+        linearLayout?.alpha = if (isVisiBle) 1f else 0f
+        val drawingEntriesLocationTextView =
+            viewRoot?.findViewById<TextView>(R.id.drawing_entries_location)
         activity?.getBeaconStatus().let {
             if (!it?.beaconArray.isNullOrEmpty())
-            drawingEntriesLocationTextView?.text =  it?.beaconArray?.first()?.location?.address1
+                drawingEntriesLocationTextView?.text = it?.beaconArray?.first()?.location?.address1
         }
     }
 
-    fun initListView(){
-          listViewRewards = viewRoot?.findViewById<ListView>(R.id.drawings_listview)
-          emptyDrawingText(segmentSelected == RewardsSegment.DRAWING_ENTRIES)
-          listViewRewards?.alpha = if(segmentSelected == RewardsSegment.DRAWING_ENTRIES) 0f else 1f
-          drawingEntriesLocation(segmentSelected == RewardsSegment.DRAWING_ENTRIES)
-          emptyDrawingText(false)
+    fun initListView() {
+        listViewRewards = viewRoot?.findViewById<ListView>(R.id.drawings_listview)
+        emptyDrawingText(segmentSelected == RewardsSegment.DRAWING_ENTRIES)
+        listViewRewards?.alpha = if (segmentSelected == RewardsSegment.DRAWING_ENTRIES) 0f else 1f
+        drawingEntriesLocation(segmentSelected == RewardsSegment.DRAWING_ENTRIES)
+        emptyDrawingText(false)
 
-         listViewRewards?.adapter =
+        listViewRewards?.adapter =
             activity?.let {
                 fragment?.context?.let { it1 ->
                     DottysDrawingAdapter(
@@ -159,7 +161,7 @@ class DrawingViewModel : ViewModel() {
                         it,
                         cashRewardsWiredData(),
                         segmentSelected
-                        )
+                    )
                 }
             }
     }
@@ -187,7 +189,7 @@ class DrawingViewModel : ViewModel() {
     }
 
     private fun viewSegmentSelectedHandler(segment: RewardsSegment, contex: Context) {
-        when(segment){
+        when (segment) {
             RewardsSegment.DRAWING_ENTRIES -> {
 
                 drawingButton?.setBackgroundColor(
@@ -202,15 +204,19 @@ class DrawingViewModel : ViewModel() {
                         R.color.colorSelectedSegment
                     )
                 )
-                subTitle?.text = "Redeem your points for entries into your local Dotty’s weekly, monthly and quarterly drawings."
+                subTitle?.text =
+                    "Redeem your points for entries into your local Dotty’s weekly, monthly and quarterly drawings."
 
             }
             RewardsSegment.CASH_REWARDS -> {
                 contex.let { ContextCompat.getColor(it, R.color.colorSelectedSegment) }.let {
-                    drawingButton?.setBackgroundColor(it)}
+                    drawingButton?.setBackgroundColor(it)
+                }
                 contex.let { ContextCompat.getColor(it, R.color.colorTransparent) }.let {
-                    cashButton?.setBackgroundColor(it)}
-                subTitle?.text = "Convert your points into cash to be redeemed at your local Dotty’s location."
+                    cashButton?.setBackgroundColor(it)
+                }
+                subTitle?.text =
+                    "Convert your points into cash to be redeemed at your local Dotty’s location."
 
             }
         }
@@ -219,9 +225,9 @@ class DrawingViewModel : ViewModel() {
 
     fun getCurrentDrawingLocation(mContext: DottysMainNavigationActivity, locationId: String) {
         val mQueue = Volley.newRequestQueue(mContext)
-      //  mContext.showLoader()
+        //  mContext.showLoader()
         val jsonObjectRequest = object : JsonObjectRequest(Method.GET,
-            mContext.baseUrl+"locations/"+locationId,
+            mContext.baseUrl + "locations/" + locationId,
             null,
             Response.Listener<JSONObject> { response ->
                 mContext.hideLoader()
@@ -238,7 +244,9 @@ class DrawingViewModel : ViewModel() {
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {
                     mContext.hideLoader()
-                    if (error.networkResponse ==  null){return}
+                    if (error.networkResponse == null) {
+                        return
+                    }
                     val errorRes =
                         DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                     if (errorRes.error?.messages?.size ?: 0 > 0) {
@@ -248,7 +256,7 @@ class DrawingViewModel : ViewModel() {
                             Toast.LENGTH_LONG
                         ).show()
                     }
-                     Log.e("TAG", error.message, error)
+                    Log.e("TAG", error.message, error)
                 }
             }) { //no semicolon or coma
 
@@ -264,11 +272,11 @@ class DrawingViewModel : ViewModel() {
         mQueue.add(jsonObjectRequest)
     }
 
-     fun getUserDrawings(mContext: DottysMainNavigationActivity) {
+    fun getUserDrawings(mContext: DottysMainNavigationActivity) {
         val mQueue = Volley.newRequestQueue(mContext)
         mContext.showLoader()
         val jsonObjectRequest = object : JsonObjectRequest(Method.GET,
-            mContext.baseUrl+"drawings/mydrawings",
+            mContext.baseUrl + "drawings/mydrawings",
             null,
             Response.Listener<JSONObject> { response ->
                 mContext.hideLoader()
@@ -281,14 +289,16 @@ class DrawingViewModel : ViewModel() {
                     // getDrawingSummary(mContext)
                     userDrawing = user
                     drawingObserver?.drawingsModel = user
-                } catch (e: Error){
+                } catch (e: Error) {
                     Log.d("ERROR", e.localizedMessage)
                 }
             },
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {
                     mContext.hideLoader()
-                    if (error.networkResponse ==  null){return}
+                    if (error.networkResponse == null) {
+                        return
+                    }
                     val errorRes =
                         DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                     if (errorRes.error?.messages?.size ?: 0 > 0) {
@@ -298,7 +308,7 @@ class DrawingViewModel : ViewModel() {
                             Toast.LENGTH_LONG
                         ).show()
                     }
-                     Log.e("TAG", error.message, error)
+                    Log.e("TAG", error.message, error)
                 }
             }) { //no semicolon or coma
 
@@ -323,10 +333,10 @@ interface DottysDrawingDelegates {
 }
 
 class DottysDrawingObserver(lisener: DottysDrawingDelegates) {
-     var rewardsModel: DottysDrawingRewardsModel by Delegates.observable(
+    var rewardsModel: DottysDrawingRewardsModel by Delegates.observable(
         initialValue = DottysDrawingRewardsModel(),
         onChange = { prop, old, new -> lisener.getUserRewards(new) })
-     var drawingsModel: DottysDrawingUserModel by Delegates.observable(
+    var drawingsModel: DottysDrawingUserModel by Delegates.observable(
         initialValue = DottysDrawingUserModel(),
         onChange = { prop, old, new -> lisener.getUserDrawings(new) })
 }

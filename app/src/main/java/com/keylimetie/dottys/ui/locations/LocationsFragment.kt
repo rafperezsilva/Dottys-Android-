@@ -4,13 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
- import com.keylimetie.dottys.DottysMainNavigationActivity
+import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.R
-import kotlin.math.roundToInt
 
 
 class LocationsFragment : Fragment(), DottysLocationDelegates {
@@ -24,14 +20,14 @@ class LocationsFragment : Fragment(), DottysLocationDelegates {
         savedInstanceState: Bundle?,
     ): View? {
         //locationViewModel =
-       //     ViewModelProviders.of(this).get(LocationsViewModel::class.java)
+        //     ViewModelProviders.of(this).get(LocationsViewModel::class.java)
 
         val root = inflater.inflate(R.layout.fragment_locations, container, false)
         rootView = root
         var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity
         locationViewModel = activity?.let { LocationsViewModel(it) } ?: return root
-        activity?.let { locationViewModel.initLocationView(this, activity, root) }
-        val stores : ArrayList<String>  = arrayListOf<String>(StoreType.DottyS.value,
+        activity.let { locationViewModel.initLocationView(this, activity, root) }
+        val stores: ArrayList<String> = arrayListOf<String>(StoreType.DottyS.value,
             StoreType.PaddyS.value,
             StoreType.DelToro.value,
             StoreType.BradleyS.value)
@@ -46,25 +42,31 @@ class LocationsFragment : Fragment(), DottysLocationDelegates {
         return root
     }
 
+
+    override fun onResume() {
+        super.onResume()
+        (activity as DottysMainNavigationActivity).mapFragmentBase = locationViewModel.fragmentMap
+        locationViewModel.fragmentMap.updateMarker()
+
+    }
+
     override fun onStop() {
         super.onStop()
         (activity as DottysMainNavigationActivity).mapFragmentBase = null
     }
+
     override fun getStoresLocation(locations: DottysLocationsStoresModel) {
         locations.locations?.let {
-            locationViewModel.initMapWHitMarker(it)
+                locationViewModel.initMapWHitMarker(it)
         }
         locationViewModel.screenDimensionManager(LocationViewType.COLLAPSE_TYPE)
     }
 
 
     override fun allItemsCollapse(isColappse: Boolean) {
-        if (isColappse)
-        {
+        if (isColappse) {
             this.locationViewModel.screenDimensionManager(LocationViewType.COLLAPSE_TYPE)
-        }
-        else
-        {
+        } else {
             this.locationViewModel.screenDimensionManager(LocationViewType.EXPANDED_TYPE)
         }
     }

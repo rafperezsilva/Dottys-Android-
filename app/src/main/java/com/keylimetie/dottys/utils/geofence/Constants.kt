@@ -40,13 +40,14 @@ internal object Constants {
     /**
      * Map for storing information about airports in the San Francisco bay area.
      */
-   // val BAY_AREA_LANDMARKS = HashMap<String, LatLng>()
+    val BAY_AREA_LANDMARKS = HashMap<String, LatLng>()
 
-//    init {
-//        // San Francisco International Airport.
-//        BAY_AREA_LANDMARKS["SFO"] = LatLng(37.621313, -122.378955)
-//
-//        // Googleplex.
-//        BAY_AREA_LANDMARKS["GOOGLE"] = LatLng(37.422611, -122.0840577)
-//    }
+    init {
+        // San Francisco International Airport.
+        BAY_AREA_LANDMARKS["SFO"] = LatLng(37.621313, -122.378955)
+
+        // Googleplex.
+        BAY_AREA_LANDMARKS["GOOGLE"] =
+            LatLng(37.422611, -122.0840577)
+    }
 }

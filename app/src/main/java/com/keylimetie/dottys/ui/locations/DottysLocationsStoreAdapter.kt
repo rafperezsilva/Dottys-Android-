@@ -15,7 +15,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
- import com.keylimetie.dottys.DottysMainNavigationActivity
+import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.GpsTracker
 
 import com.keylimetie.dottys.R
@@ -30,7 +30,7 @@ class DottysLocationsStoreAdapter(
     private val locationsViewModel: LocationsViewModel,
     private val activity: Context,
     private val dataSource: ArrayList<DottysStoresLocation>,
-    private val mapFragment: DottysLocationsMapFragment
+    private val mapFragment: DottysLocationsMapFragment,
 ) : BaseExpandableListAdapter(), View.OnClickListener {
     //  private val inflater: LayoutInflater
     // = activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -69,7 +69,7 @@ class DottysLocationsStoreAdapter(
         parent: Int,
         isExpanded: Boolean,
         convertView: View?,
-        parentview: ViewGroup
+        parentview: ViewGroup,
     ): View {
         var convertView = convertView
 
@@ -94,7 +94,7 @@ class DottysLocationsStoreAdapter(
         child: Int,
         isLastChild: Boolean,
         convertView: View?,
-        parentview: ViewGroup
+        parentview: ViewGroup,
     ): View {
         var convertView = convertView
 
@@ -109,8 +109,8 @@ class DottysLocationsStoreAdapter(
 
         convertView?.layoutParams = paramsView
         val childTextvew = convertView!!.findViewById(R.id.child_textview) as TextView
-        val getDirectionsButton = convertView!!.findViewById(R.id.get_directions_button) as Button
-        val callLocationButton = convertView!!.findViewById(R.id.call_location_button) as Button
+        val getDirectionsButton = convertView.findViewById(R.id.get_directions_button) as Button
+        val callLocationButton = convertView.findViewById(R.id.call_location_button) as Button
         getDirectionsButton.setOnClickListener(this)
         callLocationButton.setOnClickListener(this)
         childTextvew.text =
@@ -150,14 +150,16 @@ class DottysLocationsStoreAdapter(
     }
 
     override fun onGroupCollapsed(groupPosition: Int) {
-        if(locationsViewModel.isAllGroupCollapsed()){ locationsViewModel.fragmentMap.updateMarker()}
+        if (locationsViewModel.isAllGroupCollapsed()) {
+            locationsViewModel.fragmentMap.updateMarker()
+        }
 
         print("GROUP COLAPSED ->" + groupPosition)
 
     }
 
     override fun onClick(v: View?) {
-        when(v?.id){
+        when (v?.id) {
             R.id.get_directions_button -> {
                 openMap()
             }
@@ -171,13 +173,15 @@ class DottysLocationsStoreAdapter(
 
         if (ContextCompat.checkSelfPermission(activity,
                 Manifest.permission.CALL_PHONE)
-            != PackageManager.PERMISSION_GRANTED) {
+            != PackageManager.PERMISSION_GRANTED
+        ) {
 
             // Permission is not granted
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(
                     activity as Activity,
-                    Manifest.permission.CALL_PHONE)) {
+                    Manifest.permission.CALL_PHONE)
+            ) {
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
@@ -194,26 +198,22 @@ class DottysLocationsStoreAdapter(
     }
 
 
-
-
-
-
     @SuppressLint("MissingPermission")
-    fun callPhone(){
+    fun callPhone() {
         val phone = locationObserver?.hasSelected?.phone ?: ""
         val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:$phone"))
         activity.startActivity(intent)
     }
 
-    fun openMap(){
-        if (locationObserver?.hasSelected?.latitude.toString().isNotEmpty()){
-         val lat =  locationObserver?.hasSelected?.latitude.toString()
-         val long =  locationObserver?.hasSelected?.longitude.toString()
-        val currentGps = GpsTracker(activity as DottysMainNavigationActivity)
-        val uri =
-            "http://maps.google.com/maps?saddr=${currentGps.getLatitude()},${currentGps.getLongitude()}&daddr=$lat,$long"
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
-        activity.startActivity(intent)
+    fun openMap() {
+        if (locationObserver?.hasSelected?.latitude.toString().isNotEmpty()) {
+            val lat = locationObserver?.hasSelected?.latitude.toString()
+            val long = locationObserver?.hasSelected?.longitude.toString()
+            val currentGps = GpsTracker(activity as DottysMainNavigationActivity)
+            val uri =
+                "http://maps.google.com/maps?saddr=${currentGps.getLatitude()},${currentGps.getLongitude()}&daddr=$lat,$long"
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+            activity.startActivity(intent)
         }
     }
 

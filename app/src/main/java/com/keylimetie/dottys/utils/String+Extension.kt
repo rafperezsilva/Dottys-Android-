@@ -1,11 +1,15 @@
 package com.keylimetie.dottys.utils
 
+import android.os.Build
 import android.text.TextUtils
 import android.util.Patterns
+import androidx.annotation.RequiresApi
 import org.skyscreamer.jsonassert.JSONAssert
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.regex.Pattern
 
@@ -104,4 +108,16 @@ fun String.isValidEmail(): Boolean {
     } else {
         Patterns.EMAIL_ADDRESS.matcher(this).matches()
     }
+}
+
+
+fun String.currentDateTime():String{
+    val current = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        LocalDateTime.now()
+    } else {
+        return  ""
+    }
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+    return  current.format(formatter)
+
 }

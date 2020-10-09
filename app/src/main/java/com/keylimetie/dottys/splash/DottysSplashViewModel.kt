@@ -87,13 +87,11 @@ class DottysSplashViewModel : ViewModel() {
         loginButton.setOnClickListener {
             val intentLogin = Intent(context, DottysLoginActivity::class.java)
             context.startActivity(intentLogin)
-
         }
         sigupButton.setOnClickListener {
             val intent = Intent(context, DottysRegisterActivity::class.java)
             context.startActivity(intent)
         }
-//        conainer.alpha = 1f
     }
 
 
@@ -105,7 +103,7 @@ fun DottysBaseActivity.getVersionApp(context: AppCompatActivity): String {
         val pInfo = context.packageManager.getPackageInfo(packageName, 0)
         val version = pInfo.versionName
         @Suppress("DEPRECATION") val verCode = pInfo.versionCode
-        "V$verCode.0 ( $version )"
+        "V$version ($verCode)"
     } catch (e: Error) {
         Log.d("ERROR VERSION", e.toString())
         ""

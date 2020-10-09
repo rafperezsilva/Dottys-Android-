@@ -21,8 +21,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.R
-import com.keylimetie.dottys.utils.getleftDays
 import com.keylimetie.dottys.redeem.DottysRewardRedeemedActivity
+import com.keylimetie.dottys.utils.getleftDays
 import kotlin.math.roundToInt
 
 
@@ -30,7 +30,7 @@ class DottysDrawingAdapter(
     activity: Context,
     val activityFragment: DottysMainNavigationActivity,
     private val dataSource: List<DottysDrawing>,
-    val segmentSelected: RewardsSegment
+    val segmentSelected: RewardsSegment,
 ) : BaseAdapter() {
 
     var expireRewards: TextView? = null
@@ -79,8 +79,8 @@ class DottysDrawingAdapter(
         return rowView
     }
 
-    fun heigthForItem(parent: ViewGroup):Int{
-        when(segmentSelected){
+    fun heigthForItem(parent: ViewGroup): Int {
+        when (segmentSelected) {
             RewardsSegment.DRAWING_ENTRIES -> {
                 return (parent.height / 3.0).roundToInt()
             }
@@ -104,7 +104,7 @@ class DottysDrawingAdapter(
                 descriptionRewards?.text =
                     rewards.priceInPoints.toString() + " Points for " + rewards.quantity + " Entries"
                 expireRewards?.text =
-                    "Expire in " + rewards.endDate?.let { it.getleftDays()  } + " days"
+                    "Expire in " + rewards.endDate?.let { it.getleftDays() } + " days"
                 backImage?.setImageDrawable(activityFragment.resources.getDrawable(R.mipmap.ticket_background_image))
                 buttonRewards?.text = "Convert Points for Entries"
                 intent.putExtra("REDEEM_REWARDS_VIEW_TYPE", "DRAWING_ENTRIES")
@@ -130,7 +130,7 @@ class DottysDrawingAdapter(
         }
     }
 
-    private  fun attributedRedeemText2(text:String): SpannableString {
+    private fun attributedRedeemText2(text: String): SpannableString {
         val spannable = SpannableString(text)
         spannable.setSpan(
             ForegroundColorSpan(Color.BLACK),
@@ -152,7 +152,7 @@ class DottysDrawingAdapter(
         return spannable
     }
 
-    fun attributedRedeemText(point:String): SpannableString {
+    fun attributedRedeemText(point: String): SpannableString {
         val spannable = SpannableString("$point points!")
         spannable.setSpan(
             ForegroundColorSpan(Color.GREEN),

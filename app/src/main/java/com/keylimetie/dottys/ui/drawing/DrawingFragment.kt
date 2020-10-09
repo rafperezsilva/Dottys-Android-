@@ -23,20 +23,20 @@ import java.text.NumberFormat
 class DrawingFragment : Fragment(), DottysDrawingDelegates, DottysDashboardDelegates {
 
     private lateinit var drawingViewModel: DrawingViewModel
-    private var dashboardViewModel:  DashboardViewModel? = null
+    private var dashboardViewModel: DashboardViewModel? = null
     private var viewRoot: View? = null
-     override fun onCreateView(
+    override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         drawingViewModel =
             ViewModelProviders.of(this).get(DrawingViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_drawing, container, false)
-         drawingViewModel.segmentLayout = root.findViewById(R.id.segment_drawing_layout)
-         dashboardViewModel = DashboardViewModel(activity as DottysMainNavigationActivity)
-         drawingViewModel.segmentLayout?.visibility = View.INVISIBLE
-         viewRoot = root
+        drawingViewModel.segmentLayout = root.findViewById(R.id.segment_drawing_layout)
+        dashboardViewModel = DashboardViewModel(activity as DottysMainNavigationActivity)
+        drawingViewModel.segmentLayout?.visibility = View.INVISIBLE
+        viewRoot = root
         return root
     }
 
@@ -57,40 +57,40 @@ class DrawingFragment : Fragment(), DottysDrawingDelegates, DottysDashboardDeleg
 
     override fun getUserDrawings(drawing: DottysDrawingUserModel) {
         drawingViewModel.segmentSelected = RewardsSegment.DRAWING_ENTRIES
-         drawingViewModel.initListView()  
-          var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
+        drawingViewModel.initListView()
+        var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
         dashboardViewModel?.userCurrentUserDataObserver = DottysCurrentUserObserver(this)
         activity?.let { dashboardViewModel?.getCurrentUserRequest(it) }
     }
 
 
-
     override fun getDrawingSummary(dawingSummary: DottysDrawingSumaryModel) {}
 
     override fun getCurrentUser(currentUser: DottysLoginResponseModel) {
-     var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
+        var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
 //        activity?.let { drawingViewModel.initViewSetting(this, null, it, viewRoot) }
-         var userAux = activity?.getUserPreference()
+        var userAux = activity?.getUserPreference()
         userAux?.points = currentUser.points
-        activity?.saveDataPreference(PreferenceTypeKey.USER_DATA,userAux?.toJson().toString())
+        activity?.saveDataPreference(PreferenceTypeKey.USER_DATA, userAux?.toJson().toString())
         activity?.getUserPreference()?.let { fillItemsInView(it) }
 
     }
-//region
+
+    //region
     override fun getUserRewards(rewards: DottysRewardsModel) {}
 
     override fun getGlobalData(gloabalData: DottysGlobalDataModel) {}
 
     override fun getDottysUserLocation(locationData: DottysDrawingRewardsModel) {}
 
-    override fun getBeaconList(beaconList: DottysBeaconsModel) { }
-    override fun onDashboardBanners(banners: ArrayList<DottysBanners>) { }
+    override fun getBeaconList(beaconList: DottysBeaconsModel) {}
+    override fun onDashboardBanners(banners: ArrayList<DottysBanners>) {}
 
     //endregion
-  private fun fillItemsInView(currentUser: DottysLoginResponseModel){
-      drawingViewModel.titleTotalPoints?.text = drawingViewModel.attributedRedeemText(
-        NumberFormat.getIntegerInstance()
-            .format(currentUser.points ?: (0).toLong())
-    )
-}
+    private fun fillItemsInView(currentUser: DottysLoginResponseModel) {
+        drawingViewModel.titleTotalPoints?.text = drawingViewModel.attributedRedeemText(
+            NumberFormat.getIntegerInstance()
+                .format(currentUser.points ?: (0).toLong())
+        )
+    }
 }

@@ -27,23 +27,25 @@ import com.keylimetie.dottys.register.DottysRegisterViewModel
 import com.keylimetie.dottys.splash.getVersionApp
 import com.keylimetie.dottys.ui.dashboard.DottysPagerDelegates
 import com.keylimetie.dottys.ui.drawing.*
+import com.keylimetie.dottys.utils.geofence.DottysGeofence
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import kotlin.properties.Delegates
 
 
-class DottysMainNavigationActivity: DottysBaseActivity(), DottysLocationChangeDelegates,
-    DottysPagerDelegates, DottysDrawingDelegates, DottysRegisterUserDelegates {//, DottysBeaconStatusDelegate {
+class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeDelegates,
+    DottysPagerDelegates, DottysDrawingDelegates, DottysRegisterUserDelegates {
+    //, DottysBeaconStatusDelegate {
     val registerViewModel = DottysRegisterViewModel()
     var cameraPictureObserver: DottysProfilePictureObserver? = null
     private var drawingItemSelected: Int? = 0
     private var navView: NavigationView? = null
-    var segmentSelect: RewardsSegment? =  null
+    var segmentSelect: RewardsSegment? = null
     private lateinit var appBarConfiguration: AppBarConfiguration
     lateinit var controller: NavController // don't forget to initialize
     private lateinit var toolbar: Toolbar
     var selectedItemId: Int? = 0
-    var image_uri: Uri?  = null
+    var image_uri: Uri? = null
     private val listener =
         NavController.OnDestinationChangedListener { controller, destination, arguments ->
             val logoAppBar = findViewById<ImageView>(R.id.logo_appbar)
@@ -52,7 +54,8 @@ class DottysMainNavigationActivity: DottysBaseActivity(), DottysLocationChangeDe
             when (destination.id) {
                 R.id.nav_locations, R.id.nav_profile,
                 R.id.nav_terms_and_conditions, R.id.nav_privacy_policy,
-                R.id.nav_contact_suppport -> {
+                R.id.nav_contact_suppport,
+                -> {
                     toolbar.setBackgroundColor(resources.getColor(R.color.colorPrimary))
                     logoAppBar.visibility = View.INVISIBLE
                     window.statusBarColor = ContextCompat.getColor(this, R.color.colorPrimary)
@@ -63,7 +66,7 @@ class DottysMainNavigationActivity: DottysBaseActivity(), DottysLocationChangeDe
                             logoAppBar.visibility = View.VISIBLE
                         }
                         else -> {
-                             when(destination.id) {
+                            when (destination.id) {
 
                                 R.id.nav_drawing -> {
                                     segmentSelect = RewardsSegment.DRAWING_ENTRIES
@@ -119,7 +122,7 @@ class DottysMainNavigationActivity: DottysBaseActivity(), DottysLocationChangeDe
 
         setSupportActionBar(toolbar)
         initDrawerSetting()
-        if(intent.getBooleanExtra("VIEW_FROM_PROFILE", false)) {
+        if (intent.getBooleanExtra("VIEW_FROM_PROFILE", false)) {
             controller.navigate(R.id.nav_profile, intent.extras)
         }
 //        if (gpsTracker == null) {
@@ -127,13 +130,14 @@ class DottysMainNavigationActivity: DottysBaseActivity(), DottysLocationChangeDe
 //        }
 //        gpsTracker?.getLocation()?.let { gpsTracker?.onLocationChanged(it) }
         mainNavigationActivity = this
-       // getBeaconStatus()?.let { beaconService.listenerBeaconStatus(it, this) }
- }
+        // getBeaconStatus()?.let { beaconService.listenerBeaconStatus(it, this) }
+        DottysGeofence(this)
+    }
 
     private fun initDrawerSetting() {
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-          navView  = findViewById(R.id.nav_view)
+        navView = findViewById(R.id.nav_view)
         val footerLabel = findViewById<TextView>(R.id.footer_label)
         footerLabel.text =
             "© 2020 Laredo Hospitality Group.\nAll rights reserved.\n${getVersionApp(this)}"
@@ -215,7 +219,7 @@ class DottysMainNavigationActivity: DottysBaseActivity(), DottysLocationChangeDe
     override fun getDrawingSelected(position: Int) {
         drawingItemSelected = position
         val drawingViewModel = DrawingViewModel()
-        drawingViewModel.drawingObserver =  DottysDrawingObserver(this)
+        drawingViewModel.drawingObserver = DottysDrawingObserver(this)
         drawingViewModel.getUserDrawings(this)
 
     }
@@ -227,8 +231,9 @@ class DottysMainNavigationActivity: DottysBaseActivity(), DottysLocationChangeDe
     override fun getUserDrawings(drawing: DottysDrawingUserModel) {
         var intent = Intent(this, DottysRewardRedeemedActivity::class.java)
         intent.putExtra("REDEEM_REWARDS_VIEW_TYPE", "DRAWING_ENTRIES")
-        intent.putExtra("DRAWING_DATA",drawing.drawings?.reversed()?.get(drawingItemSelected ?: 0)?.toJson().toString())
-         startActivity(intent)
+        intent.putExtra("DRAWING_DATA",
+            drawing.drawings?.reversed()?.get(drawingItemSelected ?: 0)?.toJson().toString())
+        startActivity(intent)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -248,9 +253,9 @@ class DottysMainNavigationActivity: DottysBaseActivity(), DottysLocationChangeDe
         }
     }
 
-    override fun registerUser(userData: DottysLoginResponseModel) { }
+    override fun registerUser(userData: DottysLoginResponseModel) {}
 
-    override fun imageProfileHasUploaded(hasUploaded: Boolean) { }
+    override fun imageProfileHasUploaded(hasUploaded: Boolean) {}
 
 }
 
@@ -265,11 +270,11 @@ class DottysProfilePictureObserver(lisener: DottysOnProfilePictureTakenDelegate)
         initialValue = emptyBitmap(),
         onChange = { _, _, new -> lisener.onPictureTaken(new) })
 
-    private fun emptyBitmap():Bitmap {
+    private fun emptyBitmap(): Bitmap {
         val w = 1
         val h = 1
         val conf = Bitmap.Config.ARGB_8888
-       return  Bitmap.createBitmap(w, h, conf)
+        return Bitmap.createBitmap(w, h, conf)
 //        val canvas = Canvas(bmp)
     }
 }

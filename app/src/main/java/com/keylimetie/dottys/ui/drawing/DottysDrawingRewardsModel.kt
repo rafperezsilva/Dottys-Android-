@@ -12,14 +12,14 @@ val mapper = jacksonObjectMapper().apply {
 }
 
 
-data class DottysMainHomeLocationModel (
+data class DottysMainHomeLocationModel(
     val total: Long? = (0).toLong(),
     val limit: Long? = (0).toLong(),
     val page: Long? = (0).toLong(),
     val pages: Long? = (0).toLong(),
-    @get:JsonProperty("_id")@field:JsonProperty("_id")
+    @get:JsonProperty("_id") @field:JsonProperty("_id")
     val id: String? = "",
-    val locations: List<DottysDrawingRewardsModel>? = listOf(DottysDrawingRewardsModel())
+    val locations: List<DottysDrawingRewardsModel>? = listOf(DottysDrawingRewardsModel()),
 ) {
     fun toJson() = mapper.writeValueAsString(this)
 
@@ -29,8 +29,8 @@ data class DottysMainHomeLocationModel (
 }
 
 
-data class DottysDrawingRewardsModel (
-    @get:JsonProperty("_id")@field:JsonProperty("_id")
+data class DottysDrawingRewardsModel(
+    @get:JsonProperty("_id") @field:JsonProperty("_id")
     val id: String? = "",
 
     val updatedAt: String? = "",
@@ -38,7 +38,7 @@ data class DottysDrawingRewardsModel (
     val updatedBy: String? = "",
     val createdBy: String? = "",
 
-    @get:JsonProperty("regionId")@field:JsonProperty("regionId")
+    @get:JsonProperty("regionId") @field:JsonProperty("regionId")
     val regionID: String? = "",
 
     val name: String? = "",
@@ -55,10 +55,10 @@ data class DottysDrawingRewardsModel (
     val company: String? = "",
     val address2: String? = "",
 
-    @get:JsonProperty("isDeleted")@field:JsonProperty("isDeleted")
+    @get:JsonProperty("isDeleted") @field:JsonProperty("isDeleted")
     val isDeleted: Boolean? = false,
 
-    val hours: List<String>? = listOf("")
+    val hours: List<String>? = listOf(""),
 ) {
     fun toJson() = mapper.writeValueAsString(this)
 

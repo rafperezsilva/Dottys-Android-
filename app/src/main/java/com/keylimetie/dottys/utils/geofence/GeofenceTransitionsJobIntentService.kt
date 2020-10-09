@@ -31,8 +31,8 @@ import androidx.core.app.TaskStackBuilder
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingEvent
 import com.keylimetie.dottys.DottysBaseActivity
+import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.R
-import com.keylimetie.dottys.utils.geofence.GeofenceErrorMessages.getErrorString
 import java.util.*
 
 /**
@@ -51,11 +51,9 @@ class GeofenceTransitionsJobIntentService : JobIntentService() {
     override fun onHandleWork(intent: Intent) {
         val geofencingEvent = GeofencingEvent.fromIntent(intent)
         if (geofencingEvent.hasError()) {
-            val errorMessage = getErrorString(
-                this,
-                geofencingEvent.errorCode
-            )
-            Log.e(TAG, errorMessage)
+            val errorMessage = GeofenceErrorMessages.getErrorString(this,
+                geofencingEvent.errorCode)
+            Log.e(TAG, errorMessage!!)
             return
         }
 
@@ -71,10 +69,8 @@ class GeofenceTransitionsJobIntentService : JobIntentService() {
             val triggeringGeofences = geofencingEvent.triggeringGeofences
 
             // Get the transition details as a String.
-            val geofenceTransitionDetails = getGeofenceTransitionDetails(
-                geofenceTransition,
-                triggeringGeofences
-            )
+            val geofenceTransitionDetails = getGeofenceTransitionDetails(geofenceTransition,
+                triggeringGeofences)
 
             // Send notification and log the transition details.
             sendNotification(geofenceTransitionDetails)
@@ -127,13 +123,13 @@ class GeofenceTransitionsJobIntentService : JobIntentService() {
         }
 
         // Create an explicit content Intent that starts the main Activity.
-        val notificationIntent = Intent(applicationContext, DottysBaseActivity::class.java)
+        val notificationIntent = Intent(applicationContext, DottysGeofence::class.java)
 
         // Construct a task stack.
         val stackBuilder = TaskStackBuilder.create(this)
 
         // Add the main Activity to the task stack as the parent.
-        stackBuilder.addParentStack(DottysBaseActivity::class.java)
+        stackBuilder.addParentStack(DottysMainNavigationActivity::class.java)
 
         // Push the content Intent onto the stack.
         stackBuilder.addNextIntent(notificationIntent)
@@ -146,14 +142,10 @@ class GeofenceTransitionsJobIntentService : JobIntentService() {
         val builder = NotificationCompat.Builder(this)
 
         // Define the notification settings.
-        builder.setSmallIcon(R.mipmap.dottys_image) // In a real app, you may want to use a library like Volley
+        builder.setSmallIcon(R.drawable.ic_launcher_foreground) // In a real app, you may want to use a library like Volley
             // to decode the Bitmap.
-            .setLargeIcon(
-                BitmapFactory.decodeResource(
-                    resources,
-                    R.drawable.ic_launcher_foreground
-                )
-            )
+            .setLargeIcon(BitmapFactory.decodeResource(resources,
+                R.drawable.ic_launcher_foreground))
             .setColor(Color.RED)
             .setContentTitle(notificationDetails)
             .setContentText(getString(R.string.geofence_transition_notification_text))
@@ -194,12 +186,10 @@ class GeofenceTransitionsJobIntentService : JobIntentService() {
          * Convenience method for enqueuing work in to this service.
          */
         fun enqueueWork(context: Context?, intent: Intent?) {
-            enqueueWork(
-                context!!,
+            enqueueWork(context!!,
                 GeofenceTransitionsJobIntentService::class.java,
                 JOB_ID,
-                intent!!
-            )
+                intent!!)
         }
     }
 }

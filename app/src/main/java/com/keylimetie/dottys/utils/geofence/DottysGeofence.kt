@@ -19,9 +19,7 @@ import android.Manifest
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.preference.PreferenceManager
-import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -31,16 +29,13 @@ import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingClient
 import com.google.android.gms.location.GeofencingRequest
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
-import com.keylimetie.dottys.BuildConfig
 import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.R
 import com.keylimetie.dottys.ui.locations.DottysStoresLocation
-import com.keylimetie.dottys.utils.geofence.DottysGeofenceActivity
-import com.keylimetie.dottys.utils.geofence.GeofenceErrorMessages.getErrorString
+import java.util.*
 
 /**
  * Demonstrates how to create and remove geofences using the GeofencingApi. Uses an IntentService
@@ -53,13 +48,7 @@ import com.keylimetie.dottys.utils.geofence.GeofenceErrorMessages.getErrorString
  *
  *
  */
-class DottysGeofenceActivity (
-    activity: DottysBaseActivity,
-    storeList: ArrayList<DottysStoresLocation>
-) : OnCompleteListener<Void?> {
-    private val baseActivity = activity
-    private val storeDottysList = storeList
-
+class DottysGeofence(private val baseActivity: DottysBaseActivity ) :   OnCompleteListener<Void?> {
     /**
      * Tracks whether the user requested to add or remove geofences, or to do neither.
      */
@@ -83,72 +72,59 @@ class DottysGeofenceActivity (
     private var mGeofencePendingIntent: PendingIntent? = null
 
     // Buttons for kicking off the process of adding or removing geofences.
-    private var mAddGeofencesButton: Button? = null
-    private var mRemoveGeofencesButton: Button? = null
+    private val mAddGeofencesButton: Button? = null
+    private val mRemoveGeofencesButton: Button? = null
     private var mPendingGeofenceTask = PendingGeofenceTask.NONE
-
     init {
-        onCreateGeofence()
-    }
-    private fun onCreateGeofence() {
+
+//
+//    public override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+        // setContentView(R.layout.main_activity);
+
+        // Get the UI widgets.
+//        mAddGeofencesButton = (Button) findViewById(R.id.add_geofences_button);
+//        mRemoveGeofencesButton = (Button) findViewById(R.id.remove_geofences_button);
 
         // Empty list for storing geofences.
-        mGeofenceList = getGeofencesStores()
+        mGeofenceList = ArrayList()
+
 
         // Initially set the PendingIntent used in addGeofences() and removeGeofences() to null.
         mGeofencePendingIntent = null
-        //setButtonsEnabledState()
+       // setButtonsEnabledState()
 
         // Get the geofences used. Geofence data is hard coded in this sample.
-       // populateGeofenceList()
+        populateGeofenceList()
         mGeofencingClient = LocationServices.getGeofencingClient(baseActivity)
-        mPendingGeofenceTask = PendingGeofenceTask.ADD
-        onStartGeofece()
-    }
-
-
-    private fun onStartGeofece() {
-
+//    }
+//
+//    public override fun onStart() {
+//        super.onStart()
         if (!checkPermissions()) {
             requestPermissions()
         } else {
             performPendingGeofenceTask()
         }
-    }
 
 
-    /**
-     * Build an array for Id's and Lat Long
-     * for the 15 nearest Dotty's stores
-     */
-    private fun getGeofencesStores(): ArrayList<Geofence> {
-        val geofences = ArrayList<Geofence>()
-
-        for (store in storeDottysList) {
-
-            val locationGPS =
-                store.latitude?.let { store.longitude?.let { it1 -> LatLng(it, it1) } }
-            val geofence = Geofence.Builder()
-                .setRequestId(store.regionID) // Geofence ID
-                .setCircularRegion(
-                    locationGPS?.latitude ?: return geofences,
-                    locationGPS.longitude,
-                    750f
-                ) // defining fence region
-                .setExpirationDuration(Geofence.NEVER_EXPIRE)// expiring date
-                .setLoiteringDelay(10000)
-                // Transition types that it should look for
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT)
-                .build()
-            if (geofences.count() >= 15) {
-                return geofences
-            }
-            geofences.add(geofence)
+        if (!checkPermissions()) {
+            mPendingGeofenceTask = PendingGeofenceTask.ADD
+            requestPermissions()
+         } else {
+            addGeofences()
         }
-        return geofences
+
     }
 
-
+    fun geofenceAtStores():  ArrayList<DottysStoresLocation> {
+       var geoList = ArrayList<DottysStoresLocation>()
+        val storeList = if (baseActivity.getUserNearsLocations().locations.isNullOrEmpty()) {return geoList} else {baseActivity.getUserNearsLocations().locations} ?: return geoList
+        for (store in 0..15) {
+            geoList.add(storeList[store])
+        }
+        return geoList
+    }
     // The INITIAL_TRIGGER_ENTER flag indicates that geofencing service should trigger a
     // GEOFENCE_TRANSITION_ENTER notification when the geofence is added and if the device
     // is already inside that geofence.
@@ -180,14 +156,14 @@ class DottysGeofenceActivity (
      * Adds geofences, which sets alerts to be notified when the device enters or exits one of the
      * specified geofences. Handles the success or failure results returned by addGeofences().
      */
-//    fun addGeofencesButtonHandler(view: View?) {
-//        if (!checkPermissions()) {
-//            mPendingGeofenceTask = PendingGeofenceTask.ADD
-//            requestPermissions()
-//            return
-//        }
-//        addGeofences()
-//    }
+    fun addGeofencesButtonHandler(view: View?) {
+        if (!checkPermissions()) {
+            mPendingGeofenceTask = PendingGeofenceTask.ADD
+            requestPermissions()
+            return
+        }
+        addGeofences()
+    }
 
     /**
      * Adds geofences. This method should be called after the user has granted the location
@@ -198,10 +174,8 @@ class DottysGeofenceActivity (
             showSnackbar(baseActivity.getString(R.string.insufficient_permissions))
             return
         }
-        if (ActivityCompat.checkSelfPermission(
-                baseActivity,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
+        if (ActivityCompat.checkSelfPermission(baseActivity,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
         ) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -210,36 +184,24 @@ class DottysGeofenceActivity (
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            showSnackbar(
-                R.string.permission_denied_explanation, R.string.settings
-            ) { // Build intent that displays the App settings screen.
-                val intent = Intent()
-                intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                val uri = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
-                intent.data = uri
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                baseActivity.startActivity(intent)
-
-
-            }
             return
         }
-      //  mGeofencingClient!!.addGeofences(geofencingRequest, geofencePendingIntent)
-       //     .addOnCompleteListener(this)
+        mGeofencingClient!!.addGeofences(geofencingRequest, geofencePendingIntent)
+            .addOnCompleteListener(this)
     }
 
     /**
      * Removes geofences, which stops further notifications when the device enters or exits
      * previously registered geofences.
      */
-//    fun removeGeofencesButtonHandler(view: View?) {
-//        if (!checkPermissions()) {
-//            mPendingGeofenceTask = PendingGeofenceTask.REMOVE
-//            requestPermissions()
-//            return
-//        }
-//        removeGeofences()
-//    }
+    fun removeGeofencesButtonHandler(view: View?) {
+        if (!checkPermissions()) {
+            mPendingGeofenceTask = PendingGeofenceTask.REMOVE
+            requestPermissions()
+            return
+        }
+        removeGeofences()
+    }
 
     /**
      * Removes geofences. This method should be called after the user has granted the location
@@ -262,15 +224,14 @@ class DottysGeofenceActivity (
         mPendingGeofenceTask = PendingGeofenceTask.NONE
         if (task.isSuccessful) {
             updateGeofencesAdded(!geofencesAdded)
-           // setButtonsEnabledState()
-            val messageId: Int =
+//            setButtonsEnabledState()
+            val messageId =
                 if (geofencesAdded) R.string.geofences_added else R.string.geofences_removed
-            Toast.makeText(baseActivity, baseActivity.getString(messageId), Toast.LENGTH_SHORT)
-                .show()
+            Toast.makeText(baseActivity, baseActivity.getString(messageId), Toast.LENGTH_SHORT).show()
         } else {
             // Get the status code for the error and log it using a user-friendly message.
-            val errorMessage = getErrorString(baseActivity, task.exception)
-            Log.w(TAG, errorMessage)
+            val errorMessage = GeofenceErrorMessages.getErrorString(baseActivity, task.exception)
+            Log.w(TAG, errorMessage!!)
         }
     }// Reuse the PendingIntent if we already have it.
     // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when calling
@@ -292,12 +253,7 @@ class DottysGeofenceActivity (
             // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when calling
             // addGeofences() and removeGeofences().
             mGeofencePendingIntent =
-                PendingIntent.getBroadcast(
-                    baseActivity,
-                    0,
-                    intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT
-                )
+                PendingIntent.getBroadcast(baseActivity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
             return mGeofencePendingIntent
         }
 
@@ -305,28 +261,28 @@ class DottysGeofenceActivity (
      * This sample hard codes geofence data. A real app might dynamically create geofences based on
      * the user's location.
      */
-//    private fun populateGeofenceList() {
-//        for (value in this.mGeofenceList ?: return) {
-//            mGeofenceList!!.add(
-//                Geofence.Builder() // Set the request ID of the geofence. This is a string to identify this
-//                    // geofence.
-//                    .setRequestId(key) // Set the circular region of this geofence.
-//                    .setCircularRegion(
-//                        value.latitude,
-//                        value.longitude,
-//                        Constants.GEOFENCE_RADIUS_IN_METERS
-//                    ) // Set the expiration duration of the geofence. This geofence gets automatically
-//                    // removed after this period of time.
-//                    .setExpirationDuration(Constants.GEOFENCE_EXPIRATION_IN_MILLISECONDS) // Set the transition types of interest. Alerts are only generated for these
-//                    // transition. We track entry and exit transitions in this sample.
-//                    .setTransitionTypes(
-//                        Geofence.GEOFENCE_TRANSITION_ENTER or
-//                                Geofence.GEOFENCE_TRANSITION_EXIT
-//                    ) // Create the geofence.
-//                    .build()
-//            )
-//        }
-//    }
+    private fun populateGeofenceList() {
+        //for (store in geofenceAtStores()){
+        for ((value ,index) in Constants.BAY_AREA_LANDMARKS) {
+            mGeofenceList!!.add(Geofence.Builder() // Set the request ID of the geofence. This is a string to identify this
+                // geofence.
+                .setRequestId(value) // Set the circular region of this geofence.
+                .setCircularRegion(
+                    index.latitude ?: 0.0,
+                    index.longitude ?: 0.0,
+                    Constants.GEOFENCE_RADIUS_IN_METERS
+                ) // Set the expiration duration of the geofence. This geofence gets automatically
+                // removed after this period of time.
+                .setExpirationDuration(Constants.GEOFENCE_EXPIRATION_IN_MILLISECONDS) // Set the transition types of interest. Alerts are only generated for these
+                // transition. We track entry and exit transitions in this sample.
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or
+                        Geofence.GEOFENCE_TRANSITION_EXIT) // Create the geofence.
+                .build())
+            //Log.e("POPULATE STORE - ", "${store.storeNumber} LOC -- ${index.latitude}//${store.longitude}")
+            Log.e("POPULATE STORE - ", "${value} LOC -- ${index.latitude}//${index.longitude}")
+
+        }
+    }
 
     /**
      * Ensures that only one button is enabled at any time. The Add Geofences button is enabled
@@ -349,7 +305,7 @@ class DottysGeofenceActivity (
      * @param text The Snackbar text.
      */
     private fun showSnackbar(text: String) {
-        val container = baseActivity.findViewById<View>(R.id.content)
+        val container = baseActivity.findViewById<View>(android.R.id.content)
         if (container != null) {
             Snackbar.make(container, text, Snackbar.LENGTH_LONG).show()
         }
@@ -367,10 +323,9 @@ class DottysGeofenceActivity (
         listener: View.OnClickListener
     ) {
         Snackbar.make(
-            baseActivity.findViewById(R.id.content),
+            baseActivity.findViewById(android.R.id.content),
             baseActivity.getString(mainTextStringId),
-            Snackbar.LENGTH_INDEFINITE
-        )
+            Snackbar.LENGTH_INDEFINITE)
             .setAction(baseActivity.getString(actionStringId), listener).show()
     }
 
@@ -379,8 +334,7 @@ class DottysGeofenceActivity (
      */
     private val geofencesAdded: Boolean
         private get() = PreferenceManager.getDefaultSharedPreferences(baseActivity).getBoolean(
-            Constants.GEOFENCES_ADDED_KEY, false
-        )
+            Constants.GEOFENCES_ADDED_KEY, false)
 
     /**
      * Stores whether geofences were added ore removed in [SharedPreferences];
@@ -405,96 +359,91 @@ class DottysGeofenceActivity (
         }
     }
 
-
-
     /**
      * Return the current state of the permissions needed.
      */
     private fun checkPermissions(): Boolean {
-        val permissionState = ActivityCompat.checkSelfPermission(
-            baseActivity,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        )
+        val permissionState = ActivityCompat.checkSelfPermission(baseActivity,
+            Manifest.permission.ACCESS_FINE_LOCATION)
         return permissionState == PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestPermissions() {
-        val shouldProvideRationale = ActivityCompat.shouldShowRequestPermissionRationale(
-            baseActivity,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        )
+        val shouldProvideRationale = ActivityCompat.shouldShowRequestPermissionRationale(baseActivity,
+            Manifest.permission.ACCESS_FINE_LOCATION)
 
         // Provide an additional rationale to the user. This would happen if the user denied the
         // request previously, but didn't check the "Don't ask again" checkbox.
         if (shouldProvideRationale) {
             Log.i(TAG, "Displaying permission rationale to provide additional context.")
-            showSnackbar(
-                R.string.permission_rationale, R.string.app_name
+            showSnackbar(R.string.permission_rationale, android.R.string.ok
             ) { // Request permission
-                ActivityCompat.requestPermissions(
-                    baseActivity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    REQUEST_PERMISSIONS_REQUEST_CODE
-                )
+                ActivityCompat.requestPermissions(baseActivity,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    REQUEST_PERMISSIONS_REQUEST_CODE)
             }
         } else {
             Log.i(TAG, "Requesting permission")
             // Request permission. It's possible this can be auto answered if device policy
             // sets the permission in a given state or the user denied the permission
             // previously and checked "Never ask again".
-            ActivityCompat.requestPermissions(
-                baseActivity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                REQUEST_PERMISSIONS_REQUEST_CODE
-            )
+            ActivityCompat.requestPermissions(baseActivity,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                REQUEST_PERMISSIONS_REQUEST_CODE)
         }
     }
 
     /**
      * Callback received when a permissions request has been completed.
      */
-    fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        Log.i(TAG, "onRequestPermissionResult")
-        if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
-            if (grantResults.size <= 0) {
-                // If user interaction was interrupted, the permission request is cancelled and you
-                // receive empty arrays.
-                Log.i(TAG, "User interaction was cancelled.")
-            } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.i(TAG, "Permission granted.")
-                performPendingGeofenceTask()
-            } else {
-                // Permission denied.
+//    override fun onRequestPermissionsResult(
+//        requestCode: Int, permissions: Array<String>,
+//        grantResults: IntArray
+//    ) {
+//        Log.i(TAG, "onRequestPermissionResult")
+//        if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
+//            if (grantResults.size <= 0) {
+//                // If user interaction was interrupted, the permission request is cancelled and you
+//                // receive empty arrays.
+//                Log.i(TAG, "User interaction was cancelled.")
+//            } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                Log.i(TAG, "Permission granted.")
+//                performPendingGeofenceTask()
+//            } else {
+//                // Permission denied.
+//
+//                // Notify the user via a SnackBar that they have rejected a core permission for the
+//                // app, which makes the Activity useless. In a real app, core permissions would
+//                // typically be best requested during a welcome-screen flow.
+//
+//                // Additionally, it is important to remember that a permission might have been
+//                // rejected without asking the user for permission (device policy or "Never ask
+//                // again" prompts). Therefore, a user interface affordance is typically implemented
+//                // when permissions are denied. Otherwise, your app could appear unresponsive to
+//                // touches or interactions which have required permissions.
+//                showSnackbar(R.string.permission_denied_explanation, R.string.settings
+//                ) { // Build intent that displays the App settings screen.
+//                    val intent = Intent()
+//                    intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+//                    val uri = Uri.fromParts("package",
+//                        BuildConfig.APPLICATION_ID, null)
+//                    intent.data = uri
+//                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+//                    baseActivity.startActivity(intent)
+//                }
+//                mPendingGeofenceTask = PendingGeofenceTask.NONE
+//            }
+//        }
+//    } //    public final class BuildConfig {
 
-                // Notify the user via a SnackBar that they have rejected a core permission for the
-                // app, which makes the Activity useless. In a real app, core permissions would
-                // typically be best requested during a welcome-screen flow.
-
-                // Additionally, it is important to remember that a permission might have been
-                // rejected without asking the user for permission (device policy or "Never ask
-                // again" prompts). Therefore, a user interface affordance is typically implemented
-                // when permissions are denied. Otherwise, your app could appear unresponsive to
-                // touches or interactions which have required permissions.
-                showSnackbar(
-                    R.string.permission_denied_explanation, R.string.settings
-                ) { // Build intent that displays the App settings screen.
-                    val intent = Intent()
-                    intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                    val uri = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
-                    intent.data = uri
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    baseActivity.startActivity(intent)
-
-
-                }
-                mPendingGeofenceTask = PendingGeofenceTask.NONE
-            }
-        }
-    }
-
+    //       // public static final boolean DEBUG = Boolean.parseBoolean("true");
+    //        public static final String APPLICATION_ID = "com.keylimetie.dottys";
+    //        public static final String BUILD_TYPE = "debug";
+    //        public static final int VERSION_CODE = 1;
+    //        public static final String VERSION_NAME = "3.0.1";
+    //    }
     companion object {
-        private val TAG = DottysGeofenceActivity::class.java.simpleName
+        private val TAG = DottysGeofence::class.java.simpleName
         private const val REQUEST_PERMISSIONS_REQUEST_CODE = 34
     }
 }

@@ -43,16 +43,14 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         android:usesCleartextTraffic="true">
-<!--        <receiver-->
-<!--            android:name=".utils.geofence.GeofenceBroadcastReceiver"-->
-<!--            android:enabled="true"-->
-<!--            android:exported="true" />-->
-
-<!--        <service-->
-<!--            android:name=".utils.geofence.GeofenceTransitionsJobIntentService"-->
-<!--            android:exported="true"-->
-<!--            android:permission="android.permission.BIND_JOB_SERVICE" />-->
-<!--        <receiver android:name=".utils.geofence.GeofenceBroadcastReceiver"/>-->
+        <receiver
+            android:name=".utils.geofence.GeofenceBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".utils.geofence.GeofenceTransitionsJobIntentService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
         <activity
             android:name=".game_play.roulette.DottysRouletteActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />

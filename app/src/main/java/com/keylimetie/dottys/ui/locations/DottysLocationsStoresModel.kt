@@ -18,7 +18,7 @@ private fun <T> ObjectMapper.convert(
     k: kotlin.reflect.KClass<*>,
     fromJson: (JsonNode) -> T,
     toJson: (T) -> String,
-    isUnion: Boolean = false
+    isUnion: Boolean = false,
 ) = registerModule(SimpleModule().apply {
     addSerializer(k.java as Class<T>, object : StdSerializer<T>(k.java as Class<T>) {
         override fun serialize(value: T, gen: JsonGenerator, provider: SerializerProvider) =
@@ -41,7 +41,7 @@ data class DottysLocationsStoresModel(
     var limit: Long? = 0,
     var page: Long? = 0,
     var pages: Long? = 0,
-    var locations: ArrayList<DottysStoresLocation>? = ArrayList<DottysStoresLocation>()
+    var locations: ArrayList<DottysStoresLocation>? = ArrayList<DottysStoresLocation>(),
 ) {
     fun toJson() = mapper.writeValueAsString(this)
 
@@ -81,17 +81,16 @@ data class DottysStoresLocation(
     val distance: Double? = null,
     val createdBy: String? = null,
     val company: String? = null,
-    val updatedBy: String? = null
+    val updatedBy: String? = null,
 
 
-){
+    ) {
     fun toJson() = mapper.writeValueAsString(this)
 
     companion object {
         fun fromLocationJson(json: String) = mapper.readValue<DottysStoresLocation>(json)
     }
 }
-
 
 
 enum class StoreType(val value: String) {

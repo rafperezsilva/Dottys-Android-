@@ -14,7 +14,8 @@ import com.keylimetie.dottys.ui.dashboard.models.DottysBeacon
 
 class AnalyticBeacoonsAdapter(
     private val mContext: Context,
-    val list: ArrayList<DottysBeacon>) : BaseAdapter() {
+    val list: ArrayList<DottysBeacon>,
+) : BaseAdapter() {
 
     private var idBeacon: TextView? = null
     private var typeBeacon: TextView? = null
@@ -47,7 +48,8 @@ class AnalyticBeacoonsAdapter(
 
         val rewards = list[position]
         idBeacon = rowView.findViewById<TextView>(R.id.id_beacon_label)
-        statusColorBeacon = rowView.findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.status_beacon_image)
+        statusColorBeacon =
+            rowView.findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.status_beacon_image)
         typeBeacon = rowView.findViewById<TextView>(R.id.type_beacon_label)
 
         fillItemsInView(rewards)
@@ -56,9 +58,10 @@ class AnalyticBeacoonsAdapter(
 
 
     private fun fillItemsInView(beacon: DottysBeacon) {
-         idBeacon?.text = beacon.id
-         typeBeacon?.text = "${beacon.beaconType?.value} | Major: ${beacon.major.toString()} - Minor:${beacon.minor.toString()}"
-        var conectionStatusColor: Drawable? = when(beacon.isConected) {
+        idBeacon?.text = beacon.id
+        typeBeacon?.text =
+            "${beacon.beaconType?.value} | Major: ${beacon.major.toString()} - Minor:${beacon.minor.toString()}"
+        var conectionStatusColor: Drawable? = when (beacon.isConected) {
             true -> {
                 mContext.resources.getDrawable(R.drawable.shape_circular_conected)
             }
@@ -67,7 +70,7 @@ class AnalyticBeacoonsAdapter(
 
             }
         }
-        statusColorBeacon?.background =  conectionStatusColor
+        statusColorBeacon?.background = conectionStatusColor
     }
 
 

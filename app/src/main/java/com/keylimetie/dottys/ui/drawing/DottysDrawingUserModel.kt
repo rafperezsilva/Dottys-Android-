@@ -12,8 +12,8 @@ val drawingMapper = jacksonObjectMapper().apply {
     setSerializationInclusion(JsonInclude.Include.NON_NULL)
 }
 
-data class DottysDrawingUserModel (
-    val drawings: List<DottysDrawing>? = null
+data class DottysDrawingUserModel(
+    val drawings: List<DottysDrawing>? = null,
 ) {
     fun toJson() = drawingMapper.writeValueAsString(this)
 
@@ -21,9 +21,10 @@ data class DottysDrawingUserModel (
         fun fromJson(json: String) = drawingMapper.readValue<DottysDrawingUserModel>(json)
     }
 }
+
 @JsonIgnoreProperties
 data class DottysDrawing(
-    @get:JsonProperty("_id")@field:JsonProperty("_id")
+    @get:JsonProperty("_id") @field:JsonProperty("_id")
     val id: String? = null,
 
     val drawingType: String? = null,
@@ -37,20 +38,20 @@ data class DottysDrawing(
     val createdBy: String? = null,
     val updatedBy: String? = null,
 
-    @get:JsonProperty("regionId")@field:JsonProperty("regionId")
+    @get:JsonProperty("regionId") @field:JsonProperty("regionId")
     val regionID: String? = null,
 
     val quantity: Long? = null,
     val priceInPoints: Long? = null,
     val locationName: String? = null,
-     val dummy: Boolean? = false,
+    val dummy: Boolean? = false,
 
-    @get:JsonProperty("locationId")@field:JsonProperty("locationId")
+    @get:JsonProperty("locationId") @field:JsonProperty("locationId")
     val locationID: String? = null,
 
-    @get:JsonProperty("isDeleted")@field:JsonProperty("isDeleted")
-    val isDeleted: Boolean? = null
-){
+    @get:JsonProperty("isDeleted") @field:JsonProperty("isDeleted")
+    val isDeleted: Boolean? = null,
+) {
     fun toJson() = drawingMapper.writeValueAsString(this)
 
     companion object {

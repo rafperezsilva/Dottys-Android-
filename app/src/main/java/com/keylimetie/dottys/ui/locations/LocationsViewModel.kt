@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.location.Location
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ExpandableListView
@@ -28,32 +29,34 @@ import kotlin.properties.Delegates
 
 class LocationsViewModel(val contextMain: DottysBaseActivity) : ViewModel(),
     DottysLocationChangeDelegates {
-   private var listStoresExpandable: ExpandableListView? = null
-   // var activityMain: DottysBaseActivity? = contextMain
+    private var listStoresExpandable: ExpandableListView? = null
+
+    // var activityMain: DottysBaseActivity? = contextMain
     var locationsStores: ArrayList<DottysStoresLocation>? = null
     var locationDataObserver: DottysLocationStoresObserver? = null
     var fragmentMap = DottysLocationsMapFragment()
     var locationFragment = LocationsFragment()
     var rootView: View? = null
     var locationUser: Location? = null
-   private var searchView: SearchView? = null
+    private var searchView: SearchView? = null
 
     fun initLocationView(
         locationFragment: LocationsFragment,
         activityDrawing: DottysMainNavigationActivity,
-        rootView: View
+        rootView: View,
     ) {
         this.locationFragment = locationFragment
         locationDataObserver = DottysLocationStoresObserver(locationFragment)
         this.rootView = rootView
         contextMain.locationsBaseViewModel = this
 
-        val gpsTracker = locationFragment.context?.let { GpsTracker(it as DottysMainNavigationActivity) }
+        val gpsTracker =
+            locationFragment.context?.let { GpsTracker(it as DottysMainNavigationActivity) }
         gpsTracker?.locationObserver = DottysLocationObserver(this)
         locationUser = gpsTracker?.let {
             locationFragment.context?.let { _ ->
                 //activityMain?.getLocation(
-                    it.getLocation()
+                it.getLocation()
                 //)
             }
         }
@@ -67,7 +70,7 @@ class LocationsViewModel(val contextMain: DottysBaseActivity) : ViewModel(),
             screenDimensionManager(LocationViewType.COLLAPSE_TYPE)
             true
         }
-        searchView?.setOnQueryTextListener(object:  SearchView.OnQueryTextListener{
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 TODO("Not yet implemented")
             }
@@ -100,7 +103,7 @@ class LocationsViewModel(val contextMain: DottysBaseActivity) : ViewModel(),
 
     fun filterQueryData(
         locations: ArrayList<DottysStoresLocation>,
-        query: String
+        query: String,
     ): List<DottysStoresLocation> {
         return locations.filter {
             it.address1?.toLowerCase()?.contains(query) ?: false ||
@@ -109,9 +112,9 @@ class LocationsViewModel(val contextMain: DottysBaseActivity) : ViewModel(),
         }
     }
 
-    fun isAllGroupCollapsed():Boolean {
-        for (group in locationsStores?.indices ?: return  false) {
-             if (listStoresExpandable?.isGroupExpanded(group) == true) return false
+    fun isAllGroupCollapsed(): Boolean {
+        for (group in locationsStores?.indices ?: return false) {
+            if (listStoresExpandable?.isGroupExpanded(group) == true) return false
         }
         return true
     }
@@ -179,11 +182,11 @@ class LocationsViewModel(val contextMain: DottysBaseActivity) : ViewModel(),
 
         var mapParams = fragmentMap.view?.layoutParams
         mapParams?.height = heightToViewType(viewType).roundToInt()
-     }
+    }
 
     fun initMapWHitMarker(locations: List<DottysStoresLocation>) {
         fragmentMap =
-        locationFragment.childFragmentManager.findFragmentById(R.id.map_view_fragment) as DottysLocationsMapFragment
+            locationFragment.childFragmentManager.findFragmentById(R.id.map_view_fragment) as DottysLocationsMapFragment
         contextMain.mapFragmentBase = fragmentMap
         fragmentMap.markersList = markersDottysLocation(locations)
         fragmentMap.locationStore = locations as ArrayList<DottysStoresLocation>
@@ -227,7 +230,7 @@ class LocationsViewModel(val contextMain: DottysBaseActivity) : ViewModel(),
     fun getLocationsDottysRequest(
         mContext: DottysBaseActivity,//DottysMainNavigationActivity
         latitude: String,
-        longitude: String
+        longitude: String,
     ) {
 //        if(BigDecimal(latitude.toDouble()).setScale(1,1) == BigDecimal(mContext.lastKnownLatitudeGps).setScale(1,1) &&
 //           BigDecimal(longitude.toDouble()).setScale(1,1) == BigDecimal(mContext.lastKnownLongitudeGps).setScale(1,1)){
@@ -237,24 +240,26 @@ class LocationsViewModel(val contextMain: DottysBaseActivity) : ViewModel(),
         mContext.isUpdatingLocation = true
         mContext.showLoader()
 /*MOCK LOCATION */
-          val locationURL =  "locations?distance=999999&limit=50&page=1&page=1&latitude=$latitude&longitude=$longitude"
+        val locationURL =
+            "locations?distance=999999&limit=60&page=1&page=1&latitude=$latitude&longitude=$longitude"
         // val locationURL = "locations?distance=150&limit=300&page=1&page=1&latitude=40.0998935&longitude=-87.6357274"
 
         val jsonObjectRequest = object : JsonObjectRequest(
             Method.GET,
-            mContext.baseUrl +locationURL,
+            mContext.baseUrl + locationURL,
             null,
             Response.Listener<JSONObject> { response ->
-                mContext.hideLoader()
 
+                mContext.hideLoader()
                 val stores: DottysLocationsStoresModel =
                     DottysLocationsStoresModel.fromLocationJson(
                         response.toString()
                     )
+                Log.d("LOCATIONS RESPONSE -->",stores.toJson())
                 mContext.saveDataPreference(PreferenceTypeKey.LOCATIONS, stores.toJson())
                 locationDataObserver?.dottysLocationsModel = stores
                 stores.locations?.let { initExpandableList(mContext, it) }
-                locationsStores = stores.locations as ArrayList<DottysStoresLocation>?
+                locationsStores = stores.locations
                 //mContext.geofencesAtStore = stores.locations?.let { DottysGeofenceActivity(mContext, it) }    /** TODO ADD GEOFENCING **/
 
                 mContext.isUpdatingLocation = false
@@ -262,11 +267,11 @@ class LocationsViewModel(val contextMain: DottysBaseActivity) : ViewModel(),
             Response.ErrorListener {
                 mContext.hideLoader()
                 mContext.isUpdatingLocation = false
-               // if(mContext.taskAtBackground?.isOnBackground ==  true || it.networkResponse.statusCode == 400) {
-                    var stores = DottysLocationsStoresModel()
-                    stores.locations = ArrayList<DottysStoresLocation>()
+                // if(mContext.taskAtBackground?.isOnBackground ==  true || it.networkResponse.statusCode == 400) {
+                var stores = DottysLocationsStoresModel()
+                stores.locations = ArrayList<DottysStoresLocation>()
 
-                    locationDataObserver?.dottysLocationsModel = stores
+                locationDataObserver?.dottysLocationsModel = stores
 
 //                } else
 //                if (it.networkResponse == null){
@@ -305,6 +310,7 @@ class LocationsViewModel(val contextMain: DottysBaseActivity) : ViewModel(),
                 params["distance"] = "50"
                 return params
             }
+
             @Throws(AuthFailureError::class)
             override fun getHeaders(): Map<String, String> {
                 val params = HashMap<String, String>()
@@ -317,9 +323,8 @@ class LocationsViewModel(val contextMain: DottysBaseActivity) : ViewModel(),
     }
 
 
-
     override fun onLocationChangeHandler(locationGps: Location?) {
-        getLocationsDottysRequest(contextMain ?: return,
+        getLocationsDottysRequest(contextMain,
             locationGps?.latitude.toString(),
             locationGps?.longitude.toString())
     }

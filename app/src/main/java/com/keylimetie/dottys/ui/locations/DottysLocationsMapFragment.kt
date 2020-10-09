@@ -20,8 +20,8 @@ class DottysLocationsMapFragment : SupportMapFragment(), OnMapReadyCallback,
     DottysStoreListDelegates {
     private lateinit var mMap: GoogleMap
     private var mapIsReady = false
-    var initialLatitude : Double? = 41.8563329
-    var initialLongitude: Double? =  -87.8488141
+    var initialLatitude: Double? = 41.8563329
+    var initialLongitude: Double? = -87.8488141
     var initialMarker = "Seed nay"
     var markersList = ArrayList<MarkerOptions>()
     var locationStore = ArrayList<DottysStoresLocation>()
@@ -68,7 +68,7 @@ class DottysLocationsMapFragment : SupportMapFragment(), OnMapReadyCallback,
 //       } else {
         maxMarkers = markersList.size - 1
         //  }
- //       var sydney: LatLng? = null
+        //       var sydney: LatLng? = null
         for (locationPosition in 0..maxMarkers) {
 //            sydney = locationStore[locationPosition].longitude?.let {
 //                locationStore[locationPosition].latitude?.let { it1 ->
@@ -84,13 +84,15 @@ class DottysLocationsMapFragment : SupportMapFragment(), OnMapReadyCallback,
         updateMarker()
     }
 
-    fun updateMarker(){
-       if (!mapIsReady){return}
+    fun updateMarker() {
+        if (!mapIsReady) {
+            return
+        }
         val gps = GpsTracker(activity as DottysMainNavigationActivity)
         val loc = gps.getLocation(gps)
         val currentPositionMarker = loc ?: return
         markerPosition?.remove()
-        markerPosition =  mMap.addMarker(currentPositionMarker.let {
+        markerPosition = mMap.addMarker(currentPositionMarker.let {
             MarkerOptions().position(it)
         })
 //        // mMap.addMarker(MarkerOptions().position(sydney).title(initial_marker).icon(BitmapDescriptorFactory.fromResource(R.mipmap.cash_image)))

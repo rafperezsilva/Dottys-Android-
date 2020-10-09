@@ -37,6 +37,6 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
      */
     override fun onReceive(context: Context, intent: Intent) {
         // Enqueues a JobIntentService passing the context and intent as parameters
-        GeofenceTransitionsJobIntentService.enqueueWork(context, intent)
+        GeofenceTransitionsJobIntentService.Companion.enqueueWork(context, intent)
     }
 }

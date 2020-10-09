@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Dottys</string>
     <string name="splash_first_text">Our Player Perks App was designed to\nenhance your experience while visiting any of\nour more than 40 locations.</string>
     <string name="splash_second_text">Get rewarded for playing at Dotty’s, earning\npoints that you can redeem them\nfor drawing entries or cash.</string>
@@ -43,11 +43,13 @@ Sed commodo tellus sit amet nisi scelerisque volutpat. Nam ac sapien ac felis ve
 
 
     <!-- Buttons strings -->
+    <string name="enter_geofences">Enter geofences</string>
     <string name="add_geofences">Add geofences</string>
     <string name="remove_geofences">Remove geofences</string>
 
     <string name="geofences_added">Geofences added</string>
     <string name="geofences_removed">Geofences removed</string>
+    <string name="geofences_not_added">Geofences not added</string>
 
     <!-- Error strings -->
     <string name="geofence_not_available">Geofence service is not available now</string>
@@ -76,5 +78,48 @@ Sed commodo tellus sit amet nisi scelerisque volutpat. Nam ac sapien ac felis ve
     <string name="permission_denied_explanation">Permission was denied, but is needed for core
         functionality.</string>
     <string name="settings">Settings</string>
+
+<!--    GEOFENCES 2-->
+    <string name="title_activity_hunt">Treasure Hunt</string>
+
+    <!--    Permissions Strings-->
+
+    <string
+        name="location_setting_off">Please turn on device location in Settings and try again.
+    </string>
+
+    <!--    Geofence Status Strings-->
+
+    <string name="geofence_entered">Geofence entered.</string>
+    <string name="geofence_over">You have found the treasure! Congratulations!</string>
+
+    <!-- Geofence Hints -->
+    <string name="not_started_hint"></string>
+    <string name="golden_gate_bridge_hint">Go to a bridge with a name that does not match the color that it is!</string>
+    <string name="ferry_building_hint">Go to a market with an amazing assortment of delicious foods. It is a San Francisco classic!</string>
+    <string name="pier_39_hint">Go to a pier popular for tourist attractions, carnival games, fresh fish, and delicious sourdough bread!</string>
+    <string name="union_square_hint">Go to a square named after Civil War rallies held there, but now known for its amazing shopping!</string>
+
+    <!-- Geofence Locations -->
+    <string name="golden_gate_bridge_location">at the Golden Gate bridge</string>
+    <string name="ferry_building_location">in the Ferry Building</string>
+    <string name="pier_39_location">at Pier 39</string>
+    <string name="union_square_location">in Union Square</string>
+
+    <!-- Error strings -->
+
+    <string name="location_required_error">Location services must be enabled for this game.</string>
+
+    <string name="geofences_not_removed">Geofences not removed.</string>
+
+    <string name="geofence_error">There was an error in finding your treasure</string>
+
+    <!-- Notification Strings-->
+    <string name="channel_name">GeofenceStatus</string>
+    <string name="content_text">You found a clue <xliff:g id="geofence_location">%1$s</xliff:g>.</string>
+    <string name="notification_channel_description">Geofence status notification</string>
+
+    <!-- Content Description Strings -->
+    <string name="android_map_description">An Android robot with a map</string>
 
 </resources>
