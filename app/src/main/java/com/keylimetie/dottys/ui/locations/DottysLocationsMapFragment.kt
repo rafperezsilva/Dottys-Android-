@@ -96,12 +96,12 @@ class DottysLocationsMapFragment : SupportMapFragment(), OnMapReadyCallback,
             MarkerOptions().position(it)
         })
 //        // mMap.addMarker(MarkerOptions().position(sydney).title(initial_marker).icon(BitmapDescriptorFactory.fromResource(R.mipmap.cash_image)))
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPositionMarker, 10.0f))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPositionMarker, 14.0f))
     }
 
     override fun onItemSelected(location: DottysStoresLocation) {
         val loc = location.longitude?.let { location.latitude?.let { it1 -> LatLng(it1, it) } }
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 12.0f))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 16.0f))
     }
 
 

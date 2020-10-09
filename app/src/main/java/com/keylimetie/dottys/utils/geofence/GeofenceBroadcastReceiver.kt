@@ -18,6 +18,9 @@ package com.keylimetie.dottys.utils.geofence
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import com.keylimetie.dottys.DottysBaseActivity
+import com.keylimetie.dottys.ui.dashboard.models.DottysBeacon
+import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconArray
 
 /**
  * Receiver for geofence transition changes.
@@ -27,7 +30,7 @@ import android.content.Intent
  * the transition type and geofence id(s) that triggered the transition. Creates a JobIntentService
  * that will handle the intent in the background.
  */
-class GeofenceBroadcastReceiver : BroadcastReceiver() {
+class GeofenceBroadcastReceiver: BroadcastReceiver() {
     /**
      * Receives incoming intents.
      *
@@ -37,6 +40,7 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
      */
     override fun onReceive(context: Context, intent: Intent) {
         // Enqueues a JobIntentService passing the context and intent as parameters
+
         GeofenceTransitionsJobIntentService.Companion.enqueueWork(context, intent)
     }
 }

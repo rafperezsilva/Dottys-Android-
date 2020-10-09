@@ -4,6 +4,7 @@ package com.keylimetie.dottys.ui.dashboard
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.icu.math.BigDecimal
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -772,13 +773,13 @@ class DashboardViewModel(mainActivity: DottysMainNavigationActivity?) : ViewMode
         if (trackerLocation?.isGPSEnabled == true) {
             isEnableLocation = "Enable"
         }
-        locationDeviceTextView?.text = "Lat: ${
-            trackerLocation?.locationGps?.latitude ?: mainFragmentActivity?.gpsTracker?.getLatitude()
-                ?.roundToLong()
-        } | Long: ${
-            trackerLocation?.locationGps?.longitude ?: mainFragmentActivity?.gpsTracker?.getLongitude()
-                ?.roundToLong()
-        }"
+        val lat = trackerLocation?.locationGps?.latitude ?: mainFragmentActivity?.gpsTracker?.getLatitude()
+        val long = trackerLocation?.locationGps?.longitude ?: mainFragmentActivity?.gpsTracker?.getLongitude()
+
+        val latitude = BigDecimal(lat.toString()).setScale(3, 1)
+        val longitude = BigDecimal(long.toString()).setScale(3, 1)
+
+        locationDeviceTextView?.text = "Lat: $latitude | Long: $longitude"
         locationEnableTextView?.text = isEnableLocation
         if (storeLocation != null) {
             storeLocation.text = if(!mainFragmentActivity?.getBeaconStatus()?.beaconArray.isNullOrEmpty())

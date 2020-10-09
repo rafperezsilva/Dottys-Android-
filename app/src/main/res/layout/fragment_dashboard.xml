@@ -740,7 +740,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:fontFamily="@font/proxima_nova_light    "
-                    android:text="Store #224"
+                    android:text=""
                     android:textAlignment="textEnd"
                     android:textColor="#FFF"
                     android:textSize="16sp" />

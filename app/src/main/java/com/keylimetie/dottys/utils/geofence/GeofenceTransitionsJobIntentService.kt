@@ -21,7 +21,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.os.Build
 import android.text.TextUtils
 import android.util.Log
@@ -30,10 +29,13 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.TaskStackBuilder
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingEvent
-import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.R
-import java.util.*
+import com.keylimetie.dottys.ui.dashboard.models.DottysBeacon
+import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconArray
+import com.keylimetie.dottys.ui.locations.DottysLocationsStoresModel
+import com.keylimetie.dottys.ui.locations.DottysStoresLocation
+import kotlin.collections.ArrayList
 
 /**
  * Listener for geofence transition changes.
@@ -42,13 +44,18 @@ import java.util.*
  * the transition type and geofence id(s) that triggered the transition. Creates a notification
  * as the output.
  */
-class GeofenceTransitionsJobIntentService : JobIntentService() {
+class GeofenceTransitionsJobIntentService: JobIntentService() {
     /**
      * Handles incoming intents.
      * @param intent sent by Location Services. This Intent is provided to Location
      * Services (inside a PendingIntent) when addGeofences() is called.
      */
+    var stores: ArrayList<DottysStoresLocation>? = null
+
     override fun onHandleWork(intent: Intent) {
+        val beacons = intent.getStringExtra("beacon_data")
+        val beacondata = DottysLocationsStoresModel.fromLocationJson(beacons ?: return)
+        stores = beacondata.locations
         val geofencingEvent = GeofencingEvent.fromIntent(intent)
         if (geofencingEvent.hasError()) {
             val errorMessage = GeofenceErrorMessages.getErrorString(this,
@@ -73,7 +80,7 @@ class GeofenceTransitionsJobIntentService : JobIntentService() {
                 triggeringGeofences)
 
             // Send notification and log the transition details.
-            sendNotification(geofenceTransitionDetails)
+            sendNotification(geofenceTransitionDetails, geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER)
             Log.i(TAG, geofenceTransitionDetails)
         } else {
             // Log the error.
@@ -107,7 +114,21 @@ class GeofenceTransitionsJobIntentService : JobIntentService() {
      * Posts a notification in the notification bar when a transition is detected.
      * If the user clicks the notification, control goes to the MainActivity.
      */
-    private fun sendNotification(notificationDetails: String) {
+    fun getCurrentStore(storeID: String, isFirtsLocation: Boolean):DottysStoresLocation{
+        if(isFirtsLocation) {
+            return stores?.filter { it.id == storeID.split(": ")[1] }?.first() ?: DottysStoresLocation()
+        } else {
+            return stores?.get(1) ?: DottysStoresLocation()
+        }
+    }
+
+    private fun sendNotification(notificationDetails: String, hasEnterInRegion: Boolean) {
+        val store =  getCurrentStore(notificationDetails, true)
+        val secondStore =  getCurrentStore(notificationDetails, false)
+        val notificationTitle = if(hasEnterInRegion) "Welcome ${store?.name}" else "See you soon"
+        val notificationDescription = if(hasEnterInRegion) "You have a ${store?.storeType?.name} store nearby, on ${store?.address1}, ${store?.distance} miles away"
+                                              else "You got another ${secondStore?.storeType?.name} store, on ${secondStore?.address1}, ${secondStore?.distance} miles away"
+
         // Get an instance of the Notification manager
         val mNotificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
@@ -123,7 +144,7 @@ class GeofenceTransitionsJobIntentService : JobIntentService() {
         }
 
         // Create an explicit content Intent that starts the main Activity.
-        val notificationIntent = Intent(applicationContext, DottysGeofence::class.java)
+        val notificationIntent = Intent(baseContext, DottysGeofence::class.java)
 
         // Construct a task stack.
         val stackBuilder = TaskStackBuilder.create(this)
@@ -142,13 +163,15 @@ class GeofenceTransitionsJobIntentService : JobIntentService() {
         val builder = NotificationCompat.Builder(this)
 
         // Define the notification settings.
-        builder.setSmallIcon(R.drawable.ic_launcher_foreground) // In a real app, you may want to use a library like Volley
+        builder.setSmallIcon(R.mipmap.dottys_notification_icon) // In a real app, you may want to use a library like Volley
             // to decode the Bitmap.
             .setLargeIcon(BitmapFactory.decodeResource(resources,
-                R.drawable.ic_launcher_foreground))
-            .setColor(Color.RED)
-            .setContentTitle(notificationDetails)
-            .setContentText(getString(R.string.geofence_transition_notification_text))
+                R.mipmap.ic_launcher))
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setVibrate(LongArray(3))
+            .setStyle(NotificationCompat.BigTextStyle().bigText(notificationDescription))
+            .setColor(baseContext.resources.getColor(R.color.colorPrimary))
+            .setContentTitle(notificationTitle)
             .setContentIntent(notificationPendingIntent)
 
         // Set the Channel ID for Android O.

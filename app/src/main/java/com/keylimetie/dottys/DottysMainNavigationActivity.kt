@@ -131,7 +131,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
 //        gpsTracker?.getLocation()?.let { gpsTracker?.onLocationChanged(it) }
         mainNavigationActivity = this
         // getBeaconStatus()?.let { beaconService.listenerBeaconStatus(it, this) }
-        DottysGeofence(this)
+
     }
 
     private fun initDrawerSetting() {

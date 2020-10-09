@@ -35,16 +35,16 @@ internal object Constants {
      * For this sample, geofences expire after twelve hours.
      */
     const val GEOFENCE_EXPIRATION_IN_MILLISECONDS = GEOFENCE_EXPIRATION_IN_HOURS * 60 * 60 * 1000
-    const val GEOFENCE_RADIUS_IN_METERS = 1609f // 1 mile, 1.6 km
+    const val GEOFENCE_RADIUS_IN_METERS = 300f // 1 mile = 1.6 km
 
     /**
      * Map for storing information about airports in the San Francisco bay area.
      */
-    val BAY_AREA_LANDMARKS = HashMap<String, LatLng>()
+    private val BAY_AREA_LANDMARKS = HashMap<String, LatLng>()
 
     init {
         // San Francisco International Airport.
-        BAY_AREA_LANDMARKS["SFO"] = LatLng(37.621313, -122.378955)
+        this.BAY_AREA_LANDMARKS["SFO"] = LatLng(37.621313, -122.378955)
 
         // Googleplex.
         BAY_AREA_LANDMARKS["GOOGLE"] =

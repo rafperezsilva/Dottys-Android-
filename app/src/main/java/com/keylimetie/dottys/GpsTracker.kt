@@ -228,7 +228,7 @@ open class GpsTracker(private val mContext: DottysBaseActivity) : Service(),
 
     companion object {
         // The minimum distance to change Updates in meters
-        private const val MIN_DISTANCE_CHANGE_FOR_UPDATES: Long = 10 // 10 meters
+        private const val MIN_DISTANCE_CHANGE_FOR_UPDATES: Long = 100 // 10 meters
 
         // The minimum time between updates in milliseconds
         private const val MIN_TIME_BW_UPDATES = (1000 * 60 * 1) / 4 // 1 minute

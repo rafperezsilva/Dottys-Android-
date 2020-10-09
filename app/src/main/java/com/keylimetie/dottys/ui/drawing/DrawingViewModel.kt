@@ -151,7 +151,7 @@ class DrawingViewModel : ViewModel() {
         emptyDrawingText(segmentSelected == RewardsSegment.DRAWING_ENTRIES)
         listViewRewards?.alpha = if (segmentSelected == RewardsSegment.DRAWING_ENTRIES) 0f else 1f
         drawingEntriesLocation(segmentSelected == RewardsSegment.DRAWING_ENTRIES)
-        emptyDrawingText(false)
+       // emptyDrawingText(false)
 
         listViewRewards?.adapter =
             activity?.let {

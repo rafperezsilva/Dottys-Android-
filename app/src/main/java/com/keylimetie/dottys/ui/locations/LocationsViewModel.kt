@@ -10,6 +10,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ExpandableListView
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import com.android.volley.AuthFailureError
 import com.android.volley.Response
@@ -272,7 +273,11 @@ class LocationsViewModel(val contextMain: DottysBaseActivity) : ViewModel(),
                 stores.locations = ArrayList<DottysStoresLocation>()
 
                 locationDataObserver?.dottysLocationsModel = stores
-
+                Toast.makeText(
+                            mContext,
+                              "You currently have no stores nearby",
+                            Toast.LENGTH_LONG
+                        ).show()
 //                } else
 //                if (it.networkResponse == null){
 //                    Toast.makeText(mContext, "Has lost your internet connection", Toast.LENGTH_LONG).show()

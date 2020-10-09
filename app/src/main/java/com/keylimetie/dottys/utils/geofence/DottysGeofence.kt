@@ -120,7 +120,7 @@ class DottysGeofence(private val baseActivity: DottysBaseActivity ) :   OnComple
     fun geofenceAtStores():  ArrayList<DottysStoresLocation> {
        var geoList = ArrayList<DottysStoresLocation>()
         val storeList = if (baseActivity.getUserNearsLocations().locations.isNullOrEmpty()) {return geoList} else {baseActivity.getUserNearsLocations().locations} ?: return geoList
-        for (store in 0..15) {
+        for (store in 0..10) {
             geoList.add(storeList[store])
         }
         return geoList
@@ -194,7 +194,7 @@ class DottysGeofence(private val baseActivity: DottysBaseActivity ) :   OnComple
      * Removes geofences, which stops further notifications when the device enters or exits
      * previously registered geofences.
      */
-    fun removeGeofencesButtonHandler(view: View?) {
+    fun removeGeofencesHandler() {
         if (!checkPermissions()) {
             mPendingGeofenceTask = PendingGeofenceTask.REMOVE
             requestPermissions()
@@ -212,7 +212,7 @@ class DottysGeofence(private val baseActivity: DottysBaseActivity ) :   OnComple
             showSnackbar(baseActivity.getString(R.string.insufficient_permissions))
             return
         }
-        mGeofencingClient!!.removeGeofences(geofencePendingIntent).addOnCompleteListener(this)
+        mGeofencingClient?.removeGeofences(geofencePendingIntent)?.addOnCompleteListener(this)
     }
 
     /**
@@ -227,7 +227,7 @@ class DottysGeofence(private val baseActivity: DottysBaseActivity ) :   OnComple
 //            setButtonsEnabledState()
             val messageId =
                 if (geofencesAdded) R.string.geofences_added else R.string.geofences_removed
-            Toast.makeText(baseActivity, baseActivity.getString(messageId), Toast.LENGTH_SHORT).show()
+           // Toast.makeText(baseActivity, baseActivity.getString(messageId), Toast.LENGTH_SHORT).show()
         } else {
             // Get the status code for the error and log it using a user-friendly message.
             val errorMessage = GeofenceErrorMessages.getErrorString(baseActivity, task.exception)
@@ -252,6 +252,7 @@ class DottysGeofence(private val baseActivity: DottysBaseActivity ) :   OnComple
             val intent = Intent(baseActivity, GeofenceBroadcastReceiver::class.java)
             // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when calling
             // addGeofences() and removeGeofences().
+            intent.putExtra("beacon_data", baseActivity.getUserNearsLocations()?.toJson())
             mGeofencePendingIntent =
                 PendingIntent.getBroadcast(baseActivity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
             return mGeofencePendingIntent
@@ -262,24 +263,27 @@ class DottysGeofence(private val baseActivity: DottysBaseActivity ) :   OnComple
      * the user's location.
      */
     private fun populateGeofenceList() {
-        //for (store in geofenceAtStores()){
-        for ((value ,index) in Constants.BAY_AREA_LANDMARKS) {
+        for (store in geofenceAtStores()){
+    //    for ((value ,index) in Constants.BAY_AREA_LANDMARKS) {
             mGeofenceList!!.add(Geofence.Builder() // Set the request ID of the geofence. This is a string to identify this
                 // geofence.
-                .setRequestId(value) // Set the circular region of this geofence.
+                //.setRequestId(value) // Set the circular region of this geofence.
+                .setRequestId(store.id) // Set the circular region of this geofence.
                 .setCircularRegion(
-                    index.latitude ?: 0.0,
-                    index.longitude ?: 0.0,
+                   // index.latitude ?: 0.0,
+                   // index.longitude ?: 0.0,
+                    store.latitude ?: 0.0,
+                    store.longitude ?: 0.0,
                     Constants.GEOFENCE_RADIUS_IN_METERS
                 ) // Set the expiration duration of the geofence. This geofence gets automatically
                 // removed after this period of time.
-                .setExpirationDuration(Constants.GEOFENCE_EXPIRATION_IN_MILLISECONDS) // Set the transition types of interest. Alerts are only generated for these
+                .setExpirationDuration(Geofence.NEVER_EXPIRE) // Set the transition types of interest. Alerts are only generated for these
                 // transition. We track entry and exit transitions in this sample.
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or
                         Geofence.GEOFENCE_TRANSITION_EXIT) // Create the geofence.
                 .build())
-            //Log.e("POPULATE STORE - ", "${store.storeNumber} LOC -- ${index.latitude}//${store.longitude}")
-            Log.e("POPULATE STORE - ", "${value} LOC -- ${index.latitude}//${index.longitude}")
+            Log.e("POPULATE STORE - ", "${store.id} LOC -${store.storeNumber}- ${store.latitude}//${store.longitude}")
+            // Log.e("POPULATE STORE - ", "${value} LOC -- ${index.latitude}//${index.longitude}")
 
         }
     }

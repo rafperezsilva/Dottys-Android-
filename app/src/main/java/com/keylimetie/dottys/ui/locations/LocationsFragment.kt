@@ -53,6 +53,7 @@ class LocationsFragment : Fragment(), DottysLocationDelegates {
     override fun onStop() {
         super.onStop()
         (activity as DottysMainNavigationActivity).mapFragmentBase = null
+       // locationViewModel.locationDataObserver = null
     }
 
     override fun getStoresLocation(locations: DottysLocationsStoresModel) {
