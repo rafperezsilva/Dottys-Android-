@@ -54,6 +54,7 @@
         <activity
             android:name=".game_play.roulette.DottysRouletteActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
         <activity android:name=".game_play.DottysSlotMachineActivity" />
         <activity android:name=".game_play.DottysBubbleGameActivity" />
         <activity android:name=".game_play.DottysScratchAndWinActivity" />
@@ -86,7 +87,8 @@
         <activity
             android:name=".DottysMainNavigationActivity"
             android:label="@string/title_activity_dottys_main_navigation"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+           />
         <activity android:name=".login.DottysLoginActivity" />
         <activity
             android:name="com.keylimetie.dottys.splash.DottysSplashActivity"

@@ -30,7 +30,7 @@ import kotlin.math.roundToInt
 import kotlin.properties.Delegates
 
 
-open class DottysRegisterViewModel: ViewModel(), View.OnClickListener, DottysLoginDelegate {
+open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): ViewModel(), View.OnClickListener, DottysLoginDelegate {
     private var termsOfServiceLabel: TextView? = null
     private var privacyPolicyLabel: TextView? = null
     private var verificationLayout: ConstraintLayout? = null
@@ -275,6 +275,7 @@ open class DottysRegisterViewModel: ViewModel(), View.OnClickListener, DottysLog
         //  val displayMetrics = DisplayMetrics()
         activityRegister.windowManager.defaultDisplay.getMetrics(activityRegister.displayMetrics)
         var imageVerification = activityRegister.findViewById<ImageView>(id.image_verification)
+        var subTitlePreverificationLabel = activityRegister.findViewById<TextView>(id.subtitle_register_sucess_textview)
         var imageParams = imageVerification.layoutParams
         imageParams.height = (activityRegister.displayMetrics.heightPixels * 0.55).roundToInt()
         imageVerification.layoutParams = imageParams
@@ -291,22 +292,40 @@ open class DottysRegisterViewModel: ViewModel(), View.OnClickListener, DottysLog
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
+        var subtitleMssg =  if(activityRegister.getUserPreference().cell.isNullOrEmpty()){
+            "An text message with a verification\ncode has been sent to phone"
+        } else {
+            val cell = activityRegister?.getUserPreference()?.cell
+            val terminalPhoneNumber =   cell?.subSequence(cell?.count()  - 4, cell.count())
+            "An text message with a verification\ncode has been sent to (xxx) xxx-${terminalPhoneNumber}."
+        }
 
+        subTitlePreverificationLabel.text = subtitleMssg
         val goToVerification = activityRegister.findViewById<Button>(R.id.go_to_enter_verification)
         goToVerification.setOnClickListener {
-           // activityRegisterObserver?.registerUser?.email = //"pruebaemail@mail.com"/*FIXME*/
-            if (activityRegisterObserver?.registerUser?.email != null) {
+           val currentUser = activityRegisterObserver?.registerUser
+            if (currentUser != null) {
                 var intent =
                     Intent(activityRegister, DottysEnterVerificationCodeActivity::class.java)
-                intent.putExtra("EMAIL_FORGOT", activityRegisterObserver?.registerUser?.email)
+                intent.putExtra("EMAIL_FORGOT", currentUser.email ?: dottysBaseActivity.getUserPreference().email)
+                if (dottysBaseActivity.getUserPreference() !=  null &&
+                    dottysBaseActivity.getUserPreference().cellVerified == false) {
+                    intent.putExtra("VERIFY_CELL", true)
+                }
                 intent.putExtra("REGISTER_VIEW_TYPE", true)
                 intent.putExtra("USER_DATA", activityRegisterObserver?.registerUser?.toJson().toString())
                 activityRegister.startActivity(intent)
+
+
+
+
             }
         }
     }
 
-    /*REQUEST REGISTER*/
+    /**
+     * REQUEST REGISTER
+     * */
     fun registerNewUser(
         activityRegister: DottysRegisterActivity,
         registerData: DottysRegisterRequestModel
@@ -354,7 +373,9 @@ open class DottysRegisterViewModel: ViewModel(), View.OnClickListener, DottysLog
         }
         mQueue.add(jsonObjectRequest)
     }
-
+/**
+ * UPLOAD IMAGE
+ * */
     fun uploadImgage(context: DottysBaseActivity, imageData: ByteArray) {
      // context.showLoader()
 
@@ -397,6 +418,46 @@ open class DottysRegisterViewModel: ViewModel(), View.OnClickListener, DottysLog
                     return params
                 }
                 set(value) {}
+        }
+
+        mQueue.add(request)
+    }
+
+    /**
+     * REQUEST VERIFICATION PHONE
+     * */
+    fun requestNewVerificationPhone (context: DottysBaseActivity) {
+      context.showLoader()
+        val mQueue = Volley.newRequestQueue(context)
+        val params = HashMap<String, String>()
+        params["Authorization"] = context.getUserPreference().token ?: ""
+        val request = object : VolleyMultipartRequest(
+            context.baseUrl + "users/requestVerifyPhone",
+            params,
+            Response.Listener { response ->
+                 context.hideLoader()
+
+                print(response.statusCode)
+            },
+            Response.ErrorListener { error ->
+               context.hideLoader()
+                context.finish()
+                 if(error.networkResponse != null ) {
+                    val errorRes =
+                        DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
+                    if (errorRes.error?.messages?.size ?: 0 > 0) {
+                        Toast.makeText(
+                            context,
+                            errorRes.error?.messages?.first() ?: "",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    Log.e("ERROR VOLLEY ", error.message, error)
+                }
+
+            }) {
+
+
         }
 
         mQueue.add(request)

@@ -11,10 +11,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.widget.addTextChangedListener
@@ -52,6 +49,7 @@ class ProfileViewModel(activityMain: DottysMainNavigationActivity?,profileData:D
     private var passwordEditButton:  Button? = null
     private var myPlayLocation:    EditText? = null
     private var userLocation:      TextView? = null
+    private var switchNotification:      Switch? = null
     private var activity: DottysMainNavigationActivity? = activityMain
     private var context: Context? = null
     private var userData: DottysLoginResponseModel? = profileData
@@ -79,6 +77,9 @@ class ProfileViewModel(activityMain: DottysMainNavigationActivity?,profileData:D
        passwordEditButton = rootView.findViewById<Button>(R.id.password_profile_edit_text)
        myPlayLocation = rootView.findViewById<EditText>(R.id.play_location_profile_edit_text)
        userLocation = rootView.findViewById<EditText>(R.id.user_location_textview)
+       switchNotification = rootView.findViewById<Switch>(R.id.profile_switch_notification)
+        switchNotification?.isActivated = activity?.isPushNotificationEnabled() ?: false
+        switchNotification?.setOnClickListener(this)
        imageViewProfile?.setOnClickListener(this)
        activity?.let {
            setImageProfile(it)
@@ -133,6 +134,10 @@ class ProfileViewModel(activityMain: DottysMainNavigationActivity?,profileData:D
 
     override fun onClick(v: View?) {
         when (v?.id) {
+            R.id.profile_switch_notification -> {
+                activity?.enablePushNotification(!(switchNotification?.isActivated ?: false))
+                switchNotification?.isActivated = activity?.isPushNotificationEnabled() ?: false
+            }
             R.id.profile_image -> {
                 requestCameraPermission()
             }
@@ -185,7 +190,6 @@ class ProfileViewModel(activityMain: DottysMainNavigationActivity?,profileData:D
     }
 
 
-
       fun uploadProfile(profileData: DottysLoginResponseModel, activity: DottysMainNavigationActivity?) {
         val mQueue = Volley.newRequestQueue(activity)
      //   activity?.showLoader()
@@ -200,6 +204,7 @@ class ProfileViewModel(activityMain: DottysMainNavigationActivity?,profileData:D
                     DottysLoginResponseModel.fromJson(
                         response.toString()
                     )
+                Log.d("PROFILE UPDATED", userData.toJson())
                 var user = userData
                 user.token = activity?.getUserPreference()?.token
                 activity?.saveDataPreference(PreferenceTypeKey.USER_DATA, user.toJson())

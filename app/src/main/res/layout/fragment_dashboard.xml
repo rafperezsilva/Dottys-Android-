@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dashboard_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary">
@@ -44,6 +45,7 @@
                         android:orientation="vertical">
 
                         <RelativeLayout
+                            android:layout_marginTop="15dp"
                             android:layout_width="120dp"
                             android:layout_height="120dp">
 
@@ -81,10 +83,12 @@
                         android:orientation="vertical">
 
                         <TextView
+
                             android:id="@+id/points_earned_textview"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
+                            android:layout_marginTop="15dp"
                             android:fontFamily="@font/proxima_nova_regular"
                             android:text="0"
                             android:textColor="#FFF"
@@ -100,6 +104,7 @@
                             android:textSize="12sp" />
 
                         <TextView
+                            android:layout_marginTop="15dp"
                             android:id="@+id/cash_rewards_textview"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -121,7 +126,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-
+                    android:layout_marginBottom="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -683,6 +688,7 @@
                 android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/is_push_enable_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"

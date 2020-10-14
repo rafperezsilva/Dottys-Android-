@@ -71,7 +71,8 @@ open class DottysForgotPasswordViewModel : ViewModel()  {
         }
     }
 
-    /* VERIFICATION CODE VIEW */
+    /**
+     *  VERIFICATION CODE VIEW */
     fun initValidationView(verificationActivity: DottysVerificationTypeActivity, email: String) {
         verificationActivity.hideLoader()
         verificationCodeObserver   = DottysForgotPasswordObserver(verificationActivity)
@@ -97,7 +98,7 @@ open class DottysForgotPasswordViewModel : ViewModel()  {
         phoneVerificationImageview?.layoutParams = params
         emailVerificationTextview?.text =  mailUser
         val phone = verificationActivity.getUserPreference().cell
-        phoneVerificationTextview?.text = "Send a SMS to (XXX) XXX-${phone?.substring((phone?.chars()?.count() ?: 0).toInt() - 4, phone?.chars()?.count()?.toInt() ?: 0)}"
+        phoneVerificationTextview?.text = "Send an SMS to your phone"//(XXX) XXX-${phone?.substring((phone?.chars()?.count() ?: 0).toInt() - 4, phone?.chars()?.count()?.toInt() ?: 0)}"
         phoneVerificationTextview?.textAlignment = View.TEXT_ALIGNMENT_CENTER
         buttonValidationClickLisener(verificationActivity, email)
     }
@@ -119,7 +120,7 @@ open class DottysForgotPasswordViewModel : ViewModel()  {
         }
     }
 
-    /* ENTER CODE VERIFICATION VIEW */
+    /** ENTER CODE VERIFICATION VIEW */
     fun initVerificationCodeView(verificationCodeActivity: DottysEnterVerificationCodeActivity, email:String, isRegisterView: Boolean){
         verificationCodeActivity.hideLoader()
         this.isRegisterView = isRegisterView
@@ -292,7 +293,10 @@ open class DottysForgotPasswordViewModel : ViewModel()  {
 
             override fun getHeaders(): MutableMap<String, String>  {
                 val params = HashMap<String, String>()
-                params["Authorization"] = verificationActivity.user?.token ?: ""
+                params["Authorization"] =  if  (verificationActivity.user?.token.isNullOrEmpty())
+                    verificationActivity.getUserPreference().token  ?: ""
+                else
+                    verificationActivity.user?.token ?: ""
 
                 return params
             }

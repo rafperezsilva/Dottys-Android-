@@ -15,6 +15,7 @@
  */
 package com.keylimetie.dottys.utils.geofence
 
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -78,7 +79,7 @@ class GeofenceTransitionsJobIntentService: JobIntentService() {
             // Get the transition details as a String.
             val geofenceTransitionDetails = getGeofenceTransitionDetails(geofenceTransition,
                 triggeringGeofences)
-
+   Log.e("TRANSITION TYPE --", ">> ${if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER)  "ENTER" else "EXIT"}")
             // Send notification and log the transition details.
             sendNotification(geofenceTransitionDetails, geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER)
             Log.i(TAG, geofenceTransitionDetails)
@@ -122,6 +123,7 @@ class GeofenceTransitionsJobIntentService: JobIntentService() {
         }
     }
 
+    @SuppressLint("WrongConstant")
     private fun sendNotification(notificationDetails: String, hasEnterInRegion: Boolean) {
         val store =  getCurrentStore(notificationDetails, true)
         val secondStore =  getCurrentStore(notificationDetails, false)
@@ -144,7 +146,7 @@ class GeofenceTransitionsJobIntentService: JobIntentService() {
         }
 
         // Create an explicit content Intent that starts the main Activity.
-        val notificationIntent = Intent(baseContext, DottysGeofence::class.java)
+        val notificationIntent = Intent(this, DottysMainNavigationActivity::class.java)
 
         // Construct a task stack.
         val stackBuilder = TaskStackBuilder.create(this)
@@ -181,7 +183,7 @@ class GeofenceTransitionsJobIntentService: JobIntentService() {
 
         // Dismiss notification once the user touches it.
         builder.setAutoCancel(true)
-
+        builder.setBadgeIconType(R.mipmap.dottys_notification_icon)
         // Issue the notification
         mNotificationManager.notify(0, builder.build())
     }

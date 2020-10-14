@@ -18,6 +18,8 @@ import com.keylimetie.dottys.ui.dashboard.DottysDashboardDelegates
 import com.keylimetie.dottys.ui.dashboard.models.DottysBanners
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconsModel
 import com.keylimetie.dottys.ui.dashboard.models.DottysDrawingSumaryModel
+import com.keylimetie.dottys.ui.drawing.models.DottysDrawingRewardsModel
+import com.keylimetie.dottys.ui.drawing.models.DottysDrawingUserModel
 import java.text.NumberFormat
 
 class DrawingFragment : Fragment(), DottysDrawingDelegates, DottysDashboardDelegates {
@@ -56,7 +58,7 @@ class DrawingFragment : Fragment(), DottysDrawingDelegates, DottysDashboardDeleg
     }
 
     override fun getUserDrawings(drawing: DottysDrawingUserModel) {
-        drawingViewModel.segmentSelected = RewardsSegment.DRAWING_ENTRIES
+        //drawingViewModel.segmentSelected = RewardsSegment.DRAWING_ENTRIES
         drawingViewModel.initListView()
         var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
         dashboardViewModel?.userCurrentUserDataObserver = DottysCurrentUserObserver(this)

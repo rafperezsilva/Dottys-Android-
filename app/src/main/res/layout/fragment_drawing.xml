@@ -102,10 +102,12 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
             <TextView
+                android:id="@+id/drawing_location_static_textview"
                 style="@style/GenericDottysStyleText"
                 android:text="Your drawing entries are entered at"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="invisible"
                 android:fontFamily="@font/proxima_nova_regular"
                 app:layout_constraintBottom_toBottomOf="@+id/drawings_listview"
                 app:layout_constraintTop_toTopOf="@+id/drawing_subtitle_textview" />

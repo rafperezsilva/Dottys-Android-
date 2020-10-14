@@ -22,6 +22,7 @@ import android.widget.TextView
 import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.R
 import com.keylimetie.dottys.redeem.DottysRewardRedeemedActivity
+import com.keylimetie.dottys.ui.drawing.models.DottysDrawing
 import com.keylimetie.dottys.utils.getleftDays
 import kotlin.math.roundToInt
 

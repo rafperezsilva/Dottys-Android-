@@ -32,8 +32,10 @@ import com.keylimetie.dottys.redeem.DottysRedeemRewardsActivity
 import com.keylimetie.dottys.redeem.DottysRewardRedeemedActivity
 import com.keylimetie.dottys.ui.dashboard.models.*
 import com.keylimetie.dottys.ui.drawing.*
+import com.keylimetie.dottys.ui.drawing.models.DottysDrawing
+import com.keylimetie.dottys.ui.drawing.models.DottysDrawingRewardsModel
+import com.keylimetie.dottys.ui.drawing.models.DottysDrawingUserModel
 import com.keylimetie.dottys.utils.md5
-import com.keylimetie.dottys.utils.notifications.DottysLocalNotifiaction
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import org.json.JSONArray
@@ -41,7 +43,6 @@ import org.json.JSONObject
 import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.math.roundToLong
 import kotlin.properties.Delegates
 
 
@@ -136,6 +137,8 @@ class DashboardViewModel(mainActivity: DottysMainNavigationActivity?) : ViewMode
                 mainFragmentActivity?.startActivity(intent)
             }
             id.convert_points_dashboard_button -> {
+                mainFragmentActivity?.segmentSelect = RewardsSegment.DRAWING_ENTRIES
+                mainFragmentActivity?.intent?.putExtra("IS_DASHBOARD_BUTTON", true)
                 mainFragmentActivity?.controller?.navigate(
                     R.id.nav_rewards,
                     mainFragmentActivity?.intent?.extras
@@ -190,7 +193,8 @@ class DashboardViewModel(mainActivity: DottysMainNavigationActivity?) : ViewMode
     // FILL DATA POINTS AND BUTTON DASHBOARD
     fun fillItemsAtDashboards(rewardsLoaction: DottysDrawingRewardsModel?) {
         val stringFormated: String = NumberFormat.getIntegerInstance()
-            .format(userCurrentUserDataObserver?.currentUserModel?.points)
+            .format(mainFragmentActivity?.getUserPreference()?.points ?: 0.0)//userCurrentUserDataObserver?.currentUserModel?.points)
+
         cashRewards?.text = "$" + getCashForDrawing()
         pointsEarned?.text = stringFormated
         //region
@@ -762,6 +766,9 @@ class DashboardViewModel(mainActivity: DottysMainNavigationActivity?) : ViewMode
             mainFragmentActivity?.findViewById<TextView>(R.id.location_device_analytic_textview) //?: return
         val sendToSupportButton =
             mainFragmentActivity?.findViewById<Button>(R.id.send_to_support_button) //?: return
+        val isPushEnable =
+            mainFragmentActivity?.findViewById<TextView>(R.id.is_push_enable_textview) //?: return
+        isPushEnable?.text = if(mainFragmentActivity?.isPushNotificationEnabled() == true) "ENABLE" else "DISABLE"
         sendToSupportButton?.setOnClickListener(this)
         closeAnalyticButton?.setOnClickListener(this)
         closeAnalyticButton?.setOnClickListener {

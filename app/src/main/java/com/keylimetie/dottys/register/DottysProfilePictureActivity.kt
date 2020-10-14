@@ -31,7 +31,7 @@ class DottysProfilePictureActivity: DottysBaseActivity(), DottysRegisterUserDele
       val IMAGE_CAPTURE_CODE = 1001
     var image_uri: Uri? = null
 
-      val registerViewModel = DottysRegisterViewModel()
+      val registerViewModel = DottysRegisterViewModel(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dottys_profile_picture)

@@ -120,7 +120,8 @@ class DottysGeofence(private val baseActivity: DottysBaseActivity ) :   OnComple
     fun geofenceAtStores():  ArrayList<DottysStoresLocation> {
        var geoList = ArrayList<DottysStoresLocation>()
         val storeList = if (baseActivity.getUserNearsLocations().locations.isNullOrEmpty()) {return geoList} else {baseActivity.getUserNearsLocations().locations} ?: return geoList
-        for (store in 0..10) {
+        val maxSize = if(storeList.count() > 30) 30 else storeList.count() - 1
+        for (store in 0..maxSize) {
             geoList.add(storeList[store])
         }
         return geoList
@@ -280,7 +281,8 @@ class DottysGeofence(private val baseActivity: DottysBaseActivity ) :   OnComple
                 .setExpirationDuration(Geofence.NEVER_EXPIRE) // Set the transition types of interest. Alerts are only generated for these
                 // transition. We track entry and exit transitions in this sample.
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or
-                        Geofence.GEOFENCE_TRANSITION_EXIT) // Create the geofence.
+                        Geofence.GEOFENCE_TRANSITION_EXIT)
+                .setLoiteringDelay(1000*60*5)// Create the geofence.
                 .build())
             Log.e("POPULATE STORE - ", "${store.id} LOC -${store.storeNumber}- ${store.latitude}//${store.longitude}")
             // Log.e("POPULATE STORE - ", "${value} LOC -- ${index.latitude}//${index.longitude}")

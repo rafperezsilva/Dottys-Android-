@@ -12,6 +12,8 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.util.Log
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -27,6 +29,9 @@ import com.keylimetie.dottys.DottysErrorModel
 import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.R
 import com.keylimetie.dottys.ui.dashboard.DashboardFragment
+import com.keylimetie.dottys.ui.drawing.models.DottysDrawing
+import com.keylimetie.dottys.ui.drawing.models.DottysDrawingRewardsModel
+import com.keylimetie.dottys.ui.drawing.models.DottysDrawingUserModel
 import org.json.JSONObject
 import kotlin.properties.Delegates
 
@@ -62,7 +67,7 @@ class DrawingViewModel : ViewModel() {
     ) {
 
         activity = fragment.activity as? DottysMainNavigationActivity?
-        segmentSelected = activity?.segmentSelect ?: RewardsSegment.DRAWING_ENTRIES
+         segmentSelected = if (activity?.intent?.getBooleanExtra("IS_DASHBOARD_BUTTON",false) == true) RewardsSegment.DRAWING_ENTRIES else activity?.segmentSelect ?: RewardsSegment.DRAWING_ENTRIES
         this.viewRoot = viewRoot
         this.fragment = fragment
         if (fragment is DashboardFragment) {
@@ -70,7 +75,7 @@ class DrawingViewModel : ViewModel() {
         } else {
             drawingObserver = DottysDrawingObserver(fragment as DrawingFragment)
             initDrawingView(viewRoot)
-            getUserDrawings(activity!!)
+           //TODO getUserDrawings(activity!!)
         }
         if (locationId != null) {
             getCurrentDrawingLocation(activity ?: return, locationId)
@@ -79,7 +84,10 @@ class DrawingViewModel : ViewModel() {
         fragment.context.let {
             it?.let { it1 -> viewSegmentSelectedHandler(segmentSelected, it1) }
         }
-
+        emptyDrawingText(segmentSelected == RewardsSegment.DRAWING_ENTRIES)
+        if(segmentSelected == RewardsSegment.CASH_REWARDS) {
+            initListView()
+        }
     }
 
     private fun initDrawingView(viewRoot: View?) {
@@ -140,9 +148,15 @@ class DrawingViewModel : ViewModel() {
         linearLayout?.alpha = if (isVisiBle) 1f else 0f
         val drawingEntriesLocationTextView =
             viewRoot?.findViewById<TextView>(R.id.drawing_entries_location)
-        activity?.getBeaconStatus().let {
-            if (!it?.beaconArray.isNullOrEmpty())
-                drawingEntriesLocationTextView?.text = it?.beaconArray?.first()?.location?.address1
+        val drawinStaticLocationTextView =
+            viewRoot?.findViewById<TextView>(R.id.drawing_location_static_textview)
+        activity?.getDrawings().let {
+            if (!it?.address1.isNullOrEmpty()) {
+                drawingEntriesLocationTextView?.text = it?.address1
+                drawinStaticLocationTextView?.visibility = VISIBLE
+            } else {
+                drawinStaticLocationTextView?.visibility = INVISIBLE
+            }
         }
     }
 
@@ -177,12 +191,16 @@ class DrawingViewModel : ViewModel() {
             RewardsSegment.CASH_REWARDS -> {
                 var rewardsWired0 = DottysDrawing()
                 var rewardsWired1 = DottysDrawing()
+                var rewardsWired2 = DottysDrawing()
                 rewardsWired0.title = "$10\n Cash Reward"
                 rewardsWired0.subtitle = "1,000 Points for $10"
                 rewardsWired1.title = "$20\n Cash Reward"
                 rewardsWired1.subtitle = "2,000 Points for $20"
+                rewardsWired2.title = "$50\n Cash Reward"
+                rewardsWired2.subtitle = "5,000 Points for $50"
                 currentDrawing.add(rewardsWired0)
                 currentDrawing.add(rewardsWired1)
+                currentDrawing.add(rewardsWired2)
             }
         }
         return currentDrawing

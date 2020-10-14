@@ -31,6 +31,7 @@ data class DottysLoginResponseModel(
     var zip: String? = null,
     var lastKnownLocationId: String? = null,
     var lastLoginAt: String? = null,
+    var cellVerificationKey: String? = null,
 
     @get:JsonProperty("homeLocationId") @field:JsonProperty("homeLocationId")
     var homeLocationID: String? = "",

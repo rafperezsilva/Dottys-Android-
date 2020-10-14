@@ -1,4 +1,4 @@
-package com.keylimetie.dottys.ui.drawing
+package com.keylimetie.dottys.ui.drawing.models
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty

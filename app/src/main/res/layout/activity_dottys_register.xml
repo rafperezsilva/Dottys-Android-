@@ -198,7 +198,7 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:src="@mipmap/password_icon_red"
-                    android:tint="#9B9B9B" />
+                    app:tint="#9B9B9B" />
 
 
                 <EditText
@@ -489,7 +489,7 @@ contain 1 uppercase and 1 lowercase letter."
             app:layout_constraintTop_toBottomOf="@+id/image_verification" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/subtitle_register_sucess_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/send_label"
@@ -498,7 +498,7 @@ contain 1 uppercase and 1 lowercase letter."
             android:layout_marginEnd="25dp"
             android:layout_weight="0"
             android:fontFamily="@font/proxima_nova_light"
-            android:text="An text message with a verification code has been sent to (xxx) xxx-8686."
+            android:text=""
             android:textAlignment="center"
             android:textColor="#FFF"
             android:textSize="18sp"
@@ -510,7 +510,7 @@ contain 1 uppercase and 1 lowercase letter."
             android:id="@+id/go_to_enter_verification"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/textView"
+            android:layout_below="@+id/subtitle_register_sucess_textview"
             android:layout_marginStart="55dp"
             android:layout_marginTop="35dp"
             android:layout_marginEnd="55dp"
@@ -521,7 +521,7 @@ contain 1 uppercase and 1 lowercase letter."
             android:textColor="#FFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toBottomOf="@+id/subtitle_register_sucess_textview" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -605,8 +605,7 @@ contain 1 uppercase and 1 lowercase letter."
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:src="@mipmap/password_icon_red"
-                        android:tint="#9B9B9B"
-                        />
+                        app:tint="#9B9B9B" />
 
                     <EditText
                         android:inputType="textPassword"

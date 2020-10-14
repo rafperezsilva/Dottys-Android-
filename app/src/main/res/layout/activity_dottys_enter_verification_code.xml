@@ -44,7 +44,7 @@
         android:textSize="18sp"
         android:layout_weight="0"
         android:fontFamily="@font/proxima_nova_light"
-        android:text="An text message with a verification code has been sent to (xxx) xxx-8686."
+        android:text="An text message with a verification code has been sent to -------"
         android:textAlignment="center"
         android:textColor="#56585A" />
     <TextView

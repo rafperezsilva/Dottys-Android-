@@ -15,7 +15,7 @@ import java.util.*
 
 class DottysRegisterActivity : DottysBaseActivity(), DatePickerDialog.OnDateSetListener,
     DottysRegisterUserDelegates {
-    private val registerViewModel = DottysRegisterViewModel()
+    private val registerViewModel = DottysRegisterViewModel(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dottys_register)
@@ -31,6 +31,12 @@ class DottysRegisterActivity : DottysBaseActivity(), DatePickerDialog.OnDateSetL
         hideCustomKeyboard()
         setBackButton()
         backButton?.setImageResource(R.drawable.close_icon)
+        if(intent.getBooleanExtra("IS_REGISTER_USER",false)){
+            hideCustomKeyboard()
+            registerViewModel.showPreVerificationLayer(this)
+            registerViewModel.requestNewVerificationPhone(this)
+        }
+
     }
 
     override fun onResume() {

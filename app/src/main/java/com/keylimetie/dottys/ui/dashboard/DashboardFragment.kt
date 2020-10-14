@@ -1,27 +1,30 @@
 package com.keylimetie.dottys.ui.dashboard
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings.Secure
+import android.telephony.PhoneNumberFormattingTextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.ViewFlipper
+import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.keylimetie.dottys.*
 import com.keylimetie.dottys.beacon_service.DottysBeaconActivityDelegate
 import com.keylimetie.dottys.models.DottysGlobalDataModel
 import com.keylimetie.dottys.models.DottysRewardsModel
+import com.keylimetie.dottys.register.DottysRegisterActivity
 import com.keylimetie.dottys.splash.getVersionApp
 import com.keylimetie.dottys.ui.dashboard.models.DottysBanners
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconArray
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconsModel
 import com.keylimetie.dottys.ui.dashboard.models.DottysDrawingSumaryModel
 import com.keylimetie.dottys.ui.drawing.DottysDrawingDelegates
-import com.keylimetie.dottys.ui.drawing.DottysDrawingRewardsModel
-import com.keylimetie.dottys.ui.drawing.DottysDrawingUserModel
+import com.keylimetie.dottys.ui.drawing.models.DottysDrawingRewardsModel
+import com.keylimetie.dottys.ui.drawing.models.DottysDrawingUserModel
 import com.keylimetie.dottys.ui.locations.DottysLocationDelegates
 import com.keylimetie.dottys.ui.locations.DottysLocationStoresObserver
 import com.keylimetie.dottys.ui.locations.DottysLocationsStoresModel
@@ -83,34 +86,43 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
 
     }
 
-    private fun updateDataAtProfile(activityMain: DottysMainNavigationActivity?) {
+    private fun checkDataAtProfile(activityMain: DottysMainNavigationActivity?, isUpdateable: Boolean) {
         dashboardViewModel.initDashboardButtons()
+        val location = activityMain?.getUserNearsLocations()?.locations.let { it?.first() }
         val androidId = Secure.getString(
             context?.contentResolver,
             Secure.ANDROID_ID)
         val appVersion = "Android_${activityMain?.getVersionApp(activityMain)}"
         var profileData = activityMain?.getUserPreference()
-        profileData?.deviceId = androidId
+        if (isUpdateable){
+            callUpdateProfileData(profileData, activityMain, isUpdateable)
+            return
+        }
         profileData?.deviceId = if (profileData?.deviceId != androidId ||
             profileData?.appVersion != appVersion
         ) ({
             profileData?.deviceId = androidId
             profileData?.appVersion = appVersion
-            if (profileData?.toJson()
-                    ?.isEquivalentToString(activityMain?.getUserPreference()?.toJson()) == false
-            ) {
-                Log.d("DASHBOAR", "PROFILE ITS BEGIN TO UPADATE")
-                val profileViewModel = ProfileViewModel(null, profileData)
-                profileData.let {
-                    profileViewModel.uploadProfile(it, activityMain)
-                    profileViewModel.profileUpdateObserver = DottysProfileObserver(this)
-                }
-            }
-        }).toString() else {
-            return
+        }).toString() else { androidId }
+        if ((location?.distance ?: 0.0) <= 1.0 &&
+                profileData?.address1 ?: "" != location?.address1 ?: ""){
+            profileData?.address1 = location?.address1
+            profileData?.zip  = location?.zip
         }
+        callUpdateProfileData(profileData, activityMain, isUpdateable)
+    }
 
-
+    fun callUpdateProfileData(profileData: DottysLoginResponseModel?, activityMain: DottysMainNavigationActivity?, isUpdateable: Boolean){
+        if (profileData?.toJson()
+                ?.isEquivalentToString(activityMain?.getUserPreference()?.toJson()) == false or isUpdateable )
+        {
+            Log.d("DASHBOAR", "PROFILE ITS BEGIN TO UPADATE")                       
+            val profileViewModel = ProfileViewModel(null, profileData)
+            profileData.let {
+                profileViewModel.uploadProfile(it, activityMain)
+                profileViewModel.profileUpdateObserver = DottysProfileObserver(this)
+            }
+        }
     }
 
 
@@ -136,10 +148,89 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
     override fun getCurrentUser(currentUser: DottysLoginResponseModel) {
         //    var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
         //    updateDottysLocations(activity as DottysMainNavigationActivity)
-        dashboardViewModel.initDashboardButtons()
-        dashboardViewModel.getBannerDashboard(activity as DottysMainNavigationActivity)
+        when {
+            currentUser.cell.isNullOrEmpty() -> {
+             initVerificationCell()
+            }
+            currentUser.cellVerified == false -> {
+                val intent = Intent(activity as DottysMainNavigationActivity, DottysRegisterActivity::class.java)
+                intent.putExtra("IS_REGISTER_USER", true)
+                (activity as DottysMainNavigationActivity)?.startActivity(intent)
+
+
+//
+//                    var intent = Intent(this, DottysEnterVerificationCodeActivity::class.java)
+//                    intent.putExtra("EMAIL_FORGOT", strUser)
+//                    intent.putExtra("VIEW_FROM_PROFILE",   viewFromProfile)
+//                    startActivity(intent)
+
+
+            }
+            else -> {
+                  dashboardViewModel.initDashboardButtons()
+                  dashboardViewModel.getBannerDashboard(activity as DottysMainNavigationActivity)
+              }
+          }
+        
+
         //TODO dashboardViewModel.getDrawingSummary(activity as DottysMainNavigationActivity)
         //updateDataAtProfile(activity as DottysMainNavigationActivity)
+    }
+
+    private fun initVerificationCell() {
+        val addPhoneView = layoutInflater.inflate(R.layout.view_phone_verification, null) as ViewGroup
+        val dashboardLayout = viewFragment?.findViewById<ConstraintLayout>(R.id.dashboard_layout)
+        val buttonDone = addPhoneView?.findViewById<Button>(R.id.validation_done_button)
+        val validationPhoneEditText = addPhoneView?.findViewById<EditText>(R.id.validation_phone_edittext)
+        dashboardLayout?.addView(addPhoneView)
+        var phoneViewParams = (viewFragment?.height?: 0)*0.5
+        addPhoneView.elevation = 25f
+        buttonDone?.elevation = 35f
+
+        addPhoneView.animate()
+            .translationY(-(phoneViewParams).toFloat())
+            .setDuration(0)
+            .start()
+        addPhoneView.animate()
+            .translationY((((viewFragment?.height
+                ?: 0) * 0.8 / 2) - (phoneViewParams / 2)).toFloat())
+            .setDuration(700)
+            .setStartDelay(750)
+            .start()
+       validationPhoneEditText.addTextChangedListener(object : PhoneNumberFormattingTextWatcher() {
+           override fun onTextChanged(
+               s: CharSequence?,
+               start: Int,
+               before: Int,
+               count: Int,
+           ) {
+               if (!validationPhoneEditText.text.contains("+1") && !validationPhoneEditText.text.isEmpty()) {
+                   validationPhoneEditText.text.insert(0, "+1")
+               } else if (validationPhoneEditText.text.toString() == "+1") {
+                   validationPhoneEditText.setText("")
+               }
+               super.onTextChanged(s, start, before, count)
+           }
+       })
+        buttonDone?.setOnClickListener{
+
+             if (validationPhoneEditText.text.isBlank()) {
+                 mainActivity?.hideCustomKeyboard()
+                Toast.makeText(context,
+                     "Phone number is invalid or Empty, please check phone number field.", Toast.LENGTH_LONG).show()
+
+             } else {
+                 val userData =  (activity as DottysMainNavigationActivity).getUserPreference()
+                 userData?.cell = validationPhoneEditText.text.toString().replace(" ","").replace("-","")
+                 (activity as DottysMainNavigationActivity)?.saveDataPreference(PreferenceTypeKey.USER_DATA, userData?.toJson() ?: return@setOnClickListener)
+                 checkDataAtProfile(activity as DottysMainNavigationActivity, true)
+                 addPhoneView.animate()
+                     .translationY(-((viewFragment?.height ?: 0) * 0.7 / 2).toFloat())
+                     .setDuration(350)
+                     .start()
+             }
+        }
+
     }
 
     /** 1 **/
@@ -210,12 +301,25 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
 
     /** 4 **/
     override fun getDrawingSummary(dawingSummary: DottysDrawingSumaryModel) {
-        updateDataAtProfile(activity as DottysMainNavigationActivity)
+        checkDataAtProfile(activity as DottysMainNavigationActivity, false)
     }
 
     override fun onProfileUpdated(userProfile: DottysLoginResponseModel) {
-        var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
-        activity?.let { dashboardViewModel.getGlobalDataRequest(it) }
+        when {
+            userProfile.cell.isNullOrEmpty() -> {
+             initVerificationCell()
+            }
+            userProfile.cellVerified == false -> {
+                val intent = Intent(activity as DottysMainNavigationActivity, DottysRegisterActivity::class.java)
+                intent.putExtra("IS_REGISTER_USER", true)
+                (activity as DottysMainNavigationActivity)?.startActivity(intent)
+
+            }
+            else -> {
+                var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
+                activity?.let { dashboardViewModel.getGlobalDataRequest(it) }
+            }
+        }
     }
 
     //*02*/
@@ -242,7 +346,7 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
         var beaconsArray = DottysBeaconArray(activity.getBeaconStatus()?.beaconArray)
         dashboardViewModel.initAnalitycsItems(beaconsArray.beaconArray
             ?: activity.getBeaconStatus()?.beaconArray ?: return)
-        updateDataAtProfile(activity)
+        checkDataAtProfile(activity, false)
 
     }
 
@@ -297,6 +401,7 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
                     flipperViewDashboard?.showNext()
                 }
             }
+
         }
     }
 

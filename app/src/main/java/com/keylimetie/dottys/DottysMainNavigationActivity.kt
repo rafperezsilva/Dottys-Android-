@@ -27,7 +27,8 @@ import com.keylimetie.dottys.register.DottysRegisterViewModel
 import com.keylimetie.dottys.splash.getVersionApp
 import com.keylimetie.dottys.ui.dashboard.DottysPagerDelegates
 import com.keylimetie.dottys.ui.drawing.*
-import com.keylimetie.dottys.utils.geofence.DottysGeofence
+import com.keylimetie.dottys.ui.drawing.models.DottysDrawingRewardsModel
+import com.keylimetie.dottys.ui.drawing.models.DottysDrawingUserModel
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import kotlin.properties.Delegates
@@ -36,7 +37,7 @@ import kotlin.properties.Delegates
 class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeDelegates,
     DottysPagerDelegates, DottysDrawingDelegates, DottysRegisterUserDelegates {
     //, DottysBeaconStatusDelegate {
-    val registerViewModel = DottysRegisterViewModel()
+    val registerViewModel = DottysRegisterViewModel(this)
     var cameraPictureObserver: DottysProfilePictureObserver? = null
     private var drawingItemSelected: Int? = 0
     private var navView: NavigationView? = null
@@ -66,8 +67,8 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
                             logoAppBar.visibility = View.VISIBLE
                         }
                         else -> {
+                            intent.putExtra("IS_DASHBOARD_BUTTON",false)
                             when (destination.id) {
-
                                 R.id.nav_drawing -> {
                                     segmentSelect = RewardsSegment.DRAWING_ENTRIES
                                 }
