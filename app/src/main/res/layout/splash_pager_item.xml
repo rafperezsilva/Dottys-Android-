@@ -44,6 +44,7 @@
             android:layout_weight="2"
             android:scaleType="centerInside" />
 
+
         <TextView
             android:layout_marginRight="5dp"
             android:layout_marginLeft="5dp"
@@ -56,6 +57,20 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="35dp"
             android:text="PRUEBS DE TEXTO"
+            app:layout_constraintBottom_toTopOf="@+id/splash_swipe_static_textview"
             />
+        <TextView
+            android:id="@+id/splash_swipe_static_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:textSize="14dp"
+            android:layout_marginTop="8dp"
+            android:textColor="#FFF"
+            android:textAlignment="center"
+            android:text="Swipe to learn how."
+            android:fontFamily="@font/proxima_nova_light"
+            app:layout_constraintBottom_toTopOf="@+id/indicator"
+             />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

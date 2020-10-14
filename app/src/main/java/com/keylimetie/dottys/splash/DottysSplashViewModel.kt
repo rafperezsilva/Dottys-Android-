@@ -22,6 +22,7 @@ class DottysSplashViewModel : ViewModel() {
     private lateinit var viewPager: ViewPager
     private lateinit var loginButton: Button
     private lateinit var sigupButton: Button
+
       lateinit var conainer: ConstraintLayout
 
      fun initView(context: DottysSplashActivity){
@@ -29,8 +30,7 @@ class DottysSplashViewModel : ViewModel() {
         loginButton = context.findViewById(R.id.login_splash_button)
         sigupButton = context.findViewById(R.id.sign_up_splash_button)
          conainer = context.findViewById(R.id.splash_page_container)
-
-         conainer.alpha = 0f
+          conainer.alpha = 0f
          if ((context.getUserPreference().token?.isEmpty() != false).not()) {
              val intent = Intent(context, DottysMainNavigationActivity::class.java)
              context.startActivity(intent)

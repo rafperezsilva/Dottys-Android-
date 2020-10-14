@@ -80,6 +80,13 @@ class DottysProfilePictureActivity: DottysBaseActivity(), DottysRegisterUserDele
         image_uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
         //camera intent
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+             cameraIntent.putExtra("android.intent.extras.CAMERA_FACING", android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT);
+             cameraIntent.putExtra("android.intent.extras.LENS_FACING_FRONT", 1);
+             cameraIntent.putExtra("android.intent.extra.USE_FRONT_CAMERA", true);
+         } else {
+             cameraIntent.putExtra("android.intent.extras.CAMERA_FACING", 1);
+         }
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri)
         startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE)
      }

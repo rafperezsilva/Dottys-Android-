@@ -1,5 +1,7 @@
 package com.keylimetie.dottys.utils
 
+import android.graphics.Bitmap
+import android.graphics.Matrix
 import android.os.Build
 import android.text.TextUtils
 import android.util.Patterns
@@ -132,3 +134,24 @@ fun String.currentDateTime():String{
         || Build.HOST.startsWith("Build") //MSI App Player
         || (Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic"))
         || "google_sdk" == Build.PRODUCT
+
+
+/*
+* BITMAP EXTENSION
+* */
+
+fun Bitmap.rotateBitmap():Bitmap{
+    val matrix = Matrix()
+
+    matrix.postRotate(90F)
+
+    val scaledBitmap = Bitmap.createScaledBitmap(this, width, height, true)
+
+    return  Bitmap.createBitmap(scaledBitmap,
+        0,
+        0,
+        scaledBitmap.width,
+        scaledBitmap.height,
+        matrix,
+        true)
+}

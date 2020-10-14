@@ -3,6 +3,8 @@ package com.keylimetie.dottys.login
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import android.view.KeyEvent
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -21,7 +23,7 @@ import org.json.JSONObject
 import kotlin.properties.Delegates
 
 
-open class DottysLoginViewModel : ViewModel() {
+open class DottysLoginViewModel : ViewModel() { //}, TextView.OnEditorActionListener {
 
     private var forgotPasswordTextView: TextView? = null
     var userLoginDataObserver: DottysLoginObserver? = null
@@ -47,6 +49,9 @@ open class DottysLoginViewModel : ViewModel() {
             PreferenceTypeKey.USER_DATA.name,
             Context.MODE_PRIVATE
         )
+
+//        emailEditText?.setOnEditorActionListener(this)
+//        passwordEditText?.setOnEditorActionListener(this)
         activityLogin.editor = activityLogin.sharedPreferences!!.edit()
         VolleyService.initialize(mContext!!)
         //userRegisterData = DottysRegisterObservers(activityRegister)
@@ -89,7 +94,7 @@ open class DottysLoginViewModel : ViewModel() {
         return true
     }
 
-      fun loginUserRequest(modelRegister: DottysRegisterModel, mContext: DottysBaseActivity) {
+    fun loginUserRequest(modelRegister: DottysRegisterModel, mContext: DottysBaseActivity) {
         val params = HashMap<String, String>()
         params["email"] = modelRegister.email!!
         params["password"] = modelRegister.password!!
@@ -145,6 +150,22 @@ open class DottysLoginViewModel : ViewModel() {
         }
         mQueue.add(jsonObjectRequest)
     }
+
+//    override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+//        if(actionId == EditorInfo.IME_ACTION_DONE){
+//            var msg = ""
+//            when(v?.id) {
+//                 R.id.email_login_edittext -> {
+//                     msg = "From Emal"
+//                 }
+//                  R.id.password_login_edittext -> {
+//                      msg = "From Pasword"
+//                  }
+//            }
+//            Toast.makeText(mContext, msg,Toast.LENGTH_LONG).show()
+//        }
+//        return    false
+//    }
 }
 
 

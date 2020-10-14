@@ -98,7 +98,11 @@ open class DottysForgotPasswordViewModel : ViewModel()  {
         phoneVerificationImageview?.layoutParams = params
         emailVerificationTextview?.text =  mailUser
         val phone = verificationActivity.getUserPreference().cell
-        phoneVerificationTextview?.text = "Send an SMS to your phone"//(XXX) XXX-${phone?.substring((phone?.chars()?.count() ?: 0).toInt() - 4, phone?.chars()?.count()?.toInt() ?: 0)}"
+        val mssg = if (phone.isNullOrEmpty()) "Send an SMS to your phone" else {
+            val number = phone.subSequence(phone.count() - 4, phone.count())
+            "Send an SMS to (xxx) xxx-$number"
+        }
+        phoneVerificationTextview?.text = mssg//(XXX) XXX-${phone?.substring((phone?.chars()?.count() ?: 0).toInt() - 4, phone?.chars()?.count()?.toInt() ?: 0)}"
         phoneVerificationTextview?.textAlignment = View.TEXT_ALIGNMENT_CENTER
         buttonValidationClickLisener(verificationActivity, email)
     }

@@ -3,6 +3,7 @@ package com.keylimetie.dottys
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Matrix
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -26,9 +27,13 @@ import com.keylimetie.dottys.register.DottysRegisterUserObserver
 import com.keylimetie.dottys.register.DottysRegisterViewModel
 import com.keylimetie.dottys.splash.getVersionApp
 import com.keylimetie.dottys.ui.dashboard.DottysPagerDelegates
-import com.keylimetie.dottys.ui.drawing.*
+import com.keylimetie.dottys.ui.drawing.DottysDrawingDelegates
+import com.keylimetie.dottys.ui.drawing.DottysDrawingObserver
+import com.keylimetie.dottys.ui.drawing.DrawingViewModel
+import com.keylimetie.dottys.ui.drawing.RewardsSegment
 import com.keylimetie.dottys.ui.drawing.models.DottysDrawingRewardsModel
 import com.keylimetie.dottys.ui.drawing.models.DottysDrawingUserModel
+import com.keylimetie.dottys.utils.rotateBitmap
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import kotlin.properties.Delegates
@@ -67,7 +72,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
                             logoAppBar.visibility = View.VISIBLE
                         }
                         else -> {
-                            intent.putExtra("IS_DASHBOARD_BUTTON",false)
+                            intent.putExtra("IS_DASHBOARD_BUTTON", false)
                             when (destination.id) {
                                 R.id.nav_drawing -> {
                                     segmentSelect = RewardsSegment.DRAWING_ENTRIES
@@ -105,8 +110,11 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
             R.id.nav_drawing -> {
                 return "CONVERT POINTS"
             }
-            R.id.nav_terms_and_conditions, R.id.nav_privacy_policy -> {
-                return "Legal"
+            R.id.nav_terms_and_conditions -> {
+                return "Terms & Conditions"
+            }
+            R.id.nav_privacy_policy -> {
+                return "Privacy Policy"
             }
         }
         return ""
@@ -242,7 +250,9 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
         registerViewModel.activityRegisterObserver = DottysRegisterUserObserver(this)
         if (resultCode == Activity.RESULT_OK) {
             try {
-                val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, image_uri)
+
+                val bitmapBase = MediaStore.Images.Media.getBitmap(contentResolver, image_uri)
+                val bitmap = if (bitmapBase.width > bitmapBase.height) bitmapBase.rotateBitmap() else bitmapBase
                 val stream = ByteArrayOutputStream()
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream)
                 cameraPictureObserver?.imageFromCamera = bitmap
@@ -252,6 +262,9 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
                 e.printStackTrace()
             }
         }
+
+
+
     }
 
     override fun registerUser(userData: DottysLoginResponseModel) {}

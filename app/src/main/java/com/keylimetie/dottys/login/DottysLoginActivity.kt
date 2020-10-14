@@ -20,7 +20,7 @@ class DottysLoginActivity : DottysBaseActivity(), DottysLoginDelegate {
         viewModel.initView(this)
         this.supportActionBar?.let { actionBarSetting(it, ColorDrawable(resources.getColor(R.color.colorPrimary))) }
         val titleBar = actionBarView!!.findViewById<TextView>(R.id.title_bar)
-        titleBar.text = "Login"
+        titleBar.text = "Log In"
         setBackButton()
         backButton?.setImageResource(R.drawable.close_icon)
     }

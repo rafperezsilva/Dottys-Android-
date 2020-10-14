@@ -44,9 +44,7 @@
             android:textSize="18sp"
             android:layout_weight="0"
             android:fontFamily="@font/proxima_nova_light"
-            android:text="In order to access your account you will need to verify a sign-in code sent to you.
-
-How do you want to receive your code?"
+            android:text="In order to access your account you will \n need to verify a sign-in code sent to you.\n\nHow do you want to receive your code?"
             android:textAlignment="center"
             android:textColor="#56585A" />
 <androidx.constraintlayout.widget.ConstraintLayout

@@ -6,15 +6,15 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.hardware.Camera
+import android.hardware.camera2.CameraManager
+import android.os.Build
 import android.provider.MediaStore
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.requestPermissions
-import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModel
 import com.android.volley.AuthFailureError
 import com.android.volley.Response
@@ -24,19 +24,18 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.keylimetie.dottys.*
 import com.keylimetie.dottys.forgot_password.DottysVerificationTypeActivity
-import com.keylimetie.dottys.redeem.DottysRedeemResponseModel
 import com.keylimetie.dottys.register.DottysProfilePictureActivity
-import com.keylimetie.dottys.ui.locations.DottysLocationsStoresModel
 import com.keylimetie.dottys.utils.md5
 import com.keylimetie.dottys.utils.stringGetYear
-import com.keylimetie.dottys.utils.stringToDate
 import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.serialization.json.JsonObject
 import org.json.JSONObject
-import java.util.HashMap
+import java.util.*
 import kotlin.properties.Delegates
 
-class ProfileViewModel(activityMain: DottysMainNavigationActivity?,profileData:DottysLoginResponseModel?) : ViewModel(), View.OnClickListener,
+class ProfileViewModel(
+    activityMain: DottysMainNavigationActivity?,
+    profileData: DottysLoginResponseModel?
+) : ViewModel(), View.OnClickListener,
     DottysOnProfilePictureTakenDelegate {
     var imageViewProfile : CircleImageView? = null
     var nameProfileTextView : TextView? = null
@@ -59,9 +58,9 @@ class ProfileViewModel(activityMain: DottysMainNavigationActivity?,profileData:D
     private val pictureActivity = DottysProfilePictureActivity()
 
     fun initProfileView(
-       rootView: View,
-       activity: DottysMainNavigationActivity?, context: Context, fragent:ProfileFragment
-   ){
+        rootView: View,
+        activity: DottysMainNavigationActivity?, context: Context, fragent: ProfileFragment,
+    ){
        this.fragent = fragent
        this.context = context
        this.activity = activity
@@ -114,7 +113,7 @@ class ProfileViewModel(activityMain: DottysMainNavigationActivity?,profileData:D
         val request = ImageRequest(url,
             { bitmap ->
                 imageViewProfile?.setImageBitmap(bitmap)
-               // getLocationDrawing(fragment)
+                // getLocationDrawing(fragment)
             }, 0, 0, null,
             {
                 imageViewProfile?.setImageResource(R.mipmap.default_profile_image)
@@ -143,20 +142,31 @@ class ProfileViewModel(activityMain: DottysMainNavigationActivity?,profileData:D
             }
             R.id.password_profile_edit_text -> {
                 var intent = Intent(activity, DottysVerificationTypeActivity::class.java)
-                intent.putExtra("EMAIL_FORGOT",   userData?.email ?: "")
-                intent.putExtra("VIEW_FROM_PROFILE",   true)
+                intent.putExtra("EMAIL_FORGOT", userData?.email ?: "")
+                intent.putExtra("VIEW_FROM_PROFILE", true)
                 activity?.startActivity(intent)
             }
         }
     }
 
     private fun openCamera() {
+
         val values = ContentValues()
         values.put(MediaStore.Images.Media.TITLE, "New Picture")
         values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera")
-       activity?.image_uri = activity?.contentResolver?.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+       activity?.image_uri = activity?.contentResolver?.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+           values)
         //camera intent
+
+
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            cameraIntent.putExtra("android.intent.extras.CAMERA_FACING", android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT);
+            cameraIntent.putExtra("android.intent.extras.LENS_FACING_FRONT", 1);
+            cameraIntent.putExtra("android.intent.extra.USE_FRONT_CAMERA", true);
+        } else {
+            cameraIntent.putExtra("android.intent.extras.CAMERA_FACING", 1);
+        }
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, activity?.image_uri)
         activity?.cameraPictureObserver = DottysProfilePictureObserver(this)
         activity?.startActivityForResult(cameraIntent, pictureActivity.IMAGE_CAPTURE_CODE)
@@ -190,7 +200,10 @@ class ProfileViewModel(activityMain: DottysMainNavigationActivity?,profileData:D
     }
 
 
-      fun uploadProfile(profileData: DottysLoginResponseModel, activity: DottysMainNavigationActivity?) {
+      fun uploadProfile(
+          profileData: DottysLoginResponseModel,
+          activity: DottysMainNavigationActivity?
+      ) {
         val mQueue = Volley.newRequestQueue(activity)
      //   activity?.showLoader()
         val jsonProfile = JSONObject(profileData.toJson())
@@ -208,7 +221,7 @@ class ProfileViewModel(activityMain: DottysMainNavigationActivity?,profileData:D
                 var user = userData
                 user.token = activity?.getUserPreference()?.token
                 activity?.saveDataPreference(PreferenceTypeKey.USER_DATA, user.toJson())
-                profileUpdateObserver?.updateProfile =  userData
+                profileUpdateObserver?.updateProfile = userData
 
 
             },
@@ -216,7 +229,9 @@ class ProfileViewModel(activityMain: DottysMainNavigationActivity?,profileData:D
                 override fun onErrorResponse(error: VolleyError) {
                     activity?.hideLoader()
 
-                    if (error.networkResponse ==  null){return}
+                    if (error.networkResponse == null) {
+                        return
+                    }
                     val errorRes =
                         DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                     if (errorRes.error?.messages?.size ?: 0 > 0) {

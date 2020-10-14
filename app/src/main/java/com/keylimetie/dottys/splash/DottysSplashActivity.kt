@@ -10,7 +10,7 @@ import com.keylimetie.dottys.game_play.roulette.DottysRouletteActivity
 
 
 class DottysSplashActivity : DottysBaseActivity() {
-    private val viewModel = DottysSplashViewModel()
+      val viewModel = DottysSplashViewModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
