@@ -107,7 +107,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:sb_swipe_animate_text="true"
-        app:sb_swipe_text="Host Swipe to Redeem"
+        app:sb_swipe_text="FHost Swipe to Redeem"
         app:layout_constraintCircleAngle="15"  />
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -3,6 +3,7 @@ package com.keylimetie.dottys.redeem
 import android.annotation.SuppressLint
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.Typeface
 import android.graphics.Typeface.BOLD
 import android.graphics.drawable.ColorDrawable
 import android.text.Layout
@@ -20,6 +21,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModel
 import com.agik.AGIKSwipeButton.Controller.OnSwipeCompleteListener
 import com.agik.AGIKSwipeButton.View.Swipe_Button_View
@@ -331,14 +333,22 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
     }
 
     fun swipeButtonSetting(activityRewards: AppCompatActivity) {
+        val pointsToRedeem = (activityRewards as DottysRewardRedeemedActivity).drawing?.subtitle?.split(
+            "Points")?.get(0)
+        swipeRewardsItem?.textView?.text = "Redeem $pointsToRedeem points"
+        swipeRewardsItem?.textView?.textSize = 17f
+        swipeRewardsItem?.textView?.setTextColor(activityRewards.getColor(R.color.colorTextGrey))
+        swipeRewardsItem?.textView?.textAlignment = View.TEXT_ALIGNMENT_CENTER
+         swipeRewardsItem?.textView?.typeface  = ResourcesCompat.getFont(activityRewards.applicationContext, R.font.proxima_nova_bold)
         swipeRewardsItem?.setBackgroundResource(R.drawable.shape_swipe_view)
+        //swipeRewardsItem?.setThumbImage(activityRewards.resources.getDrawable(R.drawable.soda_win))
         swipeRewardsItem?.setThumbBackgroundColor(activityRewards.resources.getColor(R.color.colorSecundaryDark))
         swipeRewardsItem?.setTextColor(activityRewards.resources.getColor(R.color.colorTextGrey))
         swipeRewardsItem?.setOnSwipeCompleteListener_forward_reverse(object :
             OnSwipeCompleteListener {
             override fun onSwipe_Forward(swipeView: Swipe_Button_View) {
                 if (activityRewards is DottysRewardRedeemedActivity) {
-                    if (swipeType ==  null) {
+                    if (swipeType == null) {
 
                         dashBardViewModel.userCurrentUserDataObserver =
                             DottysCurrentUserObserver(activityRewards as DottysRewardRedeemedActivity)
@@ -347,7 +357,7 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
                         drawingPurchaseRequest(activityRewards)
                     } else {
 
-                         cashRewardsRequest(activityRewards)
+                        cashRewardsRequest(activityRewards)
                     }
                 } else {
                     codeVerificationLayout?.animate()?.x(0.0f)?.y(0.0f)?.scaleY(1f)
@@ -355,6 +365,7 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
                         ?.start()
                 }
             }
+
             override fun onSwipe_Reverse(swipeView: Swipe_Button_View) {}
         })
     }
@@ -370,7 +381,7 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
 
     /* NETWORK REDEEM REWARDS  */
     private fun redeemRewards(
-        activityRewards: DottysCashRedeemRewardsActivity, hostCode: String
+        activityRewards: DottysCashRedeemRewardsActivity, hostCode: String,
     ) {
         val mQueue = Volley.newRequestQueue(activityRewards)
         activityRewards.showLoader()
@@ -402,7 +413,9 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
             },
             Response.ErrorListener { error ->
                 activityRewards.hideLoader()
-                if (error.networkResponse ==  null){return@ErrorListener}
+                if (error.networkResponse == null) {
+                    return@ErrorListener
+                }
                 val errorRes =
                     DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                 if (errorRes.error?.messages?.size ?: 0 > 0) {
@@ -431,7 +444,8 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
 
     /* NETWORK DRAWING PURCHASE */
     fun drawingPurchaseRequest(
-        drawingActivity: DottysRewardRedeemedActivity) {
+        drawingActivity: DottysRewardRedeemedActivity,
+    ) {
         val mQueue = Volley.newRequestQueue(drawingActivity)
         drawingActivity.showLoader()
         //val jsonArray = JSONArray()
@@ -456,7 +470,9 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
             },
             Response.ErrorListener { error ->
                 drawingActivity.hideLoader()
-                if (error.networkResponse ==  null){return@ErrorListener}
+                if (error.networkResponse == null) {
+                    return@ErrorListener
+                }
                 val errorRes =
                     DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                 if (errorRes.error?.messages?.size ?: 0 > 0) {
@@ -499,7 +515,8 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
 
     /* NETWORK CASH REWARDS */
     fun cashRewardsRequest(
-        drawingActivity: DottysRewardRedeemedActivity) {
+        drawingActivity: DottysRewardRedeemedActivity,
+    ) {
         val mQueue = Volley.newRequestQueue(drawingActivity)
         drawingActivity.showLoader()
         val params = HashMap<String, String>()
@@ -518,7 +535,9 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
             },
             Response.ErrorListener { error ->
                 drawingActivity.hideLoader()
-                if (error.networkResponse ==  null){return@ErrorListener}
+                if (error.networkResponse == null) {
+                    return@ErrorListener
+                }
                 val errorRes =
                     DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                 if (errorRes.error?.messages?.size ?: 0 > 0) {
@@ -563,13 +582,13 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
         view.window.statusBarColor = ContextCompat.getColor(view, R.color.colorDottysGrey)
     }
 
-    private fun containerTicketLayoutParams(view: DottysRedeemRewardsActivity?, layout:ConstraintLayout):ConstraintLayout.LayoutParams{
+    private fun containerTicketLayoutParams(view: DottysBaseActivity?, layout: ConstraintLayout):ConstraintLayout.LayoutParams{
         var containerParams = layout.layoutParams
         view?.windowManager?.defaultDisplay?.getMetrics(view?.displayMetrics)
         val containerWidthSize =
-            ((view?.displayMetrics?.widthPixels ?: 0) * 0.35).roundToInt()
+            ((view?.displayMetrics?.widthPixels ?: 0) * 0.85).roundToInt()
         containerParams?.width = containerWidthSize
-        containerParams?.height = containerWidthSize + (containerWidthSize * 0.2).roundToInt()
+        containerParams?.height =  ((view?.displayMetrics?.widthPixels ?: 0)*0.8).roundToInt() // containerWidthSize + (containerWidthSize * 0.2).roundToInt()
         return containerParams as ConstraintLayout.LayoutParams
     }
 
@@ -593,7 +612,8 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
             image.setImageBitmap(BitmapFactory.decodeByteArray(bm, 0, bm.size))
         }
 
-        redemmedContainer?.layoutParams = containerTicketLayoutParams(activityRedeem,redemmedContainer)
+        redemmedContainer?.layoutParams = containerTicketLayoutParams(activityRedeem,
+            redemmedContainer)
 
         swipeRewardsItem = redemeedActivity.findViewById<Swipe_Button_View>(R.id.start_swipe)
         swipeButtonSetting(redemeedActivity as DottysRewardRedeemedActivity)
@@ -628,23 +648,27 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
         val drawingViewModel = DrawingViewModel()
         descriptioDrawinTextView.text = drawingViewModel.attributedRedeemText(
             NumberFormat.getIntegerInstance()
-            .format(drawingActivity.getUserPreference()?.points ?: (0).toLong()))
+                .format(drawingActivity.getUserPreference()?.points ?: (0).toLong()))
         rewardsObserver = DottysRedeemedRewardsObserver(drawingActivity)
         if (drawingActivity.rewardsTypeView == "CASH_REWARDS"){
            subtitleDrawing.text = drawingActivity.drawing?.subtitle
            redemmedCodeItem.text = "Visit a local Dotty's to redeem after purchase"
            tagEntriesTextView.visibility = View.INVISIBLE
            wiredDrawingTextView.visibility = View.INVISIBLE
-           titleDrawing.textSize = 32f
+           titleDrawing.textSize = 30f
            titleDrawing.text = "CASH REWARDS"
             qttyEntries.text = drawingActivity.drawing?.subtitle?.split(" ")?.last() ?: ""
-       } else {
+            redemmedContainer?.layoutParams = containerTicketLayoutParams(drawingActivity,
+                redemmedContainer)
+
+        } else {
 
            qttyEntries.text = drawingActivity.drawing?.quantity.toString()
            titleDrawing.text = drawingActivity.drawing?.title
            subtitleDrawing.text = drawingActivity.drawing?.subtitle
            redemmedCodeItem.text = "You can redeem your points for up to $quantityEntries entries into the $entriesType drawing."
-           redemmedContainer?.layoutParams = containerTicketLayoutParams(activityRedeem,redemmedContainer)
+           redemmedContainer?.layoutParams = containerTicketLayoutParams(activityRedeem,
+               redemmedContainer)
        }
         swipeRewardsItem = drawingActivity.findViewById<Swipe_Button_View>(R.id.start_swipe)
         swipeButtonSetting(drawingActivity as DottysRewardRedeemedActivity)
@@ -665,9 +689,9 @@ class DottysRedeemedRewardsObserver(lisener: DottysRedeemedRewardsDelegates) {
         initialValue = DottysRedeemResponseModel(),
         onChange = { prop, old, new -> lisener.getRedeemedRewards(new) })
     var purchaseDrawing: Boolean by Delegates.observable(
-            initialValue = false,
-            onChange = { prop, old, new -> lisener.getPurchaseDrawing(new) })
+        initialValue = false,
+        onChange = { prop, old, new -> lisener.getPurchaseDrawing(new) })
      var chashRewards: Boolean by Delegates.observable(
-                initialValue = false,
-                onChange = { prop, old, new -> lisener.getCachRewards(new) })
+         initialValue = false,
+         onChange = { prop, old, new -> lisener.getCachRewards(new) })
 }

@@ -8,10 +8,11 @@
     android:background="@color/colorPrimary">
 
     <TextView
+
         android:id="@+id/host_id_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="45dp"
         android:fontFamily="@font/proxima_nova_semibold"
         android:text="ENTER HOST ID"
         android:textColor="#FFF"
@@ -25,7 +26,7 @@
         android:layout_width="402dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="35dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="35dp"
         android:fontFamily="@font/proxima_nova_semibold"
         android:text="To complete Validation and Redemption."
@@ -39,9 +40,9 @@
         android:id="@+id/ticket_redemeed_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="45dp"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="35dp"
-        android:layout_marginEnd="45dp"
+        android:layout_marginEnd="25dp"
         android:layout_marginBottom="25dp"
         app:layout_constraintBottom_toTopOf="@+id/start_swipe"
         app:layout_constraintEnd_toEndOf="parent"
@@ -66,13 +67,11 @@
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/proxima_nova_extrabold"
-            android:text="10$"
-            android:textColor="#1E1E1E"
-            android:textSize="80sp"
-            app:layout_constraintEnd_toEndOf="parent"
+             android:textColor="#1E1E1E"
+             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/ticket_redemeed_container2" />
 
@@ -108,10 +107,9 @@
             android:id="@+id/drawing_layout_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="#FFF"
-            app:layout_constraintEnd_toEndOf="@+id/ticket_redemeed_container2"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+             app:layout_constraintEnd_toEndOf="@+id/ticket_redemeed_container2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -191,23 +189,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <com.agik.AGIKSwipeButton.View.Swipe_Button_View
-        android:scaleY="0.8"
-        android:scaleX="0.9"
-        android:id="@+id/start_swipe"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="27dp"
-        android:layout_marginEnd="27dp"
-        android:layout_marginBottom="25dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:sb_swipe_animate_text="true"
-        app:sb_swipe_text="Host Swipe to Redeem"
-        app:layout_constraintCircleAngle="15"  />
-<!--    <ImageView-->
+    <!--    <ImageView-->
 <!--        android:id="@+id/reward_barcode"-->
 <!--        android:layout_width="wrap_content"-->
 <!--        android:layout_height="wrap_content"-->
@@ -215,6 +197,23 @@
 <!--        app:layout_constraintEnd_toEndOf="parent"-->
 <!--        app:layout_constraintStart_toStartOf="parent"-->
 <!--        app:layout_constraintTop_toTopOf="parent" />-->
+    <com.agik.AGIKSwipeButton.View.Swipe_Button_View
+        android:id="@+id/start_swipe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="27dp"
+        android:layout_marginEnd="27dp"
+        android:layout_marginBottom="16dp"
+        android:scaleX="0.9"
+        android:scaleY="0.8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintCircleAngle="15"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:sb_swipe_animate_text="true"
+        app:sb_swipe_text="Host Swipe to Redeem" />
+
     <ProgressBar
         android:id="@+id/progress_loader"
         style="?android:attr/progressBarStyleLarge"
