@@ -85,7 +85,8 @@ class DottysRedeemAdapter(private val activity: DottysRedeemRewardsActivity,
         rewardsForCashButton?.setOnClickListener {
             val intent = Intent(activity, DottysCashRedeemRewardsActivity::class.java)
             //intent.putExtra("LOCATION_ID",rewards.locationID)
-            intent.putExtra("REWARD_ID",rewards.id)
+            intent.putExtra("REWARD_ID",rewards.toJson())
+
             activity.startActivity(intent)
         }
 

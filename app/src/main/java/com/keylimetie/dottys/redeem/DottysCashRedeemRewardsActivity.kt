@@ -4,11 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.R
+import com.keylimetie.dottys.models.DottysRewardModel
 
 
 class DottysCashRedeemRewardsActivity : DottysBaseActivity(), DottysRedeemedRewardsDelegates {
     private var redeemReawrdsViewModel = DottysRedeemRewardsViewmodel()
-    var rewardID = String()
+    var rewardID =  DottysRewardModel()
     var rewardLocation = String()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,7 +17,7 @@ class DottysCashRedeemRewardsActivity : DottysBaseActivity(), DottysRedeemedRewa
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             window.statusBarColor = resources.getColor(R.color.colorDottysGrey)
         }
-        rewardID  = intent.getStringExtra("REWARD_ID").toString()
+        rewardID  =  DottysRewardModel.fromJson(intent.getStringExtra("REWARD_ID").toString())
         redeemReawrdsViewModel.initCashRewardsView(this)
         setBackButton()
     }

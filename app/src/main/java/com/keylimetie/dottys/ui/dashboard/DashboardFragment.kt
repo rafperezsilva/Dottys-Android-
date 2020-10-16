@@ -272,18 +272,11 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
         mainActivity?.beaconsStatusObserver?.distanceToNearStore =
             (locations.locations?.first()?.distance ?: return)
         if(locations.locations.isNullOrEmpty()){return}
-        if (locations.locations?.first()?.distance ?: return < 0.5 || mainActivity?.getBeaconStatus()?.beaconArray.isNullOrEmpty()) {
-            activity.let { dashboardViewModel.getBeaconList(it as DottysBaseActivity) }
-        } else {
-            activity?.let { dashboardViewModel.getDrawingSummary(it as DottysMainNavigationActivity) }
-            dashboardViewModel.initAnalitycsItems(
-                (if (mainActivity?.getBeaconStatus()?.beaconArray.isNullOrEmpty()) {
-                    mainActivity?.getBeaconStatus()?.beaconArray
-                } else {
-                    mainActivity?.getBeaconStatus()?.beaconArray
-                })
-            )
-        }
+        //if (locations.locations?.first()?.distance ?: return < 0.5 || mainActivity?.getBeaconStatus()?.beaconArray.isNullOrEmpty()) {
+            activity.let { dashboardViewModel.getBeaconList(it as DottysBaseActivity, locations.locations?.first()?.storeNumber.toString()) }
+        //} else {
+
+     //   }
     }
 
     /** 4 // PASS **/
@@ -295,7 +288,15 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
         )
         dashboardViewModel.initAnalitycsItems(activity?.getBeaconStatus()?.beaconArray
             ?: activity?.getBeaconStatus()?.beaconArray ?: return)
-        activity.let { it?.let { it1 -> dashboardViewModel.getDrawingSummary(it1) } }
+        activity?.let { dashboardViewModel.getDrawingSummary(it as DottysMainNavigationActivity) }
+        dashboardViewModel.initAnalitycsItems(
+            (if (mainActivity?.getBeaconStatus()?.beaconArray.isNullOrEmpty()) {
+                mainActivity?.getBeaconStatus()?.beaconArray
+            } else {
+                mainActivity?.getBeaconStatus()?.beaconArray
+            })
+        )
+      //  activity.let { it?.let { it1 -> dashboardViewModel.getDrawingSummary(it1) } }
 
     }
 

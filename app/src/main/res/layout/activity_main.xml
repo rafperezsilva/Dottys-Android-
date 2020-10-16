@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-
     tools:context=".splash.DottysSplashActivity">
+
 
     <!--    <TextView-->
     <!--        style="@style/TextViewPrimaryStyle"-->
@@ -99,4 +99,13 @@
                 android:text="SIGN UP" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+<!--    <ImageView-->
+<!--        android:id="@+id/splash_init_image"-->
+<!--        android:src="@mipmap/splash_image"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/splash_page_container"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/splash_page_container"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>

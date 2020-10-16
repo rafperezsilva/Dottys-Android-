@@ -22,6 +22,10 @@ class   DottysRedeemRewardsActivity : DottysBaseActivity() {
         setBackButton()
      }
 
+    override fun onStop() {
+        super.onStop()
+        viewModel.gifAnimatedImage = null
+    }
 //    override fun getDrawingSummary(dawingSummary: DottysDrawingSumaryModel) {}
 //
 //    override fun getCurrentUser(currentUser: DottysLoginResponseModel) {

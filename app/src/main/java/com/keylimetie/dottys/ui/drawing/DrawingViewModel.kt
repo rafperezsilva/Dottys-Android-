@@ -32,6 +32,7 @@ import com.keylimetie.dottys.ui.dashboard.DashboardFragment
 import com.keylimetie.dottys.ui.drawing.models.DottysDrawing
 import com.keylimetie.dottys.ui.drawing.models.DottysDrawingRewardsModel
 import com.keylimetie.dottys.ui.drawing.models.DottysDrawingUserModel
+import com.keylimetie.dottys.utils.DottysStatics
 import org.json.JSONObject
 import kotlin.properties.Delegates
 
@@ -189,23 +190,24 @@ class DrawingViewModel : ViewModel() {
                 }
             }
             RewardsSegment.CASH_REWARDS -> {
-                var rewardsWired0 = DottysDrawing()
-                var rewardsWired1 = DottysDrawing()
-                var rewardsWired2 = DottysDrawing()
-                rewardsWired0.title = "$10\n Cash Reward"
-                rewardsWired0.subtitle = "1,000 Points for $10"
-                rewardsWired1.title = "$20\n Cash Reward"
-                rewardsWired1.subtitle = "2,000 Points for $20"
-                rewardsWired2.title = "$50\n Cash Reward"
-                rewardsWired2.subtitle = "5,000 Points for $50"
-                currentDrawing.add(rewardsWired0)
-                currentDrawing.add(rewardsWired1)
-                currentDrawing.add(rewardsWired2)
+                currentDrawing = DottysStatics.staticCashRewards
             }
         }
         return currentDrawing
     }
 
+//    var rewardsWired0 = DottysDrawing()
+//    var rewardsWired1 = DottysDrawing()
+//    var rewardsWired2 = DottysDrawing()
+//    rewardsWired0.title = "$10\n Cash Reward"
+//    rewardsWired0.subtitle = "1,000 Points for $10"
+//    rewardsWired1.title = "$20\n Cash Reward"
+//    rewardsWired1.subtitle = "2,000 Points for $20"
+//    rewardsWired2.title = "$50\n Cash Reward"
+//    rewardsWired2.subtitle = "5,000 Points for $50"
+//    currentDrawing.add(rewardsWired0)
+//    currentDrawing.add(rewardsWired1)
+//    currentDrawing.add(rewardsWired2)
     private fun viewSegmentSelectedHandler(segment: RewardsSegment, contex: Context) {
         when (segment) {
             RewardsSegment.DRAWING_ENTRIES -> {

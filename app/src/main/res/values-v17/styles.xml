@@ -22,5 +22,9 @@
         <item name="colorAccent">@color/colorSecundary</item>
 
 
+        <item name="android:windowDisablePreview">true</item>
+<!--        <item name="android:windowBackground">@null</item>-->
+        <item name="android:windowIsTranslucent">true</item>
+
     </style>
 </resources>

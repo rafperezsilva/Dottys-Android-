@@ -631,11 +631,11 @@ class DashboardViewModel(mainActivity: DottysMainNavigationActivity?) : ViewMode
     }
 
     /*BEACON LIST REQUEST */
-    fun getBeaconList(mContext: DottysBaseActivity) {
+    fun getBeaconList(mContext: DottysBaseActivity, storeNumber: String) {
         val mQueue = Volley.newRequestQueue(mContext)
         mContext.showLoader()
         val jsonObjectRequest = object : JsonObjectRequest(Method.GET,
-            mContext.baseUrl + "beacons/?limit=500",
+            mContext.baseUrl + "beacons/?major=$storeNumber",
             null,
             Response.Listener<JSONObject> { response ->
                 mContext.hideLoader()

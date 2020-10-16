@@ -131,7 +131,13 @@ data class DottysRewardModel(
     val region: String? = null,
     val validationCode: String? = null,
     val redeemedValidationCode: String? = null
-)
+){
+    fun toJson() = mapper.writeValueAsString(this)
+
+    companion object {
+        fun fromJson(json: String) = mapper.readValue<DottysRewardModel>(json)
+    }
+}
 
 
 //{

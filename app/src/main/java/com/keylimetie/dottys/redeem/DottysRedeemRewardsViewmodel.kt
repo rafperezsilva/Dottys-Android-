@@ -29,6 +29,7 @@ import com.android.volley.NetworkResponse
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.bumptech.glide.Glide
 import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.DottysErrorModel
 import com.keylimetie.dottys.R
@@ -62,6 +63,7 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
     /* CASH REWARDS VIEW ITEMS */
     private var redeemImage: ImageView? = null
     private var swipeRewardsItem: Swipe_Button_View? = null
+      var gifAnimatedImage: ImageView? = null
 
     private var zeroButton: Button? = null
     private var oneButton: Button? = null
@@ -222,7 +224,7 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
         imageReedemSetting(activityRewards)
         swipeButtonSetting(activityRewards)
         buttonsPadsLisener(activityRewards)
-        congratsTextview?.text = "Congrats \n${activityRewards.getUserPreference().firstName}"
+        congratsTextview?.text = "CONGRATS \n\n${activityRewards.getUserPreference().firstName}"
         rewardsObserver = DottysRedeemedRewardsObserver(activityRewards)
 
 
@@ -230,6 +232,7 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
 
     private fun initRewardsItemsView(activityRewards: DottysCashRedeemRewardsActivity) {
         swipeRewardsItem = activityRewards.findViewById<Swipe_Button_View>(R.id.start_swipe)
+        gifAnimatedImage = activityRewards.findViewById<ImageView>(R.id.animated_gif_redeem_rewards)
         codeVerificationLayout =
             activityRewards.findViewById<ConstraintLayout>(R.id.enter_code_layout)
         redeemImage = activityRewards.findViewById<ImageView>(R.id.redeem_rewards_image)
@@ -257,6 +260,7 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
             fourtCode, fifthCode, sixtCode
         )
         codeVerificationLayout?.animate()?.x(0.0f)?.y(0.0f)?.scaleY(0f)?.setDuration(0)?.start()
+        Glide.with(activityRewards).asGif().load(R.drawable.falling_money).into(gifAnimatedImage ?: return)
     }
 
     private fun editTextCodeManager(activityRewards: DottysCashRedeemRewardsActivity) {
@@ -333,9 +337,12 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
     }
 
     fun swipeButtonSetting(activityRewards: AppCompatActivity) {
-        val pointsToRedeem = (activityRewards as DottysRewardRedeemedActivity).drawing?.subtitle?.split(
-            "Points")?.get(0)
-        swipeRewardsItem?.textView?.text = "Redeem $pointsToRedeem points"
+        val pointsToRedeem = if (activityRewards is DottysRewardRedeemedActivity)
+            (activityRewards).let {
+                "Redeem ${it.drawing?.subtitle?.split(
+            "Points")?.get(0)} points"
+        }  else "Host Swipe to Redeem"
+        swipeRewardsItem?.textView?.text = pointsToRedeem
         swipeRewardsItem?.textView?.textSize = 17f
         swipeRewardsItem?.textView?.setTextColor(activityRewards.getColor(R.color.colorTextGrey))
         swipeRewardsItem?.textView?.textAlignment = View.TEXT_ALIGNMENT_CENTER
@@ -401,7 +408,7 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
         val jsonObject = JSONObject(params as Map<*, *>)
         val jsonObjectRequest = object : JsonObjectRequest(
             Method.PATCH,
-            activityRewards.baseUrl + "rewards/redeem/" + activityRewards.rewardID,
+            activityRewards.baseUrl + "rewards/redeem/" + activityRewards.rewardID.id,
             jsonObject,
             Response.Listener<JSONObject> {
                 activityRewards.hideLoader()
