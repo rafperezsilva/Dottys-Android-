@@ -27,11 +27,12 @@ class DottysRegisterActivity : DottysBaseActivity(), DatePickerDialog.OnDateSetL
         }
         val titleBar = actionBarView!!.findViewById<TextView>(R.id.title_bar)
         titleBar.text = "Create Account"
+
         registerViewModel.initRegisterView(this)
         hideCustomKeyboard()
         setBackButton()
         backButton?.setImageResource(R.drawable.close_icon)
-        if(intent.getBooleanExtra("IS_REGISTER_USER",false)){
+        if(registerViewModel.isRegisterUser){
             hideCustomKeyboard()
             registerViewModel.showPreVerificationLayer(this)
             registerViewModel.requestNewVerificationPhone(this)

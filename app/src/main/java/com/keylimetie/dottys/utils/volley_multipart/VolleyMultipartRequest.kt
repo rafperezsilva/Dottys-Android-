@@ -1,4 +1,4 @@
-package com.keylimetie.dottys.register.volley_multipart
+package com.keylimetie.dottys.utils.volley_multipart
 
 import com.android.volley.*
 import com.android.volley.toolbox.HttpHeaderParser

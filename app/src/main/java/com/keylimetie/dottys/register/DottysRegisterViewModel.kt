@@ -22,7 +22,7 @@ import com.keylimetie.dottys.forgot_password.DottysEnterVerificationCodeActivity
 import com.keylimetie.dottys.login.DottysLoginDelegate
 import com.keylimetie.dottys.login.DottysLoginObserver
 import com.keylimetie.dottys.login.DottysLoginViewModel
-import com.keylimetie.dottys.register.volley_multipart.VolleyMultipartRequest
+import com.keylimetie.dottys.utils.volley_multipart.VolleyMultipartRequest
 import com.keylimetie.dottys.utils.isValidPassword
 import org.json.JSONObject
 import java.util.*
@@ -58,10 +58,12 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
    // private var showConfirmPasswordButonState = false
     private var submitRegisterButon: Button? = null
     private var phantonBirthdayButton: Button? = null
+    var isRegisterUser = false
     //endregion
     var heigth = 0f
     fun initRegisterView(activityRegister: DottysRegisterActivity) {
         activityRegisterObserver = DottysRegisterUserObserver(activityRegister)
+        activityRegister.intent.getBooleanExtra("IS_REGISTER_USER",false)
         initItemsAtView(activityRegister)
         addCustomsSettings()
         showPasswordButtonAction()
@@ -309,7 +311,8 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
                     Intent(activityRegister, DottysEnterVerificationCodeActivity::class.java)
                 intent.putExtra("EMAIL_FORGOT", currentUser.email ?: dottysBaseActivity.getUserPreference().email)
                 if (dottysBaseActivity.getUserPreference() !=  null &&
-                    dottysBaseActivity.getUserPreference().cellVerified == false) {
+                    dottysBaseActivity.getUserPreference().cellVerified == false &&
+                        isRegisterUser) {
                     intent.putExtra("VERIFY_CELL", true)
                 }
                 intent.putExtra("REGISTER_VIEW_TYPE", true)
