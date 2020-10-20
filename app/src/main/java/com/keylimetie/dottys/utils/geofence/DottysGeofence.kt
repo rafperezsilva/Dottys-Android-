@@ -208,7 +208,7 @@ class DottysGeofence(private val baseActivity: DottysBaseActivity ) :   OnComple
      * Removes geofences. This method should be called after the user has granted the location
      * permission.
      */
-    private fun removeGeofences() {
+     fun removeGeofences() {
         if (!checkPermissions()) {
             showSnackbar(baseActivity.getString(R.string.insufficient_permissions))
             return
@@ -278,7 +278,7 @@ class DottysGeofence(private val baseActivity: DottysBaseActivity ) :   OnComple
                     Constants.GEOFENCE_RADIUS_IN_METERS
                 ) // Set the expiration duration of the geofence. This geofence gets automatically
                 // removed after this period of time.
-                .setExpirationDuration(Geofence.NEVER_EXPIRE) // Set the transition types of interest. Alerts are only generated for these
+                .setExpirationDuration(Constants.GEOFENCE_EXPIRATION_IN_MILLISECONDS) // Set the transition types of interest. Alerts are only generated for these
                 // transition. We track entry and exit transitions in this sample.
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or
                         Geofence.GEOFENCE_TRANSITION_EXIT)

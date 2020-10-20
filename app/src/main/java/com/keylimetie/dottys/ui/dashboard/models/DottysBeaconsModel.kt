@@ -79,7 +79,7 @@ data class  DottysBeacon (
     val isDeleted: Boolean? = null,
 
     var location: DottysStoresLocation? = null,
-    var beaconIdentifier: String? = null,
+    val beaconIdentifier: String? = id,
     var eventType: String? = null,
 
     @get:JsonProperty("userId")@field:JsonProperty("userId")

@@ -18,14 +18,14 @@ package com.keylimetie.dottys.beacon_service
 enum class BeaconEventType{ENTER,EXIT}
 
 class DottysBeaconViewModel: ViewModel(){
-    private var beaconDataObserver: DottysBeaconObserver? = null
+      var beaconDataObserver: DottysBeaconObserver? = null
 
 
      fun recordBeacon(mContext: DottysBaseActivity, beaconData:DottysBeaconRequestModel) {
         val mQueue = Volley.newRequestQueue(mContext)
-        beaconDataObserver = DottysBeaconObserver(mContext)
+        //beaconDataObserver = DottysBeaconObserver(mContext)
         val jsonObject = JSONObject(beaconData.toJson())
-      //  mContext.showLoader()
+         mContext.showLoader()
         val jsonObjectRequest = object : JsonObjectRequest(
             Method.POST,
             mContext.baseUrl + "beaconEventSummaries/event",

@@ -95,6 +95,9 @@
         <activity
             android:name="com.keylimetie.dottys.splash.DottysSplashActivity"
             android:theme="@style/AppSplashTheme">
+        </activity>
+        <activity android:name=".SplashAnimationActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

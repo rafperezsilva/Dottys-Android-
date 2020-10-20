@@ -29,7 +29,7 @@ internal object Constants {
      * Used to set an expiration time for a geofence. After this amount of time Location Services
      * stops tracking the geofence.
      */
-    private const val GEOFENCE_EXPIRATION_IN_HOURS: Long = 12
+    private const val GEOFENCE_EXPIRATION_IN_HOURS: Long = 1
 
     /**
      * For this sample, geofences expire after twelve hours.

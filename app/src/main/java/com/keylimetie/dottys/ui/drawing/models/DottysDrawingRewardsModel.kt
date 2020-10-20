@@ -54,6 +54,7 @@ data class DottysDrawingRewardsModel(
     val seq: Long? = (0).toLong(),
     val company: String? = "",
     val address2: String? = "",
+    val total: Long? = (0).toLong(),
 
     @get:JsonProperty("isDeleted") @field:JsonProperty("isDeleted")
     val isDeleted: Boolean? = false,
