@@ -281,10 +281,17 @@ class DashboardViewModel(mainActivity: DottysMainNavigationActivity?) : ViewMode
         rootView: View,
     ) {
         val imageView = rootView.findViewById<CircleImageView>(id.profile_dashboard_image)
-        imageView.setImageResource(R.mipmap.default_profile_image)
-        if (mainFragmentActivity?.getUserPreference()?.profilePicture?.isNotBlank() == true) {
-            Picasso.with(mContext).load(mainFragmentActivity?.getUserPreference()?.profilePicture)
-                .transform(CircleTransform()).into(imageView)
+        if (mainFragmentActivity?.userPictureBM != null){
+            imageView.setImageBitmap(mainFragmentActivity?.userPictureBM)
+
+        } else {
+
+            imageView.setImageResource(R.mipmap.default_profile_image)
+            if (mainFragmentActivity?.getUserPreference()?.profilePicture?.isNotBlank() == true) {
+                Picasso.with(mContext)
+                    .load(mainFragmentActivity?.getUserPreference()?.profilePicture)
+                    .transform(CircleTransform()).into(imageView)
+            }
         }
     }
 
@@ -768,7 +775,7 @@ class DashboardViewModel(mainActivity: DottysMainNavigationActivity?) : ViewMode
             mainFragmentActivity?.findViewById<Button>(R.id.send_to_support_button) //?: return
         val isPushEnable =
             mainFragmentActivity?.findViewById<TextView>(R.id.is_push_enable_textview) //?: return
-        isPushEnable?.text = if(mainFragmentActivity?.isPushNotificationEnabled() == true) "ENABLE" else "DISABLE"
+        isPushEnable?.text = if(mainFragmentActivity?.isPushNotificationEnabled() == true) "Enable" else "Disable"
         sendToSupportButton?.setOnClickListener(this)
         closeAnalyticButton?.setOnClickListener(this)
         closeAnalyticButton?.setOnClickListener {

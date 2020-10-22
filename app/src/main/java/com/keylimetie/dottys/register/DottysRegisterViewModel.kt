@@ -15,6 +15,7 @@ import com.android.volley.NetworkResponse
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.google.android.material.snackbar.Snackbar
 import com.keylimetie.dottys.*
 import com.keylimetie.dottys.R.id
 import com.keylimetie.dottys.TermsAndPrivacy.TermsAndPrivacyActivity
@@ -439,8 +440,12 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
             params,
             Response.Listener { response ->
                  context.hideLoader()
-
-                print(response.statusCode)
+                val container = context.findViewById<View>(android.R.id.content)
+                if (container != null) {
+                    context.hideCustomKeyboard()
+                    Snackbar.make(container, "A verification code has been send", Snackbar.LENGTH_LONG).show()
+                }
+                Log.i("REQUEST VERIFY PHONE","STATUS ${response.statusCode}")
             },
             Response.ErrorListener { error ->
                context.hideLoader()

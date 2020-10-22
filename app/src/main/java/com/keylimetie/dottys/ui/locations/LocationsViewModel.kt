@@ -268,42 +268,8 @@ class LocationsViewModel(val contextMain: DottysBaseActivity) : ViewModel(),
             Response.ErrorListener {
                 mContext.hideLoader()
                 mContext.isUpdatingLocation = false
-                // if(mContext.taskAtBackground?.isOnBackground ==  true || it.networkResponse.statusCode == 400) {
-                var stores = DottysLocationsStoresModel()
-                stores.locations = ArrayList<DottysStoresLocation>()
-
-                locationDataObserver?.dottysLocationsModel = stores
-                Toast.makeText(
-                            mContext,
-                              "You currently have no stores nearby",
-                            Toast.LENGTH_LONG
-                        ).show()
-//                } else
-//                if (it.networkResponse == null){
-//                    Toast.makeText(mContext, "Has lost your internet connection", Toast.LENGTH_LONG).show()
-//                } else {
-//
-//                    val errorRes =
-//                        DottysErrorModel.fromJson(it.networkResponse.data.toString(Charsets.UTF_8))
-//                    if (errorRes.error?.messages?.size ?: 0 > 0) {
-//                        Toast.makeText(
-//                            mContext,
-//                            errorRes.error?.messages?.first() ?: "",
-//                            Toast.LENGTH_LONG
-//                        ).show()
-//                    }
-//                    return@ErrorListener
-//                }
-//                    .run {
-//                        if (fragment != null) {
-//                            if (fragment is LocationsFragment) {
-//                                val intent =
-//                                    Intent(mContext, DottysMainNavigationActivity::class.java)
-//                                mContext.startActivity(intent)
-//                            }
-//                        }
-//                    }
-            }) { //no semicolon or coma
+                locationDataObserver?.dottysLocationsModel = mContext.getUserNearsLocations()
+            }) {
 
 
             override fun getParams(): MutableMap<String, String> {

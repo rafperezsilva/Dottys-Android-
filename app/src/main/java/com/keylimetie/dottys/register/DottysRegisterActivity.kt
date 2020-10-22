@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.DottysLoginResponseModel
+import com.keylimetie.dottys.PreferenceTypeKey
 import com.keylimetie.dottys.R
 import java.time.LocalDate
 import java.util.*
@@ -71,6 +72,7 @@ class DottysRegisterActivity : DottysBaseActivity(), DatePickerDialog.OnDateSetL
     override fun registerUser(userData: DottysLoginResponseModel) {
         //   Toast.makeText(this, "GO TO VERFY CODE", Toast.LENGTH_LONG).show()
         hideCustomKeyboard()
+        saveDataPreference(PreferenceTypeKey.USER_DATA,userData.toJson())
         registerViewModel.showPreVerificationLayer(this)
     }
 

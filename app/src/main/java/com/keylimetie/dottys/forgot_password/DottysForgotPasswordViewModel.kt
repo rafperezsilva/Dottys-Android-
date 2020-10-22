@@ -14,6 +14,7 @@ import com.android.volley.toolbox.Volley
 import com.keylimetie.dottys.*
 import com.keylimetie.dottys.forgot_password.VerificationMethodType.EMAIL
 import com.keylimetie.dottys.forgot_password.VerificationMethodType.SMS
+import com.keylimetie.dottys.register.DottysRegisterViewModel
 import com.keylimetie.dottys.utils.isValidEmail
 import com.keylimetie.dottys.utils.isValidPassword
 import org.json.JSONObject
@@ -134,9 +135,15 @@ open class DottysForgotPasswordViewModel : ViewModel()  {
         fourthEditTextCode  = verificationCodeActivity.findViewById<EditText>(R.id.fourth_code_edittext)
         fifthEditTextCode  = verificationCodeActivity.findViewById<EditText>(R.id.fifth_code_edittext)
         sixththEditTextCode  = verificationCodeActivity.findViewById<EditText>(R.id.sixthcode_edittext)
+        val subtitleVerification   = verificationCodeActivity.findViewById<TextView>(R.id.subtitle_verification_code_textview)
         val resendCodeTextView  = verificationCodeActivity.findViewById<TextView>(R.id.resend_code_textview)
+        val phone = verificationCodeActivity.getUserPreference().cell
+        val number = if(phone.isNullOrEmpty()) "" else phone?.subSequence(phone.count() - 4, phone.count())
+        subtitleVerification.text = "An text message with a verification code\nhas been sent to (xxx) xxx-$number"
+
         resendCodeTextView.setOnClickListener {
-            verificationCodeActivity.finish()
+            val registerMOdel = DottysRegisterViewModel(verificationCodeActivity)
+            registerMOdel.requestNewVerificationPhone(verificationCodeActivity)
         }
         firtsEditTextCode?.requestFocus()
         editTextArray = arrayOf(

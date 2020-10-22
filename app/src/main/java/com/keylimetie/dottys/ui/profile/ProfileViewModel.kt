@@ -196,6 +196,7 @@ class ProfileViewModel(
     }
 
     override fun onPictureTaken(bitmap: Bitmap?) {
+        activity?.userPictureBM = bitmap
         imageViewProfile?.setImageBitmap(bitmap)
     }
 

@@ -23,6 +23,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Build
+import android.os.CountDownTimer
 import android.text.TextUtils
 import android.util.Log
 import androidx.core.app.JobIntentService
@@ -52,6 +53,20 @@ class GeofenceTransitionsJobIntentService: JobIntentService() {
      * Services (inside a PendingIntent) when addGeofences() is called.
      */
     var stores: ArrayList<DottysStoresLocation>? = null
+    var canSendNotification : Boolean? = null
+
+    val timer = object: CountDownTimer(1000 * 60 * 5 , 1000) {
+        override fun onTick(millisUntilFinished: Long) {
+            canSendNotification = false
+            Log.d("COUNTER NOTIFICATION", "EXPIRE ON $millisUntilFinished milisec")
+
+        }
+
+        override fun onFinish() {
+            Log.d("COUNTER NOTIFICATION", "HAS EXPIRED")
+            canSendNotification = true
+        }
+    }
 
     override fun onHandleWork(intent: Intent) {
         val beacons = intent.getStringExtra("beacon_data")
@@ -115,11 +130,11 @@ class GeofenceTransitionsJobIntentService: JobIntentService() {
      * Posts a notification in the notification bar when a transition is detected.
      * If the user clicks the notification, control goes to the MainActivity.
      */
-    fun getCurrentStore(storeID: String, isFirtsLocation: Boolean):DottysStoresLocation{
-        if(isFirtsLocation) {
-            return stores?.filter { it.id == storeID.split(": ")[1] }?.first() ?: DottysStoresLocation()
+    private fun getCurrentStore(storeID: String, isFirtsLocation: Boolean):DottysStoresLocation{
+        return if(isFirtsLocation) {
+            stores?.filter { it.id == storeID.split(": ")[1] }?.first() ?: DottysStoresLocation()
         } else {
-            return stores?.get(1) ?: DottysStoresLocation()
+            stores?.get(1) ?: DottysStoresLocation()
         }
     }
 
@@ -185,7 +200,11 @@ class GeofenceTransitionsJobIntentService: JobIntentService() {
         builder.setAutoCancel(true)
         builder.setBadgeIconType(R.mipmap.dottys_notification_icon)
         // Issue the notification
-        mNotificationManager.notify(0, builder.build())
+//        timer.start()
+//        if(canSendNotification == true) {
+            mNotificationManager.notify(0, builder.build())
+
+//       }
     }
 
     /**
@@ -205,7 +224,7 @@ class GeofenceTransitionsJobIntentService: JobIntentService() {
     companion object {
         private const val JOB_ID = 573
         private const val TAG = "GeofenceTransitionsIS"
-        private const val CHANNEL_ID = "channel_01"
+        const val CHANNEL_ID = "channel_02"
 
         /**
          * Convenience method for enqueuing work in to this service.

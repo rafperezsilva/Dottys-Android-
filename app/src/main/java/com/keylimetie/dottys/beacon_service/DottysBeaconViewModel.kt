@@ -19,7 +19,7 @@ enum class BeaconEventType{ENTER,EXIT}
 
 class DottysBeaconViewModel: ViewModel(){
       var beaconDataObserver: DottysBeaconObserver? = null
-
+var isUploading: Boolean? = null
 
      fun recordBeacon(mContext: DottysBaseActivity, beaconData:DottysBeaconRequestModel) {
         val mQueue = Volley.newRequestQueue(mContext)
@@ -38,8 +38,10 @@ class DottysBeaconViewModel: ViewModel(){
                             response.toString()
                         )
                     beaconDataObserver?.beaconData = beaconSummary
+                isUploading = false
                 }, object : Response.ErrorListener {
                     override fun onErrorResponse(error: VolleyError) {
+                        isUploading = false
                         mContext.hideLoader()
                         if (error.networkResponse == null) {
                             return

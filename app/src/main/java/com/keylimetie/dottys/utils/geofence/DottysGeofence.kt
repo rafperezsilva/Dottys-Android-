@@ -284,7 +284,7 @@ class DottysGeofence(private val baseActivity: DottysBaseActivity ) :   OnComple
                         Geofence.GEOFENCE_TRANSITION_EXIT)
                 .setLoiteringDelay(1000*60*5)// Create the geofence.
                 .build())
-            Log.e("POPULATE STORE - ", "${store.id} LOC -${store.storeNumber}- ${store.latitude}//${store.longitude}")
+            //Log.e("POPULATE STORE - ", "${store.id} LOC -${store.storeNumber}- ${store.latitude}//${store.longitude}")
             // Log.e("POPULATE STORE - ", "${value} LOC -- ${index.latitude}//${index.longitude}")
 
         }

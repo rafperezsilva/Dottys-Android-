@@ -98,6 +98,7 @@ class DottysProfilePictureActivity: DottysBaseActivity(), DottysRegisterUserDele
                 val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, image_uri)
                 val stream = ByteArrayOutputStream()
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream)
+                userPictureBM = bitmap
                 val byteArray = resizeBitmap(bitmap)
                 registerViewModel.uploadImgage(this, stream.toByteArray())
             } catch (e: IOException) {
