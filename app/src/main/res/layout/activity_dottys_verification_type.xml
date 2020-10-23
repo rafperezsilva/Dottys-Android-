@@ -82,6 +82,7 @@
             style="@style/EditTextLoginStyle"
             android:enabled="false"
             android:hint="Email"
+            android:textColor="@color/colorGreen"
             android:inputType="textEmailAddress"
             android:text="twallace@icsdottys.com"
 
@@ -122,6 +123,7 @@
                 android:id="@+id/phone_verification_password_edittext"
                 style="@style/EditTextLoginStyle"
                 android:hint="Email"
+                android:textColor="@color/colorGreen"
                 android:text="(XXX)-XXXX-8989"
                 android:inputType="textEmailAddress"
 

@@ -34,6 +34,8 @@ val mapper = jacksonObjectMapper().apply {
     propertyNamingStrategy = PropertyNamingStrategy.LOWER_CAMEL_CASE
     setSerializationInclusion(JsonInclude.Include.NON_NULL)
     convert(StoreType::class, { StoreType.fromValue(it.asText()) }, { "\"${it.value}\"" })
+    convert(CompanyType::class,   { CompanyType.fromValue(it.asText()) },   { "\"${it.value}\"" })
+
 }
 
 data class DottysLocationsStoresModel(
@@ -80,7 +82,7 @@ data class DottysStoresLocation(
     val hours: List<String>? = null,
     val distance: Double? = null,
     val createdBy: String? = null,
-    val company: String? = null,
+    val company: CompanyType? = CompanyType.Dotty,
     val updatedBy: String? = null,
 
 
@@ -112,6 +114,22 @@ enum class StoreType(val value: String) {
             "Paddy's" -> PaddyS
             "Paddy's " -> StoreTypePaddyS
             else -> throw IllegalArgumentException()
+        }
+    }
+}
+
+
+enum class CompanyType(val value: String) {
+    Dotty("dotty"),
+    Shelby("shelby"),
+    Stella("stella");
+
+    companion object {
+        fun fromValue(value: String): CompanyType = when (value) {
+            "dotty"  -> Dotty
+            "shelby" -> Shelby
+            "stella" -> Stella
+            else     -> throw IllegalArgumentException()
         }
     }
 }

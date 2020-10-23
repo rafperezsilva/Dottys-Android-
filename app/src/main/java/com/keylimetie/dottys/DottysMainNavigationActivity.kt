@@ -2,12 +2,14 @@ package com.keylimetie.dottys
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
-import android.graphics.Matrix
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
+import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
@@ -85,7 +87,23 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
                         }
                     }
                     toolbar.run { setBackgroundColor(resources.getColor(R.color.colorDottysGrey)) }
-                    window.statusBarColor = ContextCompat.getColor(this, R.color.colorDottysGrey)
+                    //window.statusBarColor = ContextCompat.getColor(this, R.color.colorDottysGrey)
+//                    @Suppress("DEPRECATION")
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//                        window.insetsController?.hide(WindowInsets.Type.statusBars())
+//                    } else {
+//                        window.setFlags(
+//                            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                            WindowManager.LayoutParams.FLAG_FULLSCREEN)
+//                    }
+//                    window.setFlags(
+//                        WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                        WindowManager.LayoutParams.FLAG_FULLSCREEN
+//
+//                    )
+//                    val decorView = window.decorView
+//                    val uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN
+//                    decorView.systemUiVisibility = uiOptions
                 }
             }
         }
@@ -143,6 +161,18 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
 
     }
 
+    override fun onRestart() {
+        super.onRestart()
+         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        this.window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+
+        )
+
+    }
+
+
     private fun initDrawerSetting() {
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
@@ -174,8 +204,8 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
 
             override fun onDrawerClosed(p0: View) {
                 // Toast.makeText(baseContext,"CLOSE  ",Toast.LENGTH_SHORT).show()
-                window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+//                window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+//                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             }
 
             override fun onDrawerOpened(p0: View) {

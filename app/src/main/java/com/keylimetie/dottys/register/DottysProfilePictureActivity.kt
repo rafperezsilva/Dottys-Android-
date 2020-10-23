@@ -7,6 +7,8 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.Matrix
+import android.media.ExifInterface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -49,7 +51,7 @@ class DottysProfilePictureActivity: DottysBaseActivity(), DottysRegisterUserDele
         imageAccountCreated.layoutParams = imageParams
 
         val takePicture = findViewById<Button>(R.id.add_photo_button)
-        skipTakePicture.setOnClickListener (this)
+        skipTakePicture.setOnClickListener(this)
         takePicture.setOnClickListener(this)
         registerViewModel.activityRegisterObserver = DottysRegisterUserObserver(this)
     }
@@ -57,7 +59,7 @@ class DottysProfilePictureActivity: DottysBaseActivity(), DottysRegisterUserDele
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
-        grantResults: IntArray
+        grantResults: IntArray,
     ) {
         //called when user presses ALLOW or DENY from Permission Request Popup
         when (requestCode) {
@@ -81,7 +83,8 @@ class DottysProfilePictureActivity: DottysBaseActivity(), DottysRegisterUserDele
         //camera intent
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-             cameraIntent.putExtra("android.intent.extras.CAMERA_FACING", android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT);
+             cameraIntent.putExtra("android.intent.extras.CAMERA_FACING",
+                 android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT);
              cameraIntent.putExtra("android.intent.extras.LENS_FACING_FRONT", 1);
              cameraIntent.putExtra("android.intent.extra.USE_FRONT_CAMERA", true);
          } else {
@@ -95,11 +98,11 @@ class DottysProfilePictureActivity: DottysBaseActivity(), DottysRegisterUserDele
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             try {
-                val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, image_uri)
+                val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, image_uri).bitmapFixPosition(image_uri.toString())
                 val stream = ByteArrayOutputStream()
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream)
+                bitmap?.compress(Bitmap.CompressFormat.JPEG, 50, stream)
                 userPictureBM = bitmap
-                val byteArray = resizeBitmap(bitmap)
+               // val byteArray = resizeBitmap(bitmap)
                 registerViewModel.uploadImgage(this, stream.toByteArray())
             } catch (e: IOException) {
                 e.printStackTrace()
@@ -158,4 +161,44 @@ class DottysProfilePictureActivity: DottysBaseActivity(), DottysRegisterUserDele
             openCamera()
         }
     }
+
+
 }
+
+fun Bitmap.bitmapFixPosition(imageUri: String): Bitmap? {
+    val ei = ExifInterface(imageUri)
+    val orientation: Int = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+        ExifInterface.ORIENTATION_UNDEFINED)
+    return when (orientation) {
+        ExifInterface.ORIENTATION_ROTATE_90  -> this.rotateImages(90f)
+        ExifInterface.ORIENTATION_ROTATE_180 -> this.rotateImages(180f)
+        ExifInterface.ORIENTATION_ROTATE_270 -> this.rotateImages(270f)
+        ExifInterface.ORIENTATION_NORMAL     -> this
+        else                                 -> this
+    }
+}
+
+fun Bitmap.rotateImages(angle: Float): Bitmap? {
+    val matrix = Matrix()
+    matrix.postRotate(angle)
+    return Bitmap.createBitmap(this, 0, 0, this.width, this.height,
+        matrix, true)
+}
+//
+//@Throws(IOException::class)
+//fun rotateImage(bitmap: Bitmap): Bitmap? {
+//    var rotate = 0
+//    val exif: ExifInterface
+//    exif = ExifInterface(path)
+//    val orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+//        ExifInterface.ORIENTATION_NORMAL)
+//    when (orientation) {
+//        ExifInterface.ORIENTATION_ROTATE_270 -> rotate = 270
+//        ExifInterface.ORIENTATION_ROTATE_180 -> rotate = 180
+//        ExifInterface.ORIENTATION_ROTATE_90 -> rotate = 90
+//    }
+//    val matrix = Matrix()
+//    matrix.postRotate(rotate.toFloat())
+//    return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width,
+//        bitmap.height, matrix, true)
+//}

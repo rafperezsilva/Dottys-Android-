@@ -544,8 +544,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/analitycs_floating_view"
         android:layout_width="match_parent"
-        android:layout_height="550dp"
-        android:layout_margin="55dp"
+        android:layout_height="match_parent"
+        android:layout_margin="25dp"
+        android:layout_marginTop="45dp"
+        android:layout_marginBottom="45dp"
         android:background="#C1000000"
         android:elevation="10dp"
         android:visibility="invisible"

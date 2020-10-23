@@ -47,6 +47,7 @@ open class DottysBeaconActivity(baseActivity: DottysBaseActivity): BeaconManager
         if(baseActivity.getUserPreference().token.isNullOrEmpty()) { return }
         manageBeaconList()
         mainHandler =  Handler(Looper.myLooper()!!)
+        //initJobHandler()
        // mainHandler?.post(runneableAction())
      //currentBeacon =   baseActivity.getBeaconAtStoreLocation()
 
@@ -255,11 +256,15 @@ open class DottysBeaconActivity(baseActivity: DottysBaseActivity): BeaconManager
         }
         Log.i("-- BEACON LISENER -->"," \n****** BEACON DATA *****\n $mms \n*****************************************")
         expirationBeaconConection = 0
+        initJobHandler()
+
+    }
+
+    private fun initJobHandler(){
         mainHandler?.removeCallbacks(runneableAction)
         mainHandler =  null
         mainHandler = Handler(Looper.myLooper()!!)
         mainHandler?.post(runneableAction)
-
     }
 
     private val runneableAction =   Runnable {
@@ -278,6 +283,9 @@ open class DottysBeaconActivity(baseActivity: DottysBaseActivity): BeaconManager
                     }
                     beacons?.count() ?: 0 > 0 && beaconToConnect?.isConected != true -> {
                         Log.d(" *** WARNING *** ","\n****** CONNECT TO  ***** \n ID: ${beaconToConnect?.beaconIdentifier} / Minor: ${beaconToConnect?.minor}" )
+                    }
+                    beacons?.count() ?: 0 == 0 -> {
+
                     }
                 }
                 if (hasBeaconAtRange != true) {

@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -63,7 +64,7 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
         viewFragment = root
         flipperViewDashboard = viewFragment?.findViewById<ViewFlipper>(R.id.flipper_view_dashboard)
 
-        var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
+        val activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
         if (activity != null) {
 
             dashboardViewModel.initDashboardViewSetting(this, activity, viewFragment)
@@ -76,9 +77,12 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
 
     override fun onStart() {
         super.onStart()
-        var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
+        val activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
         activity?.dashboardFragment = this
         activity?.beaconService?.observer = DottysBeaconActivityObserver(this)
+        getActivity()?.window?.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
     }
     @SuppressLint("UseRequireInsteadOfGet")
@@ -104,7 +108,7 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
             context?.contentResolver,
             Secure.ANDROID_ID)
         val appVersion = "Android_${activityMain?.getVersionApp(activityMain)}"
-        var profileData = activityMain?.getUserPreference()
+        val profileData = activityMain?.getUserPreference()
         if (isUpdateable){
             callUpdateProfileData(profileData, activityMain, isUpdateable)
             return
@@ -123,7 +127,7 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
         callUpdateProfileData(profileData, activityMain, isUpdateable)
     }
 
-    fun callUpdateProfileData(profileData: DottysLoginResponseModel?, activityMain: DottysMainNavigationActivity?, isUpdateable: Boolean){
+    private fun callUpdateProfileData(profileData: DottysLoginResponseModel?, activityMain: DottysMainNavigationActivity?, isUpdateable: Boolean){
         if (profileData?.toJson()
                 ?.isEquivalentToString(activityMain?.getUserPreference()?.toJson()) == false or isUpdateable )
         {

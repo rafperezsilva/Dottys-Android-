@@ -45,6 +45,9 @@ open class DottysForgotPasswordViewModel : ViewModel()  {
     private var sixththEditTextCode: EditText? = null
     private var isRegisterView: Boolean = false
 
+    private var isSmsView: Boolean? = null
+
+
     /* FORGOT PASSWORD VIEW */
     fun initForgotPasswordView(forgotActivity: DottysForgotPasswordMainActivity) {
         emailTextview = forgotActivity.findViewById<TextView>(R.id.email_forgot_password_edittext)
@@ -99,9 +102,9 @@ open class DottysForgotPasswordViewModel : ViewModel()  {
         phoneVerificationImageview?.layoutParams = params
         emailVerificationTextview?.text =  mailUser
         val phone = verificationActivity.getUserPreference().cell
-        val mssg = if (phone.isNullOrEmpty()) "Send an SMS to your phone" else {
+        val mssg = if (phone.isNullOrEmpty()) "Send a SMS to your phone" else {
             val number = phone.subSequence(phone.count() - 4, phone.count())
-            "Send an SMS to (xxx) xxx-$number"
+            "Send a SMS to (xxx) xxx-$number"
         }
         phoneVerificationTextview?.text = mssg//(XXX) XXX-${phone?.substring((phone?.chars()?.count() ?: 0).toInt() - 4, phone?.chars()?.count()?.toInt() ?: 0)}"
         phoneVerificationTextview?.textAlignment = View.TEXT_ALIGNMENT_CENTER
@@ -118,9 +121,11 @@ open class DottysForgotPasswordViewModel : ViewModel()  {
             intent.putExtra("EMAIL_FORGOT",   email)
 
             verificationActivity.startActivity(intent)*/
+            isSmsView = false
              resesetPassword(verificationActivity, email, EMAIL)
         }
         phoneVerificationButton?.setOnClickListener {
+            isSmsView = true
             resesetPassword(verificationActivity, verificationActivity.strUser, SMS)
         }
     }
@@ -139,7 +144,8 @@ open class DottysForgotPasswordViewModel : ViewModel()  {
         val resendCodeTextView  = verificationCodeActivity.findViewById<TextView>(R.id.resend_code_textview)
         val phone = verificationCodeActivity.getUserPreference().cell
         val number = if(phone.isNullOrEmpty()) "" else phone?.subSequence(phone.count() - 4, phone.count())
-        subtitleVerification.text = "An text message with a verification code\nhas been sent to (xxx) xxx-$number"
+        subtitleVerification.text = if(isSmsView ?: true) "A text message " else "A email " + "with a verification code\nhas been sent to " +
+                                        if(number.isNullOrEmpty()) "your phone" else "(xxx) xxx-$number"
 
         resendCodeTextView.setOnClickListener {
             val registerMOdel = DottysRegisterViewModel(verificationCodeActivity)

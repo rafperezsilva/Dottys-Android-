@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.keylimetie.dottys.beacon_service.BeaconEventType
+import com.keylimetie.dottys.ui.locations.CompanyType
 import com.keylimetie.dottys.ui.locations.DottysStoresLocation
 
 
@@ -32,6 +33,8 @@ val mapperBeacons = jacksonObjectMapper().apply {
             it.asText()
         )
     }, { "\"${it.value}\"" })
+    convert(CompanyType::class,   { CompanyType.fromValue(it.asText()) },   { "\"${it.value}\"" })
+
 }
 
 data class DottysBeaconsModel (

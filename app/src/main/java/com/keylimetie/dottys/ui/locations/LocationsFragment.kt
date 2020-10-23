@@ -27,10 +27,7 @@ class LocationsFragment : Fragment(), DottysLocationDelegates {
         var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity
         locationViewModel = activity?.let { LocationsViewModel(it) } ?: return root
         activity.let { locationViewModel.initLocationView(this, activity, root) }
-        val stores: ArrayList<String> = arrayListOf<String>(StoreType.DottyS.value,
-            StoreType.PaddyS.value,
-            StoreType.DelToro.value,
-            StoreType.BradleyS.value)
+
 // = activity.getUserNearsLocations().locations?.filter { it.storeType.name }
 //TODO
 //        for (location in  activity.getUserNearsLocations().locations ?: return root ){
@@ -48,6 +45,7 @@ class LocationsFragment : Fragment(), DottysLocationDelegates {
         (activity as DottysMainNavigationActivity).mapFragmentBase = locationViewModel.fragmentMap
         locationViewModel.fragmentMap.updateMarker()
 
+
     }
 
     override fun onStop() {
@@ -61,6 +59,10 @@ class LocationsFragment : Fragment(), DottysLocationDelegates {
                 locationViewModel.initMapWHitMarker(it)
         }
         locationViewModel.screenDimensionManager(LocationViewType.COLLAPSE_TYPE)
+        locations.locations?.let {
+            locationViewModel.initExpandableList(activity as DottysMainNavigationActivity,
+                it)
+        }
     }
 
 

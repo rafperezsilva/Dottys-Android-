@@ -237,12 +237,13 @@ class LocationsViewModel(val contextMain: DottysBaseActivity) : ViewModel(),
 //           BigDecimal(longitude.toDouble()).setScale(1,1) == BigDecimal(mContext.lastKnownLongitudeGps).setScale(1,1)){
 //            return
 //        }
+        if(mContext.getUserPreference().token.isNullOrEmpty()){return}
         val mQueue = Volley.newRequestQueue(mContext)
         mContext.isUpdatingLocation = true
         mContext.showLoader()
 /*MOCK LOCATION */
         val locationURL =
-            "locations?distance=999999&limit=60&page=1&page=1&latitude=$latitude&longitude=$longitude"
+            "locations?distance=999999&limit=100&page=1&page=1&latitude=$latitude&longitude=$longitude"
         // val locationURL = "locations?distance=150&limit=300&page=1&page=1&latitude=40.0998935&longitude=-87.6357274"
 
         val jsonObjectRequest = object : JsonObjectRequest(
@@ -252,10 +253,12 @@ class LocationsViewModel(val contextMain: DottysBaseActivity) : ViewModel(),
             Response.Listener<JSONObject> { response ->
 
                 mContext.hideLoader()
-                val stores: DottysLocationsStoresModel =
+                var stores: DottysLocationsStoresModel =
                     DottysLocationsStoresModel.fromLocationJson(
                         response.toString()
                     )
+                val filterLocations =  stores.locations?.filter { it.company == CompanyType.Dotty }
+                stores.locations = filterLocations as ArrayList<DottysStoresLocation>?
                 Log.d("LOCATIONS RESPONSE -->",stores.toJson())
                 mContext.saveDataPreference(PreferenceTypeKey.LOCATIONS, stores.toJson())
                 locationDataObserver?.dottysLocationsModel = stores

@@ -296,11 +296,11 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
         var subtitleMssg =  if(activityRegister.getUserPreference().cell.isNullOrEmpty()){
-            "An text message with a verification\ncode has been sent to phone"
+            "A text message with a verification\ncode has been sent to phone"
         } else {
             val cell = activityRegister?.getUserPreference()?.cell
             val terminalPhoneNumber =   cell?.subSequence(cell?.count()  - 4, cell.count())
-            "An text message with a verification\ncode has been sent to (xxx) xxx-${terminalPhoneNumber}."
+            "A text message with a verification\ncode has been sent to (xxx) xxx-${terminalPhoneNumber}."
         }
 
         subTitlePreverificationLabel.text = subtitleMssg
