@@ -243,7 +243,7 @@ class DrawingViewModel : ViewModel() {
         fragment?.view?.visibility = View.VISIBLE
     }
 
-    fun getCurrentDrawingLocation(mContext: DottysMainNavigationActivity, locationId: String) {
+    private fun getCurrentDrawingLocation(mContext: DottysMainNavigationActivity, locationId: String) {
         val mQueue = Volley.newRequestQueue(mContext)
         //  mContext.showLoader()
         val jsonObjectRequest = object : JsonObjectRequest(Method.GET,

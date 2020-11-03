@@ -159,7 +159,10 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
         }
     }
 
-    /** 0 **/
+    /**
+     *      0
+     * CURRENT USER
+     * **/
     override fun getCurrentUser(currentUser: DottysLoginResponseModel) {
         //    var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
         //    updateDottysLocations(activity as DottysMainNavigationActivity)
@@ -248,7 +251,10 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
 
     }
 
-    /** 1 **/
+    /**
+     *          1
+     *   BANNER AT DASHBOARD
+     *   **/
     override fun onDashboardBanners(banners: ArrayList<DottysBanners>) {
         addPagerDashboardImages(banners)
         dashboardViewModel.getUserRewards(activity as DottysMainNavigationActivity)
@@ -272,6 +278,7 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
                 it?.longitude.toString())
         }
 
+
         //viewFragment?.let { activity?.let { it1 -> dashboardViewModel.addProfileImage(it1, it) } }
         //   dashboardViewModel.drawingViewModel.drawingObserver = DottysDrawingObserver(this)
 
@@ -294,7 +301,8 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
      //   }
     }
 
-    /** 4 // PASS **/
+    /** 4
+     *  **/
     override fun getBeaconList(beaconList: DottysBeaconsModel) {
         var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
         activity?.saveDataPreference(
@@ -317,7 +325,7 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
 
     }
 
-    /** 4 **/
+    /** 5 **/
     override fun getDrawingSummary(dawingSummary: DottysDrawingSumaryModel) {
         checkDataAtProfile(activity as DottysMainNavigationActivity, false)
     }

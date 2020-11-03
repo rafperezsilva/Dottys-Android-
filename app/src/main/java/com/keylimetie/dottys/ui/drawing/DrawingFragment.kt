@@ -48,8 +48,8 @@ class DrawingFragment : Fragment(), DottysDrawingDelegates, DottysDashboardDeleg
         activity?.let { drawingViewModel.initViewSetting(this, null, it, viewRoot) }
         activity?.getUserPreference()?.let { fillItemsInView(it) }
 
-//        dashboardViewModel.userCurrentUserDataObserver = DottysCurrentUserObserver(this)
-//        activity?.let { dashboardViewModel.getCurrentUserRequest(it) }
+        dashboardViewModel?.userCurrentUserDataObserver = DottysCurrentUserObserver(this)
+        activity?.let { dashboardViewModel?.getCurrentUserRequest(it) }
 
     }
 

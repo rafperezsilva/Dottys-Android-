@@ -219,7 +219,7 @@ class DashboardViewModel(mainActivity: DottysMainNavigationActivity?) : ViewMode
 //                   ?.first()?.endDate?.let { it.getleftDays() }
 //       }
         //endregion
-        locationDashboard?.text = addressLocationFotmatted(rewardsLoaction ?: return)
+        locationDashboard?.text = addressLocationFotmatted(rewardsLoaction ?: mainFragmentActivity?.getDrawings() ?: return)
         badgeCounterDrawingManager(drawingBadgeCounter ?: 0)
         hideAnalitycsView(mainFragmentActivity ?: return)
     }
@@ -417,6 +417,7 @@ class DashboardViewModel(mainActivity: DottysMainNavigationActivity?) : ViewMode
             }
 
         }
+        Log.d("CURRENT USER", jsonObjectRequest.url)
         mQueue.add(jsonObjectRequest)
 
     }
@@ -545,6 +546,7 @@ class DashboardViewModel(mainActivity: DottysMainNavigationActivity?) : ViewMode
                     )
                 userCurrentUserDataObserver?.rewardsAtSession = rewards
                 mContext.saveDataPreference(PreferenceTypeKey.REWARDS, rewards.toJson())
+                fillItemsAtDashboards(null)
             },
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {

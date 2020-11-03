@@ -423,16 +423,20 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
                 if (error.networkResponse == null) {
                     return@ErrorListener
                 }
-                val errorRes =
-                    DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
-                if (errorRes.error?.messages?.size ?: 0 > 0) {
-                    Toast.makeText(
-                        activityRewards,
-                        errorRes.error?.messages?.first() ?: "",
-                        Toast.LENGTH_LONG
-                    ).show()
+                try {
+                    val errorRes =
+                        DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
+                    if (errorRes.error?.messages?.size ?: 0 > 0) {
+                        Toast.makeText(
+                            activityRewards,
+                            errorRes.error?.messages?.first() ?: "",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    Log.e("ERROR VOLLEY ", error.message, error)
+                } catch (e: Error){
+                    Log.e("ERROR ", e.toString())
                 }
-                Log.e("ERROR VOLLEY ", error.message, error)
             }) { //no semicolon or coma
 
             override fun parseNetworkResponse(response: NetworkResponse?): Response<JSONObject> {
