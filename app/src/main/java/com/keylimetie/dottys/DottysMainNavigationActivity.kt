@@ -179,7 +179,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
         navView = findViewById(R.id.nav_view)
         val footerLabel = findViewById<TextView>(R.id.footer_label)
         footerLabel.text =
-            "© 2020 Laredo Hospitality Group.\nAll rights reserved.\n${getVersionApp(this)}"
+            "© 2020 Illinois Cafe' & Service Company, LLC.\nAll rights reserved.\n${getVersionApp(this)}"
         controller = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.

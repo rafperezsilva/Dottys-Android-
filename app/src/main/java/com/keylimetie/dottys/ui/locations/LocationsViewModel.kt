@@ -243,7 +243,7 @@ class LocationsViewModel(val contextMain: DottysBaseActivity) : ViewModel(),
         mContext.showLoader()
 /*MOCK LOCATION */
         val locationURL =
-            "locations?distance=999999&limit=100&page=1&page=1&latitude=$latitude&longitude=$longitude"
+            "locations?distance=25&limit=100&page=1&page=1&latitude=$latitude&longitude=$longitude"
         // val locationURL = "locations?distance=150&limit=300&page=1&page=1&latitude=40.0998935&longitude=-87.6357274"
 
         val jsonObjectRequest = object : JsonObjectRequest(

@@ -330,12 +330,17 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
         checkDataAtProfile(activity as DottysMainNavigationActivity, false)
     }
 
-    override fun onProfileUpdated(userProfile: DottysLoginResponseModel) {
+    override fun onProfileUpdated(userProfile: DottysLoginResponseModel?) {
+        if(userProfile == null){
+            var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
+            activity?.let { dashboardViewModel.getGlobalDataRequest(it) }
+            return
+        } //TODO REMOVE ON FIX BACKEND ANIVERSARY DATE
         when {
-            userProfile.cell.isNullOrEmpty() -> {
+            userProfile?.cell.isNullOrEmpty() -> {
              initVerificationCell()
             }
-            userProfile.cellVerified == false -> {
+            userProfile?.cellVerified == false -> {
                 val intent = Intent(activity as DottysMainNavigationActivity, DottysRegisterActivity::class.java)
                 intent.putExtra("IS_REGISTER_USER", true)
                 (activity as DottysMainNavigationActivity)?.startActivity(intent)

@@ -243,7 +243,7 @@ class ProfileViewModel(
                         ).show()
                     }
                     Log.e("TAG", error.message, error)
-                    profileUpdateObserver?.updateProfile = DottysLoginResponseModel()
+                    profileUpdateObserver?.updateProfile = null
                 }
             }) { //no semicolon or coma
 
@@ -265,13 +265,13 @@ class ProfileViewModel(
 /* UPDATE PROFILE PROTOCOL */
 //region
 interface DottysProfileDelegates {
-    fun onProfileUpdated(userProfile: DottysLoginResponseModel)
+    fun onProfileUpdated(userProfile: DottysLoginResponseModel?)
 
 
 }
 
 class DottysProfileObserver(lisener: DottysProfileDelegates) {
-    var updateProfile: DottysLoginResponseModel by Delegates.observable(
+    var updateProfile: DottysLoginResponseModel? by Delegates.observable(
         initialValue = DottysLoginResponseModel(),
         onChange = { prop, old, new -> lisener.onProfileUpdated(new) })
 
