@@ -2,6 +2,7 @@ package com.keylimetie.dottys.ui.locations
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.core.JsonGenerator
@@ -37,7 +38,7 @@ val mapper = jacksonObjectMapper().apply {
     convert(CompanyType::class,   { CompanyType.fromValue(it.asText()) },   { "\"${it.value}\"" })
 
 }
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class DottysLocationsStoresModel(
     var total: Long? = 0,
     var limit: Long? = 0,
@@ -51,7 +52,7 @@ data class DottysLocationsStoresModel(
         fun fromLocationJson(json: String) = mapper.readValue<DottysLocationsStoresModel>(json)
     }
 }
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class DottysStoresLocation(
     @get:JsonProperty("_id") @field:JsonProperty("_id")
     val id: String? = null,

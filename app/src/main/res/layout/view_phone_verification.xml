@@ -27,12 +27,12 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_marginRight="50dp"
-                android:layout_marginLeft="50dp"
-                android:background="@color/colorTransparent"
+                 android:padding="10dp"
+                android:textColor="#FFF"
+                android:background="@color/colorPrimary"
                 android:fontFamily="@font/proxima_nova_semibold"
                 android:text="You must add an valid phone number"
                 android:textSize="18dp" />

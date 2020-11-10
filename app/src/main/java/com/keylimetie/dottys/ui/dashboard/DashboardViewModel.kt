@@ -46,7 +46,7 @@ import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
 
 
-class DashboardViewModel(mainActivity: DottysMainNavigationActivity?) : ViewModel(),
+class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?) : ViewModel(),
     View.OnClickListener, DottysDrawingDelegates {
     val drawingViewModel = DrawingViewModel()
     private var pager: ViewPager? = null
@@ -113,9 +113,7 @@ class DashboardViewModel(mainActivity: DottysMainNavigationActivity?) : ViewMode
 
                 mainFragmentActivity?.let { hideAnalitycsView(it) }
             }
-            id.phanton_profile_button -> {
-                showAnalitycsView()
-            }
+
 //            id.rigth_roll_pager_button -> {
 //                pager?.setCurrentItem(adapter?.getCurrentPage()?.plus( 1) ?: 0, true);
 //            }
@@ -124,7 +122,7 @@ class DashboardViewModel(mainActivity: DottysMainNavigationActivity?) : ViewMode
 //            }
             id.send_to_support_button -> {
 
-                sendMailToSupport()
+                mainActivity?.sendMailToSupport(mainActivity)
 //                var intent = Intent(mainFragmentActivity, DottysMainGamePlayActivity::class.java)
 //                mainFragmentActivity?.startActivity(intent)
             }
@@ -224,21 +222,21 @@ class DashboardViewModel(mainActivity: DottysMainNavigationActivity?) : ViewMode
         hideAnalitycsView(mainFragmentActivity ?: return)
     }
 
-    private fun sendMailToSupport() {
-        val i = Intent(Intent.ACTION_SEND)
-        i.type = "message/rfc822"
-        i.putExtra(Intent.EXTRA_EMAIL, arrayOf("support@playspinwinbrands.com"))
-
-        try {
-            mainFragmentActivity?.startActivity(Intent.createChooser(i, "Send mail..."))
-        } catch (ex: ActivityNotFoundException) {
-            Toast.makeText(
-                mainFragmentActivity,
-                "There are no email clients installed.",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-    }
+//    private fun sendMailToSupport() {
+//        val i = Intent(Intent.ACTION_SEND)
+//        i.type = "message/rfc822"
+//        i.putExtra(Intent.EXTRA_EMAIL, arrayOf("support@playspinwinbrands.com"))
+//
+//        try {
+//            mainFragmentActivity?.startActivity(Intent.createChooser(i, "Send mail..."))
+//        } catch (ex: ActivityNotFoundException) {
+//            Toast.makeText(
+//                mainFragmentActivity,
+//                "There are no email clients installed.",
+//                Toast.LENGTH_SHORT
+//            ).show()
+//        }
+//    }
 
     fun badgeCounterDrawingManager(badgeCounter: Int) {
         if (badgeCounter == 0) {

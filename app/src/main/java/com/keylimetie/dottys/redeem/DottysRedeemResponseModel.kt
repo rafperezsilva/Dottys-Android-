@@ -1,6 +1,7 @@
 package com.keylimetie.dottys.redeem
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
@@ -11,7 +12,7 @@ val mapper = jacksonObjectMapper().apply {
     propertyNamingStrategy = PropertyNamingStrategy.LOWER_CAMEL_CASE
     setSerializationInclusion(JsonInclude.Include.NON_NULL)
 }
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class DottysRedeemResponseModel(
     val barcode: String? = null,
     val validationCode: String? = null,

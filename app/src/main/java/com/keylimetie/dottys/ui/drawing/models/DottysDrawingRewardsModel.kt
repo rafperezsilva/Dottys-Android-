@@ -1,5 +1,6 @@
 package com.keylimetie.dottys.ui.drawing.models
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
@@ -11,7 +12,7 @@ val mapper = jacksonObjectMapper().apply {
     setSerializationInclusion(JsonInclude.Include.NON_NULL)
 }
 
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class DottysMainHomeLocationModel(
     val total: Long? = (0).toLong(),
     val limit: Long? = (0).toLong(),
@@ -28,7 +29,7 @@ data class DottysMainHomeLocationModel(
     }
 }
 
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class DottysDrawingRewardsModel(
     @get:JsonProperty("_id") @field:JsonProperty("_id")
     val id: String? = "",

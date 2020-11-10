@@ -1,5 +1,6 @@
 package com.keylimetie.dottys.splash
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
@@ -10,7 +11,7 @@ val mapper = jacksonObjectMapper().apply {
     propertyNamingStrategy = PropertyNamingStrategy.LOWER_CAMEL_CASE
     setSerializationInclusion(JsonInclude.Include.NON_NULL)
 }
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class DottysPagerModel (
     @get:JsonProperty(required=false)@field:JsonProperty(required=false)
     val title: String,

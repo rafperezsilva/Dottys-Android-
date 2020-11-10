@@ -1,5 +1,6 @@
 package com.keylimetie.dottys.ui.dashboard.models
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.core.JsonGenerator
@@ -36,7 +37,7 @@ val mapperBeacons = jacksonObjectMapper().apply {
     convert(CompanyType::class,   { CompanyType.fromValue(it.asText()) },   { "\"${it.value}\"" })
 
 }
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class DottysBeaconsModel (
     val total: Long? = null,
     val limit: Long? = null,
@@ -50,6 +51,7 @@ data class DottysBeaconsModel (
         fun fromJson(json: String) = mapperBeacons.readValue<DottysBeaconsModel>(json)
     }
 }
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class DottysBeaconArray (
 
     var beaconArray: ArrayList<DottysBeacon>? = null
@@ -60,6 +62,7 @@ data class DottysBeaconArray (
         fun fromJson(json: String) = mapperBeacons.readValue<DottysBeaconArray>(json)
     }
 }
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class  DottysBeacon (
     @get:JsonProperty("_id")@field:JsonProperty("_id")
     var id: String? = null,

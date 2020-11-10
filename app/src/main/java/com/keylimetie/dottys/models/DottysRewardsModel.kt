@@ -1,5 +1,6 @@
 package com.keylimetie.dottys.models
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.core.JsonGenerator
@@ -34,7 +35,7 @@ val mapper = jacksonObjectMapper().apply {
     setSerializationInclusion(JsonInclude.Include.NON_NULL)
     convert(IconType::class, { IconType.fromValue(it.asText()) }, { "\"${it.value}\"" })
 }
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class DottysRewardsModel(
     val pointsForCashCount: Long? = null,
     var rewards: List<DottysRewardModel>? = null
@@ -84,7 +85,7 @@ data class DottysRewardsModel(
 //    val redeemed: Boolean? = null
 //)
 
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class DottysRewardModel(
     @get:JsonProperty("_id") @field:JsonProperty("_id")
     val id: String? = null,

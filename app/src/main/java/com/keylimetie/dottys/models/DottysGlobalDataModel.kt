@@ -1,5 +1,6 @@
 package com.keylimetie.dottys.models
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
@@ -10,7 +11,7 @@ val mapperGlobalData = jacksonObjectMapper().apply {
     propertyNamingStrategy = PropertyNamingStrategy.LOWER_CAMEL_CASE
     setSerializationInclusion(JsonInclude.Include.NON_NULL)
 }
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class DottysGlobalDataModel (
     @get:JsonProperty("_id") @field:JsonProperty("_id")
     val id: String? = null,
@@ -36,7 +37,7 @@ data class DottysGlobalDataModel (
 
 }
 
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 @kotlinx.serialization.Serializable
 data class DrawingTemplates(
     val weekly: Monthly? = null,

@@ -11,7 +11,7 @@ val mapper = jacksonObjectMapper().apply {
     propertyNamingStrategy = PropertyNamingStrategy.LOWER_CAMEL_CASE
     setSerializationInclusion(JsonInclude.Include.NON_NULL)
 }
-@JsonIgnoreProperties
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class DottysLoginResponseModel(
     @get:JsonProperty("_id") @field:JsonProperty("_id")
     var id: String?                  = "",
@@ -131,7 +131,7 @@ data class DottysACL(
 
     val role: String? = null
 )
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class DottysRegisterModel(
     var email: String? = "",
     var password: String? = "",
@@ -187,6 +187,7 @@ data class DottysRegisterModel(
 //    }
 //}
 //endregion
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class DottysRegisterRequestModel(
 
     var address1: String? = null,
@@ -209,7 +210,7 @@ data class DottysRegisterRequestModel(
     }
 }
 
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class DottysErrorModel (
     @get:JsonProperty("error") @field:JsonProperty("error")
      val error: ErrorDottys? = null
@@ -220,7 +221,7 @@ data class DottysErrorModel (
         fun fromJson(json: String) = mapper.readValue<DottysErrorModel>(json)
     }
 }
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class ErrorDottys (
     val messages: List<String>? = null,
     val stack: String? = null

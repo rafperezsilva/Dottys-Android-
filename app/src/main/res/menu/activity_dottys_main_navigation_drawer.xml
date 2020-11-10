@@ -43,13 +43,17 @@
             android:icon="@mipmap/terms_and_conditions_icon"
             android:title="@string/menu_terms_and_conditions" />
 <!--        <item-->
+<!--            android:id="@+id/suppoprt"-->
+<!--            android:icon="@mipmap/logout_icon"-->
+<!--            android:title="@string/menu_logout" />-->
+<!--        <item-->
 <!--            android:id="@+id/nav_replay_tutorial"-->
 <!--            android:icon="@mipmap/replay_tutorial_icon"-->
 <!--            android:title="@string/menu_replay_tutorial" />-->
-<!--        <item-->
-<!--            android:id="@+id/nav_contact_suppport"-->
-<!--            android:icon="@mipmap/contact_support_icon"-->
-<!--            android:title="@string/menu_contact_support" />-->
+        <item
+            android:id="@+id/nav_contact_suppport"
+            android:icon="@mipmap/beacon_icon"
+            android:title="@string/menu_contact_support" />
         <item
             android:id="@+id/nav_logout"
             android:icon="@mipmap/logout_icon"

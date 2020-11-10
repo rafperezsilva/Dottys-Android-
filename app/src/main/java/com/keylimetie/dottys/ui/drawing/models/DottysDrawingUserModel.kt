@@ -11,7 +11,7 @@ val drawingMapper = jacksonObjectMapper().apply {
     propertyNamingStrategy = PropertyNamingStrategy.LOWER_CAMEL_CASE
     setSerializationInclusion(JsonInclude.Include.NON_NULL)
 }
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class DottysDrawingUserModel(
     val drawings: List<DottysDrawing>? = null,
 ) {
@@ -22,7 +22,7 @@ data class DottysDrawingUserModel(
     }
 }
 
-@JsonIgnoreProperties
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class DottysDrawing(
     @get:JsonProperty("_id") @field:JsonProperty("_id")
     val id: String? = null,

@@ -2,7 +2,7 @@ package com.keylimetie.dottys.ui.dashboard.models
 
 import com.fasterxml.jackson.annotation.*
 import com.fasterxml.jackson.module.kotlin.*
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class DottysBannerModel (
     @get:JsonProperty("docs")@field:JsonProperty("docs")
     val bannerList: ArrayList<DottysBanners>? = null,
@@ -17,13 +17,14 @@ data class DottysBannerModel (
         fun fromJson(json: String) = mapper.readValue<DottysBannerModel>(json)
     }
 }
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class DottysBanners (
     @get:JsonProperty("isDeleted")@field:JsonProperty("isDeleted")
     val isDeleted: Boolean? = null,
 
     @get:JsonProperty("_id")@field:JsonProperty("_id")
     val id: String? = null,
+    val displayDuration: Long? = null,
 
     val title: String? = null,
     val description: String? = null,

@@ -58,12 +58,13 @@
 <!--        android:name="com.keylimetie.dottys.ui.reusable_fragment.ReusableFragment"-->
 <!--        android:label="@string/menu_terms_and_conditions"-->
 <!--        tools:layout="@layout/reusable_fragment" />-->
+<!--    <include-->
+<!--        app:graph = "@navigation/mobile_navigation"-->
+<!--        android:id="@+id/nav_contact_suppport"-->
+<!--        android:label="@string/menu_contact_support"-->
+<!--        tools:layout="@layout/analitycs_view_layout" />-->
     <fragment
-        android:id="@+id/nav_contact_suppport"
-        android:name="com.keylimetie.dottys.ui.reusable_fragment.ReusableFragment"
-        android:label="@string/menu_contact_support"
-        tools:layout="@layout/reusable_fragment" />
-    <fragment
+
         android:id="@+id/nav_logout"
         android:name="com.keylimetie.dottys.ui.logout.LogoutFragment"
         android:label="@string/menu_logout"
@@ -73,5 +74,15 @@
         android:name="com.keylimetie.dottys.ui.redeem_rewards.DottysRedeemRewrds"
         android:label="@string/menu_redeem_rewards"
         tools:layout="@layout/dottys_redeem_rewrds_fragment" />
+
+<!--    <include-->
+
+<!--        android:id="@+id/nav_contact_suppport"-->
+<!--         android:label="@string/menu_contact_support"-->
+<!--        tools:layout="@layout/analitycs_view_layout"-->
+<!--        app:graph="@navigation/mobile_navigation"-->
+<!--         />-->
+
+
 
 </navigation>
