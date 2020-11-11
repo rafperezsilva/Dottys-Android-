@@ -63,6 +63,20 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
     private lateinit var toolbar: Toolbar
     var selectedItemId: Int? = 0
     var image_uri: Uri? = null
+
+    private val mOnNavigationItemSelectedListener = NavigationView.OnNavigationItemSelectedListener { item ->
+        when(item.itemId){
+            R.id.nav_contact_suppport -> {
+                initAnalitycsItems(getDottysBeaconsList())
+                viewAnalitycs?.animate()?.translationY(0f)?.setDuration(800)?.start()
+            }
+            else ->{
+                controller.navigate(item.itemId)
+            }
+        }
+        drawerLayout?.close()
+        return@OnNavigationItemSelectedListener true
+    }
     private val listener =
         NavController.OnDestinationChangedListener { controller, destination, arguments ->
             val logoAppBar = findViewById<ImageView>(R.id.logo_appbar)
@@ -97,23 +111,6 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
                         }
                     }
                     toolbar.run { setBackgroundColor(resources.getColor(R.color.colorDottysGrey)) }
-                    //window.statusBarColor = ContextCompat.getColor(this, R.color.colorDottysGrey)
-//                    @Suppress("DEPRECATION")
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-//                        window.insetsController?.hide(WindowInsets.Type.statusBars())
-//                    } else {
-//                        window.setFlags(
-//                            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//                            WindowManager.LayoutParams.FLAG_FULLSCREEN)
-//                    }
-//                    window.setFlags(
-//                        WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//                        WindowManager.LayoutParams.FLAG_FULLSCREEN
-//
-//                    )
-//                    val decorView = window.decorView
-//                    val uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN
-//                    decorView.systemUiVisibility = uiOptions
                 }
             }
         }
@@ -138,12 +135,6 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
             R.id.nav_profile -> {
                 return "My Profile"
             }
-//            R.id.nav_contact_suppport -> {
-//                return "Help"
-//            }
-//            R.id.nav_replay_tutorial -> {
-//                return "Replay Tutorial"
-//            }
             R.id.nav_drawing -> {
                 return "CONVERT POINTS"
             }
@@ -192,9 +183,8 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
 
     override fun onStart() {
         super.onStart()
-        var itemsAtMenu =  navView?.menu
         if (!isValidUserAdmin()) {
-            itemsAtMenu?.removeItem(R.id.nav_contact_suppport)
+            navView?.menu?.removeItem(R.id.nav_contact_suppport)
         } else if (navView?.menu?.contains(navView?.menu?.findItem(R.id.nav_contact_suppport) ?: return) == false){
             navView?.menu?.add(R.id.nav_contact_suppport,R.id.nav_contact_suppport,R.id.nav_contact_suppport, getString(R.string.menu_contact_support))
         }
@@ -233,13 +223,9 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
                 (getBeaconStatus()?.beaconArray?.first()?.location?.storeNumber ?: 0).toString()
             else
                 "Has no nearest locations"
-
         }
-        var listViewRewards =
+        val listViewRewards =
             findViewById<ListView>(R.id.beacons_analytics_listview)
-        if (this == null) {
-            return
-        }
         listViewRewards?.adapter = AnalyticBeacoonsAdapter(
             this,
             beaconList ?: getBeaconStatus()?.beaconArray ?: return
@@ -297,27 +283,15 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
 
     private fun isValidUserAdmin(): Boolean {
         if (this.getUserPreference().acl.isNullOrEmpty()) { return false }
-        val role =  DottysRoleUser.USER //this.getUserPreference().acl?.first()?.role
-        return when(role){
-            DottysRoleUser.USER ->  return false
-            DottysRoleUser.ADMIN, DottysRoleUser.REGION_ADMIN -> return true
-
+          return when(this.getUserPreference().acl?.first()?.role){
+            DottysRoleUser.USER                               -> false
+            DottysRoleUser.ADMIN, DottysRoleUser.REGION_ADMIN -> true
+            else                                              -> false
         }
 
     }
-    val mOnNavigationItemSelectedListener = NavigationView.OnNavigationItemSelectedListener { item ->
-        when(item.itemId){
-            R.id.nav_contact_suppport -> {
-                initAnalitycsItems(getDottysBeaconsList())
-                viewAnalitycs?.animate()?.translationY(0f)?.setDuration(800)?.start()
-            }
-            else ->{
-                controller.navigate(item.itemId)
-            }
-        }
-        drawerLayout?.close()
-        return@OnNavigationItemSelectedListener true
-    }
+
+
     private fun setTitleToolbar(idItem: Int) {
         val textTitle = findViewById<TextView>(R.id.title_tool_bar_textview)
         textTitle.text = getToolbarTitle(idItem)

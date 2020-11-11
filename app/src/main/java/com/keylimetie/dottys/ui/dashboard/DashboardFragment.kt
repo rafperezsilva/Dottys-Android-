@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings.Secure
+import android.provider.Settings.Secure.*
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.util.Log
 import android.view.LayoutInflater
@@ -101,12 +102,13 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
 
     }
 
+    @SuppressLint("HardwareIds")
     private fun checkDataAtProfile(activityMain: DottysMainNavigationActivity?, isUpdateable: Boolean) {
         dashboardViewModel.initDashboardButtons()
         val location = activityMain?.getUserNearsLocations()?.locations.let { it?.first() }
-        val androidId = Secure.getString(
+        val androidId = getString(
             context?.contentResolver,
-            Secure.ANDROID_ID)
+            ANDROID_ID)
         val appVersion = "Android_${activityMain?.getVersionApp(activityMain)}"
         val profileData = activityMain?.getUserPreference()
         if (isUpdateable){
@@ -195,13 +197,14 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
         //updateDataAtProfile(activity as DottysMainNavigationActivity)
     }
 
+    @SuppressLint("InflateParams")
     private fun initVerificationCell() {
         val addPhoneView = layoutInflater.inflate(R.layout.view_phone_verification, null) as ViewGroup
         val dashboardLayout = viewFragment?.findViewById<ConstraintLayout>(R.id.dashboard_layout)
-        val buttonDone = addPhoneView?.findViewById<Button>(R.id.validation_done_button)
-        val validationPhoneEditText = addPhoneView?.findViewById<EditText>(R.id.validation_phone_edittext)
+        val buttonDone = addPhoneView.findViewById<Button>(R.id.validation_done_button)
+        val validationPhoneEditText = addPhoneView.findViewById<EditText>(R.id.validation_phone_edittext)
         dashboardLayout?.addView(addPhoneView)
-        var phoneViewParams = (viewFragment?.height?: 0)*0.5
+        val phoneViewParams = (viewFragment?.height?: 0)*0.5
         addPhoneView.elevation = 25f
         buttonDone?.elevation = 35f
 
@@ -310,9 +313,9 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
             beaconList.toJson().toString()
         )
         DottysBeaconActivity(activity ?: return)
-        dashboardViewModel.initAnalitycsItems(activity?.getBeaconStatus()?.beaconArray
-            ?: activity?.getBeaconStatus()?.beaconArray ?: return)
-        activity?.let { dashboardViewModel.getDrawingSummary(it as DottysMainNavigationActivity) }
+        dashboardViewModel.initAnalitycsItems(activity.getBeaconStatus()?.beaconArray
+            ?: activity.getBeaconStatus()?.beaconArray ?: return)
+        activity.let { dashboardViewModel.getDrawingSummary(it as DottysMainNavigationActivity) }
         dashboardViewModel.initAnalitycsItems(
             (if (mainActivity?.getBeaconStatus()?.beaconArray.isNullOrEmpty()) {
                 mainActivity?.getBeaconStatus()?.beaconArray
@@ -337,10 +340,10 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
             return
         } //TODO REMOVE ON FIX BACKEND ANIVERSARY DATE
         when {
-            userProfile?.cell.isNullOrEmpty() -> {
+            userProfile.cell.isNullOrEmpty() -> {
              initVerificationCell()
             }
-            userProfile?.cellVerified == false -> {
+            userProfile.cellVerified == false -> {
                 val intent = Intent(activity as DottysMainNavigationActivity, DottysRegisterActivity::class.java)
                 intent.putExtra("IS_REGISTER_USER", true)
                 (activity as DottysMainNavigationActivity)?.startActivity(intent)
@@ -369,12 +372,13 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
 
     }
 
+    @SuppressLint("CommitPrefEdits")
     override fun getDottysUserLocation(locationData: DottysDrawingRewardsModel) {
         val activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
         activity?.editor = activity?.sharedPreferences!!.edit()
         activity.saveDataPreference(PreferenceTypeKey.DOTTYS_USER_LOCATION, locationData.toJson())
 
-        var beaconsArray = DottysBeaconArray(activity.getBeaconStatus()?.beaconArray)
+        val beaconsArray = DottysBeaconArray(activity.getBeaconStatus()?.beaconArray)
         dashboardViewModel.initAnalitycsItems(beaconsArray.beaconArray
             ?: activity.getBeaconStatus()?.beaconArray ?: return)
         checkDataAtProfile(activity, false)
@@ -388,7 +392,7 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
     override fun allItemsCollapse(isColappse: Boolean) {}
 
     private fun addPagerDashboardImages(bannerList: List<DottysBanners>) {
-        var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity
+        val activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity
         var limitOfFlipperView: Int = bannerList.size
         if (bannerList.size > staticImagesResouerce.size) {
             limitOfFlipperView = staticImagesResouerce.size
