@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -21,7 +22,10 @@ import com.keylimetie.dottys.R
 import com.keylimetie.dottys.register.DottysProfilePictureActivity
 import com.keylimetie.dottys.register.DottysRegisterUserDelegates
 import com.keylimetie.dottys.register.DottysRegisterUserObserver
+import com.keylimetie.dottys.utils.DottysCameraActivity
+import com.keylimetie.dottys.utils.DottysStatics
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.IOException
 
 
@@ -39,6 +43,8 @@ import java.io.IOException
         activity?.hideLoader()
         profileViewModel = ProfileViewModel(activity, activity?.getUserPreference())
         profileViewModel?.initProfileView(root, activity, requireContext(), this )
+
+
         return root
     }
 
@@ -47,6 +53,19 @@ import java.io.IOException
             profileViewModel?.getDataToUpdate()
         }
 
+
+        override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+            super.onActivityResult(requestCode, resultCode, data)
+            when(requestCode){
+                DottysStatics.PICTURE_TAKE_REQUEST_CODE -> {
+                   val file = data?.getStringExtra("FILE_PATH")
+                    if(file.isNullOrEmpty()){return}
+                    val bmf = BitmapFactory.decodeFile(file)
+                    (activity as DottysMainNavigationActivity).userPictureBM = bmf
+                    profileViewModel?.imageViewProfile?.setImageBitmap(bmf)
+                }
+            }
+        }
 //    override fun registerUser(userData: DottysLoginResponseModel) {
 //     }
 //

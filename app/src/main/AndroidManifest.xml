@@ -52,7 +52,15 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".analitycs.AnalitycsActivity"></activity>
+        <activity android:name=".utils.DottysCameraActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <!-- Register as a system camera app -->
+            <intent-filter>
+            <action android:name="android.media.action.IMAGE_CAPTURE" />
+            <action android:name="android.media.action.STILL_IMAGE_CAMERA"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".analitycs.AnalitycsActivity" />
 
         <receiver
             android:name=".utils.geofence.GeofenceBroadcastReceiver"
@@ -103,7 +111,7 @@
         <activity android:name=".login.DottysLoginActivity" />
         <activity
             android:name=".splash.DottysSplashActivity"
-            android:theme="@style/AppSplashTheme"></activity>
+            android:theme="@style/AppSplashTheme" />
         <activity
             android:name=".SplashAnimationActivity"
             android:theme="@style/SplashTheme">

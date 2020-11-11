@@ -5,6 +5,7 @@ import com.keylimetie.dottys.ui.drawing.models.DottysDrawing
 
  class DottysStatics {
      companion object {
+         val PICTURE_TAKE_REQUEST_CODE = 9999
          val staticCashRewards = arrayListOf(
              DottysDrawing(
                  null, null, null, null, null,

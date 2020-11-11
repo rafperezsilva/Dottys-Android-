@@ -170,9 +170,9 @@ fun Bitmap.bitmapFixPosition(imageUri: String): Bitmap? {
     val orientation: Int = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
         ExifInterface.ORIENTATION_UNDEFINED)
     return when (orientation) {
-        ExifInterface.ORIENTATION_ROTATE_90  -> this.rotateImages(90f)
-        ExifInterface.ORIENTATION_ROTATE_180 -> this.rotateImages(180f)
-        ExifInterface.ORIENTATION_ROTATE_270 -> this.rotateImages(270f)
+        ExifInterface.ORIENTATION_ROTATE_90  -> this.rotateImages(-90f)
+        ExifInterface.ORIENTATION_ROTATE_180 -> this.rotateImages(-180f)
+        ExifInterface.ORIENTATION_ROTATE_270 -> this.rotateImages(-270f)
         ExifInterface.ORIENTATION_NORMAL     -> this
         else                                 -> this
     }

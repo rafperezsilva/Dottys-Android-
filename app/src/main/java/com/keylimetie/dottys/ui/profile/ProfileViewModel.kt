@@ -25,6 +25,8 @@ import com.android.volley.toolbox.Volley
 import com.keylimetie.dottys.*
 import com.keylimetie.dottys.forgot_password.DottysVerificationTypeActivity
 import com.keylimetie.dottys.register.DottysProfilePictureActivity
+import com.keylimetie.dottys.utils.DottysCameraActivity
+import com.keylimetie.dottys.utils.DottysStatics.Companion.PICTURE_TAKE_REQUEST_CODE
 import com.keylimetie.dottys.utils.md5
 import com.keylimetie.dottys.utils.stringGetYear
 import de.hdodenhof.circleimageview.CircleImageView
@@ -138,7 +140,11 @@ class ProfileViewModel(
                 switchNotification?.isActivated = activity?.isPushNotificationEnabled() ?: false
             }
             R.id.profile_image -> {
-                requestCameraPermission()
+                //TODO FIRST OPTION
+               // requestCameraPermission()
+                //TODO SECOND OPTION
+                var intent = Intent(fragent?.context, DottysCameraActivity::class.java)
+                fragent?.startActivityForResult(intent,PICTURE_TAKE_REQUEST_CODE)
             }
             R.id.password_profile_edit_text -> {
                 var intent = Intent(activity, DottysVerificationTypeActivity::class.java)
