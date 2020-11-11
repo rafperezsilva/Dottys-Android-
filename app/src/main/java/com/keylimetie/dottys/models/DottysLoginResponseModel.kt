@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.keylimetie.dottys.ui.locations.StoreType
 
 val mapper = jacksonObjectMapper().apply {
     propertyNamingStrategy = PropertyNamingStrategy.LOWER_CAMEL_CASE
@@ -129,7 +130,7 @@ data class DottysACL(
     @get:JsonProperty("_id") @field:JsonProperty("_id")
     val id: String? = null,
 
-    val role: String? = null
+    val role: DottysRoleUser? = null
 )
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class DottysRegisterModel(
@@ -141,6 +142,22 @@ data class DottysRegisterModel(
     var birthday: String? = ""
 )
 
+enum class DottysRoleUser(val value: String) {
+    ADMIN("ADMIN"),
+    USER("USER"),
+    REGION_ADMIN("REGION_ADMIN");
+
+    companion object {
+        fun fromValue(value: String): DottysRoleUser = when (value) {
+            "ADMIN"     -> DottysRoleUser.ADMIN
+            "USER" -> DottysRoleUser.USER
+            "REGION_ADMIN" -> DottysRoleUser.REGION_ADMIN
+
+
+            else -> throw IllegalArgumentException()
+        }
+    }
+}
 //region
 //val mapperBeacon = jacksonObjectMapper().apply {
 //    propertyNamingStrategy = PropertyNamingStrategy.LOWER_CAMEL_CASE

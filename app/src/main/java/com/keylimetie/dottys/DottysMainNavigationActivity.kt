@@ -19,9 +19,8 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.contains
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -35,7 +34,6 @@ import com.keylimetie.dottys.register.DottysRegisterUserObserver
 import com.keylimetie.dottys.register.DottysRegisterViewModel
 import com.keylimetie.dottys.splash.getVersionApp
 import com.keylimetie.dottys.ui.dashboard.AnalyticBeacoonsAdapter
-import com.keylimetie.dottys.ui.dashboard.DashboardFragment
 import com.keylimetie.dottys.ui.dashboard.DottysPagerDelegates
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeacon
 import com.keylimetie.dottys.ui.drawing.DottysDrawingDelegates
@@ -44,9 +42,7 @@ import com.keylimetie.dottys.ui.drawing.DrawingViewModel
 import com.keylimetie.dottys.ui.drawing.RewardsSegment
 import com.keylimetie.dottys.ui.drawing.models.DottysDrawingRewardsModel
 import com.keylimetie.dottys.ui.drawing.models.DottysDrawingUserModel
-import com.keylimetie.dottys.ui.locations.LocationsFragment
 import com.keylimetie.dottys.utils.rotateBitmap
-import kotlinx.android.synthetic.main.activity_dottys_main_navigation.*
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import kotlin.properties.Delegates
@@ -54,7 +50,7 @@ import kotlin.properties.Delegates
 
 class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeDelegates,
     DottysPagerDelegates, DottysDrawingDelegates, DottysRegisterUserDelegates, View.OnClickListener
-      {
+{
     var drawerLayout: DrawerLayout? = null
     var viewAnalitycs: ConstraintLayout? = null
     val registerViewModel = DottysRegisterViewModel(this)
@@ -177,7 +173,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
         }
 
         mainNavigationActivity = this
-         viewAnalitycs    = findViewById<ConstraintLayout>(R.id.analitycs_floating_view)
+        viewAnalitycs    = findViewById<ConstraintLayout>(R.id.analitycs_floating_view)
         viewAnalitycs?.animate()?.translationY(-screenSize.y.toFloat())?.setDuration(800)?.start()
 
 
@@ -185,13 +181,23 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
 
     override fun onRestart() {
         super.onRestart()
-         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         this.window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
 
         )
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+        var itemsAtMenu =  navView?.menu
+        if (!isValidUserAdmin()) {
+            itemsAtMenu?.removeItem(R.id.nav_contact_suppport)
+        } else if (navView?.menu?.contains(navView?.menu?.findItem(R.id.nav_contact_suppport) ?: return) == false){
+            navView?.menu?.add(R.id.nav_contact_suppport,R.id.nav_contact_suppport,R.id.nav_contact_suppport, getString(R.string.menu_contact_support))
+        }
     }
 
 
@@ -204,7 +210,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
         val locationDeviceTextView  =  findViewById<TextView>(R.id.location_device_analytic_textview) //?: return
         val sendToSupportButton     =  findViewById<Button>(R.id.send_to_support_button) //?: return
         val isPushEnable            =  findViewById<TextView>(R.id.is_push_enable_textview) //?: return
-      //  isPushEnable?.text = if(mainFragmentActivity?.isPushNotificationEnabled() == true) "Enable" else "Disable"
+        //  isPushEnable?.text = if(mainFragmentActivity?.isPushNotificationEnabled() == true) "Enable" else "Disable"
         sendToSupportButton?.setOnClickListener(this)
         closeAnalyticButton?.setOnClickListener(this)
 
@@ -228,16 +234,6 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
             else
                 "Has no nearest locations"
 
-//                "Store #${
-//                    mainFragmentActivity?.getBeaconStatus().let {
-//                        it.let {
-//                            it?.beaconArray?.let { it.first()?.location?.storeNumber }
-//                        }
-//                    }
-//                        ?: ""
-//                }"
-
-
         }
         var listViewRewards =
             findViewById<ListView>(R.id.beacons_analytics_listview)
@@ -252,7 +248,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
 
     private fun initDrawerSetting() {
 
-       drawerLayout  = findViewById<DrawerLayout>(R.id.drawer_layout)
+        drawerLayout  = findViewById<DrawerLayout>(R.id.drawer_layout)
         navView = findViewById(R.id.nav_view)
 
         val footerLabel = findViewById<TextView>(R.id.footer_label)
@@ -276,6 +272,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
         setupActionBarWithNavController(controller, appBarConfiguration)
         navView?.setupWithNavController(controller)
 
+
         drawerLayout?.addDrawerListener(object : DrawerLayout.DrawerListener {
             override fun onDrawerStateChanged(p0: Int) {
                 hideCustomKeyboard()
@@ -294,8 +291,19 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
                 )
             }
         })
-                navView?.setNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        //
+        navView?.setNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+
+    }
+
+    private fun isValidUserAdmin(): Boolean {
+        if (this.getUserPreference().acl.isNullOrEmpty()) { return false }
+        val role =  DottysRoleUser.USER //this.getUserPreference().acl?.first()?.role
+        return when(role){
+            DottysRoleUser.USER ->  return false
+            DottysRoleUser.ADMIN, DottysRoleUser.REGION_ADMIN -> return true
+
+        }
+
     }
     val mOnNavigationItemSelectedListener = NavigationView.OnNavigationItemSelectedListener { item ->
         when(item.itemId){
@@ -304,7 +312,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
                 viewAnalitycs?.animate()?.translationY(0f)?.setDuration(800)?.start()
             }
             else ->{
-               controller.navigate(item.itemId)
+                controller.navigate(item.itemId)
             }
         }
         drawerLayout?.close()
@@ -318,6 +326,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
     override fun onResume() {
         super.onResume()
         controller.addOnDestinationChangedListener(listener)
+
     }
 
     override fun onPause() {
@@ -344,7 +353,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
     }
 
     override fun getUserRewards(rewards: DottysDrawingRewardsModel) {
-     }
+    }
 
     override fun getUserDrawings(drawing: DottysDrawingUserModel) {
         var intent = Intent(this, DottysRewardRedeemedActivity::class.java)
@@ -388,7 +397,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
                 sendMailToSupport(this)
             }
         }
-     }
+    }
 
 }
 
