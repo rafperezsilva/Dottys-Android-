@@ -165,7 +165,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
 
         mainNavigationActivity = this
         viewAnalitycs    = findViewById<ConstraintLayout>(R.id.analitycs_floating_view)
-        viewAnalitycs?.animate()?.translationY(-screenSize.y.toFloat())?.setDuration(800)?.start()
+        viewAnalitycs?.animate()?.translationY(-screenSize.y.toFloat())?.setDuration(0)?.start()
 
 
     }

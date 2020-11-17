@@ -4,14 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
-import android.text.Layout
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.style.AbsoluteSizeSpan
-import android.text.style.AlignmentSpan
-import android.text.style.ForegroundColorSpan
-import android.text.style.StyleSpan
+import android.os.Build
+import android.text.*
+import android.text.style.*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -64,7 +59,7 @@ class DottysDrawingAdapter(
 
     //4
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val rowView = inflater.inflate(R.layout.drawing_fragment, parent, false)
+        val rowView = inflater.inflate(R.layout.drawing_fragment_item, parent, false)
         val params = rowView.layoutParams
         params.height = heigthForItem(parent)
         rowView.layoutParams = params
@@ -80,15 +75,16 @@ class DottysDrawingAdapter(
         return rowView
     }
 
-    fun heigthForItem(parent: ViewGroup): Int {
-        when (segmentSelected) {
-            RewardsSegment.DRAWING_ENTRIES -> {
-                return (parent.height / 3.0).roundToInt()
-            }
-            RewardsSegment.CASH_REWARDS -> {
-                return (parent.height / 3.0).roundToInt()
-            }
-        }
+    private fun heigthForItem(parent: ViewGroup): Int {
+        return  if((parent.height * 0.3).roundToInt() < 450){ (parent.height * 0.4).roundToInt() } else {  (parent.height * 0.28).roundToInt()}
+//        when (segmentSelected) {
+//            RewardsSegment.DRAWING_ENTRIES -> {
+//                return (parent.height / 3.0).roundToInt()
+//            }
+//            RewardsSegment.CASH_REWARDS -> {
+//                return if((parent.height / 3.0).roundToInt() < 450 ){ 450 } else {  (parent.height / 3.0).roundToInt()}
+//            }
+//        }
     }
 
     fun fillItemsInView(rewards: DottysDrawing) {
@@ -139,10 +135,20 @@ class DottysDrawingAdapter(
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         spannable.setSpan(
-            StyleSpan(Typeface.NORMAL),
-            0, spannable.length,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            AbsoluteSizeSpan(23, true), 0, 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
         )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            spannable.setSpan(
+                FontSpan(activityFragment.resources.getFont(R.font.proxima_nova_bold)),
+                0,
+                3,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+           )
+
+            spannable.setSpan(
+                AbsoluteSizeSpan(16, true), 4, spannable.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        }
         spannable.setSpan(
             AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, spannable.length,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -177,4 +183,29 @@ class DottysDrawingAdapter(
         )
         return spannable
     }
+}
+
+
+open class FontSpan(private val font: Typeface?) : MetricAffectingSpan() {
+
+    companion object {
+        const val WRONG_TYPEFACE = 0
+    }
+
+    override fun updateMeasureState(textPaint: TextPaint) = updateTypeface(textPaint)
+
+    override fun updateDrawState(textPaint: TextPaint) = updateTypeface(textPaint)
+
+    private fun updateTypeface(textPaint: TextPaint) {
+        textPaint.apply {
+            val oldStyle = getOldStyle(typeface)
+
+            if (oldStyle == WRONG_TYPEFACE) return
+
+            typeface = Typeface.create(font, oldStyle)
+        }
+    }
+
+    private fun getOldStyle(typeface: Typeface?) = typeface?.style ?: WRONG_TYPEFACE
+
 }

@@ -12,6 +12,7 @@ import com.keylimetie.dottys.DottysErrorModel
 import com.keylimetie.dottys.DottysMainNavigationActivity
 import org.json.JSONObject
 import java.util.*
+import kotlin.jvm.Throws
 
 class LogoutViewModel: ViewModel() {
 

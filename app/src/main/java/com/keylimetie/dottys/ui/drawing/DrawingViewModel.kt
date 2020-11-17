@@ -34,6 +34,7 @@ import com.keylimetie.dottys.ui.drawing.models.DottysDrawingRewardsModel
 import com.keylimetie.dottys.ui.drawing.models.DottysDrawingUserModel
 import com.keylimetie.dottys.utils.DottysStatics
 import org.json.JSONObject
+import kotlin.jvm.Throws
 import kotlin.properties.Delegates
 
 
@@ -355,8 +356,8 @@ interface DottysDrawingDelegates {
 class DottysDrawingObserver(lisener: DottysDrawingDelegates) {
     var rewardsModel: DottysDrawingRewardsModel by Delegates.observable(
         initialValue = DottysDrawingRewardsModel(),
-        onChange = { prop, old, new -> lisener.getUserRewards(new) })
+        onChange = { _, _, new -> lisener.getUserRewards(new) })
     var drawingsModel: DottysDrawingUserModel by Delegates.observable(
         initialValue = DottysDrawingUserModel(),
-        onChange = { prop, old, new -> lisener.getUserDrawings(new) })
+        onChange = { _, _, new -> lisener.getUserDrawings(new) })
 }

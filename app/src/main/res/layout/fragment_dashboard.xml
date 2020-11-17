@@ -233,34 +233,35 @@
                 android:inAnimation="@anim/fade_in"
                 android:outAnimation="@anim/fade_out" >
                 <ImageView
-                    android:scaleType="centerCrop"
+                    android:scaleType="fitCenter"
                     android:id="@+id/dashboard_image_pager0"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:alpha="1.0"
                     />
                 <ImageView
-                    android:scaleType="centerCrop"
+                    android:scaleType="fitCenter"
                     android:id="@+id/dashboard_image_pager1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:alpha="1.0"
                     />
                 <ImageView
-                    android:scaleType="centerCrop"
+                    android:scaleType="fitCenter"
                     android:id="@+id/dashboard_image_pager2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:alpha="1.0"
-                    /><ImageView
-                android:scaleType="centerCrop"
+                    />
+                <ImageView
+                android:scaleType="fitCenter"
                 android:id="@+id/dashboard_image_pager3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:alpha="1.0"
                 />
                 <ImageView
-                    android:scaleType="centerCrop"
+                    android:scaleType="fitCenter"
                     android:id="@+id/dashboard_image_pager4"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -268,7 +269,7 @@
                     />
 
                 <ImageView
-                    android:scaleType="centerCrop"
+                    android:scaleType="fitCenter"
                     android:id="@+id/dashboard_image_pager5"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -276,28 +277,28 @@
                     />
 
                 <ImageView
-                    android:scaleType="centerCrop"
+                    android:scaleType="fitCenter"
                     android:id="@+id/dashboard_image_pager6"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:alpha="1.0"
                     />
                 <ImageView
-                    android:scaleType="centerCrop"
+                    android:scaleType="fitCenter"
                     android:id="@+id/dashboard_image_pager7"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:alpha="1.0"
                     />
                 <ImageView
-                    android:scaleType="centerCrop"
+                    android:scaleType="fitCenter"
                     android:id="@+id/dashboard_image_pager8"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:alpha="1.0"
                     />
                 <ImageView
-                    android:scaleType="centerCrop"
+                    android:scaleType="fitCenter"
                     android:id="@+id/dashboard_image_pager9"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

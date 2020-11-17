@@ -25,6 +25,9 @@ import com.android.volley.toolbox.Volley
 import com.keylimetie.dottys.*
 import com.keylimetie.dottys.forgot_password.DottysVerificationTypeActivity
 import com.keylimetie.dottys.register.DottysProfilePictureActivity
+import com.keylimetie.dottys.ui.drawing.DottysDrawingDelegates
+import com.keylimetie.dottys.ui.drawing.models.DottysDrawingRewardsModel
+import com.keylimetie.dottys.ui.drawing.models.DottysDrawingUserModel
 import com.keylimetie.dottys.utils.DottysCameraActivity
 import com.keylimetie.dottys.utils.DottysStatics.Companion.PICTURE_TAKE_REQUEST_CODE
 import com.keylimetie.dottys.utils.md5
@@ -32,6 +35,7 @@ import com.keylimetie.dottys.utils.stringGetYear
 import de.hdodenhof.circleimageview.CircleImageView
 import org.json.JSONObject
 import java.util.*
+import kotlin.jvm.Throws
 import kotlin.properties.Delegates
 
 class ProfileViewModel(
@@ -141,10 +145,10 @@ class ProfileViewModel(
             }
             R.id.profile_image -> {
                 //TODO FIRST OPTION
-               // requestCameraPermission()
+                requestCameraPermission()
                 //TODO SECOND OPTION
-                var intent = Intent(fragent?.context, DottysCameraActivity::class.java)
-                fragent?.startActivityForResult(intent,PICTURE_TAKE_REQUEST_CODE)
+//                var intent = Intent(fragent?.context, DottysCameraActivity::class.java)
+//                fragent?.startActivityForResult(intent,PICTURE_TAKE_REQUEST_CODE)
             }
             R.id.password_profile_edit_text -> {
                 var intent = Intent(activity, DottysVerificationTypeActivity::class.java)
@@ -249,7 +253,7 @@ class ProfileViewModel(
                         ).show()
                     }
                     Log.e("TAG", error.message, error)
-                    profileUpdateObserver?.updateProfile = null
+                 //    profileUpdateObserver?.updateProfile = null
                 }
             }) { //no semicolon or coma
 
@@ -275,10 +279,13 @@ interface DottysProfileDelegates {
 
 
 }
-
 class DottysProfileObserver(lisener: DottysProfileDelegates) {
-    var updateProfile: DottysLoginResponseModel? by Delegates.observable(
-        initialValue = DottysLoginResponseModel(),
-        onChange = { prop, old, new -> lisener.onProfileUpdated(new) })
+    val initValue = DottysLoginResponseModel()
+    var updateProfile: DottysLoginResponseModel by Delegates.observable(
+        initialValue = initValue,
+        onChange = { _, _, new -> lisener.onProfileUpdated(new) })
 
 }
+
+
+

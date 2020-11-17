@@ -40,10 +40,10 @@
               "client_type": 3
             },
             {
-              "client_id": "237254077256-t39kigesc3v4o52b00jskv3f2rcnigdq.apps.googleusercontent.com",
+              "client_id": "237254077256-jvi73q7k281rvjg0gcvmiliaqjjmht81.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.keylimetie.dottys"
+                "bundle_id": "com.dottys.rewards"
               }
             }
           ]
