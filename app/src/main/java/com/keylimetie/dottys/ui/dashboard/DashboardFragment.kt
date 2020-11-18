@@ -2,7 +2,10 @@ package com.keylimetie.dottys.ui.dashboard
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings.Secure
 import android.provider.Settings.Secure.*
 import android.telephony.PhoneNumberFormattingTextWatcher
@@ -49,11 +52,14 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
         R.id.dashboard_image_pager6, R.id.dashboard_image_pager7, R.id.dashboard_image_pager8,
         R.id.dashboard_image_pager9
     )
+    lateinit var mainHandler: Handler
     var dashboardViewModel = DashboardViewModel(activity as DottysMainNavigationActivity?)
     private var viewFragment: View? = null
     var maxChildFlipperView = 0
     var flipperViewDashboard: ViewFlipper? = null
     var mainActivity = activity as DottysMainNavigationActivity?
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -73,7 +79,14 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
         activity?.hideCustomKeyboard()
         activity?.beaconService?.observer = DottysBeaconActivityObserver(this)
         //activity?.let { homeViewModel.getBannerDashboard(it) }
+        mainHandler = Handler(Looper.getMainLooper())
         return root
+    }
+    private val updateTextTask = object : Runnable {
+        override fun run() {
+            gotToNextBanner()
+            mainHandler.postDelayed(this, 5000)
+        }
     }
 
     override fun onStart() {
@@ -99,7 +112,12 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
         activity?.requestLocation(activity.gpsTracker, activity)
         activity?.gpsTracker?.locationGps?.let { activity.gpsTracker?.onLocationChanged(it) }
 
+        mainHandler.post(updateTextTask)
+    }
 
+    override fun onPause() {
+        super.onPause()
+        mainHandler.removeCallbacks(updateTextTask)
     }
 
     @SuppressLint("HardwareIds")
@@ -259,7 +277,7 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
      *   BANNER AT DASHBOARD
      *   **/
     override fun onDashboardBanners(banners: ArrayList<DottysBanners>) {
-        addPagerDashboardImages(banners)
+        addPagerDashboardImages(banners.sortedBy { it.priority })
         dashboardViewModel.getUserRewards(activity as DottysMainNavigationActivity)
     }
 
@@ -406,12 +424,9 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
 
         }
         flipperViewDashboard?.setOnClickListener(this)
-        flipperViewDashboard?.isAutoStart = true
-
-        flipperViewDashboard?.flipInterval = 4000
-        flipperViewDashboard?.startFlipping()
         flipperViewDashboard?.addOnLayoutChangeListener(this)
         maxChildFlipperView = bannerList.count()
+
 
     }
 
@@ -429,16 +444,21 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.flipper_view_dashboard -> {
-                if (flipperViewDashboard?.displayedChild ?: 0 >= maxChildFlipperView - 1) {
-                    flipperViewDashboard?.displayedChild = 0
-                } else {
-                    flipperViewDashboard?.showNext()
-                }
+                mainHandler.removeCallbacks(updateTextTask)
+                mainHandler.post(updateTextTask)
             }
 
         }
     }
 
+
+    fun gotToNextBanner(){
+        if (flipperViewDashboard?.displayedChild ?: 0 >= maxChildFlipperView - 1) {
+            flipperViewDashboard?.displayedChild = 0
+        } else {
+            flipperViewDashboard?.showNext()
+        }
+    }
 
     override fun onLayoutChange(
         v: View?,

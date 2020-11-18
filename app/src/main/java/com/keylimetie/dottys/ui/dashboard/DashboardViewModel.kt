@@ -82,7 +82,7 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
     var adapter: DashboardPagerAdapter? = null
 
 
-    fun setItemsDashBoard(
+    private fun setItemsDashBoard(
         rootView: View,
         activity: DottysMainNavigationActivity,
     ) {
@@ -275,7 +275,7 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
         return staticFirtsText + rewardsLoaction.address1 + ", " + rewardsLoaction.city + ", " + rewardsLoaction.state + " " + rewardsLoaction.zip
     }
 
-    fun addProfileImage(
+    private fun addProfileImage(
         mContext: DottysMainNavigationActivity,
         rootView: View,
     ) {
@@ -550,7 +550,7 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {
                     mContext.hideLoader()
-                    mContext.finishSession(mContext)
+                    //mContext.finishSession(mContext)
                     if (error.networkResponse == null) {
                         return
                     }
