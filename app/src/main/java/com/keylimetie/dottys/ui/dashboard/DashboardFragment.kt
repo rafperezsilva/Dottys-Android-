@@ -272,11 +272,11 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
         dashboardViewModel.drawingBadgeCounter =
             rewards.rewards?.filter { it.redeemed == false }?.size ?: 0
         dashboardViewModel.badgeCounterDrawingManager(dashboardViewModel.drawingBadgeCounter ?: 0)
-        val mainActivity = activity as DottysMainNavigationActivity
-        mainActivity.gpsTracker?.locationGps.let {
+
+        (activity as DottysMainNavigationActivity).gpsTracker?.locationGps.let {
             val locationViewModel = LocationsViewModel(activity as DottysMainNavigationActivity)
             locationViewModel.locationDataObserver = DottysLocationStoresObserver(this)
-            locationViewModel.getLocationsDottysRequest(mainActivity,
+            locationViewModel.getLocationsDottysRequest((activity as DottysMainNavigationActivity),
                 it?.latitude.toString(),
                 it?.longitude.toString())
         }

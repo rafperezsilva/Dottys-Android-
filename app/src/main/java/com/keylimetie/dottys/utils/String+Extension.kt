@@ -155,3 +155,20 @@ fun Bitmap.rotateBitmap():Bitmap{
         matrix,
         true)
 }
+fun Bitmap.rotateCustomBitmap(degreess:Float):Bitmap {
+    val matrix = Matrix()
+
+    matrix.postRotate(degreess)
+
+    val scaledBitmap = Bitmap.createScaledBitmap(this, width, height, true)
+
+    return Bitmap.createBitmap(
+        scaledBitmap,
+        0,
+        0,
+        scaledBitmap.width,
+        scaledBitmap.height,
+        matrix,
+        true
+    )
+}

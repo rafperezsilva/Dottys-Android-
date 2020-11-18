@@ -31,6 +31,7 @@ import com.keylimetie.dottys.ui.drawing.models.DottysDrawingUserModel
 import com.keylimetie.dottys.utils.DottysCameraActivity
 import com.keylimetie.dottys.utils.DottysStatics.Companion.PICTURE_TAKE_REQUEST_CODE
 import com.keylimetie.dottys.utils.md5
+import com.keylimetie.dottys.utils.rotateCustomBitmap
 import com.keylimetie.dottys.utils.stringGetYear
 import de.hdodenhof.circleimageview.CircleImageView
 import org.json.JSONObject
@@ -83,7 +84,7 @@ class ProfileViewModel(
        myPlayLocation = rootView.findViewById<EditText>(R.id.play_location_profile_edit_text)
        userLocation = rootView.findViewById<EditText>(R.id.user_location_textview)
        switchNotification = rootView.findViewById<Switch>(R.id.profile_switch_notification)
-        switchNotification?.isActivated = activity?.isPushNotificationEnabled() ?: false
+        switchNotification?.isChecked = activity?.isPushNotificationEnable() ?: false
         switchNotification?.setOnClickListener(this)
        imageViewProfile?.setOnClickListener(this)
        activity?.let {
@@ -140,8 +141,9 @@ class ProfileViewModel(
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.profile_switch_notification -> {
-                activity?.enablePushNotification(!(switchNotification?.isActivated ?: false))
-                switchNotification?.isActivated = activity?.isPushNotificationEnabled() ?: false
+                activity?.saveDataPreference(PreferenceTypeKey.PUSH_NOTIFICATION, ((switchNotification?.isChecked ?: false)).toString())
+                Log.i("SWICH ACTIVE ",switchNotification?.isChecked.toString())
+
             }
             R.id.profile_image -> {
                 //TODO FIRST OPTION
@@ -171,9 +173,9 @@ class ProfileViewModel(
 
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            cameraIntent.putExtra("android.intent.extras.CAMERA_FACING", android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT);
-            cameraIntent.putExtra("android.intent.extras.LENS_FACING_FRONT", 1);
-            cameraIntent.putExtra("android.intent.extra.USE_FRONT_CAMERA", true);
+          // cameraIntent.putExtra("android.intent.extras.CAMERA_FACING", android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT);
+         //  cameraIntent.putExtra("android.intent.extras.LENS_FACING_FRONT", 1);
+           cameraIntent.putExtra("android.intent.extra.USE_FRONT_CAMERA", true);
         } else {
             cameraIntent.putExtra("android.intent.extras.CAMERA_FACING", 1);
         }
@@ -206,8 +208,12 @@ class ProfileViewModel(
     }
 
     override fun onPictureTaken(bitmap: Bitmap?) {
+
+
+        //val rotatedBM = bitmap?.rotateCustomBitmap( if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {-180f} else {0f})
         activity?.userPictureBM = bitmap
         imageViewProfile?.setImageBitmap(bitmap)
+
     }
 
 

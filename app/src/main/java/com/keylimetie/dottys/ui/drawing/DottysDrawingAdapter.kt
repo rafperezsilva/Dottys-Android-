@@ -76,7 +76,7 @@ class DottysDrawingAdapter(
     }
 
     private fun heigthForItem(parent: ViewGroup): Int {
-        return  if((parent.height * 0.3).roundToInt() < 450){ (parent.height * 0.4).roundToInt() } else {  (parent.height * 0.28).roundToInt()}
+        return  if((parent.height * 0.3).roundToInt() < 450){ (parent.height * 0.42).roundToInt() } else {  (parent.height * 0.35).roundToInt()}
 //        when (segmentSelected) {
 //            RewardsSegment.DRAWING_ENTRIES -> {
 //                return (parent.height / 3.0).roundToInt()
@@ -159,7 +159,7 @@ class DottysDrawingAdapter(
         return spannable
     }
 
-    fun attributedRedeemText(point: String): SpannableString {
+    private fun attributedRedeemText(point: String): SpannableString {
         val spannable = SpannableString("$point points!")
         spannable.setSpan(
             ForegroundColorSpan(Color.GREEN),

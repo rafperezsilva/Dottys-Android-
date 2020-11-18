@@ -43,6 +43,7 @@ import org.json.JSONObject
 import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.jvm.Throws
 import kotlin.properties.Delegates
 
 
@@ -775,7 +776,7 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
             mainFragmentActivity?.findViewById<Button>(R.id.send_to_support_button) //?: return
         val isPushEnable =
             mainFragmentActivity?.findViewById<TextView>(R.id.is_push_enable_textview) //?: return
-        isPushEnable?.text = if(mainFragmentActivity?.isPushNotificationEnabled() == true) "Enable" else "Disable"
+        isPushEnable?.text = if(mainFragmentActivity?.isPushNotificationEnable() == true) "Enable" else "Disable"
         sendToSupportButton?.setOnClickListener(this)
         closeAnalyticButton?.setOnClickListener(this)
         closeAnalyticButton?.setOnClickListener {
