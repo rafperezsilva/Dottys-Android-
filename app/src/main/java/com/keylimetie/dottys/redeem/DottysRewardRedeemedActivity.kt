@@ -3,13 +3,11 @@ package com.keylimetie.dottys.redeem
 import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
-import com.keylimetie.dottys.DottysBaseActivity
-import com.keylimetie.dottys.DottysLoginResponseModel
-import com.keylimetie.dottys.PreferenceTypeKey
-import com.keylimetie.dottys.R
+import com.keylimetie.dottys.*
 import com.keylimetie.dottys.models.DottysGlobalDataModel
 import com.keylimetie.dottys.models.DottysRewardsModel
 import com.keylimetie.dottys.ui.dashboard.DottysDashboardDelegates
+import com.keylimetie.dottys.ui.dashboard.models.DottysBannerModel
 import com.keylimetie.dottys.ui.dashboard.models.DottysBanners
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconsModel
 import com.keylimetie.dottys.ui.dashboard.models.DottysDrawingSumaryModel
@@ -58,7 +56,7 @@ class DottysRewardRedeemedActivity : DottysBaseActivity(), DottysDashboardDelega
 
     override fun getBeaconList(beaconList: DottysBeaconsModel) {}
 
-    override fun onDashboardBanners(banners: ArrayList<DottysBanners>) {}
+    override fun onDashboardBanners(banners:  DottysBannerModel) {}
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK && drawing == null) {

@@ -6,15 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import com.keylimetie.dottys.DottysLoginResponseModel
-import com.keylimetie.dottys.DottysMainNavigationActivity
-import com.keylimetie.dottys.PreferenceTypeKey
-import com.keylimetie.dottys.R
+import com.keylimetie.dottys.*
 import com.keylimetie.dottys.models.DottysGlobalDataModel
 import com.keylimetie.dottys.models.DottysRewardsModel
 import com.keylimetie.dottys.ui.dashboard.DashboardViewModel
 import com.keylimetie.dottys.ui.dashboard.DottysCurrentUserObserver
 import com.keylimetie.dottys.ui.dashboard.DottysDashboardDelegates
+import com.keylimetie.dottys.ui.dashboard.models.DottysBannerModel
 import com.keylimetie.dottys.ui.dashboard.models.DottysBanners
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconsModel
 import com.keylimetie.dottys.ui.dashboard.models.DottysDrawingSumaryModel
@@ -86,7 +84,7 @@ class DrawingFragment : Fragment(), DottysDrawingDelegates, DottysDashboardDeleg
     override fun getDottysUserLocation(locationData: DottysDrawingRewardsModel) {}
 
     override fun getBeaconList(beaconList: DottysBeaconsModel) {}
-    override fun onDashboardBanners(banners: ArrayList<DottysBanners>) {}
+    override fun onDashboardBanners(banners: DottysBannerModel) {}
 
     //endregion
     private fun fillItemsInView(currentUser: DottysLoginResponseModel) {

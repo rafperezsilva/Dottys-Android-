@@ -23,7 +23,6 @@ import android.preference.PreferenceManager
 import android.util.Log
 import android.view.View
 import android.widget.Button
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingClient
@@ -324,16 +323,16 @@ class DottysGeofence(private val baseActivity: DottysBaseActivity ) :   OnComple
      * @param actionStringId   The text of the action item.
      * @param listener         The listener associated with the Snackbar action.
      */
-    private fun showSnackbar(
-        mainTextStringId: Int, actionStringId: Int,
-        listener: View.OnClickListener
-    ) {
-        Snackbar.make(
-            baseActivity.findViewById(android.R.id.content),
-            baseActivity.getString(mainTextStringId),
-            Snackbar.LENGTH_INDEFINITE)
-            .setAction(baseActivity.getString(actionStringId), listener).show()
-    }
+//    private fun showSnackbar(
+//        mainTextStringId: Int, actionStringId: Int,
+//        listener: () -> Unit
+//    ) {
+//        Snackbar.make(
+//            baseActivity.findViewById(android.R.id.content),
+//            baseActivity.getString(mainTextStringId),
+//            Snackbar.LENGTH_INDEFINITE)
+//            .setAction(baseActivity.getString(actionStringId), listener).show()
+//    }
 
     /**
      * Returns true if geofences were added, otherwise false.
@@ -382,12 +381,12 @@ class DottysGeofence(private val baseActivity: DottysBaseActivity ) :   OnComple
         // request previously, but didn't check the "Don't ask again" checkbox.
         if (shouldProvideRationale) {
             Log.i(TAG, "Displaying permission rationale to provide additional context.")
-            showSnackbar(R.string.permission_rationale, android.R.string.ok
-            ) { // Request permission
-                ActivityCompat.requestPermissions(baseActivity,
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    REQUEST_PERMISSIONS_REQUEST_CODE)
-            }
+//            showSnackbar(R.string.permission_rationale, android.R.string.ok
+//            ) { // Request permission
+//                ActivityCompat.requestPermissions(baseActivity,
+//                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+//                    REQUEST_PERMISSIONS_REQUEST_CODE)
+//            }
         } else {
             Log.i(TAG, "Requesting permission")
             // Request permission. It's possible this can be auto answered if device policy

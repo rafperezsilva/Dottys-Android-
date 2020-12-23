@@ -1,5 +1,6 @@
 package com.keylimetie.dottys.forgot_password
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.text.Editable
 import android.text.TextWatcher
@@ -131,6 +132,7 @@ open class DottysForgotPasswordViewModel : ViewModel()  {
     }
 
     /** ENTER CODE VERIFICATION VIEW */
+    @SuppressLint("SetTextI18n")
     fun initVerificationCodeView(verificationCodeActivity: DottysEnterVerificationCodeActivity, email:String, isRegisterView: Boolean){
         verificationCodeActivity.hideLoader()
         this.isRegisterView = isRegisterView
@@ -144,8 +146,14 @@ open class DottysForgotPasswordViewModel : ViewModel()  {
         val resendCodeTextView  = verificationCodeActivity.findViewById<TextView>(R.id.resend_code_textview)
         val phone = verificationCodeActivity.getUserPreference().cell
         val number = if(phone.isNullOrEmpty()) "" else phone?.subSequence(phone.count() - 4, phone.count())
-        subtitleVerification.text = if(isSmsView ?: true) "A text message " else "A email " + "with a verification code\nhas been sent to " +
-                                        if(number.isNullOrEmpty()) "your phone" else "(xxx) xxx-$number"
+        val msg = if(isSmsView ?: true) "A text message " else "A email "
+        subtitleVerification.text = "$msg with a verification code\nhas been sent to ${
+            if (number.isEmpty()) {
+                "your phone"
+            } else {
+                "(xxx) xxx-$number"
+            }
+        }"
 
         resendCodeTextView.setOnClickListener {
             val registerMOdel = DottysRegisterViewModel(verificationCodeActivity)

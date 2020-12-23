@@ -64,7 +64,7 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
     var heigth = 0f
     fun initRegisterView(activityRegister: DottysRegisterActivity) {
         activityRegisterObserver = DottysRegisterUserObserver(activityRegister)
-        activityRegister.intent.getBooleanExtra("IS_REGISTER_USER",false)
+        isRegisterUser = activityRegister.intent.getBooleanExtra("IS_REGISTER_USER",false)
         initItemsAtView(activityRegister)
         addCustomsSettings()
         showPasswordButtonAction()
@@ -150,7 +150,7 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
 
     }
 
-    fun initDatePackerView() {
+    private fun initDatePackerView() {
         val c: Calendar = Calendar.getInstance()
         val year: Int = c.get(Calendar.YEAR)
         val month: Int = c.get(Calendar.MONTH)
@@ -173,7 +173,7 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
             datePickerDialog?.show() }
     }
 
-    fun addCustomsSettings() {
+    private fun addCustomsSettings() {
         editTextData = arrayOf(
             firstNameEditText,
             lastNameEditText,
@@ -244,7 +244,7 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
         return true
     }
 
-    fun fillDataForRegisterRequest(editTextData: Array<EditText?>) {
+    private fun fillDataForRegisterRequest(editTextData: Array<EditText?>) {
         for (item in editTextData) {
             when (item?.id) {
                 id.first_name_register_edit_text -> {
@@ -298,7 +298,7 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
         var subtitleMssg =  if(activityRegister.getUserPreference().cell.isNullOrEmpty()){
             "A text message with a verification\ncode has been sent to phone"
         } else {
-            val cell = activityRegister?.getUserPreference()?.cell
+            val cell = activityRegister.getUserPreference().cell ?: ""
             val terminalPhoneNumber =   cell?.subSequence(cell?.count()  - 4, cell.count())
             "A text message with a verification\ncode has been sent to (xxx) xxx-${terminalPhoneNumber}."
         }
@@ -330,7 +330,7 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
     /**
      * REQUEST REGISTER
      * */
-    fun registerNewUser(
+    private fun registerNewUser(
         activityRegister: DottysRegisterActivity,
         registerData: DottysRegisterRequestModel
     ) {
@@ -341,18 +341,17 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
         val jsonObjectRequest = object : JsonObjectRequest(Method.POST,
             activityRegister.baseUrl + "users/register",
             jsonObject,
-            object : Response.Listener<JSONObject> {
+            Response.Listener<JSONObject> { response ->
+
                 // activityRegister.hideLoader(activityRegister)
-                override fun onResponse(response: JSONObject) {
-                    activityRegister.hideLoader()
+                activityRegister.hideLoader()
 
-                    var user: DottysLoginResponseModel =
-                        DottysLoginResponseModel.fromJson(
-                            response.toString()
-                        )
+                var user: DottysLoginResponseModel =
+                    DottysLoginResponseModel.fromJson(
+                        response.toString()
+                    )
 
-                    activityRegisterObserver?.registerUser = user
-                }
+                activityRegisterObserver?.registerUser = user
             },
             Response.ErrorListener { error ->
                 activityRegister.hideLoader()
@@ -380,7 +379,7 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
 /**
  * UPLOAD IMAGE
  * */
-    fun uploadImgage(context: DottysBaseActivity, imageData: ByteArray) {
+    fun uploadProfileImage(context: DottysBaseActivity, imageData: ByteArray) {
      // context.showLoader()
 
         val mQueue = Volley.newRequestQueue(context)

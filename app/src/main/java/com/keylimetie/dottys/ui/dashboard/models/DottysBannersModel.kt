@@ -36,4 +36,10 @@ data class DottysBanners (
     val image: String? = null,
     val createdAt: String? = null,
     val updatedAt: String? = null
-)
+){
+    fun toJson() = mapper.writeValueAsString(this)
+
+    companion object {
+        fun fromJson(json: String) = mapper.readValue<DottysBanners>(json)
+    }
+}

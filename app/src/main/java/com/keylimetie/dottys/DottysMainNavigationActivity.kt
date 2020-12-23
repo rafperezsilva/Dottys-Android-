@@ -285,7 +285,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
         if (this.getUserPreference().acl.isNullOrEmpty()) { return false }
           return when(this.getUserPreference().acl?.first()?.role){
             DottysRoleUser.USER                               -> false
-            DottysRoleUser.ADMIN, DottysRoleUser.REGION_ADMIN -> true
+            DottysRoleUser.ADMIN, DottysRoleUser.REGION_ADMIN, DottysRoleUser.SUPER_ADMIN -> true
             else                                              -> false
         }
 
@@ -349,7 +349,8 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream)
                 cameraPictureObserver?.imageFromCamera = bitmap
                 //val byteArray = pictureActivity.resizeBitmap(bitmap)
-                registerViewModel.uploadImgage(this, stream.toByteArray())
+
+                registerViewModel.uploadProfileImage(this, stream.toByteArray())
             } catch (e: IOException) {
                 e.printStackTrace()
             }

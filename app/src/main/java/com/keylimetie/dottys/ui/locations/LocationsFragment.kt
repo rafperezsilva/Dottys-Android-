@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.google.android.material.snackbar.Snackbar
+import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.R
 
@@ -59,9 +61,13 @@ class LocationsFragment : Fragment(), DottysLocationDelegates {
                 locationViewModel.initMapWHitMarker(it)
         }
         locationViewModel.screenDimensionManager(LocationViewType.COLLAPSE_TYPE)
+
         locations.locations?.let {
             locationViewModel.initExpandableList(activity as DottysMainNavigationActivity,
                 it)
+        }
+        if (locations.locations.isNullOrEmpty()){
+          (activity as DottysMainNavigationActivity).showSnackBarMessage("You have no stores near you at this time, please come  back later.")
         }
     }
 
@@ -99,3 +105,10 @@ class LocationsFragment : Fragment(), DottysLocationDelegates {
 }
 
 //class DottysStoreListAdapter
+
+
+fun DottysBaseActivity.showSnackBarMessage(msg: String){
+    val container = this.findViewById<View>(android.R.id.content)
+    Snackbar.make(container, msg, Snackbar.LENGTH_LONG).show()
+
+}

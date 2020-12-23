@@ -22,11 +22,16 @@ class DottysEnterVerificationCodeActivity : DottysBaseActivity(), DottysForgotPa
                 ColorDrawable(resources.getColor(R.color.colorPrimary))
             )
             val titleBar = actionBarView?.findViewById<TextView>(R.id.title_bar)
-            titleBar?.text = "Forgot Password"
+
             val mail = intent.getStringExtra("EMAIL_FORGOT")
               isFromVerifyCell = intent.getBooleanExtra("VERIFY_CELL", false)
             val isRegisterType = intent.getBooleanExtra("REGISTER_VIEW_TYPE", false)
             val userData = intent.getStringExtra("USER_DATA")
+            titleBar?.text = if (isRegisterType){
+                "Register"
+            }else {
+                "Forgot Password"
+            }
             viewFromProfile = intent.getBooleanExtra("VIEW_FROM_PROFILE", false)
             /*IF LET IMPLEMENTATION*/
             user = if (userData != null) {

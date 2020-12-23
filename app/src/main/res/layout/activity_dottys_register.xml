@@ -301,24 +301,29 @@ contain 1 uppercase and 1 lowercase letter."
                     android:layout_height="25dp"
                     android:src="@mipmap/calendar_icon" />
 
-                <TextView
-                    style="@style/TextViewRegisterStyle"
-                    android:text="Birthdate" />
+
                 <RelativeLayout
 
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content" >
-
+                    <TextView
+                        style="@style/TextViewRegisterStyle"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentBottom="true"
+                        android:text="Birthdate" />
                     <Button
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentTop="true"
-                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
                         android:layout_alignParentBottom="true"
                         android:id="@+id/phanton_birthdate_button"
                         android:layout_width="match_parent"
-                         android:layout_height="wrap_content"
-                        android:background="#000A9099"
+                         android:layout_height="match_parent"
+                        android:background="#00000000"
+                        android:layout_alignStart="@+id/birthdate_register_edit_text"
                         android:layout_alignBottom="@+id/birthdate_register_edit_text"/>
 
                     <EditText

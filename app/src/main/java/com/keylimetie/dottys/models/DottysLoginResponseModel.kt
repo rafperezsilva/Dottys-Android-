@@ -8,116 +8,66 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.keylimetie.dottys.ui.locations.StoreType
 
-val mapper = jacksonObjectMapper().apply {
+var mapper = jacksonObjectMapper().apply {
     propertyNamingStrategy = PropertyNamingStrategy.LOWER_CAMEL_CASE
     setSerializationInclusion(JsonInclude.Include.NON_NULL)
 }
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class DottysLoginResponseModel(
-    @get:JsonProperty("_id") @field:JsonProperty("_id")
-    var id: String?                  = null,
-    var deviceId: String?            = null,
-    var appVersion: String?          = null,
-    var updatedAt: String?           = null,
-    var createdAt: String?           = null,
-    var address1: String?            = null,
-    var address2: String?            = null,
-    var anniversaryDate: String?     = null,
-    var cell: String?                = null,
-    var dob: String?                 = null,
-    var email: String?               = null,
-    var firstName: String?           = null,
-    var lastName: String?            = null,
-    var state: String?               = null,
-    var zip: String?                 = null,
-    var lastKnownLocationId: String? = null,
-    var lastLoginAt: String?         = null,
-    var cellVerificationKey: String? = null,
+data class DottysLoginResponseModel (
+    var averageDailyPlayDuration: Long? = null,
+    var averageMonthlyPlayDays: Long? = null,
+    var averageMonthlyPlayDuration: Long? = null,
+    var cellVerified: Boolean? = null,
+    var deviceToken: Any? = null,
+    var emailVerified: Boolean? = null,
 
-    @get:JsonProperty("homeLocationId") @field:JsonProperty("homeLocationId")
-    var homeLocationID: String? = null,
+    @get:JsonProperty("isDeleted")@field:JsonProperty("isDeleted")
+    var isDeleted: Boolean? = null,
 
-    var updatedBy: String? = null,
-    var city: String? = null,
-    var timezone: String? = null,
-    var totalMonthlyPlayDuration: Long? = null,
-    var phoneNumberVerified: Boolean? = null,
-    var profilePicture: String? = null,
-    var weeklyVisits: Long? = null,
-    var weeklyPlayDuration: Long? = null,
-    var points: Long? = null,
-    var monthlyPlayDuration: Long? = null,
-    var lastPointsForCashRedeemed: Any? = null,
-    var lastPointsForCashBought: Any? = null,
-    var termsAccepted: Boolean? = false,
-
-    @get:JsonProperty("isOptOutFromMailingList") @field:JsonProperty("isOptOutFromMailingList")
+    @get:JsonProperty("isOptOutFromMailingList")@field:JsonProperty("isOptOutFromMailingList")
     var isOptOutFromMailingList: Boolean? = null,
 
-    @get:JsonProperty("isDeleted") @field:JsonProperty("isDeleted")
-    val isDeleted: Boolean? = null,
+    var termsAccepted: Boolean? = null,
+    var lastPointsForCashBought: Any? = null,
+    var lastPointsForCashRedeemed: Any? = null,
+    var monthlyPlayDuration: Long? = null,
+    var points: Long? = null,
+    var weeklyPlayDuration: Long? = null,
+    var weeklyVisits: Long? = null,
+    var tags: List<Any?>? = null,
 
-    var emailVerified: Boolean? = null,
-    var deviceToken: String? = null,
-    var cellVerified: Boolean? = null,
-    var averageMonthlyPlayDuration: Long? = null,
-    var averageMonthlyPlayDays: Long? = null,
-    var averageDailyPlayDuration: Long? = null,
-    var acl: List<DottysACL>? = listOf(DottysACL()),
+    @get:JsonProperty("_id")@field:JsonProperty("_id")
+    var id: String? = null,
+
+    var updatedAt: String? = null,
+    var createdAt: String? = null,
+    var email: String? = null,
+    var firstName: String? = null,
+    var lastName: String? = null,
+    var acl: List<ACL>? = null,
+    var lastLoginAt: String? = null,
+    var cell: String? = null,
+    var updatedBy: String? = null,
+    var address1: String? = null,
+    var appVersion: String? = null,
+    var city: String? = null,
+
+    @get:JsonProperty("deviceId")@field:JsonProperty("deviceId")
+    var deviceId: String? = null,
+
+    var state: String? = null,
+    var zip: String? = null,
+
+    @get:JsonProperty("homeLocationId")@field:JsonProperty("homeLocationId")
+    var homeLocationID: String? = null,
+
+    @get:JsonProperty("lastKnownLocationId")@field:JsonProperty("lastKnownLocationId")
+    var lastKnownLocationID: String? = null,
+
+    var timezone: String? = null,
+    var profilePicture: String? = null,
     var fullName: String? = null,
     var token: String? = null
-//    @get:JsonProperty("_id")@field:JsonProperty("_id")
-//    val id: String? = null,
-//
-//    val updatedAt: String? = null,
-//    val createdAt: String? = null,
-//    val address1: String? = null,
-//    val address2: String? = null,
-//    val anniversaryDate: Any? = null,
-//    val cell: String? = null,
-//    val dob: String? = null,
-//    val email: String? = null,
-//    val firstName: String? = null,
-//    val lastName: String? = null,
-//    val state: String? = null,
-//    val zip: String? = null,
-//    val lastLoginAt: String? = null,
-//
-//    @get:JsonProperty("homeLocationId")@field:JsonProperty("homeLocationId")
-//    val homeLocationID: String? = null,
-//
-//    val updatedBy: String? = null,
-//    val city: String? = null,
-//    val timezone: String? = null,
-//    val totalMonthlyPlayDuration: Long? = null,
-//
-//    @get:JsonProperty("deviceId")@field:JsonProperty("deviceId")
-//    val deviceID: String? = null,
-//
-//    val appVersion: String? = null,
-//    val weeklyVisits: Long? = null,
-//    val weeklyPlayDuration: Long? = null,
-//    val points: Long? = null,
-//    val monthlyPlayDuration: Long? = null,
-//    val lastPointsForCashRedeemed: String? = null,
-//    val lastPointsForCashBought: String? = null,
-//    val termsAccepted: Boolean? = null,
-//
-//    @get:JsonProperty("isOptOutFromMailingList")@field:JsonProperty("isOptOutFromMailingList")
-//    val isOptOutFromMailingList: Boolean? = null,
-//
-//    @get:JsonProperty("isDeleted")@field:JsonProperty("isDeleted")
-//    val isDeleted: Boolean? = null,
-//
-//    val emailVerified: Boolean? = null,
-//    val deviceToken: String? = null,
-//    val cellVerified: Boolean? = null,
-//    val averageMonthlyPlayDuration: Double? = null,
-//    val averageMonthlyPlayDays: Double? = null,
-//    val averageDailyPlayDuration: Double? = null,
-//    val acl: List<DottysACL>? = null,
-//    val fullName: String? = null,
-//    val token: String? = null
 ) {
     fun toJson() = mapper.writeValueAsString(this)
 
@@ -126,12 +76,13 @@ data class DottysLoginResponseModel(
     }
 }
 
-data class DottysACL(
-    @get:JsonProperty("_id") @field:JsonProperty("_id")
-    val id: String? = null,
-
-    val role: DottysRoleUser? = null
+data class ACL (
+    var role: DottysRoleUser? = null,
+    @get:JsonProperty("_id")@field:JsonProperty("_id")
+    var id: String? = null
 )
+
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class DottysRegisterModel(
     var email: String? = "",
@@ -142,13 +93,15 @@ data class DottysRegisterModel(
     var birthday: String? = ""
 )
 
-enum class DottysRoleUser(val value: String) {
+enum class DottysRoleUser(var varue: String) {
+    SUPER_ADMIN("SUPER_ADMIN"),
     ADMIN("ADMIN"),
     USER("USER"),
     REGION_ADMIN("REGION_ADMIN");
 
     companion object {
-        fun fromValue(value: String): DottysRoleUser = when (value) {
+        fun fromvarue(varue: String): DottysRoleUser = when (varue) {
+            "SUPER_ADMIN"     -> DottysRoleUser.SUPER_ADMIN
             "ADMIN"     -> DottysRoleUser.ADMIN
             "USER" -> DottysRoleUser.USER
             "REGION_ADMIN" -> DottysRoleUser.REGION_ADMIN
@@ -159,43 +112,43 @@ enum class DottysRoleUser(val value: String) {
     }
 }
 //region
-//val mapperBeacon = jacksonObjectMapper().apply {
+//var mapperBeacon = jacksonObjectMapper().apply {
 //    propertyNamingStrategy = PropertyNamingStrategy.LOWER_CAMEL_CASE
 //    setSerializationInclusion(JsonInclude.Include.NON_NULL)
 //}
 
 //data class DottysRegisterResponseModel(
-//    val lastLoginAt: String? = "",
-//    val updatedAt: String? = "",
-//    val createdAt: String? = "",
-//    val email: String? = "",
-//    val firstName: String? = "",
-//    val lastName: String? = "",
+//    var lastLoginAt: String? = "",
+//    var updatedAt: String? = "",
+//    var createdAt: String? = "",
+//    var email: String? = "",
+//    var firstName: String? = "",
+//    var lastName: String? = "",
 //
 //    @get:JsonProperty("_id") @field:JsonProperty("_id")
-//    val id: String? = null,
+//    var id: String? = null,
 //
-//    val weeklyVisits: Long? = null,
-//    val weeklyPlayDuration: Long? = null,
-//    val points: Long? = null,
-//    val monthlyPlayDuration: Long? = null,
-//    val lastPointsForCashRedeemed: Any? = null,
-//    val lastPointsForCashBought: Any? = null,
-//    val termsAccepted: Boolean? = null,
+//    var weeklyVisits: Long? = null,
+//    var weeklyPlayDuration: Long? = null,
+//    var points: Long? = null,
+//    var monthlyPlayDuration: Long? = null,
+//    var lastPointsForCashRedeemed: Any? = null,
+//    var lastPointsForCashBought: Any? = null,
+//    var termsAccepted: Boolean? = null,
 //
 //    @get:JsonProperty("isOptOutFromMailingList") @field:JsonProperty("isOptOutFromMailingList")
-//    val isOptOutFromMailingList: Boolean? = null,
+//    var isOptOutFromMailingList: Boolean? = null,
 //
 //    @get:JsonProperty("isDeleted") @field:JsonProperty("isDeleted")
-//    val isDeleted: Boolean? = null,
+//    var isDeleted: Boolean? = null,
 //
-//    val deviceToken: Any? = null,
-//    val averageMonthlyPlayDuration: Long? = null,
-//    val averageMonthlyPlayDays: Long? = null,
-//    val averageDailyPlayDuration: Long? = null,
-//    val acl: List<DottysACL>? = null,
-//    val fullName: String? = null,
-//    val token: String? = null
+//    var deviceToken: Any? = null,
+//    var averageMonthlyPlayDuration: Long? = null,
+//    var averageMonthlyPlayDays: Long? = null,
+//    var averageDailyPlayDuration: Long? = null,
+//    var acl: List<DottysACL>? = null,
+//    var fullName: String? = null,
+//    var token: String? = null
 //) {
 //    fun toJson() = mapper.writeValueAsString(this)
 //
@@ -209,7 +162,7 @@ data class DottysRegisterRequestModel(
 
     var address1: String? = null,
     var address2: String? = null,
-    var anniversaryDate: Any? = null,
+    var anniversaryDate: String? = null,
     var cell: String? = null,
     var email: String? = null,
     var firstName: String? = null,
@@ -230,7 +183,7 @@ data class DottysRegisterRequestModel(
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class DottysErrorModel (
     @get:JsonProperty("error") @field:JsonProperty("error")
-     val error: ErrorDottys? = null
+     var error: ErrorDottys? = null
 ) {
     fun toJson() = mapper.writeValueAsString(this)
 
@@ -240,6 +193,6 @@ data class DottysErrorModel (
 }
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class ErrorDottys (
-    val messages: List<String>? = null,
-    val stack: String? = null
+    var messages: List<String>? = null,
+    var stack: String? = null
 )

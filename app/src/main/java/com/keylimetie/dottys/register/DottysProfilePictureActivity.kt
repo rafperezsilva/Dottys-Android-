@@ -22,6 +22,7 @@ import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.DottysLoginResponseModel
 import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.R
+import com.keylimetie.dottys.utils.rotateBitmap
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.nio.ByteBuffer
@@ -75,8 +76,8 @@ class DottysProfilePictureActivity: DottysBaseActivity(), DottysRegisterUserDele
         }
     }
 
-     fun openCamera() {
-        val values = ContentValues()
+     private fun openCamera() {
+          val values = ContentValues()
         values.put(MediaStore.Images.Media.TITLE, "New Picture")
         values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera")
         image_uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
@@ -98,12 +99,13 @@ class DottysProfilePictureActivity: DottysBaseActivity(), DottysRegisterUserDele
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             try {
-                val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, image_uri).bitmapFixPosition(image_uri.toString())
+                val bitmapBase = MediaStore.Images.Media.getBitmap(contentResolver, image_uri)
+                val bitmap = if (bitmapBase.width > bitmapBase.height) bitmapBase.rotateBitmap() else bitmapBase
                 val stream = ByteArrayOutputStream()
-                bitmap?.compress(Bitmap.CompressFormat.JPEG, 50, stream)
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream)
                 userPictureBM = bitmap
                // val byteArray = resizeBitmap(bitmap)
-                registerViewModel.uploadImgage(this, stream.toByteArray())
+                registerViewModel.uploadProfileImage(this, stream.toByteArray())
             } catch (e: IOException) {
                 e.printStackTrace()
             }

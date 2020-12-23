@@ -133,9 +133,11 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
                         it.filter { it.redeemed == isRedeemed })
                 }
             }
+          redeemsUserData.rewards.let {
         titleRedeem?.text =
             attributedRedeemText(redeemsUserData.rewards?.filter { it.redeemed == isRedeemed }?.size.toString())
-
+          }
+          titleRedeem?.text =  attributedRedeemText("0")
     }
 
     private fun segmentTabLisener() {
@@ -184,7 +186,8 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
         } else {
             claimed = " claimed "
         }
-        val spannable = SpannableString("You have " + unclaimedRewards + claimed + "rewards!")
+        val spannable = SpannableString("You have " +   unclaimedRewards
+          + claimed + "rewards!")
         spannable.setSpan(
             ForegroundColorSpan(Color.YELLOW),
             8, 9 + unclaimedRewards.length,

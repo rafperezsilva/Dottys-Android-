@@ -25,10 +25,7 @@ import com.keylimetie.dottys.models.DottysGlobalDataModel
 import com.keylimetie.dottys.models.DottysRewardsModel
 import com.keylimetie.dottys.register.DottysRegisterActivity
 import com.keylimetie.dottys.splash.getVersionApp
-import com.keylimetie.dottys.ui.dashboard.models.DottysBanners
-import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconArray
-import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconsModel
-import com.keylimetie.dottys.ui.dashboard.models.DottysDrawingSumaryModel
+import com.keylimetie.dottys.ui.dashboard.models.*
 import com.keylimetie.dottys.ui.drawing.DottysDrawingDelegates
 import com.keylimetie.dottys.ui.drawing.models.DottysDrawingRewardsModel
 import com.keylimetie.dottys.ui.drawing.models.DottysDrawingUserModel
@@ -111,8 +108,8 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
 
         activity?.requestLocation(activity.gpsTracker, activity)
         activity?.gpsTracker?.locationGps?.let { activity.gpsTracker?.onLocationChanged(it) }
-
         mainHandler.post(updateTextTask)
+        dashboardViewModel.refreshItemsAtView()
     }
 
     override fun onPause() {
@@ -151,10 +148,10 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
         if (profileData?.toJson()
                 ?.isEquivalentToString(activityMain?.getUserPreference()?.toJson()) == false or isUpdateable )
         {
-            Log.d("DASHBOAR", "PROFILE ITS BEGIN TO UPADATE")                       
+            Log.d("DASHBOARD", "PROFILE ITS BEGIN TO UPADATE")
             val profileViewModel = ProfileViewModel(null, profileData)
             profileData.let {
-                profileViewModel.uploadProfile(it, activityMain)
+                it?.let { it1 -> profileViewModel.uploadProfile(it1, activityMain) }
                 profileViewModel.profileUpdateObserver = DottysProfileObserver(this)
             }
         }
@@ -194,15 +191,6 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
                 val intent = Intent(activity as DottysMainNavigationActivity, DottysRegisterActivity::class.java)
                 intent.putExtra("IS_REGISTER_USER", true)
                 (activity as DottysMainNavigationActivity)?.startActivity(intent)
-
-
-//
-//                    var intent = Intent(this, DottysEnterVerificationCodeActivity::class.java)
-//                    intent.putExtra("EMAIL_FORGOT", strUser)
-//                    intent.putExtra("VIEW_FROM_PROFILE",   viewFromProfile)
-//                    startActivity(intent)
-
-
             }
             else -> {
                   dashboardViewModel.initDashboardButtons()
@@ -276,9 +264,11 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
      *          1
      *   BANNER AT DASHBOARD
      *   **/
-    override fun onDashboardBanners(banners: ArrayList<DottysBanners>) {
-        addPagerDashboardImages(banners.sortedBy { it.priority })
+    override fun onDashboardBanners(banners: DottysBannerModel) {
+        val bannersList = banners.bannerList?.sortedBy { it.priority }
+        addPagerDashboardImages(bannersList ?: return)
         dashboardViewModel.getUserRewards(activity as DottysMainNavigationActivity)
+        (activity as DottysMainNavigationActivity).saveDataPreference(PreferenceTypeKey.BANNERS, banners.toJson())
     }
 
     /** 2 **/
@@ -409,7 +399,7 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
 
     override fun allItemsCollapse(isColappse: Boolean) {}
 
-    private fun addPagerDashboardImages(bannerList: List<DottysBanners>) {
+      fun addPagerDashboardImages(bannerList: List<DottysBanners>) {
         val activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity
         var limitOfFlipperView: Int = bannerList.size
         if (bannerList.size > staticImagesResouerce.size) {

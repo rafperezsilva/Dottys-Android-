@@ -3,8 +3,6 @@ package com.keylimetie.dottys.login
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import android.view.KeyEvent
-import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView

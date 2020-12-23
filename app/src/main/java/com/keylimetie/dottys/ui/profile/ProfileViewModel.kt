@@ -6,8 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.hardware.Camera
-import android.hardware.camera2.CameraManager
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
@@ -25,13 +23,7 @@ import com.android.volley.toolbox.Volley
 import com.keylimetie.dottys.*
 import com.keylimetie.dottys.forgot_password.DottysVerificationTypeActivity
 import com.keylimetie.dottys.register.DottysProfilePictureActivity
-import com.keylimetie.dottys.ui.drawing.DottysDrawingDelegates
-import com.keylimetie.dottys.ui.drawing.models.DottysDrawingRewardsModel
-import com.keylimetie.dottys.ui.drawing.models.DottysDrawingUserModel
-import com.keylimetie.dottys.utils.DottysCameraActivity
-import com.keylimetie.dottys.utils.DottysStatics.Companion.PICTURE_TAKE_REQUEST_CODE
 import com.keylimetie.dottys.utils.md5
-import com.keylimetie.dottys.utils.rotateCustomBitmap
 import com.keylimetie.dottys.utils.stringGetYear
 import de.hdodenhof.circleimageview.CircleImageView
 import org.json.JSONObject
@@ -107,11 +99,18 @@ class ProfileViewModel(
         emailEditText?.setText(userData?.email)
         passwordEditButton?.text = "Change Password"
         myPlayLocation?.setText(userData?.zip)
-        userLocation?.text = "Dottys\n ${userData?.address1}\n${userData?.city}. ${userData?.state} ${userData?.zip}"
+        userData?.address1?.let {
+            userLocation?.text =
+                "${userData?.address1 ?: ""}\n${userData?.city ?: ""}. ${userData?.state ?: ""} ${userData?.zip ?: ""}"
+        }
     }
 
     private fun setImageProfile(rootActivity: DottysBaseActivity){
-        val email = rootActivity?.getUserPreference()?.email//"mrirenita@gmail.com"
+        rootActivity.userPictureBM?.let {
+            imageViewProfile?.setImageBitmap(it)
+            return
+        }
+        val email = rootActivity?.getUserPreference()?.email
         var url = "https://www.gravatar.com/avatar/" + email?.md5() + "?s=400&r=pg&d=404"
         if (rootActivity?.getUserPreference()?.profilePicture != null){
             url = rootActivity?.getUserPreference()?.profilePicture ?: ""

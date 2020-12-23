@@ -12,6 +12,7 @@ import com.estimote.coresdk.recognition.packets.Beacon
 import com.estimote.coresdk.service.BeaconManager
 import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.PreferenceTypeKey
+import com.keylimetie.dottys.saveDataPreference
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeacon
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconArray
 import java.util.*

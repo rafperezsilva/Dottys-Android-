@@ -7,10 +7,7 @@ import android.os.Bundle
 import android.widget.DatePicker
 import android.widget.TextView
 import android.widget.Toast
-import com.keylimetie.dottys.DottysBaseActivity
-import com.keylimetie.dottys.DottysLoginResponseModel
-import com.keylimetie.dottys.PreferenceTypeKey
-import com.keylimetie.dottys.R
+import com.keylimetie.dottys.*
 import java.time.LocalDate
 import java.util.*
 
