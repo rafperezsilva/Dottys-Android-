@@ -120,5 +120,9 @@ Sed commodo tellus sit amet nisi scelerisque volutpat. Nam ac sapien ac felis ve
 
     <!-- Content Description Strings -->
     <string name="android_map_description">An Android robot with a map</string>
+    <string name="password_policy_check_message">The password must be at least 6 characters long and contain 1 uppercase letter and 1 lowercase letter</string>
+    <string name="legal_age_message">You must be 21 years old to participate.</string>
+    <string name="terms_and_conditions_messages">You must agree to the Terms &amp; Conditions and Privacy Policy to proceed</string>
+    <string name="complete_all_fields">All field must be complete!</string>
 
 </resources>

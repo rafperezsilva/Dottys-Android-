@@ -23,6 +23,7 @@ import com.keylimetie.dottys.beacon_service.DottysBeaconActivityDelegate
 import com.keylimetie.dottys.beacon_service.DottysBeaconActivityObserver
 import com.keylimetie.dottys.models.DottysGlobalDataModel
 import com.keylimetie.dottys.models.DottysRewardsModel
+import com.keylimetie.dottys.register.DottysProfilePictureActivity
 import com.keylimetie.dottys.register.DottysRegisterActivity
 import com.keylimetie.dottys.splash.getVersionApp
 import com.keylimetie.dottys.ui.dashboard.models.*
@@ -55,15 +56,18 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
     var maxChildFlipperView = 0
     var flipperViewDashboard: ViewFlipper? = null
     var mainActivity = activity as DottysMainNavigationActivity?
-
+    private val updateTextTask = object : Runnable {
+        override fun run() {
+            gotToNextBanner()
+            mainHandler.postDelayed(this, 5000)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-//        homeViewModel =
-//            ViewModelProviders.of(this).get(DashboardViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
         viewFragment = root
         flipperViewDashboard = viewFragment?.findViewById<ViewFlipper>(R.id.flipper_view_dashboard)
@@ -75,16 +79,11 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
         }
         activity?.hideCustomKeyboard()
         activity?.beaconService?.observer = DottysBeaconActivityObserver(this)
-        //activity?.let { homeViewModel.getBannerDashboard(it) }
         mainHandler = Handler(Looper.getMainLooper())
         return root
     }
-    private val updateTextTask = object : Runnable {
-        override fun run() {
-            gotToNextBanner()
-            mainHandler.postDelayed(this, 5000)
-        }
-    }
+
+
 
     override fun onStart() {
         super.onStart()
@@ -197,7 +196,7 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
                   dashboardViewModel.getBannerDashboard(activity as DottysMainNavigationActivity)
               }
           }
-        
+
 
         //TODO dashboardViewModel.getDrawingSummary(activity as DottysMainNavigationActivity)
         //updateDataAtProfile(activity as DottysMainNavigationActivity)
@@ -289,7 +288,9 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
                 it?.longitude.toString())
         }
 
-
+        //TODO REMOVE INTENT
+//        var intent = Intent(activity, DottysProfilePictureActivity::class.java)
+//        startActivity(intent)
         //viewFragment?.let { activity?.let { it1 -> dashboardViewModel.addProfileImage(it1, it) } }
         //   dashboardViewModel.drawingViewModel.drawingObserver = DottysDrawingObserver(this)
 

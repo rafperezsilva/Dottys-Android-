@@ -23,7 +23,7 @@ import kotlin.properties.Delegates
 
 
 enum class LocationViewType {
-    SEARCH_TYPE, EXPANDED_TYPE, COLLAPSE_TYPE
+    SEARCH_TYPE, EXPANDED_TYPE, COLLAPSE_TYPE, MAP_FULL
 }
 
 class DottysLocationsStoreAdapter(

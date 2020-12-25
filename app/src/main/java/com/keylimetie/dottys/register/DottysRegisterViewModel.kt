@@ -23,6 +23,7 @@ import com.keylimetie.dottys.forgot_password.DottysEnterVerificationCodeActivity
 import com.keylimetie.dottys.login.DottysLoginDelegate
 import com.keylimetie.dottys.login.DottysLoginObserver
 import com.keylimetie.dottys.login.DottysLoginViewModel
+import com.keylimetie.dottys.ui.locations.showSnackBarMessage
 import com.keylimetie.dottys.utils.volley_multipart.VolleyMultipartRequest
 import com.keylimetie.dottys.utils.isValidPassword
 import org.json.JSONObject
@@ -115,7 +116,9 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
        termsOfServiceLabel?.setOnClickListener(this)
        privacyPolicyLabel?.setOnClickListener(this)
        singFromRegister?.setOnClickListener(this)
-    }
+       val scrollView = activityRegister.findViewById<ScrollView>(id.register_scroll_view)
+       scrollView.alpha = if(isRegisterUser) 0.0f else 1.0f
+     }
 
     private fun initLoginFloatinItems(){
          emailEditTextFloating    = activityRegister?.findViewById<EditText>(R.id.email_floating_edit_text)
@@ -169,7 +172,7 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
 //            }
 //        }
         phantonBirthdayButton?.setOnClickListener {
-
+            activityRegister?.hideCustomKeyboard()
             datePickerDialog?.show() }
     }
 
@@ -212,29 +215,20 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
     ): Boolean {
         for (item in editTextData) {
             if (item?.text?.isEmpty() == true) {
-                Toast.makeText(activityRegister, "All field must be complete!", Toast.LENGTH_LONG)
-                    .show()
+                activityRegister.showSnackBarMessage(activityRegister.getString(R.string.complete_all_fields))
                 return false
             }
         }
         if (!passwordEditText?.text.toString().isValidPassword()) {
-            Toast.makeText(
-                activityRegister,
-                "Password must be at least 6 characters in length and contain 1 uppercase and 1 lowercase letter.",
-                Toast.LENGTH_LONG
-            ).show()
+            activityRegister.showSnackBarMessage(activityRegister.getString(R.string.password_policy_check_message))
             return false
         }
         if (legalAgeCheckBox?.isChecked != true) {
-            Toast.makeText(activityRegister, "You must be 21 years old to participate.", Toast.LENGTH_LONG).show()
+            activityRegister.showSnackBarMessage(activityRegister.getString(R.string.legal_age_message))
             return false
         }
         if (termsAndConditionsCheckBox?.isChecked != true) {
-            Toast.makeText(
-                activityRegister,
-                "You must agree to the Terms & Conditions and Privacy Policy to proceed\n",
-                Toast.LENGTH_LONG
-            ).show()
+            activityRegister.showSnackBarMessage(activityRegister.getString(R.string.terms_and_conditions_messages))
             return false
         }
         fillDataForRegisterRequest(editTextData)
@@ -379,8 +373,8 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
 /**
  * UPLOAD IMAGE
  * */
-    fun uploadProfileImage(context: DottysBaseActivity, imageData: ByteArray) {
-     // context.showLoader()
+    fun   uploadProfileImage(context: DottysBaseActivity, imageData: ByteArray) {
+      context.showLoader()
 
         val mQueue = Volley.newRequestQueue(context)
         val params = HashMap<String, String>()

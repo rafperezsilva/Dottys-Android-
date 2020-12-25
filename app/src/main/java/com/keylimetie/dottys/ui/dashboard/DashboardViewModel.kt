@@ -161,6 +161,7 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
         badgeCounterDrawingManager(drawingBadgeCounter ?: 0)
         hideAnalitycsView(mainFragmentActivity ?: return)
         fragmentDashBoard?.addPagerDashboardImages(mainActivity?.getBannersStored()?.bannerList?.sortedBy { it.priority } ?: return)
+        addProfileImage(mainFragmentActivity ?: return, dashboardView  ?: return)
     }
 
     // FILL DATA NAME AND BUTTON DASHBOARD
@@ -238,10 +239,6 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
                     .transform(CircleTransform()).into(imageView)
             }
         }
-         imageView.drawable?.toBitmap(100,100,null)?.let {
-             mainFragmentActivity?.userPictureBM = it
-        }
-
     }
 
 
@@ -456,16 +453,7 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
                     Log.e("TAG", error.message, error)
                 }
             }) { //no semicolon or coma
-            //           override fun getParams(): MutableMap<String, String> {
-//               val location = mContext.getLocation(mContext.gpsTracker,mContext)
-//               val params = HashMap<String, String>()
-//               params["latitude"] = location.latitude.toString()
-//               params["longitude"] = location.longitude.toString()
-//               params["limit"] = "50"F
-//               params["page"] = "1"
-//               params["distance"] = "50"
-//               return params
-//           }
+
             @Throws(AuthFailureError::class)
             override fun getHeaders(): Map<String, String> {
                 val params = HashMap<String, String>()
@@ -634,8 +622,6 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
                 Log.d("BEACON LIST", response.toString())
                 return super.parseNetworkResponse(response)
             }
-
-
         }
         mQueue.add(jsonObjectRequest)
 
@@ -751,17 +737,6 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
                 (mainFragmentActivity?.getBeaconStatus()?.beaconArray?.first()?.location?.storeNumber ?: 0).toString()
              else
                 "Has no nearest locations"
-
-//                "Store #${
-//                    mainFragmentActivity?.getBeaconStatus().let {
-//                        it.let {
-//                            it?.beaconArray?.let { it.first()?.location?.storeNumber }
-//                        }
-//                    }
-//                        ?: ""
-//                }"
-
-
         }
         var listViewRewards =
             mainFragmentActivity?.findViewById<ListView>(R.id.beacons_analytics_listview)

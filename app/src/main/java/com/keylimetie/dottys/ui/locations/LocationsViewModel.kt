@@ -176,6 +176,9 @@ class LocationsViewModel(val contextMain: DottysBaseActivity) : ViewModel(),
             LocationViewType.SEARCH_TYPE -> {
                 return 1.0
             }
+            LocationViewType.MAP_FULL -> {
+                return screenHeigth.toDouble()
+            }
         }
 
     }

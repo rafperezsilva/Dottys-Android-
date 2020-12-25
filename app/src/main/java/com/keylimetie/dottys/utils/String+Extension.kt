@@ -54,8 +54,8 @@ fun String.isValidPassword(): Boolean {
     var mssg = String()
     // Password policy check
     // Password should be minimum minimum 8 characters long
-    if (str.length < 8) {
-        mssg = "Must be have at least 7 characters"
+    if (str.length < 7) {
+        mssg = "Must be have at least 6 characters"
         valid = false
     }
     // Password should contain at least one number

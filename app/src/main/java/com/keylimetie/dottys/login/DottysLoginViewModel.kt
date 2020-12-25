@@ -17,6 +17,7 @@ import com.dottysrewards.dottys.service.VolleyService
 import com.keylimetie.dottys.*
 import com.keylimetie.dottys.forgot_password.DottysForgotPasswordMainActivity
 import com.keylimetie.dottys.register.DottysRegisterActivity
+import com.keylimetie.dottys.ui.locations.showSnackBarMessage
 import org.json.JSONObject
 import kotlin.properties.Delegates
 
@@ -48,11 +49,8 @@ open class DottysLoginViewModel : ViewModel() { //}, TextView.OnEditorActionList
             Context.MODE_PRIVATE
         )
 
-//        emailEditText?.setOnEditorActionListener(this)
-//        passwordEditText?.setOnEditorActionListener(this)
         activityLogin.editor = activityLogin.sharedPreferences!!.edit()
         VolleyService.initialize(mContext!!)
-        //userRegisterData = DottysRegisterObservers(activityRegister)
         buttonsClickLiseners()
   }
 
@@ -78,18 +76,22 @@ open class DottysLoginViewModel : ViewModel() { //}, TextView.OnEditorActionList
         }
     }
 
-    fun checkUserLoginInfo(): Boolean {
-        if (emailEditText?.text?.toString() == "") {
-            Toast.makeText(mContext, "Email field are empty", Toast.LENGTH_SHORT).show()
-            return false
-        } else if (passwordEditText?.text?.toString() == "") {
-            Toast.makeText(mContext, "Password field are empty", Toast.LENGTH_SHORT).show()
-            return false
-        } else if (passwordEditText?.text?.length!! < 5) {
-            Toast.makeText(mContext, "Password too short", Toast.LENGTH_SHORT).show()
-            return false
+    private fun checkUserLoginInfo(): Boolean {
+        return when {
+            emailEditText?.text?.toString() == "" -> {
+                Toast.makeText(mContext, "Email field are empty", Toast.LENGTH_SHORT).show()
+                false
+            }
+            passwordEditText?.text?.toString() == "" -> {
+                Toast.makeText(mContext, "Password field are empty", Toast.LENGTH_SHORT).show()
+                false
+            }
+            passwordEditText?.text?.length!! < 5 -> {
+                Toast.makeText(mContext, "Password too short", Toast.LENGTH_SHORT).show()
+                false
+            }
+            else -> true
         }
-        return true
     }
 
     fun loginUserRequest(modelRegister: DottysRegisterModel, mContext: DottysBaseActivity) {
@@ -121,21 +123,13 @@ open class DottysLoginViewModel : ViewModel() { //}, TextView.OnEditorActionList
                     mContext?.hideLoader()
                     mContext.hideCustomKeyboard()
                     if (error.networkResponse == null) {
-                        Toast.makeText(
-                            mContext,
-                            "Please, check your internet connection.",
-                            Toast.LENGTH_LONG
-                        ).show()
+                          mContext.showSnackBarMessage("Please, check your internet connection.")
                         return
                     }
                     val errorRes =
                         DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                     if (errorRes.error?.messages?.size ?: 0 > 0) {
-                        Toast.makeText(
-                            mContext,
-                            errorRes.error?.messages?.first() ?: "",
-                            Toast.LENGTH_LONG
-                        ).show()
+                            mContext.showSnackBarMessage(errorRes.error?.messages?.first() ?: "")
                     }
                     Log.e("TAG", error.message, error)
                 }

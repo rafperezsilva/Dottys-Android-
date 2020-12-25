@@ -29,7 +29,7 @@ class LocationsFragment : Fragment(), DottysLocationDelegates {
         var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity
         locationViewModel = activity?.let { LocationsViewModel(it) } ?: return root
         activity.let { locationViewModel.initLocationView(this, activity, root) }
-
+        locationViewModel.screenDimensionManager(LocationViewType.MAP_FULL)
 // = activity.getUserNearsLocations().locations?.filter { it.storeType.name }
 //TODO
 //        for (location in  activity.getUserNearsLocations().locations ?: return root ){
@@ -67,6 +67,7 @@ class LocationsFragment : Fragment(), DottysLocationDelegates {
                 it)
         }
         if (locations.locations.isNullOrEmpty()){
+            locationViewModel.screenDimensionManager(LocationViewType.MAP_FULL)
           (activity as DottysMainNavigationActivity).showSnackBarMessage("You have no stores near you at this time, please come  back later.")
         }
     }
@@ -108,6 +109,7 @@ class LocationsFragment : Fragment(), DottysLocationDelegates {
 
 
 fun DottysBaseActivity.showSnackBarMessage(msg: String){
+    this.hideCustomKeyboard()
     val container = this.findViewById<View>(android.R.id.content)
     Snackbar.make(container, msg, Snackbar.LENGTH_LONG).show()
 

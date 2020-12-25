@@ -42,6 +42,7 @@ import com.keylimetie.dottys.ui.drawing.DrawingViewModel
 import com.keylimetie.dottys.ui.drawing.RewardsSegment
 import com.keylimetie.dottys.ui.drawing.models.DottysDrawingRewardsModel
 import com.keylimetie.dottys.ui.drawing.models.DottysDrawingUserModel
+import com.keylimetie.dottys.ui.locations.showSnackBarMessage
 import com.keylimetie.dottys.utils.rotateBitmap
 import java.io.ByteArrayOutputStream
 import java.io.IOException
@@ -106,6 +107,9 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
                                 R.id.nav_rewards -> {
                                     segmentSelect = RewardsSegment.CASH_REWARDS
                                 }
+//                                R.id.nav_logout -> {
+//                                    toolbar.visibility = View.GONE
+//                                }
                             }
                             logoAppBar.visibility = View.INVISIBLE
                         }
@@ -188,7 +192,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
         } else if (navView?.menu?.contains(navView?.menu?.findItem(R.id.nav_contact_suppport) ?: return) == false){
             navView?.menu?.add(R.id.nav_contact_suppport,R.id.nav_contact_suppport,R.id.nav_contact_suppport, getString(R.string.menu_contact_support))
         }
-    }
+     }
 
 
     fun initAnalitycsItems(beaconList: ArrayList<DottysBeacon>?) {
@@ -344,7 +348,13 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
             try {
 
                 val bitmapBase = MediaStore.Images.Media.getBitmap(contentResolver, image_uri)
-                val bitmap = if (bitmapBase.width > bitmapBase.height) bitmapBase.rotateBitmap() else bitmapBase
+                val bitmap = if (bitmapBase.width > bitmapBase.height) {
+                    showSnackBarMessage("ROTATED BITMAP")
+                    bitmapBase.rotateBitmap()
+                } else {
+                    showSnackBarMessage("NO ROTATED")
+                    bitmapBase
+                }
                 val stream = ByteArrayOutputStream()
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream)
                 cameraPictureObserver?.imageFromCamera = bitmap

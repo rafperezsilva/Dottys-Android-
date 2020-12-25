@@ -16,6 +16,7 @@ import com.keylimetie.dottys.*
 import com.keylimetie.dottys.forgot_password.VerificationMethodType.EMAIL
 import com.keylimetie.dottys.forgot_password.VerificationMethodType.SMS
 import com.keylimetie.dottys.register.DottysRegisterViewModel
+import com.keylimetie.dottys.ui.locations.showSnackBarMessage
 import com.keylimetie.dottys.utils.isValidEmail
 import com.keylimetie.dottys.utils.isValidPassword
 import org.json.JSONObject
@@ -397,10 +398,12 @@ open class DottysForgotPasswordViewModel : ViewModel()  {
         enterNewPasswordEditText  = changePassActivity.findViewById<EditText>(R.id.confirm_new_password_login_edittext)
         submitNewPasswordButton  = changePassActivity.findViewById<Button>(R.id.submit_enter_password_button)
         submitNewPasswordButton?.setOnClickListener {
-            if (newPasswordEditText?.text.toString() == enterNewPasswordEditText?.text.toString() && newPasswordEditText?.text.toString().isValidPassword()) {
-                changePassword(changePassActivity, mail, newPasswordEditText?.text.toString(), code)
+            if (newPasswordEditText?.text.toString() != enterNewPasswordEditText?.text.toString()) {
+                changePassActivity.showSnackBarMessage(changePassActivity.getString(R.string.password_policy_check_message))
+            } else  if (!newPasswordEditText?.text.toString().isValidPassword()){
+                changePassActivity.showSnackBarMessage("Password must match")
             } else {
-                Toast.makeText(changePassActivity, "Password must match", Toast.LENGTH_LONG).show()
+                changePassword(changePassActivity, mail, newPasswordEditText?.text.toString(), code)
             }
         }
     }

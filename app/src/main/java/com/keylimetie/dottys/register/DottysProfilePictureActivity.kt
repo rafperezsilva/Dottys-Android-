@@ -18,10 +18,8 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
-import com.keylimetie.dottys.DottysBaseActivity
-import com.keylimetie.dottys.DottysLoginResponseModel
-import com.keylimetie.dottys.DottysMainNavigationActivity
-import com.keylimetie.dottys.R
+import com.keylimetie.dottys.*
+import com.keylimetie.dottys.ui.locations.showSnackBarMessage
 import com.keylimetie.dottys.utils.rotateBitmap
 import java.io.ByteArrayOutputStream
 import java.io.IOException
@@ -29,7 +27,8 @@ import java.nio.ByteBuffer
 import kotlin.math.roundToInt
 
 
-class DottysProfilePictureActivity: DottysBaseActivity(), DottysRegisterUserDelegates, View.OnClickListener {
+class DottysProfilePictureActivity: DottysBaseActivity(), DottysRegisterUserDelegates, View.OnClickListener
+   {
       val PERMISSION_CODE = 1000
       val IMAGE_CAPTURE_CODE = 1001
     var image_uri: Uri? = null
@@ -77,33 +76,54 @@ class DottysProfilePictureActivity: DottysBaseActivity(), DottysRegisterUserDele
     }
 
      private fun openCamera() {
-          val values = ContentValues()
-        values.put(MediaStore.Images.Media.TITLE, "New Picture")
-        values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera")
-        image_uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
-        //camera intent
-        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+//          val values = ContentValues()
+//        values.put(MediaStore.Images.Media.TITLE, "New Picture")
+//        values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera")
+//        image_uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+//        //camera intent
+//        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+//         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+//             cameraIntent.putExtra("android.intent.extras.CAMERA_FACING",
+//                 android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT);
+//             cameraIntent.putExtra("android.intent.extras.LENS_FACING_FRONT", 1);
+//             cameraIntent.putExtra("android.intent.extra.USE_FRONT_CAMERA", true);
+//         } else {
+//             cameraIntent.putExtra("android.intent.extras.CAMERA_FACING", 1);
+//         }
+//        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri)
+//        startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE)
+         val values = ContentValues()
+         values.put(MediaStore.Images.Media.TITLE, "New Picture")
+         values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera")
+         image_uri = contentResolver?.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+             values)
+         //camera intent
+
+
+         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-             cameraIntent.putExtra("android.intent.extras.CAMERA_FACING",
-                 android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT);
-             cameraIntent.putExtra("android.intent.extras.LENS_FACING_FRONT", 1);
+             // cameraIntent.putExtra("android.intent.extras.CAMERA_FACING", android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT);
+             //  cameraIntent.putExtra("android.intent.extras.LENS_FACING_FRONT", 1);
              cameraIntent.putExtra("android.intent.extra.USE_FRONT_CAMERA", true);
          } else {
              cameraIntent.putExtra("android.intent.extras.CAMERA_FACING", 1);
          }
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri)
-        startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE)
+         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri)
+
+         startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE)
      }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             try {
+                //val cameraPictureObserver = DottysProfilePictureObserver(this)
                 val bitmapBase = MediaStore.Images.Media.getBitmap(contentResolver, image_uri)
                 val bitmap = if (bitmapBase.width > bitmapBase.height) bitmapBase.rotateBitmap() else bitmapBase
                 val stream = ByteArrayOutputStream()
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream)
                 userPictureBM = bitmap
+
                // val byteArray = resizeBitmap(bitmap)
                 registerViewModel.uploadProfileImage(this, stream.toByteArray())
             } catch (e: IOException) {
@@ -124,7 +144,9 @@ class DottysProfilePictureActivity: DottysBaseActivity(), DottysRegisterUserDele
 
     override fun imageProfileHasUploaded(hasUploaded: Boolean) {
         val intent = Intent(this, DottysMainNavigationActivity::class.java)
-        startActivity(intent)
+        intent.putExtra("HAS_UPLOADED_IMAGE",true)
+        showSnackBarMessage("HAS IMAGE UPLOADED $hasUploaded ${userPictureBM?.byteCount}")
+      startActivity(intent)
     }
 
     override fun onClick(v: View?) {

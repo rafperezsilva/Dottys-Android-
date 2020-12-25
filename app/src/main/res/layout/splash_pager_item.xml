@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#00000000">
+    android:background="#00000000"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -18,24 +18,23 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:layout_weight="0"
             android:id="@+id/title_pager"
             style="@style/TextViewPrimaryStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
-            android:text="PRUEBS DE TEXTO"
-            android:textSize="26sp"
+            android:layout_weight="0"
             android:fontFamily="@font/proxima_nova_light"
-            />
+            android:text="PRUEBS DE TEXTO"
+            android:textSize="26sp" />
 
         <ImageView
-            android:src="@mipmap/dottys_image"
             android:id="@+id/image_top_pager"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_weight="0"
-             android:scaleType="centerInside" />
+            android:scaleType="centerInside"
+            android:src="@mipmap/dottys_image" />
 
         <ImageView
             android:id="@+id/image_pager"
@@ -46,31 +45,30 @@
 
 
         <TextView
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_weight="0"
-            android:textSize="17dp"
-            android:fontFamily="@font/proxima_nova_regular"
             android:id="@+id/subtitle_pager"
             style="@style/TextViewPrimaryStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:layout_marginTop="35dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="0"
+            android:fontFamily="@font/proxima_nova_regular"
             android:text="PRUEBS DE TEXTO"
-            app:layout_constraintBottom_toTopOf="@+id/splash_swipe_static_textview"
-            />
+            android:textSize="17dp"
+            app:layout_constraintBottom_toTopOf="@+id/splash_swipe_static_textview" />
+
         <TextView
             android:id="@+id/splash_swipe_static_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:textSize="14dp"
             android:layout_marginTop="8dp"
-            android:textColor="#FFF"
-            android:textAlignment="center"
-            android:text="Swipe to learn how."
+            android:layout_marginBottom="5dp"
             android:fontFamily="@font/proxima_nova_light"
-            app:layout_constraintBottom_toTopOf="@+id/indicator"
-             />
+            android:text="Swipe to learn how."
+            android:textAlignment="center"
+            android:textColor="#FFF"
+            android:textSize="14dp"
+            app:layout_constraintBottom_toTopOf="@+id/indicator" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

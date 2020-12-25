@@ -73,6 +73,11 @@ class DottysRegisterActivity : DottysBaseActivity(), DatePickerDialog.OnDateSetL
         registerViewModel.showPreVerificationLayer(this)
     }
 
+    override fun onBackPressed() {
+        if (!registerViewModel.isRegisterUser)
+        super.onBackPressed()
+    }
+
     override fun imageProfileHasUploaded(hasUploaded: Boolean) {
 //        val intent = Intent(this, DottysMainNavigationActivity::class.java)
 //        startActivity(intent)

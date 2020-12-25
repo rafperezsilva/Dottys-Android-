@@ -23,6 +23,7 @@ class DottysLoginActivity : DottysBaseActivity(), DottysLoginDelegate {
         titleBar.text = "Log In"
         setBackButton()
         backButton?.setImageResource(R.drawable.close_icon)
+        removeReferenceData(PreferenceTypeKey.USER_DATA)
     }
 
     override fun onUserLogin(registerUserData: DottysLoginResponseModel) {

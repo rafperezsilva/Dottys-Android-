@@ -251,11 +251,11 @@ class ProfileViewModel(
                     val errorRes =
                         DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                     if (errorRes.error?.messages?.size ?: 0 > 0) {
-                        Toast.makeText(
-                            activity,
-                            errorRes.error?.messages?.first() ?: "",
-                            Toast.LENGTH_LONG
-                        ).show()
+//                        Toast.makeText(
+//                            activity,
+//                            errorRes.error?.messages?.first() ?: "",
+//                            Toast.LENGTH_LONG
+//                        ).show()
                     }
                     Log.e("TAG", error.message, error)
                  //    profileUpdateObserver?.updateProfile = null
