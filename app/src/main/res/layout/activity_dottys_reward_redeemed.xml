@@ -37,13 +37,11 @@
         app:layout_constraintTop_toBottomOf="@+id/host_id_textview" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+      android:padding="10dp"
         android:id="@+id/ticket_redemeed_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="25dp"
+        android:layout_margin="25dp"
         app:layout_constraintBottom_toTopOf="@+id/start_swipe"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,41 +49,56 @@
 
         <ImageView
             android:id="@+id/ticket_redemeed_container2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:scaleType="fitXY"
             android:src="@mipmap/ticket_redemeed_image"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginTop="10dp"
-            android:fontFamily="@font/proxima_nova_extrabold"
-             android:textColor="#1E1E1E"
-             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/ticket_redemeed_container2" />
 
-        <ImageView
-            android:id="@+id/reward_barcode"
-            android:layout_width="220dp"
-            android:layout_height="0dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:scaleX="0.9"
-            android:scaleY="0.9"
-            app:layout_constraintEnd_toEndOf="@+id/ticket_redemeed_container2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        <RelativeLayout
+             android:foregroundGravity="center"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+
+                 android:id="@+id/ticket_redemeed_buck"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="40dp"
+                android:src="@mipmap/cash_cover" />
+
+            <TextView
+                android:id="@+id/quantity_entries"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="-45dp"
+                 android:fontFamily="@font/proxima_nova_extrabold"
+                android:text="10"
+                android:textColor="#1E1E1E"
+                android:textSize="60sp" />
+        </RelativeLayout>
+
+<!--        <ImageView-->
+<!--            android:id="@+id/reward_barcode"-->
+<!--            android:layout_width="220dp"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:layout_alignParentEnd="true"-->
+<!--            android:layout_alignParentBottom="true"-->
+<!--            android:scaleX="0.9"-->
+<!--            android:scaleY="0.9"-->
+<!--            app:layout_constraintEnd_toEndOf="@+id/ticket_redemeed_container2"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--         />-->
 
         <TextView
             android:id="@+id/redemeed_code_textview"
@@ -156,33 +169,22 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/subtitle_drawing_textview" />
 
-            <TextView
-                android:id="@+id/quantity_entries"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:fontFamily="@font/proxima_nova_extrabold"
-                android:text="10$"
-                android:textColor="#1E1E1E"
-                android:textSize="80sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/wired_drawing_label" />
 
-            <TextView
-                android:id="@+id/tag_entries_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="35dp"
-                android:layout_marginTop="0dp"
-                android:layout_marginEnd="35dp"
-                android:fontFamily="@font/proxima_nova_regular"
-                android:text="ENTRIES"
-                android:textColor="#1E1E1E"
-                android:textSize="26sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/quantity_entries" />
+
+<!--            <TextView-->
+<!--                android:id="@+id/tag_entries_textview"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="35dp"-->
+<!--                android:layout_marginTop="0dp"-->
+<!--                android:layout_marginEnd="35dp"-->
+<!--                android:fontFamily="@font/proxima_nova_regular"-->
+<!--                android:text="ENTRIES"-->
+<!--                android:textColor="#1E1E1E"-->
+<!--                android:textSize="26sp"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/quantity_entries" />-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

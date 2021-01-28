@@ -613,7 +613,7 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
         titleBar?.text = "REDEEM REWARDS"
         redemeedActivity.backButton ?: return
         redemeedActivity.backButton!!.visibility = View.INVISIBLE
-        val image = redemeedActivity.findViewById<ImageView>(R.id.reward_barcode)
+      //  val image = redemeedActivity.findViewById<ImageView>(R.id.reward_barcode)
         val redemmedContainer =
             redemeedActivity.findViewById<ConstraintLayout>(R.id.ticket_redemeed_container)
         val drawingContainer =
@@ -623,7 +623,7 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
         redemmedCodeItem.text = redemeedActivity.rewardsRedemmed?.validationCode
         if (redemeedActivity.rewardsRedemmed?.barcode?.split(",")?.size ?: 0 > 0) {
             val bm = Base64.decode(redemeedActivity.rewardsRedemmed?.barcode?.split(",")?.get(1), 0)
-            image.setImageBitmap(BitmapFactory.decodeByteArray(bm, 0, bm.size))
+           // image.setImageBitmap(BitmapFactory.decodeByteArray(bm, 0, bm.size))
         }
 
         redemmedContainer?.layoutParams = containerTicketLayoutParams(activityRedeem,
@@ -649,12 +649,12 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
         var redemmedCodeItem = drawingActivity.findViewById<TextView>(R.id.redemeed_code_textview)
         var titleDrawing = drawingActivity.findViewById<TextView>(R.id.title_drawing_textview)
         var wiredDrawingTextView = drawingActivity.findViewById<TextView>(R.id.wired_drawing_label)
-        var tagEntriesTextView = drawingActivity.findViewById<TextView>(R.id.tag_entries_textview)
+       // var tagEntriesTextView = drawingActivity.findViewById<TextView>(R.id.tag_entries_textview)
         var qttyEntries = drawingActivity.findViewById<TextView>(R.id.quantity_entries)
         var subtitleDrawing = drawingActivity.findViewById<TextView>(R.id.subtitle_drawing_textview)
         var titleGeneral = drawingActivity.findViewById<TextView>(R.id.host_id_textview)
         var descriptioDrawinTextView = drawingActivity.findViewById<TextView>(R.id.you_earned_label)
-        titleGeneral.visibility = View.GONE
+        titleGeneral.alpha = 0f
         redemmedCodeItem.textSize = 18f
         redemmedCodeItem.letterSpacing = 0f
         val quantityEntries =  (drawingActivity.drawing?.quantity ?: 0) * 7
@@ -667,7 +667,7 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
         if (drawingActivity.rewardsTypeView == "CASH_REWARDS"){
            subtitleDrawing.text = drawingActivity.drawing?.subtitle
            redemmedCodeItem.text = "Visit a local Dotty's to redeem after purchase"
-           tagEntriesTextView.visibility = View.INVISIBLE
+          // tagEntriesTextView.visibility = View.INVISIBLE
            wiredDrawingTextView.visibility = View.INVISIBLE
            titleDrawing.textSize = 30f
            titleDrawing.text = "CASH REWARDS"

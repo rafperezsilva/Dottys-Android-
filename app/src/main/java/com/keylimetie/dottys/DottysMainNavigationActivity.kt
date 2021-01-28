@@ -134,7 +134,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
                 return "Locations"
             }
             R.id.nav_rewards -> {
-                return "REDEEM REWARDS"
+                return "CONVERT POINTS"
             }
             R.id.nav_profile -> {
                 return "My Profile"

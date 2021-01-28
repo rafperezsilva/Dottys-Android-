@@ -154,7 +154,7 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
 
     fun refreshItemsAtView(){
         nameDashboard?.text = mainFragmentActivity?.getUserPreference()?.fullName
-        cashRewards?.text = "$" + getCashForDrawing()
+        cashRewards?.text = getCashForDrawing()
         pointsEarned?.text = NumberFormat.getIntegerInstance()
             .format(mainFragmentActivity?.getUserPreference()?.points ?: 0.0)
         locationDashboard?.text = addressLocationFotmatted( mainFragmentActivity?.getDrawings() ?: return)

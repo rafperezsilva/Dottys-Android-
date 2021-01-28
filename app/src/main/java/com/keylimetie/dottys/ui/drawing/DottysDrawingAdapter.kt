@@ -10,10 +10,7 @@ import android.text.style.*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.R
 import com.keylimetie.dottys.redeem.DottysRewardRedeemedActivity
@@ -60,8 +57,9 @@ class DottysDrawingAdapter(
     //4
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val rowView = inflater.inflate(R.layout.drawing_fragment_item, parent, false)
-        val params = rowView.layoutParams
-        params.height = heigthForItem(parent)
+        val params = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
+
+       // params.height = heigthForItem(parent)
         rowView.layoutParams = params
         val rewards = dataSource[position]
         expireRewards = rowView.findViewById<TextView>(R.id.expire_item_textview)
