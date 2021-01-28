@@ -127,10 +127,14 @@
     </style>
 
     <style name="EditTextEnterCodeStyle">
+
+        <item name="android:padding">2dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
         <item name="android:enabled">false</item>
         <item name="android:textColor">#FFF</item>
         <item name="android:inputType">number</item>
-        <item name="android:textSize">45sp</item>
+        <item name="android:textSize">35sp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:fontFamily">@font/proxima_nova_semibold</item>
         <item name="android:layout_weight">1</item>

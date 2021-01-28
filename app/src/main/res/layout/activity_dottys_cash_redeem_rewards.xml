@@ -6,112 +6,112 @@
     android:layout_height="match_parent"
     tools:context=".redeem.DottysCashRedeemRewardsActivity"
     android:background="@color/colorPrimary">
+
     <ImageView
         android:id="@+id/animated_gif_redeem_rewards"
-        android:layout_height="match_parent"
         android:layout_width="match_parent"
- app:layout_constraintBottom_toBottomOf="parent"
-         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        />
-
-<!--    <RelativeLayout-->
-<!--        android:id="@+id/circle_layout_two"-->
-<!--        android:layout_width="555dp"-->
-<!--        android:layout_height="555dp"-->
-<!--        android:background="@drawable/shape_circular_two"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintCircleRadius="150dp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        >-->
-
-<!--    </RelativeLayout>-->
-<!--    <RelativeLayout-->
-<!--        android:id="@+id/circle_layout_one"-->
-<!--        android:layout_width="350dp"-->
-<!--        android:layout_height="350dp"-->
-<!--        android:background="@drawable/shape_circular_one"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintCircleRadius="150dp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        />-->
-<!--    <RelativeLayout-->
-<!--        android:id="@+id/circle_layout_zero"-->
-<!--        android:layout_width="200dp"-->
-<!--        android:layout_height="200dp"-->
-<!--        android:background="@drawable/shape_circular_zero"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintCircleRadius="150dp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        />-->
-
-    <TextView
-        android:id="@+id/congrats_textview"
-        android:textSize="32sp"
-        android:textColor="#FFF"
-        android:layout_marginBottom="15dp"
-        android:fontFamily="@font/proxima_nova_semibold"
-        android:text="CONGRATS!"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/you_earned_label"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/you_earned_label"
-        android:textSize="22sp"
-        android:layout_marginBottom="15dp"
-        android:textColor="#FFF"
-        android:fontFamily="@font/proxima_nova_semibold"
-        android:text="You’ve just earned"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/redeem_rewards_image"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="35dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="35dp"
-        android:fontFamily="@font/proxima_nova_semibold"
-        android:text="See Dotty’s host to\nredeem your reward"
-        android:textColor="#FFF"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/redeem_rewards_image" />
-
-    <ImageView
-        android:id="@+id/redeem_rewards_image"
-        android:src="@mipmap/redeem_rewards_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/start_swipe"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <TextView
+            android:id="@+id/congrats_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+             android:fontFamily="@font/proxima_nova_semibold"
+            android:text="CONGRATS!"
+            android:textColor="#FFF"
+            android:textSize="32sp"
+            app:layout_constraintBottom_toTopOf="@+id/you_earned_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/you_earned_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_weight="2"
+            android:fontFamily="@font/proxima_nova_semibold"
+            android:text="You’ve just earned"
+            android:textColor="#FFF"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toTopOf="@+id/redeem_rewards_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+ 
+                android:id="@+id/redeem_rewards_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:src="@mipmap/cash_cover"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textView" />
+
+            <TextView
+                android:text="10"
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:textSize="55dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="35dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="35dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/proxima_nova_semibold"
+            android:text="See Dotty’s host to\nredeem your reward"
+            android:textColor="#FFF"
+            android:textSize="20sp" />
+
+
+    </LinearLayout>
     <com.agik.AGIKSwipeButton.View.Swipe_Button_View
         android:scaleY="0.8"
         android:scaleX="0.9"
         android:id="@+id/start_swipe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="27dp"
-        android:layout_marginEnd="27dp"
-        android:layout_marginBottom="25dp"
+        android:layout_marginBottom="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -121,8 +121,8 @@
         app:layout_constraintCircleAngle="15"  />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-
-        android:id="@+id/enter_code_layout"
+        android:visibility="gone"
+         android:id="@+id/enter_code_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorPrimary"

@@ -135,10 +135,9 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
             }
           redeemsUserData.rewards.let {
         titleRedeem?.text =
-            attributedRedeemText(redeemsUserData.rewards?.filter { it.redeemed == isRedeemed }?.size.toString())
+             attributedRedeemText(redeemsUserData.rewards?.filter { it.redeemed == isRedeemed }?.size.toString())
           }
-          titleRedeem?.text =  attributedRedeemText("0")
-    }
+     }
 
     private fun segmentTabLisener() {
         avaibleButton?.setOnClickListener {
@@ -224,10 +223,10 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
         val titleBar = activityRewards.actionBarView?.findViewById<TextView>(R.id.title_bar)
         titleBar?.text = "REDEEM REWARDS"
         initRewardsItemsView(activityRewards)
-        imageReedemSetting(activityRewards)
+        //imageReedemSetting(activityRewards)
         swipeButtonSetting(activityRewards)
         buttonsPadsLisener(activityRewards)
-        congratsTextview?.text = "CONGRATS \n\n${activityRewards.getUserPreference().firstName}"
+        congratsTextview?.text = "CONGRATS!\n${activityRewards.getUserPreference().firstName}"
         rewardsObserver = DottysRedeemedRewardsObserver(activityRewards)
 
 
@@ -238,7 +237,7 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
         gifAnimatedImage = activityRewards.findViewById<ImageView>(R.id.animated_gif_redeem_rewards)
         codeVerificationLayout =
             activityRewards.findViewById<ConstraintLayout>(R.id.enter_code_layout)
-        redeemImage = activityRewards.findViewById<ImageView>(R.id.redeem_rewards_image)
+        //redeemImage = activityRewards.findViewById<ImageView>(R.id.redeem_rewards_image)
         congratsTextview = activityRewards.findViewById<TextView>(R.id.congrats_textview)
         zeroButton = activityRewards.findViewById<Button>(R.id.button_zero)
         oneButton = activityRewards.findViewById<Button>(R.id.button_one)
@@ -380,14 +379,14 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
         })
     }
 
-    fun imageReedemSetting(activityRewards: DottysCashRedeemRewardsActivity) {
-        var imageParams = redeemImage?.layoutParams
-        imageParams?.width =
-            ((activityRewards.resources.displayMetrics?.widthPixels ?: 0) * 0.8).roundToInt()
-        imageParams?.height =
-            ((activityRewards.resources.displayMetrics?.heightPixels ?: 0) * 0.3).roundToInt()
-        redeemImage?.layoutParams = imageParams
-    }
+//        fun imageReedemSetting(activityRewards: DottysCashRedeemRewardsActivity) {
+//            var imageParams = redeemImage?.layoutParams
+//            imageParams?.width =
+//                ((activityRewards.resources.displayMetrics?.widthPixels ?: 0) * 0.8).roundToInt()
+//            imageParams?.height =
+//                ((activityRewards.resources.displayMetrics?.heightPixels ?: 0) * 0.3).roundToInt()
+//            redeemImage?.layoutParams = imageParams
+//        }
 
     /* NETWORK REDEEM REWARDS  */
     private fun redeemRewards(
