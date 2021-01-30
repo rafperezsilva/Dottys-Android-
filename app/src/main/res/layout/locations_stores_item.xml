@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_vertical">
@@ -22,18 +23,24 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
             <TextView
-                android:layout_marginLeft="12dp"
+                android:padding="3dp"
+                android:gravity="top"
                 android:textAlignment="textStart"
-                android:textSize="16sp"
+                android:layout_marginLeft="12dp"
+                 android:textSize="13sp"
                 android:fontFamily="@font/proxima_nova_light"
                 android:textColor="#404040"
                 android:id="@+id/location_store_textview"
                 android:layout_weight="1"
                 android:text="654 Lemon Location s"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                tools:ignore="RtlCompat" />
             <TextView
-                android:textSize="14sp"
+                android:padding="3dp"
+                android:textAlignment="textEnd"
+                android:gravity="end|top"
+                android:textSize="12sp"
                 android:fontFamily="@font/proxima_nova_light"
                 android:textColor="#404040"
                 android:id="@+id/distance_textview"

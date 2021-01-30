@@ -17,8 +17,10 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.Toast
-import com.keylimetie.dottys.*
+import com.keylimetie.dottys.DottysBaseActivity
+import com.keylimetie.dottys.DottysLoginResponseModel
+import com.keylimetie.dottys.DottysMainNavigationActivity
+import com.keylimetie.dottys.R
 import com.keylimetie.dottys.ui.locations.showSnackBarMessage
 import com.keylimetie.dottys.utils.rotateBitmap
 import java.io.ByteArrayOutputStream
@@ -69,7 +71,7 @@ class DottysProfilePictureActivity: DottysBaseActivity(), DottysRegisterUserDele
                 ) {
                     openCamera()
                 } else {
-                    Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show()
+                    DottysBaseActivity().showSnackBarMessage(this, "Camera permission denied")
                 }
             }
         }
@@ -145,8 +147,8 @@ class DottysProfilePictureActivity: DottysBaseActivity(), DottysRegisterUserDele
     override fun imageProfileHasUploaded(hasUploaded: Boolean) {
         val intent = Intent(this, DottysMainNavigationActivity::class.java)
         intent.putExtra("HAS_UPLOADED_IMAGE",true)
-        showSnackBarMessage("HAS IMAGE UPLOADED $hasUploaded ${userPictureBM?.byteCount}")
-      startActivity(intent)
+        showSnackBarMessage(this, "HAS IMAGE UPLOADED $hasUploaded ${userPictureBM?.byteCount}")
+        startActivity(intent)
     }
 
     override fun onClick(v: View?) {

@@ -25,6 +25,7 @@ import com.android.volley.Response
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.DottysErrorModel
 import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.R
@@ -32,6 +33,7 @@ import com.keylimetie.dottys.ui.dashboard.DashboardFragment
 import com.keylimetie.dottys.ui.drawing.models.DottysDrawing
 import com.keylimetie.dottys.ui.drawing.models.DottysDrawingRewardsModel
 import com.keylimetie.dottys.ui.drawing.models.DottysDrawingUserModel
+import com.keylimetie.dottys.ui.locations.showSnackBarMessage
 import com.keylimetie.dottys.utils.DottysStatics
 import org.json.JSONObject
 import kotlin.jvm.Throws
@@ -47,7 +49,7 @@ class DrawingViewModel : ViewModel() {
     private var subTitle: TextView? = null
     var segmentLayout: LinearLayout? = null
     var listViewRewards: ListView? = null
-    var segmentSelected = RewardsSegment.DRAWING_ENTRIES
+    var segmentSelected = RewardsSegment.CASH_REWARDS
     private val _text = MutableLiveData<String>().apply {
         value = "This is tools Fragment"
     }
@@ -69,7 +71,7 @@ class DrawingViewModel : ViewModel() {
     ) {
 
         activity = fragment.activity as? DottysMainNavigationActivity?
-         segmentSelected = if (activity?.intent?.getBooleanExtra("IS_DASHBOARD_BUTTON",false) == true) RewardsSegment.DRAWING_ENTRIES else activity?.segmentSelect ?: RewardsSegment.DRAWING_ENTRIES
+        //segmentSelected = if (activity?.intent?.getBooleanExtra("IS_DASHBOARD_BUTTON",false) == true) RewardsSegment.DRAWING_ENTRIES else activity?.segmentSelect ?: RewardsSegment.DRAWING_ENTRIES
         this.viewRoot = viewRoot
         this.fragment = fragment
         if (fragment is DashboardFragment) {
@@ -197,18 +199,6 @@ class DrawingViewModel : ViewModel() {
         return currentDrawing
     }
 
-//    var rewardsWired0 = DottysDrawing()
-//    var rewardsWired1 = DottysDrawing()
-//    var rewardsWired2 = DottysDrawing()
-//    rewardsWired0.title = "$10\n Cash Reward"
-//    rewardsWired0.subtitle = "1,000 Points for $10"
-//    rewardsWired1.title = "$20\n Cash Reward"
-//    rewardsWired1.subtitle = "2,000 Points for $20"
-//    rewardsWired2.title = "$50\n Cash Reward"
-//    rewardsWired2.subtitle = "5,000 Points for $50"
-//    currentDrawing.add(rewardsWired0)
-//    currentDrawing.add(rewardsWired1)
-//    currentDrawing.add(rewardsWired2)
     private fun viewSegmentSelectedHandler(segment: RewardsSegment, contex: Context) {
         when (segment) {
             RewardsSegment.DRAWING_ENTRIES -> {
@@ -271,11 +261,8 @@ class DrawingViewModel : ViewModel() {
                     val errorRes =
                         DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                     if (errorRes.error?.messages?.size ?: 0 > 0) {
-                        Toast.makeText(
-                            mContext,
-                            errorRes.error?.messages?.first() ?: "",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        DottysBaseActivity().showSnackBarMessage(mContext,
+                            errorRes.error?.messages?.first() ?: "")
                     }
                     Log.e("TAG", error.message, error)
                 }
@@ -323,11 +310,8 @@ class DrawingViewModel : ViewModel() {
                     val errorRes =
                         DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                     if (errorRes.error?.messages?.size ?: 0 > 0) {
-                        Toast.makeText(
-                            mContext,
-                            errorRes.error?.messages?.first() ?: "",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        DottysBaseActivity().showSnackBarMessage(mContext,
+                            errorRes.error?.messages?.first() ?: "")
                     }
                     Log.e("TAG", error.message, error)
                 }

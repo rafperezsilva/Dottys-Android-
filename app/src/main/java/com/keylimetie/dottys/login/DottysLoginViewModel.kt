@@ -6,7 +6,6 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import com.android.volley.NetworkResponse
 import com.android.volley.Response
@@ -79,15 +78,21 @@ open class DottysLoginViewModel : ViewModel() { //}, TextView.OnEditorActionList
     private fun checkUserLoginInfo(): Boolean {
         return when {
             emailEditText?.text?.toString() == "" -> {
-                Toast.makeText(mContext, "Email field are empty", Toast.LENGTH_SHORT).show()
+                DottysBaseActivity().showSnackBarMessage(mContext ?: return false,
+                    "Email field are empty"
+                )
                 false
             }
             passwordEditText?.text?.toString() == "" -> {
-                Toast.makeText(mContext, "Password field are empty", Toast.LENGTH_SHORT).show()
+                DottysBaseActivity().showSnackBarMessage(mContext ?: return false,
+                    "Password field are empty"
+                )
                 false
             }
             passwordEditText?.text?.length!! < 5 -> {
-                Toast.makeText(mContext, "Password too short", Toast.LENGTH_SHORT).show()
+                DottysBaseActivity().showSnackBarMessage(mContext ?: return false,
+                    "Password too short"
+                )
                 false
             }
             else -> true
@@ -121,15 +126,19 @@ open class DottysLoginViewModel : ViewModel() { //}, TextView.OnEditorActionList
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {
                     mContext?.hideLoader()
-                    mContext.hideCustomKeyboard()
+                    mContext.hideCustomKeyboard(mContext)
                     if (error.networkResponse == null) {
-                          mContext.showSnackBarMessage("Please, check your internet connection.")
+                        mContext.showSnackBarMessage(mContext,
+                            "Please, check your internet connection."
+                        )
                         return
                     }
                     val errorRes =
                         DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                     if (errorRes.error?.messages?.size ?: 0 > 0) {
-                            mContext.showSnackBarMessage(errorRes.error?.messages?.first() ?: "")
+                        mContext.showSnackBarMessage(mContext,
+                            errorRes.error?.messages?.first() ?: ""
+                        )
                     }
                     Log.e("TAG", error.message, error)
                 }
@@ -154,7 +163,7 @@ open class DottysLoginViewModel : ViewModel() { //}, TextView.OnEditorActionList
 //                      msg = "From Pasword"
 //                  }
 //            }
-//            Toast.makeText(mContext, msg,Toast.LENGTH_LONG).show()
+//            DottysBaseActivity().showSnackBarMessage(this,mContext, msg)
 //        }
 //        return    false
 //    }

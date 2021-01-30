@@ -68,7 +68,7 @@ class LocationsFragment : Fragment(), DottysLocationDelegates {
         }
         if (locations.locations.isNullOrEmpty()){
             locationViewModel.screenDimensionManager(LocationViewType.MAP_FULL)
-          (activity as DottysMainNavigationActivity).showSnackBarMessage("You have no stores near you at this time, please come  back later.")
+          (activity as DottysMainNavigationActivity).showSnackBarMessage(activity as DottysMainNavigationActivity,"You have no stores near you at this time, please come  back later.")
         }
     }
 
@@ -108,9 +108,11 @@ class LocationsFragment : Fragment(), DottysLocationDelegates {
 //class DottysStoreListAdapter
 
 
-fun DottysBaseActivity.showSnackBarMessage(msg: String){
-    this.hideCustomKeyboard()
-    val container = this.findViewById<View>(android.R.id.content)
-    Snackbar.make(container, msg, Snackbar.LENGTH_LONG).show()
+fun DottysBaseActivity.showSnackBarMessage(activity: DottysBaseActivity, msg: String){
+   // hideCustomKeyboard(activity)
+    val container = activity.findViewById<View>(android.R.id.content)
+    if (container != null) {
+        Snackbar.make(container, msg, Snackbar.LENGTH_LONG).show()
+    }
 
 }

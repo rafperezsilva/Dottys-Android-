@@ -5,7 +5,6 @@ import android.graphics.Matrix
 import android.os.Build
 import android.text.TextUtils
 import android.util.Patterns
-import androidx.annotation.RequiresApi
 import org.skyscreamer.jsonassert.JSONAssert
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -99,7 +98,7 @@ fun String.isValidPassword(): Boolean {
 //            setError(data, error)
 //        }
 //    if (!valid) {
-//        Toast.makeText(this, mssg, Toast.LENGTH_LONG).show()
+//        DottysBaseActivity().showSnackBarMessage(this, mssg)
 //    }
     return valid
 }

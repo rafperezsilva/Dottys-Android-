@@ -1,9 +1,7 @@
 package com.keylimetie.dottys.redeem
 
 import android.annotation.SuppressLint
-import android.graphics.BitmapFactory
 import android.graphics.Color
-import android.graphics.Typeface
 import android.graphics.Typeface.BOLD
 import android.graphics.drawable.ColorDrawable
 import android.text.Layout
@@ -16,6 +14,7 @@ import android.text.style.StyleSpan
 import android.util.Base64
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -38,8 +37,8 @@ import com.keylimetie.dottys.ui.dashboard.DashboardViewModel
 import com.keylimetie.dottys.ui.dashboard.DottysCurrentUserObserver
 import com.keylimetie.dottys.ui.drawing.DrawingViewModel
 import com.keylimetie.dottys.ui.drawing.RewardsSegment
+import com.keylimetie.dottys.ui.locations.showSnackBarMessage
 import org.json.JSONObject
-import java.text.NumberFormat
 import kotlin.math.roundToInt
 import kotlin.properties.Delegates
 
@@ -111,15 +110,20 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
         activityRedeem.window.statusBarColor =
             ContextCompat.getColor(activityRedeem, R.color.colorDottysGrey)
         val data = activityRedeem.intent.getStringExtra("REDEEM_REWARDS")
-
-        redeemsUserData = DottysRewardsModel.fromJson(data.toString())
+        if (data.isNullOrEmpty()) {
+            redeemsUserData =
+                activityRedeem.getRewardsAtSession() //DottysRewardsModel.fromJson(data.toString())
+        } else
+        {
+            redeemsUserData = DottysRewardsModel.fromJson(data.toString())
+        }
         segmentTabLisener()
         viewSegmentSelectedHandler(segmentSelected)
         initListView()
 
     }
 
-      fun initListView() {
+    private fun initListView() {
         val listViewRewards = activityRedeem?.findViewById<ListView>(R.id.redeem_rewards_listview)
         var isRedeemed: Boolean = false
         if (segmentSelected == RedeemRewardsSegment.REDEEMED_REWARDS) {
@@ -239,6 +243,10 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
             activityRewards.findViewById<ConstraintLayout>(R.id.enter_code_layout)
         //redeemImage = activityRewards.findViewById<ImageView>(R.id.redeem_rewards_image)
         congratsTextview = activityRewards.findViewById<TextView>(R.id.congrats_textview)
+        val coverCashImage = activityRewards.findViewById<ImageView>(R.id.redeem_rewards_image)
+        coverCashImage.layoutParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT,(activityRewards.screenSize.y*0.2).roundToInt())
+        val qttyValue = activityRewards.findViewById<TextView>(R.id.quantity_cahs_textview)
+        qttyValue.text = "${activityRewards.rewardID?.value ?: 0}"
         zeroButton = activityRewards.findViewById<Button>(R.id.button_zero)
         oneButton = activityRewards.findViewById<Button>(R.id.button_one)
         twoButton = activityRewards.findViewById<Button>(R.id.button_two)
@@ -281,7 +289,7 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
 //         activityRewards.  startActivity(intent)
             redeemRewards(activityRewards, getHostCode())
         } else if (codeHostArray.size == 6 && !validateStoreCode(activityRewards)) {
-            Toast.makeText(activityRewards, "INVALID HOST CODE ID", Toast.LENGTH_LONG).show()
+            DottysBaseActivity().showSnackBarMessage(activityRewards, "INVALID HOST CODE ID")
             codeHostArray = ArrayList<String>()
             editTextCodeManager(activityRewards)
 
@@ -289,6 +297,9 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
     }
 
     private fun validateStoreCode(activityRewards: DottysCashRedeemRewardsActivity): Boolean {
+        if (activityRewards.getUserNearsLocations().locations.isNullOrEmpty()) {
+            return false
+        }
         val store = activityRewards.getUserNearsLocations().locations?.first()?.storeNumber ?: 0
         var code: String
         if (store < 10) {
@@ -358,7 +369,7 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
             override fun onSwipe_Forward(swipeView: Swipe_Button_View) {
                 if (activityRewards is DottysRewardRedeemedActivity) {
                     if (swipeType == null) {
-
+                       rewardsObserver = DottysRedeemedRewardsObserver(activityRewards)
                         dashBardViewModel.userCurrentUserDataObserver =
                             DottysCurrentUserObserver(activityRewards as DottysRewardRedeemedActivity)
                         dashBardViewModel.getUserRewards(activityRewards)
@@ -396,11 +407,9 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
         activityRewards.showLoader()
         val params = HashMap<String, String>()
         if (activityRewards.getBeaconStatus()?.beaconArray?.first()?.locationID ?: "" == "") {
-            Toast.makeText(
-                activityRewards,
-                "GO TO DOTTY'S LOCATION TO CHANGE CODE",
-                Toast.LENGTH_LONG
-            ).show()
+            DottysBaseActivity().showSnackBarMessage(activityRewards,
+                "GO TO DOTTY'S LOCATION TO CHANGE CODE"
+            )
 
             return
         }
@@ -429,11 +438,9 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
                     val errorRes =
                         DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                     if (errorRes.error?.messages?.size ?: 0 > 0) {
-                        Toast.makeText(
-                            activityRewards,
-                            errorRes.error?.messages?.first() ?: "",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        DottysBaseActivity().showSnackBarMessage(activityRewards,
+                            errorRes.error?.messages?.first() ?: ""
+                        )
                     }
                     Log.e("ERROR VOLLEY ", error.message, error)
                 } catch (e: Error){
@@ -489,11 +496,9 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
                 val errorRes =
                     DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                 if (errorRes.error?.messages?.size ?: 0 > 0) {
-                    Toast.makeText(
-                        drawingActivity,
-                        errorRes.error?.messages?.first() ?: "",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    DottysBaseActivity().showSnackBarMessage(drawingActivity,
+                        errorRes.error?.messages?.first() ?: ""
+                    )
                 }
                 Log.e("ERROR VOLLEY ", error.message, error)
             }) { //no semicolon or coma
@@ -554,16 +559,16 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
                 val errorRes =
                     DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                 if (errorRes.error?.messages?.size ?: 0 > 0) {
-                    Toast.makeText(
-                        drawingActivity,
-                        errorRes.error?.messages?.first() ?: "",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    DottysBaseActivity().showSnackBarMessage(drawingActivity,
+                        errorRes.error?.messages?.first() ?: ""
+                    )
                 }
                 Log.e("ERROR VOLLEY ", error.message, error)
             }) { //no semicolon or coma
 
             override fun parseNetworkResponse(response: NetworkResponse?): Response<JSONObject> {
+
+                rewardsObserver  = DottysRedeemedRewardsObserver(drawingActivity)
                 when(response?.statusCode){
                     200 -> {
                         rewardsObserver?.chashRewards = true
@@ -659,20 +664,23 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
         val quantityEntries =  (drawingActivity.drawing?.quantity ?: 0) * 7
         val entriesType =  drawingActivity.drawing?.drawingType?.toLowerCase()?.capitalize() ?: ""
         val drawingViewModel = DrawingViewModel()
-        descriptioDrawinTextView.text = drawingViewModel.attributedRedeemText(
-            NumberFormat.getIntegerInstance()
-                .format(drawingActivity.getUserPreference()?.points ?: (0).toLong()))
-        rewardsObserver = DottysRedeemedRewardsObserver(drawingActivity)
-        if (drawingActivity.rewardsTypeView == "CASH_REWARDS"){
-           subtitleDrawing.text = drawingActivity.drawing?.subtitle
-           redemmedCodeItem.text = "Visit a local Dotty's to redeem after purchase"
-          // tagEntriesTextView.visibility = View.INVISIBLE
-           wiredDrawingTextView.visibility = View.INVISIBLE
-           titleDrawing.textSize = 30f
-           titleDrawing.text = "CASH REWARDS"
-            qttyEntries.text = drawingActivity.drawing?.subtitle?.split(" ")?.last() ?: ""
-            redemmedContainer?.layoutParams = containerTicketLayoutParams(drawingActivity,
-                redemmedContainer)
+        descriptioDrawinTextView.text = "Convert Point ${drawingActivity.drawing?.subtitle} Cash Reward"
+                //drawingViewModel.attributedRedeemText(NumberFormat.getIntegerInstance().format(drawingActivity.getUserPreference()?.points ?: (0).toLong()))rewardsObserver = DottysRedeemedRewardsObserver(drawingActivity)
+        if (drawingActivity.rewardsTypeView == "CASH_REWARDS") {
+            subtitleDrawing.visibility = View.INVISIBLE//.text = drawingActivity.drawing?.subtitle
+            // redemmedCodeItem.text = "Visit a local Dotty's to redeem after purchase"
+            redemmedCodeItem.visibility = View.INVISIBLE
+            // tagEntriesTextView.visibility = View.INVISIBLE
+            wiredDrawingTextView.visibility = View.INVISIBLE
+            titleDrawing.textSize = 30f
+            titleDrawing.text =
+                "${drawingActivity.drawing?.subtitle?.split(" ")?.last() ?: ""} Reward"
+            qttyEntries.text =
+                (drawingActivity.drawing?.subtitle?.split(" ")?.last() ?: "").replace("$", "")
+            redemmedContainer?.layoutParams = containerTicketLayoutParams(
+                drawingActivity,
+                redemmedContainer
+            )
 
         } else {
 

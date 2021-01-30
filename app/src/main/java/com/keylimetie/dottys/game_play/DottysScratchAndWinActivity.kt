@@ -7,10 +7,10 @@ package com.keylimetie.dottys.game_play
   import android.view.WindowManager
   import android.widget.ImageView
   import android.widget.TextView
-  import android.widget.Toast
   import com.clock.scratch.ScratchView
   import com.keylimetie.dottys.DottysBaseActivity
   import com.keylimetie.dottys.R
+  import com.keylimetie.dottys.ui.locations.showSnackBarMessage
 
 
 class DottysScratchAndWinActivity : DottysBaseActivity(), ScratchView.EraseStatusListener {
@@ -109,16 +109,16 @@ class DottysScratchAndWinActivity : DottysBaseActivity(), ScratchView.EraseStatu
     fun getWinner():String?{
         isComplete = false
         if(imageAtGameArray.filter { it == R.mipmap.coffee_win }.size == 3){
-            Toast.makeText(this,"COFFEE WINNER",Toast.LENGTH_LONG).show()
+            DottysBaseActivity().showSnackBarMessage(this,"COFFEE WINNER")
             "COFFEE WINNER"
         } else if (imageAtGameArray.filter { it == R.mipmap.sandwich_win }.size == 3){
-            Toast.makeText(this,"SANDWICH WINNER",Toast.LENGTH_LONG).show()
+            DottysBaseActivity().showSnackBarMessage(this,"SANDWICH WINNER")
             "SANDWICH WINNER"
         }else if (imageAtGameArray.filter { it == R.mipmap.soda_win }.size == 3){
-            Toast.makeText(this,"SODA WINNER",Toast.LENGTH_LONG).show()
+            DottysBaseActivity().showSnackBarMessage(this,"SODA WINNER")
             "SANDWICH WINNER"
         }else {
-            Toast.makeText(this,"LOSER",Toast.LENGTH_LONG).show()
+            DottysBaseActivity().showSnackBarMessage(this,"LOSER")
             "LOSER"
         }
         return  null

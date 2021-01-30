@@ -129,16 +129,17 @@
     <style name="EditTextEnterCodeStyle">
 
         <item name="android:padding">2dp</item>
+        <item name="android:minHeight">62dp</item>
         <item name="android:paddingTop">4dp</item>
         <item name="android:paddingBottom">4dp</item>
         <item name="android:enabled">false</item>
         <item name="android:textColor">#FFF</item>
         <item name="android:inputType">number</item>
-        <item name="android:textSize">35sp</item>
+        <item name="android:textSize">36sp</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:fontFamily">@font/proxima_nova_semibold</item>
+        <item name="android:fontFamily">@font/proxima_nova_light</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:layout_marginRight">6dp</item>
+        <item name="android:layout_marginRight">10dp</item>
         <item name="android:background">@drawable/border_code_edittext</item>
         <item name="android:layout_width">wrap_content</item>
     </style>
@@ -162,7 +163,8 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
     <style name="TextViewProfileStyle">
-        <item name="android:textColor">#5A9402</item>
+        <item name="android:textColor">#9B9B9B</item>
+
         <item name="android:textSize">16sp</item>
         <item name="android:fontFamily">@font/proxima_nova_light</item>
         <item name="android:background">#00000000</item>

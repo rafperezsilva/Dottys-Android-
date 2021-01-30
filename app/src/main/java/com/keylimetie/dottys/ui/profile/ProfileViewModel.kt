@@ -251,7 +251,7 @@ class ProfileViewModel(
                     val errorRes =
                         DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                     if (errorRes.error?.messages?.size ?: 0 > 0) {
-//                        Toast.makeText(
+//                        DottysBaseActivity().showSnackBarMessage(this,
 //                            activity,
 //                            errorRes.error?.messages?.first() ?: "",
 //                            Toast.LENGTH_LONG

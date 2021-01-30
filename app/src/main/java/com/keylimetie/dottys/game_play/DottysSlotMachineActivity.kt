@@ -4,11 +4,11 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.R
 import com.keylimetie.dottys.game_play.slotImageScroll.EventEnd
 import com.keylimetie.dottys.game_play.slotImageScroll.Utils
+import com.keylimetie.dottys.ui.locations.showSnackBarMessage
 import kotlinx.android.synthetic.main.activity_dottys_slot_machine.*
 import kotlin.random.Random
 
@@ -37,7 +37,7 @@ class DottysSlotMachineActivity : DottysBaseActivity(), EventEnd {
                 Utils.score -= 50
               //  score_tv.text = Utils.score.toString()
 //            }else{
-//                Toast.makeText(this,"You dont have enough money", Toast.LENGTH_SHORT).show()
+//                DottysBaseActivity().showSnackBarMessage(this,"You dont have enough money")
 //            }
         }
     }
@@ -52,17 +52,17 @@ class DottysSlotMachineActivity : DottysBaseActivity(), EventEnd {
             countDown = 0
 
             if(image1.value == image2.value && image2.value == image3.value){
-                Toast.makeText(this,"YOU WON!!!!", Toast.LENGTH_SHORT).show()
+                DottysBaseActivity().showSnackBarMessage(this,"YOU WON!!!!")
                 Utils.score +=300
             //    score_tv.text = Utils.score.toString()
             }
 //            else if(image1.value == image2.value || image2.value == image3.value || image1.value == image3.value){
-//                Toast.makeText(this,"You did good.", Toast.LENGTH_SHORT).show()
+//                DottysBaseActivity().showSnackBarMessage(this,"You did good.")
 //                Utils.score +=100
 //             //   score_tv.text = Utils.score.toString()
 //            }
             else{
-                Toast.makeText(this,"You lost. Better luck next time.", Toast.LENGTH_SHORT).show()
+                DottysBaseActivity().showSnackBarMessage(this,"You lost. Better luck next time.")
                 Utils.score +=0
               //  score_tv.text = Utils.score.toString()
             }

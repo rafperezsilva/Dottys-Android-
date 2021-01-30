@@ -6,8 +6,8 @@ import android.os.Build
 import android.os.Bundle
 import android.widget.DatePicker
 import android.widget.TextView
-import android.widget.Toast
 import com.keylimetie.dottys.*
+import com.keylimetie.dottys.ui.locations.showSnackBarMessage
 import java.time.LocalDate
 import java.util.*
 
@@ -27,11 +27,11 @@ class DottysRegisterActivity : DottysBaseActivity(), DatePickerDialog.OnDateSetL
         titleBar.text = "Create Account"
 
         registerViewModel.initRegisterView(this)
-        hideCustomKeyboard()
+        hideCustomKeyboard(this)
         setBackButton()
         backButton?.setImageResource(R.drawable.close_icon)
         if(registerViewModel.isRegisterUser){
-            hideCustomKeyboard()
+            hideCustomKeyboard(this)
             registerViewModel.showPreVerificationLayer(this)
             registerViewModel.requestNewVerificationPhone(this)
         }
@@ -60,15 +60,17 @@ class DottysRegisterActivity : DottysBaseActivity(), DatePickerDialog.OnDateSetL
         }
         if (dateSelected.isAfter(currentDate)) {
             registerViewModel.birthdateEditText?.setText("")
-            Toast.makeText(this, "You must be 21 years old to participate", Toast.LENGTH_LONG).show()
+            DottysBaseActivity().showSnackBarMessage(this,
+                "You must be 21 years old to participate"
+            )
         } else {
             registerViewModel.birthdateEditText?.setText("${month + 1} / $dayOfMonth / $year")
         }
     }
 
     override fun registerUser(userData: DottysLoginResponseModel) {
-        //   Toast.makeText(this, "GO TO VERFY CODE", Toast.LENGTH_LONG).show()
-        hideCustomKeyboard()
+        //   DottysBaseActivity().showSnackBarMessage(this, "GO TO VERFY CODE")
+        hideCustomKeyboard(this)
         saveDataPreference(PreferenceTypeKey.USER_DATA,userData.toJson())
         registerViewModel.showPreVerificationLayer(this)
     }

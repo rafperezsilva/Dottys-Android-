@@ -84,7 +84,7 @@ class DottysLocationsStoreAdapter(
         val distanceTextView = convertView.findViewById(R.id.distance_textview) as TextView
         parent_textvew?.text =
             dataSource[parent].address1 + "\n" + dataSource[parent].city + ", " + dataSource[parent].state + " " + dataSource[parent].zip
-        distanceTextView.text = dataSource[parent].distance.toString() + " mil"
+        distanceTextView.text = dataSource[parent].distance.toString() + " mi."
         return convertView
     }
 
@@ -205,7 +205,7 @@ class DottysLocationsStoreAdapter(
         activity.startActivity(intent)
     }
 
-    fun openMap() {
+    private fun openMap() {
         if (locationObserver?.hasSelected?.latitude.toString().isNotEmpty()) {
             val lat = locationObserver?.hasSelected?.latitude.toString()
             val long = locationObserver?.hasSelected?.longitude.toString()

@@ -3,17 +3,13 @@ package com.keylimetie.dottys.ui.dashboard
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.icu.math.BigDecimal
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.viewpager.widget.ViewPager
@@ -40,6 +36,7 @@ import com.keylimetie.dottys.ui.drawing.RewardsSegment
 import com.keylimetie.dottys.ui.drawing.models.DottysDrawing
 import com.keylimetie.dottys.ui.drawing.models.DottysDrawingRewardsModel
 import com.keylimetie.dottys.ui.drawing.models.DottysDrawingUserModel
+import com.keylimetie.dottys.ui.locations.showSnackBarMessage
 import com.keylimetie.dottys.utils.md5
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
@@ -290,11 +287,8 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
                         val errorRes =
                             DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                         if (errorRes.error?.messages?.size ?: 0 > 0) {
-                            Toast.makeText(
-                                mContext,
-                                errorRes.error?.messages?.first() ?: "",
-                                Toast.LENGTH_LONG
-                            ).show()
+                            DottysBaseActivity().showSnackBarMessage(mContext,
+                                errorRes.error?.messages?.first() ?: "")
                         }
                     }
                 }) { //no semicolon or coma
@@ -345,11 +339,8 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
                     val errorRes =
                         DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                     if (errorRes.error?.messages?.size ?: 0 > 0) {
-                        Toast.makeText(
-                            mContext,
-                            errorRes.error?.messages?.first() ?: "",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        DottysBaseActivity().showSnackBarMessage(mContext,
+                            errorRes.error?.messages?.first() ?: "")
                     }
                     Log.e("TAG", error.message, error)
                 }
@@ -394,11 +385,8 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
                     val errorRes =
                         DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                     if (errorRes.error?.messages?.size ?: 0 > 0) {
-                        Toast.makeText(
-                            mContext,
-                            errorRes.error?.messages?.first() ?: "",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        DottysBaseActivity().showSnackBarMessage(mContext,
+                            errorRes.error?.messages?.first() ?: "")
                     }
                     Log.e("TAG", error.message, error)
                 }
@@ -444,11 +432,8 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
                     val errorRes =
                         DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                     if (errorRes.error?.messages?.size ?: 0 > 0) {
-                        Toast.makeText(
-                            mContext,
-                            errorRes.error?.messages?.first() ?: "",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        DottysBaseActivity().showSnackBarMessage(mContext,
+                            errorRes.error?.messages?.first() ?: "")
                     }
                     Log.e("TAG", error.message, error)
                 }
@@ -495,7 +480,7 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
                     val errorRes =
                         DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                     if (errorRes.error?.messages?.size ?: 0 > 0) {
-//                        Toast.makeText(
+//                        DottysBaseActivity().showSnackBarMessage(this,
 //                            mContext,
 //                            errorRes.error?.messages?.first() ?: "",
 //                            Toast.LENGTH_LONG
@@ -550,11 +535,8 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
                     val errorRes =
                         DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                     if (errorRes.error?.messages?.size ?: 0 > 0) {
-                        Toast.makeText(
-                            mContext,
-                            errorRes.error?.messages?.first() ?: "",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        DottysBaseActivity().showSnackBarMessage(mContext,
+                            errorRes.error?.messages?.first() ?: "")
                     }
                     Log.e("TAG", error.message, error)
                     userCurrentUserDataObserver?.dashboardBanners = DottysBannerModel()
@@ -601,11 +583,8 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
                     val errorRes =
                         DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                     if (errorRes.error?.messages?.size ?: 0 > 0) {
-                        Toast.makeText(
-                            mContext,
-                            errorRes.error?.messages?.first() ?: "",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        DottysBaseActivity().showSnackBarMessage(mContext,
+                            errorRes.error?.messages?.first() ?: "")
                     }
                     Log.e("TAG", error.message, error)
                 }

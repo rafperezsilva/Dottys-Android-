@@ -99,13 +99,17 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
                         }
 
                         else -> {
-                            intent.putExtra("IS_DASHBOARD_BUTTON", false)
+
                             when (destination.id) {
                                 R.id.nav_drawing -> {
                                     segmentSelect = RewardsSegment.DRAWING_ENTRIES
+                                    intent.putExtra("IS_DASHBOARD_BUTTON", false)
                                 }
                                 R.id.nav_rewards -> {
                                     segmentSelect = RewardsSegment.CASH_REWARDS
+                                    intent.putExtra(
+                                        "REDEEM_REWARDS",
+                                        this.getRewardsAtSession()?.toJson().toString())
                                 }
 //                                R.id.nav_logout -> {
 //                                    toolbar.visibility = View.GONE
@@ -243,7 +247,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
 
         val footerLabel = findViewById<TextView>(R.id.footer_label)
         footerLabel.text =
-            "© 2020 Illinois Cafe' & Service Company, LLC.\nAll rights reserved.\n${getVersionApp(
+            "© 2021 Illinois Cafe' & Service Company, LLC.\nAll rights reserved.\n\n${getVersionApp(
                 this)}"
         controller = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
@@ -265,7 +269,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
 
         drawerLayout?.addDrawerListener(object : DrawerLayout.DrawerListener {
             override fun onDrawerStateChanged(p0: Int) {
-                hideCustomKeyboard()
+                hideCustomKeyboard(this@DottysMainNavigationActivity)
             }
 
             override fun onDrawerSlide(p0: View, p1: Float) {
@@ -349,10 +353,10 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
 
                 val bitmapBase = MediaStore.Images.Media.getBitmap(contentResolver, image_uri)
                 val bitmap = if (bitmapBase.width > bitmapBase.height) {
-                    showSnackBarMessage("ROTATED BITMAP")
+                    showSnackBarMessage(this,"ROTATED BITMAP")
                     bitmapBase.rotateBitmap()
                 } else {
-                    showSnackBarMessage("NO ROTATED")
+                    showSnackBarMessage(this,"NO ROTATED")
                     bitmapBase
                 }
                 val stream = ByteArrayOutputStream()

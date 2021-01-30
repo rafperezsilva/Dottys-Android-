@@ -103,7 +103,7 @@ fun DottysBaseActivity.getVersionApp(context: AppCompatActivity): String {
         val pInfo = context.packageManager.getPackageInfo(packageName, 0)
         val version = pInfo.versionName
         @Suppress("DEPRECATION") val verCode = pInfo.versionCode
-        "V$version ($verCode)"
+        "V$version.$verCode"
     } catch (e: Error) {
         Log.d("ERROR VERSION", e.toString())
         ""

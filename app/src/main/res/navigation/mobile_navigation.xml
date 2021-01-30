@@ -24,12 +24,17 @@
 <!--        android:name="com.keylimetie.dottys.ui.rewards.RewardsFragment"-->
 <!--        android:label="@string/nav_rewards"-->
 <!--        tools:layout="@layout/fragment_slideshow" />-->
-    <fragment
-        android:id="@+id/nav_rewards"
-        android:name="com.keylimetie.dottys.ui.drawing.DrawingFragment"
-        android:label="@string/menu_rewards"
-        tools:layout="@layout/fragment_drawing" />
+<!--    <fragment-->
+<!--        android:id="@+id/nav_rewards"-->
+<!--        android:name="com.keylimetie.dottys.ui.drawing.DrawingFragment"-->
+<!--        android:label="@string/menu_rewards"-->
+<!--        tools:layout="@layout/fragment_drawing" />-->
 
+    <activity
+        android:id="@+id/nav_rewards"
+        android:name="com.keylimetie.dottys.redeem.DottysRedeemRewardsActivity"
+        android:label="@string/menu_rewards"
+        tools:layout="@layout/activity_dottys_redeem_rewards" />
     <fragment
         android:id="@+id/nav_drawing"
         android:name="com.keylimetie.dottys.ui.drawing.DrawingFragment"

@@ -1,7 +1,6 @@
 package com.keylimetie.dottys.beacon_service
 
  import android.util.Log
- import android.widget.Toast
  import androidx.lifecycle.ViewModel
  import com.android.volley.AuthFailureError
  import com.android.volley.Response
@@ -11,8 +10,10 @@ package com.keylimetie.dottys.beacon_service
  import com.keylimetie.dottys.DottysBaseActivity
  import com.keylimetie.dottys.DottysErrorModel
  import com.keylimetie.dottys.ui.dashboard.models.DottysBeacon
+ import com.keylimetie.dottys.ui.locations.showSnackBarMessage
  import org.json.JSONObject
  import java.util.*
+ import kotlin.jvm.Throws
  import kotlin.properties.Delegates
 
 enum class BeaconEventType{ENTER,EXIT}
@@ -49,11 +50,8 @@ var isUploading: Boolean? = null
                         val errorRes =
                             DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                         if (errorRes.error?.messages?.size ?: 0 > 0) {
-                            Toast.makeText(
-                                mContext,
-                                errorRes.error?.messages?.first() ?: "",
-                                Toast.LENGTH_LONG
-                            ).show()
+                            DottysBaseActivity().showSnackBarMessage(mContext,
+                                errorRes.error?.messages?.first() ?: "")
                         }
                     }
                 }) { //no semicolon or coma

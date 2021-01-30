@@ -2,11 +2,9 @@ package com.keylimetie.dottys.ui.dashboard
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.provider.Settings.Secure
 import android.provider.Settings.Secure.*
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.util.Log
@@ -23,17 +21,13 @@ import com.keylimetie.dottys.beacon_service.DottysBeaconActivityDelegate
 import com.keylimetie.dottys.beacon_service.DottysBeaconActivityObserver
 import com.keylimetie.dottys.models.DottysGlobalDataModel
 import com.keylimetie.dottys.models.DottysRewardsModel
-import com.keylimetie.dottys.register.DottysProfilePictureActivity
 import com.keylimetie.dottys.register.DottysRegisterActivity
 import com.keylimetie.dottys.splash.getVersionApp
 import com.keylimetie.dottys.ui.dashboard.models.*
 import com.keylimetie.dottys.ui.drawing.DottysDrawingDelegates
 import com.keylimetie.dottys.ui.drawing.models.DottysDrawingRewardsModel
 import com.keylimetie.dottys.ui.drawing.models.DottysDrawingUserModel
-import com.keylimetie.dottys.ui.locations.DottysLocationDelegates
-import com.keylimetie.dottys.ui.locations.DottysLocationStoresObserver
-import com.keylimetie.dottys.ui.locations.DottysLocationsStoresModel
-import com.keylimetie.dottys.ui.locations.LocationsViewModel
+import com.keylimetie.dottys.ui.locations.*
 import com.keylimetie.dottys.ui.profile.DottysProfileDelegates
 import com.keylimetie.dottys.ui.profile.DottysProfileObserver
 import com.keylimetie.dottys.ui.profile.ProfileViewModel
@@ -77,7 +71,7 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
 
             dashboardViewModel.initDashboardViewSetting(this, activity, viewFragment)
         }
-        activity?.hideCustomKeyboard()
+        activity?.hideCustomKeyboard(activity)
         activity?.beaconService?.observer = DottysBeaconActivityObserver(this)
         mainHandler = Handler(Looper.getMainLooper())
         return root
@@ -241,9 +235,9 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
         buttonDone?.setOnClickListener{
 
              if (validationPhoneEditText.text.isBlank()) {
-                 mainActivity?.hideCustomKeyboard()
-                Toast.makeText(context,
-                     "Phone number is invalid or Empty, please check phone number field.", Toast.LENGTH_LONG).show()
+                mainActivity?.hideCustomKeyboard(activity as DottysMainNavigationActivity)
+                DottysBaseActivity().showSnackBarMessage(activity as DottysMainNavigationActivity,
+                     "Phone number is invalid or Empty, please check phone number field.")
 
              } else {
                  val userData =  (activity as DottysMainNavigationActivity).getUserPreference()

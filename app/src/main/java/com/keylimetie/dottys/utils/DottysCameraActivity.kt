@@ -4,28 +4,16 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.os.Bundle
-import android.os.Environment
 import android.util.DisplayMetrics
-import android.util.Log
 import android.util.Rational
 import android.util.Size
 import android.view.Surface
-import android.view.TextureView
-import android.view.View
-import android.widget.Toast
 import androidx.camera.core.*
-
 import com.keylimetie.dottys.DottysBaseActivity
-import com.keylimetie.dottys.DottysLoginResponseModel
-import com.keylimetie.dottys.MainActivity
 import com.keylimetie.dottys.R
-import com.keylimetie.dottys.login.DottysLoginDelegate
-import com.keylimetie.dottys.ui.profile.ProfileFragment
+import com.keylimetie.dottys.ui.locations.showSnackBarMessage
 import kotlinx.android.synthetic.main.activity_dottys_camera.*
 import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import kotlin.properties.Delegates
 
 
 class DottysCameraActivity  : DottysBaseActivity()
@@ -89,14 +77,19 @@ class DottysCameraActivity  : DottysBaseActivity()
                                message: String, exc: Throwable?
                            ) {
                                val msg = "Photo capture failed: $message"
-                               Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+                               DottysBaseActivity().showSnackBarMessage(this@DottysCameraActivity,
+
+                                   msg
+                               )
 
                            }
 
                            override fun onImageSaved(file: File) {
                                val bm =  BitmapFactory.decodeFile(file.path)
                                val msg = "Photo Dimen  width:${bm.width} / height: ${bm.height}"
-                                Toast.makeText(baseContext, msg, Toast.LENGTH_LONG).show()
+                               DottysBaseActivity().showSnackBarMessage(this@DottysCameraActivity,
+                                   msg
+                               )
                               // cameraObserver?.temporalFile = file
                                setResult(DottysStatics.PICTURE_TAKE_REQUEST_CODE, Intent().putExtra("FILE_PATH", file.path))
                                finish()

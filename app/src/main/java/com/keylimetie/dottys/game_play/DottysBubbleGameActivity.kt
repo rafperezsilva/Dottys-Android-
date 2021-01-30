@@ -8,9 +8,9 @@ import android.os.Handler
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.R
+import com.keylimetie.dottys.ui.locations.showSnackBarMessage
 import pl.droidsonroids.gif.GifImageView
 
 
@@ -113,7 +113,7 @@ class DottysBubbleGameActivity : DottysBaseActivity(), View.OnClickListener {
                 gif?.setImageResource(imagesAtGame[popedBallons])
                 popedBallons += 1
                  if (popedBallons == 5) {
-                     Toast.makeText(this,getWinner(),Toast.LENGTH_LONG).show()
+                     DottysBaseActivity().showSnackBarMessage(this,getWinner())
                      Handler().postDelayed(
                          {
                              initGame()

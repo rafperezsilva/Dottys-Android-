@@ -227,7 +227,7 @@ class DottysGeofence(private val baseActivity: DottysBaseActivity ) :   OnComple
 //            setButtonsEnabledState()
             val messageId =
                 if (geofencesAdded) R.string.geofences_added else R.string.geofences_removed
-           // Toast.makeText(baseActivity, baseActivity.getString(messageId), Toast.LENGTH_SHORT).show()
+           // DottysBaseActivity().showSnackBarMessage(this,baseActivity, baseActivity.getString(messageId))
         } else {
             // Get the status code for the error and log it using a user-friendly message.
             val errorMessage = GeofenceErrorMessages.getErrorString(baseActivity, task.exception)

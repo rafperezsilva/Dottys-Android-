@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.keylimetie.dottys.*
+import com.keylimetie.dottys.R
 import com.keylimetie.dottys.models.DottysRewardModel
 import com.keylimetie.dottys.models.IconType
 import com.keylimetie.dottys.utils.getleftDays
@@ -41,8 +41,8 @@ class DottysRedeemAdapter(private val activity: DottysRedeemRewardsActivity,
         // Get view for row item
 
         val rowView = inflater.inflate(R.layout.redeem_rewards_item, parent, false)
-        val params = rowView.layoutParams
-        params.height = (parent.height / 3.2).roundToInt()
+        val params = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
+       // params.height = (parent.height / 3.2).roundToInt()
         rowView.layoutParams = params
         val rewards = dataSource[position]
         val imageRewards = rowView.findViewById<ImageView>(R.id.reward_image_item)

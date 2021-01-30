@@ -3,7 +3,6 @@ package com.keylimetie.dottys.ui.locations
 import android.content.Context
 import android.os.Bundle
 import android.util.AttributeSet
-import android.widget.Toast
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -11,6 +10,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.GpsTracker
 import com.keylimetie.dottys.R
@@ -51,7 +51,7 @@ class DottysLocationsMapFragment : SupportMapFragment(), OnMapReadyCallback,
             providedMarker?.apply { initialMarker = providedMarker }
 
         } catch (e: Exception) {
-            Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show()
+            DottysBaseActivity().showSnackBarMessage(activity as DottysMainNavigationActivity,e.toString())
         }
 
 

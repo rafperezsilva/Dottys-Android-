@@ -24,8 +24,8 @@ import com.keylimetie.dottys.login.DottysLoginDelegate
 import com.keylimetie.dottys.login.DottysLoginObserver
 import com.keylimetie.dottys.login.DottysLoginViewModel
 import com.keylimetie.dottys.ui.locations.showSnackBarMessage
-import com.keylimetie.dottys.utils.volley_multipart.VolleyMultipartRequest
 import com.keylimetie.dottys.utils.isValidPassword
+import com.keylimetie.dottys.utils.volley_multipart.VolleyMultipartRequest
 import org.json.JSONObject
 import java.util.*
 import kotlin.math.roundToInt
@@ -111,7 +111,7 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
         paramsLayout?.height = 2
         verificationLayout?.layoutParams = paramsLayout
         initDatePackerView()
-        activityRegister.hideCustomKeyboard()
+        activityRegister.hideCustomKeyboard(activityRegister)
        loginFloatingLayout?.setOnClickListener(this)
        termsOfServiceLabel?.setOnClickListener(this)
        privacyPolicyLabel?.setOnClickListener(this)
@@ -172,7 +172,7 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
 //            }
 //        }
         phantonBirthdayButton?.setOnClickListener {
-            activityRegister?.hideCustomKeyboard()
+            activityRegister?.hideCustomKeyboard(activityRegister ?: return@setOnClickListener)
             datePickerDialog?.show() }
     }
 
@@ -215,20 +215,28 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
     ): Boolean {
         for (item in editTextData) {
             if (item?.text?.isEmpty() == true) {
-                activityRegister.showSnackBarMessage(activityRegister.getString(R.string.complete_all_fields))
+                activityRegister.showSnackBarMessage(activityRegister,
+                    activityRegister.getString(R.string.complete_all_fields)
+                )
                 return false
             }
         }
         if (!passwordEditText?.text.toString().isValidPassword()) {
-            activityRegister.showSnackBarMessage(activityRegister.getString(R.string.password_policy_check_message))
+            activityRegister.showSnackBarMessage(activityRegister,
+                activityRegister.getString(R.string.password_policy_check_message)
+            )
             return false
         }
         if (legalAgeCheckBox?.isChecked != true) {
-            activityRegister.showSnackBarMessage(activityRegister.getString(R.string.legal_age_message))
+            activityRegister.showSnackBarMessage(activityRegister,
+                activityRegister.getString(R.string.legal_age_message)
+            )
             return false
         }
         if (termsAndConditionsCheckBox?.isChecked != true) {
-            activityRegister.showSnackBarMessage(activityRegister.getString(R.string.terms_and_conditions_messages))
+            activityRegister.showSnackBarMessage(activityRegister,
+                activityRegister.getString(R.string.terms_and_conditions_messages)
+            )
             return false
         }
         fillDataForRegisterRequest(editTextData)
@@ -271,14 +279,14 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
     fun showPreVerificationLayer(activityRegister: DottysRegisterActivity) {
         //  val displayMetrics = DisplayMetrics()
         activityRegister.windowManager.defaultDisplay.getMetrics(activityRegister.displayMetrics)
-        var imageVerification = activityRegister.findViewById<ImageView>(id.image_verification)
-        var subTitlePreverificationLabel = activityRegister.findViewById<TextView>(id.subtitle_register_sucess_textview)
-        var imageParams = imageVerification.layoutParams
+        val imageVerification = activityRegister.findViewById<ImageView>(id.image_verification)
+        val subTitlePreverificationLabel = activityRegister.findViewById<TextView>(id.subtitle_register_sucess_textview)
+        val imageParams = imageVerification.layoutParams
         imageParams.height = (activityRegister.displayMetrics.heightPixels * 0.55).roundToInt()
         imageVerification.layoutParams = imageParams
-        var actionBarParams = activityRegister.actionBarView?.layoutParams
+        val actionBarParams = activityRegister.actionBarView?.layoutParams
         actionBarParams?.height = 0
-        var paramsLayout = verificationLayout?.layoutParams
+        val paramsLayout = verificationLayout?.layoutParams
         paramsLayout?.height = activityRegister.displayMetrics.heightPixels
         ///verificationLayout.marginTop = 0
         verificationLayout?.layoutParams = paramsLayout
@@ -350,10 +358,12 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
             Response.ErrorListener { error ->
                 activityRegister.hideLoader()
                 if (error.networkResponse != null) {
-                    activityRegister.hideCustomKeyboard()
+                    activityRegister.hideCustomKeyboard(activityRegister)
                     val errorRes = DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                     if (errorRes.error?.messages?.size ?: 0 > 0) {
-                        Toast.makeText(activityRegister, errorRes.error?.messages?.first() ?: "", Toast.LENGTH_LONG).show()
+                        DottysBaseActivity().showSnackBarMessage(activityRegister,
+                            errorRes.error?.messages?.first() ?: ""
+                        )
                     }
                     Log.e("ERROR VOLLEY ", error.message, error)
                 }
@@ -394,11 +404,9 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
                     val errorRes =
                         DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                     if (errorRes.error?.messages?.size ?: 0 > 0) {
-                        Toast.makeText(
-                            context,
-                            errorRes.error?.messages?.first() ?: "",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        DottysBaseActivity().showSnackBarMessage(context,
+                            errorRes.error?.messages?.first() ?: ""
+                        )
                     }
                     Log.e("ERROR VOLLEY ", error.message, error)
                 }
@@ -435,7 +443,7 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
                  context.hideLoader()
                 val container = context.findViewById<View>(android.R.id.content)
                 if (container != null) {
-                    context.hideCustomKeyboard()
+                    context.hideCustomKeyboard(context)
                     Snackbar.make(container, "A verification code has been send", Snackbar.LENGTH_LONG).show()
                 }
                 Log.i("REQUEST VERIFY PHONE","STATUS ${response.statusCode}")
@@ -447,11 +455,9 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
                     val errorRes =
                         DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                     if (errorRes.error?.messages?.size ?: 0 > 0) {
-                        Toast.makeText(
-                            context,
-                            errorRes.error?.messages?.first() ?: "",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        DottysBaseActivity().showSnackBarMessage(context,
+                            errorRes.error?.messages?.first() ?: ""
+                        )
                     }
                     Log.e("ERROR VOLLEY ", error.message, error)
                 }

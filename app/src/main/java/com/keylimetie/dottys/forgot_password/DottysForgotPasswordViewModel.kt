@@ -6,13 +6,18 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.lifecycle.ViewModel
 import com.android.volley.NetworkResponse
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.keylimetie.dottys.*
+import com.keylimetie.dottys.DottysBaseActivity
+import com.keylimetie.dottys.DottysErrorModel
+import com.keylimetie.dottys.R
 import com.keylimetie.dottys.forgot_password.VerificationMethodType.EMAIL
 import com.keylimetie.dottys.forgot_password.VerificationMethodType.SMS
 import com.keylimetie.dottys.register.DottysRegisterViewModel
@@ -71,8 +76,9 @@ open class DottysForgotPasswordViewModel : ViewModel()  {
 //                forgotActivity.startActivity(intent)
 
             } else {
-                Toast.makeText(forgotActivity, "Please, enter a valid mail.", Toast.LENGTH_LONG)
-                    .show()
+                DottysBaseActivity().showSnackBarMessage(forgotActivity,
+                    "Please, enter a valid mail."
+                )
             }
         }
     }
@@ -220,7 +226,7 @@ open class DottysForgotPasswordViewModel : ViewModel()  {
     }
 
     fun onSuccessCodeManager(verificationCodeActivity: DottysEnterVerificationCodeActivity, email:String,isRegisterView: Boolean){
-       // Toast.makeText(verificationCodeActivity,"COMPLETE CODE", Toast.LENGTH_LONG).show()
+        // DottysBaseActivity().showSnackBarMessage(this,verificationCodeActivity,"COMPLETE CODE")
         if (isRegisterView){
             /*GO TO VERIFY CODE */
 //            var intent = Intent(verificationCodeActivity, DottysProfilePictureActivity::class.java)
@@ -294,10 +300,12 @@ open class DottysForgotPasswordViewModel : ViewModel()  {
             },
             Response.ErrorListener { error ->
                 verificationActivity.hideLoader()
-                verificationActivity.hideCustomKeyboard()
+                verificationActivity.hideCustomKeyboard(verificationActivity)
                 val errorRes = DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                 if (errorRes.error?.messages?.size ?: 0 > 0) {
-                    Toast.makeText(verificationActivity, errorRes.error?.messages?.first() ?: "", Toast.LENGTH_LONG).show()
+                    DottysBaseActivity().showSnackBarMessage(verificationActivity,
+                        errorRes.error?.messages?.first() ?: ""
+                    )
                 }
                 Log.e("ERROR VOLLEY ", error.message, error)
                 verificationCodeObserver?.sendVerificationRegistrationCode = false
@@ -362,11 +370,9 @@ open class DottysForgotPasswordViewModel : ViewModel()  {
                 val errorRes =
                     DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                 if (errorRes.error?.messages?.size ?: 0 > 0) {
-                    Toast.makeText(
-                        verificationActivity,
-                        errorRes.error?.messages?.first() ?: "",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    DottysBaseActivity().showSnackBarMessage(verificationActivity,
+                        errorRes.error?.messages?.first() ?: ""
+                    )
                 }
                 }
                 Log.e("ERROR VOLLEY ", error.message, error)
@@ -399,9 +405,10 @@ open class DottysForgotPasswordViewModel : ViewModel()  {
         submitNewPasswordButton  = changePassActivity.findViewById<Button>(R.id.submit_enter_password_button)
         submitNewPasswordButton?.setOnClickListener {
             if (newPasswordEditText?.text.toString() != enterNewPasswordEditText?.text.toString()) {
-                changePassActivity.showSnackBarMessage(changePassActivity.getString(R.string.password_policy_check_message))
+                changePassActivity.showSnackBarMessage(changePassActivity,changePassActivity.getString(R.string.password_policy_check_message)
+                )
             } else  if (!newPasswordEditText?.text.toString().isValidPassword()){
-                changePassActivity.showSnackBarMessage("Password must match")
+                changePassActivity.showSnackBarMessage(changePassActivity,"Password must match")
             } else {
                 changePassword(changePassActivity, mail, newPasswordEditText?.text.toString(), code)
             }
@@ -434,11 +441,9 @@ open class DottysForgotPasswordViewModel : ViewModel()  {
                      val errorRes =
                          DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                      if (errorRes.error?.messages?.size ?: 0 > 0) {
-                         Toast.makeText(
-                             verificationActivity,
-                             errorRes.error?.messages?.first() ?: "",
-                             Toast.LENGTH_LONG
-                         ).show()
+                         DottysBaseActivity().showSnackBarMessage(verificationActivity,
+                             errorRes.error?.messages?.first() ?: ""
+                         )
                      }
                  }
                      verificationActivity.finish()

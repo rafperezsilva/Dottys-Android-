@@ -145,7 +145,7 @@
 
                 <TextView
                     style="@style/TextViewRegisterStyle"
-                    android:text="Phone number" />
+                    android:text="Mobile phone" />
 
                 <EditText
                     android:id="@+id/phone_profile_edit_text"
@@ -176,7 +176,7 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:src="@mipmap/password_icon_red"
-                    android:tint="#525252" />
+                    app:tint="#525252" />
 
                 <TextView
                     style="@style/TextViewRegisterStyle"
@@ -188,7 +188,8 @@
                     android:layout_width="match_parent"
                     android:inputType="phone"
                     android:text="Change password"
-                    android:textAlignment="textEnd" />
+                    android:textAlignment="textEnd"
+                    android:textColor="#5A9402"/>
             </LinearLayout>
 
             <RelativeLayout
@@ -323,6 +324,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:text="dlkasjdlksjdlasjdklajs"
                 android:id="@+id/name_user_profile_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -332,6 +334,7 @@
                 android:textSize="25sp" />
 
             <TextView
+                android:text="dlkasjdlksjdlasjdklajs"
                 android:id="@+id/since_profile_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

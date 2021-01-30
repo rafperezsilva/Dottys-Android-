@@ -8,8 +8,10 @@ import com.android.volley.Response
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.DottysErrorModel
 import com.keylimetie.dottys.DottysMainNavigationActivity
+import com.keylimetie.dottys.ui.locations.showSnackBarMessage
 import org.json.JSONObject
 import java.util.*
 import kotlin.jvm.Throws
@@ -41,11 +43,8 @@ class LogoutViewModel: ViewModel() {
                         val errorRes =
                             DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                         if (errorRes.error?.messages?.size ?: 0 > 0) {
-                            Toast.makeText(
-                                mContext,
-                                errorRes.error?.messages?.first() ?: "",
-                                Toast.LENGTH_LONG
-                            ).show()
+                            DottysBaseActivity().showSnackBarMessage(mContext,
+                                errorRes.error?.messages?.first() ?: "")
                         }
                         Log.e("TAG", error.message, error)
                     }

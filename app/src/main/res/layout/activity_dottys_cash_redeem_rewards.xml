@@ -58,6 +58,8 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -65,8 +67,7 @@
             android:gravity="center">
 
             <ImageView
- 
-                android:id="@+id/redeem_rewards_image"
+                 android:id="@+id/redeem_rewards_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
@@ -75,20 +76,23 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView" />
+                app:layout_constraintTop_toTopOf="@+id/quantity_cahs_textview" />
+
 
             <TextView
-                android:text="10"
-                android:id="@+id/textView"
+                android:textColor="#000"
+                android:id="@+id/quantity_cahs_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
-                android:textSize="55dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/proxima_nova_bold"
+                android:gravity="center"
+                android:textSize="55sp"
+                app:layout_constraintLeft_toLeftOf="@id/redeem_rewards_image"
+                app:layout_constraintRight_toRightOf="@id/redeem_rewards_image"
+                app:layout_constraintTop_toTopOf="@id/redeem_rewards_image" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
@@ -122,7 +126,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:visibility="gone"
-         android:id="@+id/enter_code_layout"
+          android:id="@+id/enter_code_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorPrimary"
@@ -159,12 +163,13 @@
             app:layout_constraintTop_toBottomOf="@+id/title_enter_code" />
 
         <LinearLayout
+
             android:id="@+id/linearLayout7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
+            android:layout_marginStart="18dp"
             android:layout_marginTop="35dp"
-            android:layout_marginEnd="25dp"
+            android:layout_marginEnd="18dp"
             android:gravity="top"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
