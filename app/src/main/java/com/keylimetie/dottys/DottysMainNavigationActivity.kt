@@ -27,6 +27,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.navigation.NavigationView
 import com.keylimetie.dottys.redeem.DottysRewardRedeemedActivity
 import com.keylimetie.dottys.register.DottysRegisterUserDelegates
@@ -81,6 +82,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
     private val listener =
         NavController.OnDestinationChangedListener { controller, destination, arguments ->
             val logoAppBar = findViewById<ImageView>(R.id.logo_appbar)
+            val toolbarLayout = findViewById<AppBarLayout>(R.id.toolbar_layout)
             setTitleToolbar(destination.id)
             selectedItemId = destination.id
             when (destination.id) {
@@ -112,7 +114,10 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
                                         this.getRewardsAtSession()?.toJson().toString())
                                 }
                               R.id.nav_logout -> {
-                                    toolbar.visibility = View.INVISIBLE
+                                  var params  = toolbarLayout.layoutParams
+                                  params.height = 0
+                                  toolbarLayout.layoutParams = params
+
                                 }
                             }
                             logoAppBar.visibility = View.INVISIBLE
