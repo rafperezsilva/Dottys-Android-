@@ -139,7 +139,7 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
             }
           redeemsUserData.rewards.let {
         titleRedeem?.text =
-             attributedRedeemText(redeemsUserData.rewards?.filter { it.redeemed == isRedeemed }?.size.toString())
+             attributedRedeemText("${redeemsUserData.rewards?.filter { it.redeemed == isRedeemed }?.size ?: 0}")
           }
      }
 

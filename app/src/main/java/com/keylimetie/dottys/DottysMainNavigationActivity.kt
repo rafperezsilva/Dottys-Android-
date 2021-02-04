@@ -64,7 +64,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
     private lateinit var toolbar: Toolbar
     var selectedItemId: Int? = 0
     var image_uri: Uri? = null
-
+    private var closeAnalyticButton: Button? =  null
     private val mOnNavigationItemSelectedListener = NavigationView.OnNavigationItemSelectedListener { item ->
         when(item.itemId){
             R.id.nav_contact_suppport -> {
@@ -111,9 +111,9 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
                                         "REDEEM_REWARDS",
                                         this.getRewardsAtSession()?.toJson().toString())
                                 }
-//                                R.id.nav_logout -> {
-//                                    toolbar.visibility = View.GONE
-//                                }
+                              R.id.nav_logout -> {
+                                    toolbar.visibility = View.INVISIBLE
+                                }
                             }
                             logoAppBar.visibility = View.INVISIBLE
                         }
@@ -174,7 +174,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
         mainNavigationActivity = this
         viewAnalitycs    = findViewById<ConstraintLayout>(R.id.analitycs_floating_view)
         viewAnalitycs?.animate()?.translationY(-screenSize.y.toFloat())?.setDuration(0)?.start()
-
+        closeAnalyticButton =  findViewById<Button>(R.id.close_analytics_buttom)
 
     }
 
@@ -202,7 +202,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
     fun initAnalitycsItems(beaconList: ArrayList<DottysBeacon>?) {
         val storeLocation =
             findViewById<TextView>(R.id.location_analitycs_store) //?: return
-        val closeAnalyticButton     =  findViewById<Button>(R.id.close_analytics_buttom) //?: return
+         //?: return
         val userHostIdTextView      =  findViewById<TextView>(R.id.user_host_id) //?: return
         val locationEnableTextView  =  findViewById<TextView>(R.id.location_enable_textview) //?: return
         val locationDeviceTextView  =  findViewById<TextView>(R.id.location_device_analytic_textview) //?: return

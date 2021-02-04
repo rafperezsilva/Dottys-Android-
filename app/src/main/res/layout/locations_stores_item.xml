@@ -37,6 +37,8 @@
                 android:layout_height="match_parent"
                 tools:ignore="RtlCompat" />
             <TextView
+
+                android:layout_marginRight="7dp"
                 android:padding="3dp"
                 android:textAlignment="textEnd"
                 android:gravity="end|top"

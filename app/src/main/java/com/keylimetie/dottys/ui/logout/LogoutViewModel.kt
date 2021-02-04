@@ -29,11 +29,9 @@ class LogoutViewModel: ViewModel() {
                 Method.GET,
                 mContext.baseUrl + "users/logout",
                 null,
-                object : Response.Listener<JSONObject> {
-                    override fun onResponse(response: JSONObject) {
-                        mContext.hideLoader()
-                        mContext.finishSession(mContext)
-                    }
+                Response.Listener<JSONObject> {
+                    mContext.hideLoader()
+                    mContext.finishSession(mContext)
                 },
                 object : Response.ErrorListener {
                     override fun onErrorResponse(error: VolleyError) {
