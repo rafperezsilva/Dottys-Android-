@@ -241,6 +241,7 @@
                     android:text="Dotty’s\n  6188 Cass Ave \nWestmont, IL 60559" />
 
                 <Button
+                    android:visibility="invisible"
                     style="@style/TextViewProfileStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

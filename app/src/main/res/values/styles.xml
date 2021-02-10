@@ -135,7 +135,7 @@
         <item name="android:enabled">false</item>
         <item name="android:textColor">#FFF</item>
         <item name="android:inputType">number</item>
-        <item name="android:textSize">36sp</item>
+        <item name="android:textSize">26sp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:fontFamily">@font/proxima_nova_light</item>
         <item name="android:layout_weight">1</item>
@@ -143,6 +143,19 @@
         <item name="android:background">@drawable/border_code_edittext</item>
         <item name="android:layout_width">wrap_content</item>
     </style>
+
+    <style name="edittext_input_code">
+        <item name="android:padding">5dp</item>
+        <item name="android:inputType">number</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:fontFamily">@font/proxima_nova_semibold</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/border_edittext</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
     <!--    <style name="SwipeView" >-->
     <!--        <attr format="color" name="sb_swipe_bg_color"/>-->
     <!--        <attr format="color" name="sb_thumb_bg_color"/>-->

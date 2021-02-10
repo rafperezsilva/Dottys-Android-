@@ -443,8 +443,9 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
                         )
                     }
                     Log.e("ERROR VOLLEY ", error.message, error)
-                } catch (e: Error){
+                } catch (e: Exception){
                     Log.e("ERROR ", e.toString())
+                    rewardsObserver?.chashRewards = false
                 }
             }) { //no semicolon or coma
 
@@ -664,7 +665,7 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
         val quantityEntries =  (drawingActivity.drawing?.quantity ?: 0) * 7
         val entriesType =  drawingActivity.drawing?.drawingType?.toLowerCase()?.capitalize() ?: ""
         val drawingViewModel = DrawingViewModel()
-        descriptioDrawinTextView.text = "Convert Point ${drawingActivity.drawing?.subtitle} Cash Reward"
+        descriptioDrawinTextView.text = "Convert Point ${drawingActivity.drawing?.subtitle?.replace("to","to\n")} Cash Reward"
                 //drawingViewModel.attributedRedeemText(NumberFormat.getIntegerInstance().format(drawingActivity.getUserPreference()?.points ?: (0).toLong()))rewardsObserver = DottysRedeemedRewardsObserver(drawingActivity)
         if (drawingActivity.rewardsTypeView == "CASH_REWARDS") {
             subtitleDrawing.visibility = View.INVISIBLE//.text = drawingActivity.drawing?.subtitle

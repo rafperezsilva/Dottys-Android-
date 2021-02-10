@@ -1,6 +1,7 @@
 package com.keylimetie.dottys.ui.drawing
 
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,6 +34,8 @@ class DrawingFragment : Fragment(), DottysDrawingDelegates, DottysDashboardDeleg
         drawingViewModel =
             ViewModelProviders.of(this).get(DrawingViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_drawing, container, false)
+//        val inflater2 = TransitionInflater.from(requireContext())
+//        enterTransition = inflater2.inflateTransition(R.transition.slide_right)
         drawingViewModel.segmentLayout = root.findViewById(R.id.segment_drawing_layout)
         dashboardViewModel = DashboardViewModel(activity as DottysMainNavigationActivity)
         drawingViewModel.segmentLayout?.visibility = View.INVISIBLE
@@ -84,6 +87,7 @@ class DrawingFragment : Fragment(), DottysDrawingDelegates, DottysDashboardDeleg
     override fun getDottysUserLocation(locationData: DottysDrawingRewardsModel) {}
 
     override fun getBeaconList(beaconList: DottysBeaconsModel) {}
+
     override fun onDashboardBanners(banners: DottysBannerModel) {}
 
     //endregion

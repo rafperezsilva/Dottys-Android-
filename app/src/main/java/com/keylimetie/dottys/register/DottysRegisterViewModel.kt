@@ -189,21 +189,22 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
         for (item in editTextData!!) {
             when (item?.id) {
                 id.phone_register_edit_text -> {
-                    item.addTextChangedListener(object : PhoneNumberFormattingTextWatcher() {
-                        override fun onTextChanged(
-                            s: CharSequence?,
-                            start: Int,
-                            before: Int,
-                            count: Int
-                        ) {
-                            if (!item.text.contains("+1") && !item.text.isEmpty()) {
-                                item.text.insert(0, "+1")
-                            } else if (item.text.toString() == "+1") {
-                                item.setText("")
-                            }
-                            super.onTextChanged(s, start, before, count)
-                        }
-                    })
+
+//                    item.addTextChangedListener(object : PhoneNumberFormattingTextWatcher() {
+//                        override fun onTextChanged(
+//                            s: CharSequence?,
+//                            start: Int,
+//                            before: Int,
+//                            count: Int
+//                        ) {
+//                            if (!item.text.contains("+1") && !item.text.isEmpty()) {
+//                                item.text.insert(0, "+1")
+//                            } else if (item.text.toString() == "+1") {
+//                                item.setText("")
+//                            }
+//                            super.onTextChanged(s, start, before, count)
+//                        }
+//                    })
                 }
             }
         }

@@ -142,15 +142,24 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:src="@mipmap/phone_icon" />
-
-
-                <EditText
+                <com.github.reinaldoarrosi.maskededittext.MaskedEditText
                     android:id="@+id/phone_register_edit_text"
-                    style="@style/TextViewRegisterStyle"
                     android:layout_width="match_parent"
-                    android:hint="Phone number"
-                    android:inputType="phone"
-                    android:textColor="#222222" />
+                style="@style/TextViewRegisterStyle"
+                android:hint="Phone number"
+                android:textColor="#222222"
+                app:mask="(999) 999-9999"
+                    />
+
+
+
+<!--                <EditText-->
+<!--                    android:id="@+id/phone_register_edit_text"-->
+<!--                    style="@style/TextViewRegisterStyle"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:hint="Phone number"-->
+<!--                    android:inputType="phone"-->
+<!--                    android:textColor="#222222" />-->
             </LinearLayout>
 
             <RelativeLayout

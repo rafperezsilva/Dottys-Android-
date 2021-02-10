@@ -14,7 +14,7 @@ class DottysSplashActivity : DottysBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-          setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         this.window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -22,6 +22,10 @@ class DottysSplashActivity : DottysBaseActivity() {
 
         )
 
+    }
+
+    override fun onStart() {
+        super.onStart()
 
 
 //        val intent = Intent(this,  DottysRouletteActivity::class.java)

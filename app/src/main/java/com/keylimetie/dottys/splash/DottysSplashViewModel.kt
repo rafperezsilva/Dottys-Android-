@@ -30,6 +30,8 @@ class DottysSplashViewModel : ViewModel() {
         loginButton = context.findViewById(R.id.login_splash_button)
         sigupButton = context.findViewById(R.id.sign_up_splash_button)
          conainer = context.findViewById(R.id.splash_page_container)
+         loginButton.isEnabled = true
+         sigupButton.isEnabled = true
           conainer.alpha = 0f
          if ((context.getUserPreference().token?.isEmpty() != false).not()) {
              val intent = Intent(context, DottysMainNavigationActivity::class.java)
@@ -85,10 +87,12 @@ class DottysSplashViewModel : ViewModel() {
 
     private fun buttonLisener(context: Activity) {
         loginButton.setOnClickListener {
+            loginButton.isEnabled = false
             val intentLogin = Intent(context, DottysLoginActivity::class.java)
             context.startActivity(intentLogin)
         }
         sigupButton.setOnClickListener {
+            sigupButton.isEnabled = false
             val intent = Intent(context, DottysRegisterActivity::class.java)
             context.startActivity(intent)
         }

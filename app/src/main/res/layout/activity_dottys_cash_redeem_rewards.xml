@@ -125,7 +125,6 @@
         app:layout_constraintCircleAngle="15"  />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:visibility="gone"
           android:id="@+id/enter_code_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

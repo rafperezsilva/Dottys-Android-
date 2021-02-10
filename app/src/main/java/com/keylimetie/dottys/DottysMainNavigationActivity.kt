@@ -8,6 +8,7 @@ import android.icu.math.BigDecimal
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.telecom.Call
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -175,6 +176,10 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
         if (intent.getBooleanExtra("VIEW_FROM_PROFILE", false)) {
             controller.navigate(R.id.nav_profile, intent.extras)
         }
+
+        overridePendingTransition(R.anim.fade_out,R.anim.slide_in_right);
+
+
 
         mainNavigationActivity = this
         viewAnalitycs    = findViewById<ConstraintLayout>(R.id.analitycs_floating_view)

@@ -4,6 +4,11 @@
         <attr name="longitude" format="float" />
         <attr name="marker" format="string" />
     </declare-styleable>
+
+    <declare-styleable name="MaskedEditText">
+        <attr name="mask" format="string" />
+        <attr name="placeholder" format="string" />
+    </declare-styleable>
 <!--    <declare-styleable name="swipeview">-->
 <!--        <color name="colorAccent">#E91E63</color>-->
 <!--        <color name="colorPrimary">#E91E63</color>-->

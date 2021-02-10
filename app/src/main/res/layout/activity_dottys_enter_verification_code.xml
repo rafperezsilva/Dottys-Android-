@@ -60,71 +60,29 @@
         android:textColor="#56585A" />
 
     <LinearLayout
-        android:gravity="top"
-        android:layout_marginTop="51dp"
+        android:padding="15dp"
+        android:layout_marginTop="35dp"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
-
       <EditText
-          android:inputType="number"
-          android:textSize="45sp"
-          android:fontFamily="@font/proxima_nova_semibold"
        android:id="@+id/firts_code_edittext"
-       android:layout_marginRight="10dp"
-        android:layout_weight="1"
-        android:background="@drawable/border_edittext"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"/>
+          style="@style/edittext_input_code"/>
       <EditText
-          android:inputType="number"
-          android:textSize="45sp"
-          android:fontFamily="@font/proxima_nova_semibold"
-          android:id="@+id/second_code_edittext"
-          android:layout_marginRight="10dp"
-          android:layout_weight="1"
-        android:background="@drawable/border_edittext"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"/>
+        android:id="@+id/second_code_edittext"
+          style="@style/edittext_input_code"/>
       <EditText
-          android:inputType="number"
-          android:textSize="45sp"
-          android:fontFamily="@font/proxima_nova_semibold"
-          android:id="@+id/third_code_edittext"
-          android:layout_marginRight="10dp"
-          android:layout_weight="1"
-        android:background="@drawable/border_edittext"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"/>
+        android:id="@+id/third_code_edittext"
+        style="@style/edittext_input_code"/>
       <EditText
-          android:inputType="number"
-          android:textSize="45sp"
-          android:fontFamily="@font/proxima_nova_semibold"
-          android:id="@+id/fourth_code_edittext"
-          android:layout_marginRight="10dp"
-          android:layout_weight="1"
-        android:background="@drawable/border_edittext"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"/>
+         android:id="@+id/fourth_code_edittext"
+          style="@style/edittext_input_code"/>
       <EditText
-          android:textSize="45sp"
-          android:inputType="number"
-          android:fontFamily="@font/proxima_nova_semibold"
           android:id="@+id/fifth_code_edittext"
-          android:layout_marginRight="10dp"
-          android:layout_weight="1"
-        android:background="@drawable/border_edittext"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"/>
+          style="@style/edittext_input_code"/>
       <EditText
-          android:inputType="number"
-          android:textSize="45sp"
-          android:fontFamily="@font/proxima_nova_semibold"
           android:id="@+id/sixthcode_edittext"
-          android:layout_weight="1"
-        android:background="@drawable/border_edittext"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"/>
+          style="@style/edittext_input_code"/>
     </LinearLayout>
         <TextView
             android:id="@+id/resend_code_textview"

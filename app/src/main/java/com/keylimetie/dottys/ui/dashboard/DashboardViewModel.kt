@@ -114,10 +114,16 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
                 mainFragmentActivity?.startActivity(intent)
             }
             id.convert_points_dashboard_button -> {
+//                mainFragmentActivity?.segmentSelect = RewardsSegment.DRAWING_ENTRIES
+//                mainFragmentActivity?.intent?.putExtra("IS_DASHBOARD_BUTTON", true)
+//                mainFragmentActivity?.controller?.navigate(
+//                    R.id.nav_rewards,
+//                    mainFragmentActivity?.intent?.extras
+//                )
                 mainFragmentActivity?.segmentSelect = RewardsSegment.DRAWING_ENTRIES
                 mainFragmentActivity?.intent?.putExtra("IS_DASHBOARD_BUTTON", true)
                 mainFragmentActivity?.controller?.navigate(
-                    R.id.nav_rewards,
+                    R.id.nav_drawing,
                     mainFragmentActivity?.intent?.extras
                 )
             }

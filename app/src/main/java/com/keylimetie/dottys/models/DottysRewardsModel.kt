@@ -31,6 +31,7 @@ private fun <T> ObjectMapper.convert(
 })
 
 val mapper = jacksonObjectMapper().apply {
+    this.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true)
     propertyNamingStrategy = PropertyNamingStrategy.LOWER_CAMEL_CASE
     setSerializationInclusion(JsonInclude.Include.NON_NULL)
     convert(IconType::class, { IconType.fromValue(it.asText()) }, { "\"${it.value}\"" })

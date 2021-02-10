@@ -7,7 +7,7 @@ import android.widget.TextView
 import com.keylimetie.dottys.*
 
 class DottysLoginActivity : DottysBaseActivity(), DottysLoginDelegate {
-     private val viewModel = DottysLoginViewModel()
+     internal val viewModel = DottysLoginViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

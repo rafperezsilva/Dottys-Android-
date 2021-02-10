@@ -59,6 +59,7 @@ open class DottysLoginViewModel : ViewModel() { //}, TextView.OnEditorActionList
             dataLogin.email = emailEditText?.text?.toString()
             dataLogin.password = passwordEditText?.text?.toString()
             if (checkUserLoginInfo()) {
+                submitLoginButtom?.isEnabled = false
                 loginUserRequest(dataLogin,mContext ?: DottysBaseActivity())
             }
 
@@ -121,26 +122,29 @@ open class DottysLoginViewModel : ViewModel() { //}, TextView.OnEditorActionList
                 } catch (e: Exception) {
                     println(e)
                     mContext?.hideLoader()
+                    (mContext as? DottysLoginActivity)?.viewModel?.submitLoginButtom?.isEnabled = true
                 }
             },
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {
+                    (mContext as? DottysLoginActivity)?.viewModel?.submitLoginButtom?.isEnabled = true
                     mContext?.hideLoader()
                     mContext.hideCustomKeyboard(mContext)
                     if (error.networkResponse == null) {
-                        mContext.showSnackBarMessage(mContext,
-                            "Please, check your internet connection."
-                        )
+                        mContext.showSnackBarMessage(mContext,"Please, check your internet connection.")
                         return
                     }
-                    val errorRes =
-                        DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
-                    if (errorRes.error?.messages?.size ?: 0 > 0) {
-                        mContext.showSnackBarMessage(mContext,
-                            errorRes.error?.messages?.first() ?: ""
-                        )
+                    try {
+                        val errorRes =
+                            DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
+                        if (errorRes.error?.messages?.size ?: 0 > 0) {
+                            mContext.showSnackBarMessage(mContext,
+                                errorRes.error?.messages?.first() ?: "")
+                        }
+                        Log.e("TAG", error.message, error)
+                    }catch (e: Exception){
+                        Log.e("ERROR", e.message ?: "")
                     }
-                    Log.e("TAG", error.message, error)
                 }
             }) { //no semicolon or coma
             override fun parseNetworkResponse(response: NetworkResponse?): Response<JSONObject> {
