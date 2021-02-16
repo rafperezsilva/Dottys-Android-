@@ -6,6 +6,7 @@ import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import com.keylimetie.dottys.DottysConstantItems
 import com.keylimetie.dottys.R

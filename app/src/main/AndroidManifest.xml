@@ -80,7 +80,13 @@
         <activity android:name=".game_play.DottysScratchAndWinActivity" />
         <activity android:name=".game_play.DottysMainGamePlayActivity" />
         <activity android:name=".TermsAndPrivacy.TermsAndPrivacyActivity" />
-        <activity android:name=".redeem.DottysRewardRedeemedActivity" />
+        <activity android:name=".redeem.DottysRewardRedeemedActivity">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
         <activity android:name=".redeem.DottysCashRedeemRewardsActivity" />
         <activity
             android:name=".register.DottysProfilePictureActivity"
@@ -103,7 +109,9 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".redeem.DottysRedeemRewardsActivity" />
+        <activity android:name=".redeem.DottysRedeemRewardsActivity">
+
+        </activity>
         <activity
             android:name=".DottysMainNavigationActivity"
             android:label="@string/title_activity_dottys_main_navigation"

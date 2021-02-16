@@ -23,11 +23,11 @@
 
     <TextView
         android:id="@+id/you_earned_label"
-        android:layout_width="402dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="35dp"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="15dp"
-        android:layout_marginEnd="35dp"
+        android:layout_marginEnd="25dp"
         android:fontFamily="@font/proxima_nova_semibold"
         android:text="To complete Validation and Redemption."
         android:textColor="#FFF"
@@ -39,15 +39,18 @@
     <androidx.constraintlayout.widget.ConstraintLayout
       android:padding="10dp"
         android:id="@+id/ticket_redemeed_container"
+
         android:layout_width="0dp"
         android:layout_height="0dp"
-
+       android:layout_margin="10dp"
         app:layout_constraintBottom_toTopOf="@+id/start_swipe"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/you_earned_label">
 
         <ImageView
+            android:layout_marginTop="30dp"
+            android:padding="10dp"
             android:id="@+id/ticket_redemeed_container2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -62,15 +65,18 @@
 
 
         <RelativeLayout
-             android:foregroundGravity="center"
-            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:foregroundGravity="center"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
 
-                 android:id="@+id/ticket_redemeed_buck"
+                android:id="@+id/ticket_redemeed_buck"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="40dp"
@@ -82,8 +88,8 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="-45dp"
-                 android:fontFamily="@font/proxima_nova_extrabold"
-                android:text="10"
+                android:fontFamily="@font/proxima_nova_extrabold"
+                android:text=""
                 android:textColor="#1E1E1E"
                 android:textSize="60sp" />
         </RelativeLayout>
@@ -127,14 +133,15 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
+
                 android:id="@+id/title_drawing_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="45dp"
                 android:fontFamily="@font/proxima_nova_extrabold"
-                android:text="Weekly Drawing"
+                android:text="$10 Reward"
                 android:textColor="#1E1E1E"
-                android:textSize="22sp"
+                android:textSize="32sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

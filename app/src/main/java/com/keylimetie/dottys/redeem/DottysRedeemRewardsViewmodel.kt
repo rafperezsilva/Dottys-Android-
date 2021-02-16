@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModel
 import com.agik.AGIKSwipeButton.Controller.OnSwipeCompleteListener
 import com.agik.AGIKSwipeButton.View.Swipe_Button_View
@@ -38,6 +39,7 @@ import com.keylimetie.dottys.ui.dashboard.DottysCurrentUserObserver
 import com.keylimetie.dottys.ui.drawing.DrawingViewModel
 import com.keylimetie.dottys.ui.drawing.RewardsSegment
 import com.keylimetie.dottys.ui.locations.showSnackBarMessage
+import com.keylimetie.dottys.utils.encodeToBitmap
 import org.json.JSONObject
 import kotlin.math.roundToInt
 import kotlin.properties.Delegates
@@ -353,7 +355,7 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
         val pointsToRedeem = if (activityRewards is DottysRewardRedeemedActivity)
             (activityRewards).let {
                 "Redeem ${it.drawing?.subtitle?.split(
-            "Points")?.get(0)} points"
+            "Points")?.get(0) ?: ""} points"
         }  else "Host Swipe to Redeem"
         swipeRewardsItem?.textView?.text = pointsToRedeem
         swipeRewardsItem?.textView?.textSize = 17f
@@ -618,21 +620,30 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
         titleBar?.text = "REDEEM REWARDS"
         redemeedActivity.backButton ?: return
         redemeedActivity.backButton!!.visibility = View.INVISIBLE
-      //  val image = redemeedActivity.findViewById<ImageView>(R.id.reward_barcode)
-        val redemmedContainer =
-            redemeedActivity.findViewById<ConstraintLayout>(R.id.ticket_redemeed_container)
-        val drawingContainer =
-            redemeedActivity.findViewById<ConstraintLayout>(R.id.drawing_layout_container)
-        var redemmedCodeItem = redemeedActivity.findViewById<TextView>(R.id.redemeed_code_textview)
-        drawingContainer.visibility = View.INVISIBLE
-        redemmedCodeItem.text = redemeedActivity.rewardsRedemmed?.validationCode
-        if (redemeedActivity.rewardsRedemmed?.barcode?.split(",")?.size ?: 0 > 0) {
-            val bm = Base64.decode(redemeedActivity.rewardsRedemmed?.barcode?.split(",")?.get(1), 0)
-           // image.setImageBitmap(BitmapFactory.decodeByteArray(bm, 0, bm.size))
-        }
+         val image =  (redemeedActivity.findViewById(R.id.ticket_redemeed_buck) as? ImageView)
+         val subtitleReward =  (redemeedActivity.findViewById(R.id.you_earned_label) as? TextView)
 
-        redemmedContainer?.layoutParams = containerTicketLayoutParams(activityRedeem,
-            redemmedContainer)
+            redemeedActivity.findViewById<ConstraintLayout>(R.id.ticket_redemeed_container)
+//        val drawingContainer =
+//            redemeedActivity.findViewById<ConstraintLayout>(R.id.drawing_layout_container)
+
+        val titleTextView = (redemeedActivity.findViewById(R.id.title_drawing_textview) as TextView)
+        titleTextView?.text = "$10 Reward"
+        (redemeedActivity.findViewById(R.id.wired_drawing_label) as TextView).visibility = View.INVISIBLE
+        (redemeedActivity.findViewById(R.id.subtitle_drawing_textview) as TextView).visibility = View.INVISIBLE
+        titleTextView?.textSize = 42f
+        subtitleReward?.textSize = 18f
+
+        var redemmedCodeItem = redemeedActivity.findViewById<TextView>(R.id.redemeed_code_textview)
+//        drawingContainer.visibility = View.INVISIBLE
+        redemmedCodeItem.text = redemeedActivity.rewardsRedemmed?.validationCode ?: "1234564"
+
+      if (redemeedActivity.rewardsRedemmed?.barcode?.split(",")?.size ?: 0 > 0) {
+            val bitmap =  redemeedActivity.rewardsRedemmed?.barcode?.split(",")?.get(1)?.encodeToBitmap()
+
+            image?.setImageBitmap(bitmap)
+         }
+      //  image?.setImageBitmap(redemeedActivity.imageData?.split(",")?.get(1)?.encodeToBitmap())
 
         swipeRewardsItem = redemeedActivity.findViewById<Swipe_Button_View>(R.id.start_swipe)
         swipeButtonSetting(redemeedActivity as DottysRewardRedeemedActivity)
@@ -673,15 +684,16 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
             redemmedCodeItem.visibility = View.INVISIBLE
             // tagEntriesTextView.visibility = View.INVISIBLE
             wiredDrawingTextView.visibility = View.INVISIBLE
-            titleDrawing.textSize = 30f
+            descriptioDrawinTextView.textSize = 22f
+            titleDrawing.textSize = 32f
             titleDrawing.text =
                 "${drawingActivity.drawing?.subtitle?.split(" ")?.last() ?: ""} Reward"
             qttyEntries.text =
                 (drawingActivity.drawing?.subtitle?.split(" ")?.last() ?: "").replace("$", "")
-            redemmedContainer?.layoutParams = containerTicketLayoutParams(
-                drawingActivity,
-                redemmedContainer
-            )
+////     //       redemmedContainer?.layoutParams = containerTicketLayoutParams(
+////                drawingActivity,
+////                redemmedContainer
+//            )
 
         } else {
 
@@ -689,8 +701,8 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
            titleDrawing.text = drawingActivity.drawing?.title
            subtitleDrawing.text = drawingActivity.drawing?.subtitle
            redemmedCodeItem.text = "You can redeem your points for up to $quantityEntries entries into the $entriesType drawing."
-           redemmedContainer?.layoutParams = containerTicketLayoutParams(activityRedeem,
-               redemmedContainer)
+//           redemmedContainer?.layoutParams = containerTicketLayoutParams(activityRedeem,
+//               redemmedContainer)
        }
         swipeRewardsItem = drawingActivity.findViewById<Swipe_Button_View>(R.id.start_swipe)
         swipeButtonSetting(drawingActivity as DottysRewardRedeemedActivity)

@@ -1,9 +1,12 @@
 package com.keylimetie.dottys.utils
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.os.Build
 import android.text.TextUtils
+import android.util.Base64
+import android.util.Log
 import android.util.Patterns
 import org.skyscreamer.jsonassert.JSONAssert
 import java.math.BigInteger
@@ -20,6 +23,16 @@ fun String.isEquivalentToString(jsonString:String?):Boolean{
         true
     } catch (e: Error) {
         false
+    }
+}
+
+fun String.encodeToBitmap():Bitmap? {
+    return try {
+        val decodedByte = Base64.decode(this, Base64.DEFAULT)
+        BitmapFactory.decodeByteArray(decodedByte, 0,decodedByte?.size ?: return null)
+    }catch (e: java.lang.Exception){
+        Log.e("BITMAP DECODE","${e.message}")
+        null
     }
 }
 

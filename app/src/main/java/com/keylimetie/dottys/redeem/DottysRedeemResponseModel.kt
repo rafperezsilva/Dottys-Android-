@@ -16,15 +16,15 @@ val mapper = jacksonObjectMapper().apply {
 }
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class DottysRedeemResponseModel(
-    val barcode: String? = null,
-    val validationCode: String? = null,
+    var barcode: String? = null,
+    var validationCode: String? = null,
 
     @get:JsonProperty("_id") @field:JsonProperty("_id")
-    val id: String? = null,
+    var id: String? = null,
 
-    val redeemedValidationCode: String? = null,
-    val productCode: String? = null,
-    val user: List<Any?>? = null
+    var redeemedValidationCode: String? = null,
+    var productCode: String? = null,
+    var user: List<Any?>? = null
 ) {
     fun toJson() = mapper.writeValueAsString(this)
 

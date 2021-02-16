@@ -193,7 +193,10 @@ class DrawingViewModel : ViewModel() {
                 }
             }
             RewardsSegment.CASH_REWARDS -> {
-                currentDrawing = DottysStatics.staticCashRewards
+                val drawins =  ArrayList<DottysDrawing>()
+                drawins.add((DottysStatics.staticCashRewards).first())
+                currentDrawing = drawins
+                //currentDrawing = DottysStatics.staticCashRewards
             }
         }
         return currentDrawing

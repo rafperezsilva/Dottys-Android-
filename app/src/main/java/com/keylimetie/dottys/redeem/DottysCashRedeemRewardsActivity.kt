@@ -14,9 +14,7 @@ class DottysCashRedeemRewardsActivity : DottysBaseActivity(), DottysRedeemedRewa
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dottys_cash_redeem_rewards)
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            window.statusBarColor = resources.getColor(R.color.colorDottysGrey)
-        }
+        window.statusBarColor = resources.getColor(R.color.colorDottysGrey)
         rewardID  =  DottysRewardModel.fromJson(intent.getStringExtra("REWARD_ID").toString())
         redeemReawrdsViewModel.initCashRewardsView(this)
         setBackButton()
