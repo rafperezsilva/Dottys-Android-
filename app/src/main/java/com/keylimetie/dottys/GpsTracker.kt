@@ -129,6 +129,7 @@ open class GpsTracker(private val mContext: DottysBaseActivity) : Service(),
             }
         } catch (e: Exception) {
             e.printStackTrace()
+            canGetLocation = false
         }
         return locationGps
     }
@@ -180,18 +181,18 @@ open class GpsTracker(private val mContext: DottysBaseActivity) : Service(),
     fun showSettingsAlert() {
         val alertDialog: AlertDialog.Builder = AlertDialog.Builder(mContext)
         // Setting Dialog Title
-        alertDialog.setTitle("GPS is settings")
+        alertDialog.setTitle("Location permissions")
         // Setting Dialog Message
-        alertDialog.setMessage("GPS is not enabled. Do you want to go to settings menu?")
+        alertDialog.setMessage("This app collects location data to find the closest Dotty's store to redeem rewards")
         // On pressing Settings button
-        alertDialog.setPositiveButton("Settings",
+        alertDialog.setNeutralButton("Settings",
             DialogInterface.OnClickListener { dialog, which ->
                 val intent =
                     Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                 mContext.startActivity(intent)
             })
         // on pressing cancel button
-        alertDialog.setNegativeButton("Cancel",
+        alertDialog.setPositiveButton("Dismiss",
             DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
         alertDialog.show()
     }
