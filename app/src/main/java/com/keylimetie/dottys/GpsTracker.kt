@@ -183,7 +183,7 @@ open class GpsTracker(private val mContext: DottysBaseActivity) : Service(),
         // Setting Dialog Title
         alertDialog.setTitle("Location permissions")
         // Setting Dialog Message
-        alertDialog.setMessage("This app collects location data to find the closest Dotty's store to redeem rewards")
+        alertDialog.setMessage(mContext.resources.getString(R.string.LOCATION_PERMISISONS))
         // On pressing Settings button
         alertDialog.setNeutralButton("Settings",
             DialogInterface.OnClickListener { dialog, which ->

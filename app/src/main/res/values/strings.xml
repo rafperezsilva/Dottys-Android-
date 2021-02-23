@@ -124,5 +124,6 @@ Sed commodo tellus sit amet nisi scelerisque volutpat. Nam ac sapien ac felis ve
     <string name="legal_age_message">You must be 21 years old to participate.</string>
     <string name="terms_and_conditions_messages">You must agree to the Terms &amp; Conditions and Privacy Policy to proceed</string>
     <string name="complete_all_fields">All field must be complete!</string>
+    <string name="LOCATION_PERMISISONS">"This app collects location data to find the closest Dotty\'s store to redeem rewards.\nWhen the app is in the background the location is updated every half hour, in case the app is when the app is closed, the location will be updated every two hours.\nWhen the location is always in use, there will be periodic updates every hour and when the app is not in use every two hours.\nRemember that you can change these permissions from the location settings of your device"</string>
 
 </resources>
