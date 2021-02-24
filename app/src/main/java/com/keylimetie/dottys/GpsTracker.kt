@@ -15,10 +15,15 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.os.IBinder
 import android.provider.Settings
+import android.text.Html
+import android.text.Spanned
 import android.util.Log
 import androidx.core.app.ActivityCompat
- import kotlin.properties.Delegates
+import androidx.core.content.ContextCompat
+import kotlin.properties.Delegates
 
+
+@Suppress("DEPRECATED_IDENTITY_EQUALS")
 open class GpsTracker(private val mContext: DottysBaseActivity) : Service(),
     LocationListener {
     var locationObserver: DottysLocationObserver? = null
@@ -129,7 +134,7 @@ open class GpsTracker(private val mContext: DottysBaseActivity) : Service(),
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            canGetLocation = false
+          // canGetLocation = false
         }
         return locationGps
     }
@@ -181,9 +186,11 @@ open class GpsTracker(private val mContext: DottysBaseActivity) : Service(),
     fun showSettingsAlert() {
         val alertDialog: AlertDialog.Builder = AlertDialog.Builder(mContext)
         // Setting Dialog Title
-        alertDialog.setTitle("Location permissions")
+
+        alertDialog.setTitle("Allow Background\nLocation Access")
         // Setting Dialog Message
-        alertDialog.setMessage(mContext.resources.getString(R.string.LOCATION_PERMISISONS))
+        alertDialog.setCancelable(false)
+        alertDialog.setMessage(locationMsgFormatedText())
         // On pressing Settings button
         alertDialog.setNeutralButton("Settings",
             DialogInterface.OnClickListener { dialog, which ->
@@ -191,8 +198,9 @@ open class GpsTracker(private val mContext: DottysBaseActivity) : Service(),
                     Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                 mContext.startActivity(intent)
             })
+
         // on pressing cancel button
-        alertDialog.setPositiveButton("Dismiss",
+        alertDialog.setPositiveButton("Continue",
             DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
         alertDialog.show()
     }
@@ -210,6 +218,19 @@ open class GpsTracker(private val mContext: DottysBaseActivity) : Service(),
             locationObserver?.locationListener = locationGps
         }
 
+    }
+
+    fun locationMsgFormatedText(): Spanned {
+val text1 = "Dotty’s requires access to your device location in the background in order to recognize the device’s entry into secured Dotty’s store locations.\nTo enable location permissions in the background:\n1. Tap on “Continue” on this dialog box.\n2. Tap on “Allow in settings” in the next prompt. This will open the location permission screen for Dotty’s.\n3. Select “Allow all the time” on the screen."
+val text2 = "This app collects location data to enable<br>to recognize the device’s entry<br>into secured Dotty’s store locations,<br>both while using the app and<br>when the app is closed."
+val text3 = "1. Tap on <b>“Continue”</b> on this dialog box."
+val text4 = "2. Tap on <b>“Allow in settings”</b> in the next prompt. This will open the location<br>permission screen for Dotty’s."
+val text5 = "3. Select <b>“Allow all the time”</b> on the screen."
+val text6 = "This app collects location data to<br>enable GPS tracking in order to recognize the device’s entry into secured<br>Dotty’s store locations, even when the<br>app is closed or not in use"
+val text7 = "To function properly, Dotty’s requires<br>access to location in order to recognize<br>the device’s proximity and entry into<br>Dotty’s store locations."
+
+       // val boldText = Html.fromHtml("$text2<br><br>$text3<br>$text4<br>$text5<br>")
+        return Html.fromHtml("$text6<br><br>$text7")
     }
 
     override fun onProviderDisabled(provider: String) {}
@@ -237,6 +258,12 @@ open class GpsTracker(private val mContext: DottysBaseActivity) : Service(),
     }
 
     init {
+        if (ContextCompat.checkSelfPermission( mContext, android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission( mContext, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            showSettingsAlert()
+        }
+
+
         getLocation()
     }
 }
