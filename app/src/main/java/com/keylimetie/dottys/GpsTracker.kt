@@ -258,10 +258,10 @@ val text7 = "To function properly, Dotty’s requires<br>access to location in o
     }
 
     init {
-        if (ContextCompat.checkSelfPermission( mContext, android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED &&
-            ContextCompat.checkSelfPermission( mContext, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            showSettingsAlert()
-        }
+//        if (ContextCompat.checkSelfPermission( mContext, android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED &&
+//            ContextCompat.checkSelfPermission( mContext, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            showSettingsAlert()
+//        }
 
 
         getLocation()
@@ -282,4 +282,10 @@ class DottysLocationObserver(lisener: DottysLocationChangeDelegates) {
     var locationListener: Location? by Delegates.observable(
         initialValue = location,
         onChange = { prop, old, new -> lisener.onLocationChangeHandler(new) })
+}
+
+fun DottysBaseActivity.locationMsgFormatedText(): String {
+     val firts  = "This app collects location data\nto enable GPS tracking in order\nto recognize the device’s entry into\nsecured Dotty’s store locations,\neven when the app is closed or not in use."
+     val second = "To function properly, Dotty’s\nrequires access to location in order\nto recognize the device’s proximity\nand entry into Dotty’s store locations."
+     return "\n$firts\n\n$second\n\n"
 }

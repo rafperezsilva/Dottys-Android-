@@ -10,7 +10,7 @@ fun GpsTracker.getLocation(gps: GpsTracker): LatLng? {
         val longitude = this.getLongitude()
         return LatLng(latitude, longitude)
     } else {
-        gps.showSettingsAlert()
+        //  gps.showSettingsAlert()
     }
     return LatLng(41.8563329, -87.84881410)
 }
