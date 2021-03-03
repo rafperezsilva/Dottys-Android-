@@ -9,12 +9,13 @@
 
 
     <ImageView
-        android:layout_marginTop="35dp"
         android:id="@+id/account_created_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:src="@mipmap/account_created_image"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,7 +23,7 @@
         android:id="@+id/send_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/image_verification"
+        android:layout_below="@+id/account_created_image"
         android:layout_marginTop="15dp"
         android:layout_weight="0"
         android:fontFamily="@font/proxima_nova_light"
