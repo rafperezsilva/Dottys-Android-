@@ -16,11 +16,11 @@ android {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
     defaultConfig {
-        applicationId "com.keylimetie.dottys"
+        applicationId "com.playspinwin.dottys"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 8
-        versionName "3.0.27"
+        versionCode 1
+        versionName "1.0.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
          manifestPlaceholders = [

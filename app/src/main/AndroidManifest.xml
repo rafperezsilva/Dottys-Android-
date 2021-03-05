@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.keylimetie.dottys">
+    package="com.playspinwin.dottys">
 
     <permission android:name="android.permission.CALL_PHONE" />
     <permission android:name="android.permission.INTERNET" />
@@ -33,13 +33,13 @@
         android:name="android.permission.BLUETOOTH_ADMIN"
         android:required="false" />
     <permission
-        android:name="com.keylimetie.dottys.permission.MAPS_RECEIVE"
+        android:name="com.playspinwin.dottys.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
     <permission
-        android:name="com.keylimetie.dottys.permission.ACCESS_FINE_LOCATION"
+        android:name="com.playspinwin.dottys.permission.ACCESS_FINE_LOCATION"
         android:protectionLevel="signature" />
     <permission
-        android:name="com.keylimetie.dottys.permission.ACCESS_COARSE_LOCATION"
+        android:name="com.playspinwin.dottys.permission.ACCESS_COARSE_LOCATION"
         android:protectionLevel="signature" />
 
     <application
@@ -52,7 +52,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".utils.DottysCameraActivity"
+        <activity android:name="com.playspinwin.dottys.utils.DottysCameraActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <!-- Register as a system camera app -->
             <intent-filter>
@@ -60,42 +60,42 @@
             <action android:name="android.media.action.STILL_IMAGE_CAMERA"/>
             </intent-filter>
         </activity>
-        <activity android:name=".analitycs.AnalitycsActivity" />
+        <activity android:name="com.playspinwin.dottys.analitycs.AnalitycsActivity" />
 
         <receiver
-            android:name=".utils.geofence.GeofenceBroadcastReceiver"
+            android:name="com.playspinwin.dottys.utils.geofence.GeofenceBroadcastReceiver"
             android:enabled="true"
             android:exported="true" />
 
         <service
-            android:name=".utils.geofence.GeofenceTransitionsJobIntentService"
+            android:name="com.playspinwin.dottys.utils.geofence.GeofenceTransitionsJobIntentService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <activity
-            android:name=".game_play.roulette.DottysRouletteActivity"
+            android:name="com.playspinwin.dottys.game_play.roulette.DottysRouletteActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".game_play.DottysSlotMachineActivity" />
-        <activity android:name=".game_play.DottysBubbleGameActivity" />
-        <activity android:name=".game_play.DottysScratchAndWinActivity" />
-        <activity android:name=".game_play.DottysMainGamePlayActivity" />
-        <activity android:name=".TermsAndPrivacy.TermsAndPrivacyActivity" />
-        <activity android:name=".redeem.DottysRewardRedeemedActivity">
+        <activity android:name="com.playspinwin.dottys.game_play.DottysSlotMachineActivity" />
+        <activity android:name="com.playspinwin.dottys.game_play.DottysBubbleGameActivity" />
+        <activity android:name="com.playspinwin.dottys.game_play.DottysScratchAndWinActivity" />
+        <activity android:name="com.playspinwin.dottys.game_play.DottysMainGamePlayActivity" />
+        <activity android:name="com.playspinwin.dottys.TermsAndPrivacy.TermsAndPrivacyActivity" />
+        <activity android:name="com.playspinwin.dottys.redeem.DottysRewardRedeemedActivity">
 <!--            <intent-filter>-->
 <!--                <action android:name="android.intent.action.MAIN" />-->
 
 <!--                <category android:name="android.intent.category.LAUNCHER" />-->
 <!--            </intent-filter>-->
         </activity>
-        <activity android:name=".redeem.DottysCashRedeemRewardsActivity" />
+        <activity android:name="com.playspinwin.dottys.redeem.DottysCashRedeemRewardsActivity" />
         <activity
-            android:name=".register.DottysProfilePictureActivity"
+            android:name="com.playspinwin.dottys.register.DottysProfilePictureActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".register.DottysRegisterActivity" />
-        <activity android:name=".forgot_password.DottysEnterPasswordActivity" />
-        <activity android:name=".forgot_password.DottysEnterVerificationCodeActivity" />
-        <activity android:name=".forgot_password.DottysVerificationTypeActivity" />
-        <activity android:name=".forgot_password.DottysForgotPasswordMainActivity" />
+        <activity android:name="com.playspinwin.dottys.register.DottysRegisterActivity" />
+        <activity android:name="com.playspinwin.dottys.forgot_password.DottysEnterPasswordActivity" />
+        <activity android:name="com.playspinwin.dottys.forgot_password.DottysEnterVerificationCodeActivity" />
+        <activity android:name="com.playspinwin.dottys.forgot_password.DottysVerificationTypeActivity" />
+        <activity android:name="com.playspinwin.dottys.forgot_password.DottysForgotPasswordMainActivity" />
 
         <meta-data
             android:name="com.onesignal.NotificationOpened.DEFAULT"
@@ -109,19 +109,19 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".redeem.DottysRedeemRewardsActivity">
+        <activity android:name="com.playspinwin.dottys.redeem.DottysRedeemRewardsActivity">
 
         </activity>
         <activity
-            android:name=".DottysMainNavigationActivity"
+            android:name="com.playspinwin.dottys.DottysMainNavigationActivity"
             android:label="@string/title_activity_dottys_main_navigation"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".login.DottysLoginActivity" />
+        <activity android:name="com.playspinwin.dottys.login.DottysLoginActivity" />
         <activity
-            android:name=".splash.DottysSplashActivity"
+            android:name="com.playspinwin.dottys.splash.DottysSplashActivity"
             android:theme="@style/AppSplashTheme" />
         <activity
-            android:name=".SplashAnimationActivity"
+            android:name="com.playspinwin.dottys.SplashAnimationActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
