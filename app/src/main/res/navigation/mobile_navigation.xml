@@ -58,6 +58,12 @@
         android:name="com.playspinwin.dottys.ui.reusable_fragment.ReusableFragment"
         android:label="@string/menu_terms_and_conditions"
         tools:layout="@layout/reusable_fragment" />
+
+    <fragment
+        android:id="@+id/nav_app_suppport"
+        android:name="com.playspinwin.dottys.ui.reusable_fragment.ReusableFragment"
+        android:label="@string/menu_app_support"
+        tools:layout="@layout/reusable_fragment" />
 <!--    <fragment-->
 <!--            android:id="@+id/nav_replay_tutorial"-->
 <!--        android:name="com.keylimetie.dottys.ui.reusable_fragment.ReusableFragment"-->

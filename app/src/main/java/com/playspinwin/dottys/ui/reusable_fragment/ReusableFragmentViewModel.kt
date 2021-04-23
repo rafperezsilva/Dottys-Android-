@@ -1,13 +1,17 @@
 package com.playspinwin.dottys.ui.reusable_fragment
 
+ import android.os.Build
+ import android.util.Log
  import android.view.View
  import android.webkit.DownloadListener
+ import android.webkit.WebChromeClient
  import android.webkit.WebView
  import androidx.lifecycle.ViewModel
  import com.playspinwin.dottys.DottysConstantItems
  import com.playspinwin.dottys.DottysMainNavigationActivity
  import com.playspinwin.dottys.R
  import android.widget.TextView
+ import androidx.annotation.RequiresApi
 
 
 class ReusableFragmentViewModel : ViewModel(), DownloadListener {
@@ -15,6 +19,7 @@ class ReusableFragmentViewModel : ViewModel(), DownloadListener {
     var webView: WebView? = null
     var textView: TextView? = null
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun initViewSetting(
         root: View,
         itemId: Int,
@@ -27,6 +32,14 @@ class ReusableFragmentViewModel : ViewModel(), DownloadListener {
         textViewDescription?.isEnabled = false
         textViewDescription?.text = activity.getGlobalData().terms ?: DottysConstantItems.termsAndConditionsDefault
          titleForView(itemId, activity)
+        webView!!.webChromeClient = object : WebChromeClient() {
+            override fun onProgressChanged(view: WebView, newProgress: Int) {
+                Log.e("Page loading"," $newProgress%")
+                if (newProgress == 100) {
+                    activity.hideLoader()
+                }
+            }
+        }
     }
 
     private fun titleForView(itemId:Int, activity: DottysMainNavigationActivity){
@@ -51,7 +64,9 @@ class ReusableFragmentViewModel : ViewModel(), DownloadListener {
                 textView?.text =   "Contact Suppport"
             }
             else -> {
-                textView?.text =   ""
+                webView?.loadUrl(DottysConstantItems.appSupportUrl)
+                textView?.text =   "Support"
+
             }
         }
     }

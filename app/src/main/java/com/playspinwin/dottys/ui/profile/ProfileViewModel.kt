@@ -222,6 +222,7 @@ class ProfileViewModel(
       ) {
         val mQueue = Volley.newRequestQueue(activity)
      //   activity?.showLoader()
+          profileData.cell = null
         val jsonProfile = JSONObject(profileData.toJson())
         val jsonObjectRequest = object : JsonObjectRequest(
             Method.PATCH,
@@ -265,7 +266,7 @@ class ProfileViewModel(
             @Throws(AuthFailureError::class)
             override fun getHeaders(): Map<String, String> {
                 val params = HashMap<String, String>()
-                params["Authorization"] = activity?.getUserPreference()?.token!!
+                params["Authorization"] = activity?.getCurrentToken() ?: ""
                 return params
             }
 

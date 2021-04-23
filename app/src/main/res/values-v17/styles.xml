@@ -10,6 +10,15 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
+    <style name="DatePicker" parent="@android:style/Theme.Holo.Light">
+        <item name="android:datePickerStyle">@android:style/Widget.DatePicker</item>
+        <!--        <item name="android:layout_alignParentBottom">true</item>-->
+        <!--        <item name="android:layout_marginRight">55dp</item>-->
+        <!--        <item name="android:layout_width">wrap_content</item>-->
+        <!--        <item name="android:layout_height">wrap_content</item>-->
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+
     <style name="TextViewProfileStyle">
         <item name="android:textColor">#9B9B9B</item>
         <item name="android:textSize">16sp</item>

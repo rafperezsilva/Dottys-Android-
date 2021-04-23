@@ -291,7 +291,7 @@ class LocationsViewModel(val contextMain: DottysBaseActivity) : ViewModel(),
             @Throws(AuthFailureError::class)
             override fun getHeaders(): Map<String, String> {
                 val params = HashMap<String, String>()
-                params["Authorization"] = mContext.getUserPreference().token ?: ""
+                params["Authorization"] = mContext.getCurrentToken() ?: ""
                 return params
             }
 

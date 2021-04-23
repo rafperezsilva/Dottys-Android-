@@ -88,7 +88,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
             when (destination.id) {
                 R.id.nav_locations, R.id.nav_profile,
                 R.id.nav_terms_and_conditions, R.id.nav_privacy_policy,
-                    /// R.id.nav_contact_suppport,
+                      R.id.nav_app_suppport,
                 -> {
                     toolbar.setBackgroundColor(resources.getColor(R.color.colorPrimary))
                     logoAppBar.visibility = View.INVISIBLE
@@ -153,6 +153,9 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
             }
             R.id.nav_terms_and_conditions -> {
                 return "Terms & Conditions"
+            }
+             R.id.nav_app_suppport -> {
+                return "Support"
             }
             R.id.nav_privacy_policy -> {
                 return "Privacy Policy"
@@ -239,7 +242,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
             storeLocation.text = if(!getBeaconStatus()?.beaconArray.isNullOrEmpty())
                 (getBeaconStatus()?.beaconArray?.first()?.location?.storeNumber ?: 0).toString()
             else
-                "Has no nearest locations"
+                ""//FIXME: PUT MESSAGE ON VOID LOCATIONS
         }
         val listViewRewards =
             findViewById<ListView>(R.id.beacons_analytics_listview)
@@ -265,7 +268,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
             setOf(
                 R.id.nav_dashboard, R.id.nav_locations, R.id.nav_rewards,
                 R.id.nav_drawing, R.id.nav_privacy_policy, R.id.nav_profile,
-                R.id.nav_terms_and_conditions, //R.id.nav_replay_tutorial,
+                R.id.nav_terms_and_conditions, R.id.nav_app_suppport,
                 R.id.nav_contact_suppport, R.id.nav_logout
             ), drawerLayout
         )
@@ -302,7 +305,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
         if (this.getUserPreference().acl.isNullOrEmpty()) { return false }
           return when(this.getUserPreference().acl?.first()?.role){
             DottysRoleUser.USER                               -> false
-            DottysRoleUser.ADMIN, DottysRoleUser.REGION_ADMIN, DottysRoleUser.SUPER_ADMIN -> true
+            DottysRoleUser.ADMIN, DottysRoleUser.REGION_ADMIN, DottysRoleUser.SUPER_ADMIN, DottysRoleUser.EMPLOYEE -> true
             else                                              -> false
         }
 

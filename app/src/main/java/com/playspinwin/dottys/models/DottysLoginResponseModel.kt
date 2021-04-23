@@ -95,6 +95,7 @@ data class DottysRegisterModel(
 )
 
 enum class DottysRoleUser(var varue: String) {
+    EMPLOYEE("EMPLOYEE"),
     SUPER_ADMIN("SUPER_ADMIN"),
     ADMIN("ADMIN"),
     USER("USER"),
@@ -102,6 +103,7 @@ enum class DottysRoleUser(var varue: String) {
 
     companion object {
         fun fromvarue(varue: String): DottysRoleUser = when (varue) {
+            "EMPLOYEE"     -> DottysRoleUser.EMPLOYEE
             "SUPER_ADMIN"     -> DottysRoleUser.SUPER_ADMIN
             "ADMIN"     -> DottysRoleUser.ADMIN
             "USER" -> DottysRoleUser.USER

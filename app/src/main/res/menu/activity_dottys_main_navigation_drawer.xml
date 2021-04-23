@@ -50,6 +50,11 @@
 <!--            android:icon="@mipmap/replay_tutorial_icon"-->
 <!--            android:title="@string/menu_replay_tutorial" />-->
         <item
+            android:id="@+id/nav_app_suppport"
+            android:icon="@mipmap/contact_support_icon"
+            android:title="@string/menu_app_support" />
+
+        <item
             android:id="@+id/nav_contact_suppport"
             android:icon="@mipmap/beacon_icon"
             android:title="@string/menu_contact_support" />

@@ -54,7 +54,7 @@ class DottysRegisterActivity : DottysBaseActivity(), DatePickerDialog.OnDateSetL
             return
         }
         val currentDate = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            LocalDate.of(c.get(Calendar.YEAR) - 18,c.get(Calendar.MONTH) + 1,c.get(Calendar.DAY_OF_MONTH))
+            LocalDate.of(c.get(Calendar.YEAR) - 21,c.get(Calendar.MONTH) + 1,c.get(Calendar.DAY_OF_MONTH))
         } else {
             return
         }

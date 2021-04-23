@@ -28,6 +28,7 @@ class DottysLoginActivity : DottysBaseActivity(), DottysLoginDelegate {
 
     override fun onUserLogin(registerUserData: DottysLoginResponseModel) {
         saveDataPreference(PreferenceTypeKey.USER_DATA, registerUserData.toJson())
+        saveDataPreference(PreferenceTypeKey.TOKEN, registerUserData.token)
         val intent = Intent(this, DottysMainNavigationActivity::class.java)
         startActivity(intent)
 

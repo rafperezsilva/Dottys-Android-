@@ -158,9 +158,10 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
         val month: Int = c.get(Calendar.MONTH)
         val day: Int = c.get(Calendar.DAY_OF_MONTH)
         val datePickerDialog = activityRegister?.let {
-            DatePickerDialog(
-                it, activityRegister, year - 18, month, day
-            )
+         val dp =   DatePickerDialog(it,R.style.DatePicker, activityRegister, year - 21, month, day)
+//            dp.datePicker.spinnersShown = true
+//            dp.datePicker.calendarViewShown = false
+            dp
         }
 
 //        birthdateEditText?.setOnFocusChangeListener { v, hasFocus ->
@@ -388,7 +389,7 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
 
         val mQueue = Volley.newRequestQueue(context)
         val params = HashMap<String, String>()
-        params["Authorization"] = context.getUserPreference().token ?: ""
+        params["Authorization"] = context.getCurrentToken() ?: ""
         val request = object : VolleyMultipartRequest(
             context.baseUrl + "users/profilePicture",
             params,
@@ -435,7 +436,7 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
       context.showLoader()
         val mQueue = Volley.newRequestQueue(context)
         val params = HashMap<String, String>()
-        params["Authorization"] = context.getUserPreference().token ?: ""
+        params["Authorization"] = context.getCurrentToken() ?: ""
         val request = object : VolleyMultipartRequest(
             context.baseUrl + "users/requestVerifyPhone",
             params,
@@ -506,6 +507,7 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
 
     override fun onUserLogin(registerUserData: DottysLoginResponseModel) {
         activityRegister?.saveDataPreference(PreferenceTypeKey.USER_DATA, registerUserData.toJson())
+        activityRegister?.saveDataPreference(PreferenceTypeKey.TOKEN, registerUserData.token)
         val intent = Intent(activityRegister, DottysMainNavigationActivity::class.java)
         activityRegister?.startActivity(intent)
 

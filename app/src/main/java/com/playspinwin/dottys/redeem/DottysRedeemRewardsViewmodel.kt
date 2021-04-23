@@ -440,6 +440,8 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
                         DottysBaseActivity().showSnackBarMessage(activityRewards,
                             errorRes.error?.messages?.first() ?: ""
                         )
+                       rewardsObserver?.chashRewards = false
+                       // rewardsObserver?.rewardsRedeemed = DottysRedeemResponseModel()
                     }
                     Log.e("ERROR VOLLEY ", error.message, error)
                 } catch (e: Exception){
@@ -455,7 +457,7 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
 
             override fun getHeaders(): MutableMap<String, String> {
                 val params = java.util.HashMap<String, String>()
-                params["Authorization"] = activityRewards.getUserPreference().token!!
+                params["Authorization"] = activityRewards.getCurrentToken() ?: ""
                 return params
             }
         }
@@ -524,7 +526,7 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
 //            }
             override fun getHeaders(): MutableMap<String, String> {
                 val params = java.util.HashMap<String, String>()
-                params["Authorization"] = drawingActivity.getUserPreference().token!!
+                params["Authorization"] = drawingActivity.getCurrentToken() ?: ""
                 return params
             }
         }
@@ -582,7 +584,7 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
 
             override fun getHeaders(): MutableMap<String, String> {
                 val params = java.util.HashMap<String, String>()
-                params["Authorization"] = drawingActivity.getUserPreference().token!!
+                params["Authorization"] = drawingActivity.getCurrentToken() ?: ""
                 return params
             }
         }

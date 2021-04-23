@@ -302,7 +302,7 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
                 @Throws(AuthFailureError::class)
                 override fun getHeaders(): Map<String, String> {
                     val params = HashMap<String, String>()
-                    params["Authorization"] = mContext.getUserPreference().token!!
+                    params["Authorization"] = mContext.getCurrentToken() ?: ""
                     return params
                 }
 
@@ -355,7 +355,7 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
             @Throws(AuthFailureError::class)
             override fun getHeaders(): Map<String, String> {
                 val params = HashMap<String, String>()
-                params["Authorization"] = mContext.getUserPreference().token!!
+                params["Authorization"] = mContext.getCurrentToken() ?: ""
                 return params
             }
 
@@ -401,7 +401,7 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
             @Throws(AuthFailureError::class)
             override fun getHeaders(): Map<String, String> {
                 val params = HashMap<String, String>()
-                params["Authorization"] = mContext.getUserPreference().token ?: ""
+                params["Authorization"] = mContext.getCurrentToken() ?: ""
                 return params
             }
 
@@ -448,7 +448,7 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
             @Throws(AuthFailureError::class)
             override fun getHeaders(): Map<String, String> {
                 val params = HashMap<String, String>()
-                params["Authorization"] = mContext.getUserPreference().token!!
+                params["Authorization"] = mContext.getCurrentToken() ?: ""
                 return params
             }
 
@@ -500,7 +500,7 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
             @Throws(AuthFailureError::class)
             override fun getHeaders(): Map<String, String> {
                 val params = HashMap<String, String>()
-                params["Authorization"] = mContext.getUserPreference().token!!
+                params["Authorization"] = mContext.getCurrentToken() ?: ""
                 return params
             }
 
@@ -551,7 +551,7 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
             @Throws(AuthFailureError::class)
             override fun getHeaders(): Map<String, String> {
                 val params = HashMap<String, String>()
-                params["Authorization"] = mContext.getUserPreference().token!!
+                params["Authorization"] = mContext.getCurrentToken() ?: ""
                 return params
             }
 
@@ -599,7 +599,7 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
             @Throws(AuthFailureError::class)
             override fun getHeaders(): Map<String, String> {
                 val params = HashMap<String, String>()
-                params["Authorization"] = mContext.getUserPreference().token!!
+                params["Authorization"] = mContext.getCurrentToken() ?: ""
                 return params
             }
 
@@ -721,7 +721,7 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
             storeLocation.text = if(!mainFragmentActivity?.getBeaconStatus()?.beaconArray.isNullOrEmpty())
                 (mainFragmentActivity?.getBeaconStatus()?.beaconArray?.first()?.location?.storeNumber ?: 0).toString()
              else
-                "Has no nearest locations"
+                ""//FIXME: PUT MESSAGE ON VOID LOCATIONS
         }
         var listViewRewards =
             mainFragmentActivity?.findViewById<ListView>(R.id.beacons_analytics_listview)
