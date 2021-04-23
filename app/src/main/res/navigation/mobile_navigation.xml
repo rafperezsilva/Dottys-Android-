@@ -8,12 +8,12 @@
     >
     <fragment
         android:id="@+id/nav_locations"
-        android:name="com.playspinwin.dottys.ui.locations.LocationsFragment"
+        android:name="com.keylimetie.dottys.ui.locations.LocationsFragment"
         android:label="@string/menu_locations"
         tools:layout="@layout/fragment_locations" />
     <fragment
         android:id="@+id/nav_dashboard"
-        android:name="com.playspinwin.dottys.ui.dashboard.DashboardFragment"
+        android:name="com.keylimetie.dottys.ui.dashboard.DashboardFragment"
         android:label="@string/menu_dashboard"
         tools:layout="@layout/fragment_dashboard" />
 
@@ -32,36 +32,36 @@
 
     <activity
         android:id="@+id/nav_rewards"
-        android:name="com.playspinwin.dottys.redeem.DottysRedeemRewardsActivity"
+        android:name="com.keylimetie.dottys.redeem.DottysRedeemRewardsActivity"
         android:label="@string/menu_rewards"
         tools:layout="@layout/activity_dottys_redeem_rewards" />
     <fragment
         android:id="@+id/nav_drawing"
-        android:name="com.playspinwin.dottys.ui.drawing.DrawingFragment"
-        android:label="@string/menu_drawing"
+        android:name="com.keylimetie.dottys.ui.drawing.DrawingFragment"
+        android:label="@string/menu_convert_points"
         tools:layout="@layout/fragment_drawing" />
 
     <fragment
         android:id="@+id/nav_privacy_policy"
-        android:name="com.playspinwin.dottys.ui.reusable_fragment.ReusableFragment"
+        android:name="com.keylimetie.dottys.ui.reusable_fragment.ReusableFragment"
         android:label="@string/menu_privacy_policy"
         tools:layout="@layout/fragment_share"/>
 
     <fragment
         android:id="@+id/nav_profile"
-        android:name="com.playspinwin.dottys.ui.profile.ProfileFragment"
+        android:name="com.keylimetie.dottys.ui.profile.ProfileFragment"
         android:label="@string/menu_profile"
         tools:layout="@layout/reusable_fragment" />
 
     <fragment
         android:id="@+id/nav_terms_and_conditions"
-        android:name="com.playspinwin.dottys.ui.reusable_fragment.ReusableFragment"
+        android:name="com.keylimetie.dottys.ui.reusable_fragment.ReusableFragment"
         android:label="@string/menu_terms_and_conditions"
         tools:layout="@layout/reusable_fragment" />
 
     <fragment
         android:id="@+id/nav_app_suppport"
-        android:name="com.playspinwin.dottys.ui.reusable_fragment.ReusableFragment"
+        android:name="com.keylimetie.dottys.ui.reusable_fragment.ReusableFragment"
         android:label="@string/menu_app_support"
         tools:layout="@layout/reusable_fragment" />
 <!--    <fragment-->
@@ -77,12 +77,12 @@
     <fragment
 
         android:id="@+id/nav_logout"
-        android:name="com.playspinwin.dottys.ui.logout.LogoutFragment"
+        android:name="com.keylimetie.dottys.ui.logout.LogoutFragment"
         android:label="@string/menu_logout"
         tools:layout="@layout/logout_fragment" />
     <fragment
         android:id="@+id/nav_redeem_rewards"
-        android:name="com.playspinwin.dottys.ui.redeem_rewards.DottysRedeemRewrds"
+        android:name="com.keylimetie.dottys.ui.redeem_rewards.DottysRedeemRewrds"
         android:label="@string/menu_redeem_rewards"
         tools:layout="@layout/dottys_redeem_rewrds_fragment" />
 

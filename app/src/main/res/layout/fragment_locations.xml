@@ -14,7 +14,7 @@
         android:layout_height="390dp"
         android:id="@+id/map_view_fragment"
         tools:context=".DottysMainNavigationActivity"
-        android:name="com.playspinwin.dottys.ui.locations.DottysLocationsMapFragment"
+        android:name="com.keylimetie.dottys.ui.locations.DottysLocationsMapFragment"
         app:layout_constraintEnd_toEndOf="parent"
          app:layout_constraintStart_toStartOf="parent"
          app:layout_constraintTop_toTopOf="parent"

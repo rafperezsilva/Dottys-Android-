@@ -30,7 +30,7 @@
     <string name="menu_redeem_rewards">Logout</string>
 
 
-    <string name="menu_drawing">Drawing</string>
+    <string name="menu_convert_points">Convert Points</string>
     <!--    <string name="menu_privacy_policy">Share</string>-->
     <string name="menu_profile">Profile</string>
     <string name="title_activity_dottys_main_navigation">DottysMainNavigationActivity</string>

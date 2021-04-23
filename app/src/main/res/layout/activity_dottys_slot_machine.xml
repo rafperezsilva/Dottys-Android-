@@ -38,7 +38,7 @@
             android:layout_gravity="center_horizontal|center_vertical"
             tools:ignore="UselessParent">
 
-            <com.playspinwin.dottys.game_play.slotImageScroll.SlotScroll
+            <com.keylimetie.dottys.game_play.slotImageScroll.SlotScroll
                 android:id="@+id/image1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
                 android:layout_weight="1"
                 android:padding="10sp" />
 
-            <com.playspinwin.dottys.game_play.slotImageScroll.SlotScroll
+            <com.keylimetie.dottys.game_play.slotImageScroll.SlotScroll
                 android:id="@+id/image2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
                 android:layout_weight="1"
                 android:padding="10sp" />
 
-            <com.playspinwin.dottys.game_play.slotImageScroll.SlotScroll
+            <com.keylimetie.dottys.game_play.slotImageScroll.SlotScroll
                 android:id="@+id/image3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
