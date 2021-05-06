@@ -579,6 +579,7 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
                         response.toString()
                     )
                 userCurrentUserDataObserver?.dottysBeaconList = user
+                mContext.initEstimoteBeaconManager()
             },
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {
@@ -717,13 +718,9 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
 
         locationDeviceTextView?.text = "Lat: $latitude | Long: $longitude"
         locationEnableTextView?.text = isEnableLocation
-        if (storeLocation != null) {
-            storeLocation.text = if(!mainFragmentActivity?.getBeaconStatus()?.beaconArray.isNullOrEmpty())
-                (mainFragmentActivity?.getBeaconStatus()?.beaconArray?.first()?.location?.storeNumber ?: 0).toString()
-             else
-                ""//FIXME: PUT MESSAGE ON VOID LOCATIONS
-        }
-        var listViewRewards =
+        mainActivity?.getUserNearsLocations()?.locations?.first()?.let { location -> storeLocation?.text = "${location.storeNumber ?: 0}" }
+
+        val listViewRewards =
             mainFragmentActivity?.findViewById<ListView>(R.id.beacons_analytics_listview)
         if (mainFragmentActivity == null) {
             return

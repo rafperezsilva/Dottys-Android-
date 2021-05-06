@@ -11,6 +11,8 @@ import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.databind.ser.std.StdSerializer
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.keylimetie.dottys.beacon_service.BeaconEventType
+import com.keylimetie.dottys.beacon_service.DottysBeaconResponseModel
 import com.keylimetie.dottys.ui.locations.CompanyType
 import com.keylimetie.dottys.ui.locations.DottysStoresLocation
 
@@ -42,7 +44,7 @@ data class DottysBeaconsModel (
     val limit: Long? = null,
     val page: Long? = null,
     val pages: Long? = null,
-    val beacons: List<DottysBeacon>? = null
+    var beacons: List<DottysBeacon>? = null
 ) {
     fun toJson() = mapperBeacons.writeValueAsString(this)
 
@@ -76,16 +78,18 @@ data class  DottysBeacon (
     var major: Long? = null,
     var minor: Long? = null,
     var beaconType: BeaconType? = null,
-    val createdBy: String? = null,
-    val updatedBy: String? = null,
+    var createdBy: String? = null,
+    var updatedBy: String? = null,
     var isConected: Boolean? = null,
+    var isRegistered: Boolean = false,
+    var expiration: Int = 0,
 
     @get:JsonProperty("isDeleted")@field:JsonProperty("isDeleted")
     val isDeleted: Boolean? = null,
 
     var location: DottysStoresLocation? = null,
-    val beaconIdentifier: String? = id,
-    var eventType: String? = null,
+    var beaconIdentifier: String? = id,
+    var eventType: BeaconEventType? = null,
 
     @get:JsonProperty("userId")@field:JsonProperty("userId")
     var userID: String? = null,
@@ -104,15 +108,28 @@ data class  DottysBeacon (
     }
 }
 
+
+data class BeaconConnectionsUpdatesModel(
+    var beacon: DottysBeaconResponseModel? = null,
+    var updates: ArrayList<String>? = null
+) {
+    fun toJson(): String = mapper.writeValueAsString(this)
+
+    companion object {
+        fun fromJson(json: String) = mapper.readValue<BeaconConnectionsUpdatesModel>(json)
+    }
+}
+
+
 enum class BeaconType(val value: String) {
-    Gaming("GAMING"),
-    Location("LOCATION");
+    GAMING("GAMING"),
+    LOCATION("LOCATION");
 
     companion object {
         fun fromValue(value: String): BeaconType = when (value) {
-            "GAMING"   -> Gaming
-            "LOCATION" -> Location
+            "GAMING"   -> GAMING
+            "LOCATION" -> LOCATION
             else       -> throw IllegalArgumentException()
         }
     }
-}
+    }

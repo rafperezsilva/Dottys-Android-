@@ -16,9 +16,7 @@ import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.keylimetie.dottys.*
-import com.keylimetie.dottys.beacon_service.DottysBeaconActivity
-import com.keylimetie.dottys.beacon_service.DottysBeaconActivityDelegate
-import com.keylimetie.dottys.beacon_service.DottysBeaconActivityObserver
+
 import com.keylimetie.dottys.models.DottysGlobalDataModel
 import com.keylimetie.dottys.models.DottysRewardsModel
 import com.keylimetie.dottys.register.DottysRegisterActivity
@@ -37,7 +35,7 @@ import com.squareup.picasso.Picasso
 
 class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDelegates,
     DottysLocationDelegates, View.OnClickListener, View.OnLayoutChangeListener,
-    DottysProfileDelegates, DottysBeaconActivityDelegate {
+    DottysProfileDelegates {
     private var staticImagesResouerce = arrayListOf<Int>(
         R.id.dashboard_image_pager0, R.id.dashboard_image_pager1, R.id.dashboard_image_pager2,
         R.id.dashboard_image_pager3, R.id.dashboard_image_pager4, R.id.dashboard_image_pager5,
@@ -72,7 +70,7 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
             dashboardViewModel.initDashboardViewSetting(this, activity, viewFragment)
         }
         activity?.hideCustomKeyboard(activity)
-        activity?.beaconService?.observer = DottysBeaconActivityObserver(this)
+       // activity?.beaconService?.observer = DottysBeaconActivityObserver(this)
         mainHandler = Handler(Looper.getMainLooper())
         return root
     }
@@ -83,7 +81,7 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
         super.onStart()
         val activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
         activity?.dashboardFragment = this
-        activity?.beaconService?.observer = DottysBeaconActivityObserver(this)
+       // activity?.beaconService?.observer = DottysBeaconActivityObserver(this)
         getActivity()?.window?.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN)
@@ -95,7 +93,7 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
 
         var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
         activity?.dashboardFragment = this
-        activity?.beaconService?.observer = DottysBeaconActivityObserver(this)
+        //activity?.beaconService?.observer = DottysBeaconActivityObserver(this)
         activity?.gpsTracker =
             this.context?.let { GpsTracker(it as DottysMainNavigationActivity) }!! /*GPS TRACKER*/
 
@@ -315,9 +313,9 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
             PreferenceTypeKey.BEACONS_LIST,
             beaconList.toJson().toString()
         )
-        DottysBeaconActivity(activity ?: return)
-        dashboardViewModel.initAnalitycsItems(activity.getBeaconStatus()?.beaconArray
-            ?: activity.getBeaconStatus()?.beaconArray ?: return)
+      //  DottysBeaconActivity(activity ?: return)
+        dashboardViewModel.initAnalitycsItems(activity?.getBeaconStatus()?.beaconArray
+            ?: activity?.getBeaconStatus()?.beaconArray ?: return)
         activity.let { dashboardViewModel.getDrawingSummary(it as DottysMainNavigationActivity) }
         dashboardViewModel.initAnalitycsItems(
             (if (mainActivity?.getBeaconStatus()?.beaconArray.isNullOrEmpty()) {
@@ -415,16 +413,16 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
 
     }
 
-    override fun onBeaconsServiceChange(beaconsData: DottysBeaconArray) {
-        val activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
-        if (beaconsData != activity?.getBeaconStatus()) {
-            activity?.saveDataPreference(PreferenceTypeKey.BEACON_AT_CONECTION,beaconsData.toJson()
-            )
-        }
-
-
-        dashboardViewModel.initAnalitycsItems(beaconsData.beaconArray)
-    }
+//    override fun onBeaconsServiceChange(beaconsData: DottysBeaconArray) {
+//        val activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
+//        if (beaconsData != activity?.getBeaconStatus()) {
+//            activity?.saveDataPreference(PreferenceTypeKey.BEACON_AT_CONECTION,beaconsData.toJson()
+//            )
+//        }
+//
+//
+//        dashboardViewModel.initAnalitycsItems(beaconsData.beaconArray)
+//    }
 
     override fun onClick(v: View?) {
         when (v?.id) {

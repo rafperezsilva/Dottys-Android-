@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.keylimetie.dottys.ui.dashboard.models.BeaconType
+import com.keylimetie.dottys.ui.dashboard.models.DottysBeacon
 
 
 val mapper = jacksonObjectMapper().apply {
@@ -36,7 +38,7 @@ data class DottysBeaconResponseModel (
     val major: Long? = null,
     val minor: Long? = null,
     val eventType: BeaconEventType? = null,
-    val beaconType: BeaconEventType? = null,
+    val beaconType: BeaconType? = null,
     val createdBy: String? = null,
     val updatedBy: String? = null,
 
@@ -52,5 +54,23 @@ data class DottysBeaconResponseModel (
 
     companion object {
         fun fromJson(json: String) = mapper.readValue<DottysBeaconResponseModel>(json)
+    }
+
+    fun  castToBeaconEvent(): DottysBeacon {
+          val beaconCasted = DottysBeacon()
+           beaconCasted.userID = userID
+           beaconCasted.locationSequence = locationSequence
+           beaconCasted.id = id
+           beaconCasted.uuid = uuid
+           beaconCasted.eventType = eventType
+           beaconCasted.updatedAt = updatedAt
+           beaconCasted.createdAt = createdAt
+           beaconCasted.beaconIdentifier = beaconIdentifier
+           beaconCasted.major = major
+           beaconCasted.minor = minor
+           beaconCasted.beaconType = beaconType
+           beaconCasted.createdBy = createdBy
+           beaconCasted.updatedBy = updatedBy
+        return beaconCasted
     }
 }

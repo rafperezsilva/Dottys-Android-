@@ -77,7 +77,7 @@ class ForegroundCheckTask(isAppOnBackground: Boolean, baseActivity: DottysBaseAc
       val locationsViewModel = LocationsViewModel(activity)
       if (activity.getUserPreference().token?.isEmpty() ?: return){ return }
       locationsViewModel.locationDataObserver = DottysLocationStoresObserver(activity)
-      locationsViewModel.getLocationsDottysRequest(activity,
+      locationsViewModel.   getLocationsDottysRequest(activity,
           gps?.latitude.toString(),
           gps?.longitude.toString())
 
