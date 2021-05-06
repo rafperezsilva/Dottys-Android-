@@ -308,22 +308,25 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
     /** 4
      *  **/
     override fun getBeaconList(beaconList: DottysBeaconsModel) {
-        var activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
-        activity?.saveDataPreference(
-            PreferenceTypeKey.BEACONS_LIST,
-            beaconList.toJson().toString()
-        )
+        val activity: DottysMainNavigationActivity? = activity as DottysMainNavigationActivity?
+        if(activity?.getDottysBeaconsList().isNullOrEmpty() || activity?.getDottysBeaconsList()?.first()?.minor != beaconList.beacons?.first()?.minor) {
+            activity?.saveDataPreference(
+                PreferenceTypeKey.BEACONS_LIST,
+                beaconList.toJson()
+            )
+            activity?.initEstimoteBeaconManager()
+        }
       //  DottysBeaconActivity(activity ?: return)
-        dashboardViewModel.initAnalitycsItems(activity?.getBeaconStatus()?.beaconArray
-            ?: activity?.getBeaconStatus()?.beaconArray ?: return)
+//        dashboardViewModel.initAnalitycsItems(activity?.getBeaconStatus()?.beaconArray
+//            ?: activity?.getBeaconStatus()?.beaconArray ?: return)
         activity.let { dashboardViewModel.getDrawingSummary(it as DottysMainNavigationActivity) }
-        dashboardViewModel.initAnalitycsItems(
-            (if (mainActivity?.getBeaconStatus()?.beaconArray.isNullOrEmpty()) {
-                mainActivity?.getBeaconStatus()?.beaconArray
-            } else {
-                mainActivity?.getBeaconStatus()?.beaconArray
-            })
-        )
+//        dashboardViewModel.initAnalitycsItems(
+//            (if (mainActivity?.getBeaconStatus()?.beaconArray.isNullOrEmpty()) {
+//                mainActivity?.getBeaconStatus()?.beaconArray
+//            } else {
+//                mainActivity?.getBeaconStatus()?.beaconArray
+//            })
+//        )
 
       //  activity.let { it?.let { it1 -> dashboardViewModel.getDrawingSummary(it1) } }
 

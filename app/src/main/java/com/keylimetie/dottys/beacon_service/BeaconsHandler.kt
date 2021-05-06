@@ -165,6 +165,7 @@ class BeaconsHandler(private val context: DottysBaseActivity, private val observ
             /** SI NO CONTIENE NINGUN BEACON*/
             if(beaconOnConnection.isEmpty()){
                 beacon.isConected = true
+                beacon.isRegistered = false
                 beaconOnConnection.add(beacon) //UPDAET VIEW
                 recordBeacon(beacon, BeaconEventType.ENTER)
                 observer?.listOfBeacons = beaconOnConnection
@@ -173,10 +174,12 @@ class BeaconsHandler(private val context: DottysBaseActivity, private val observ
                 if(beaconOnConnection.filter { it.minor == beacon.minor }.isNotEmpty()){
                     val beaconRestore = beaconOnConnection.first{ it.minor == beacon.minor }
                     beaconRestore.expiration = 0
+                    beaconRestore.isConected = true
                     beaconOnConnection[beaconOnConnection.indexOf(beaconRestore)] = beaconRestore
                     /** REVISAR SI HAY BEACON ENCENDIDOS DE GAMMING PREVIAMENTE **/
                     if(!beaconRestore.isRegistered &&
                         beaconRestore.beaconType == BeaconType.GAMING &&
+                        beaconOnConnection.filter { it.beaconType == BeaconType.LOCATION }.isNotEmpty() &&
                         beaconRestore.isConected == true){
                         beaconRestore.isRegistered = true
                         beaconRestore.expiration = 0
@@ -186,6 +189,7 @@ class BeaconsHandler(private val context: DottysBaseActivity, private val observ
                  } else {
                     /** SE AGREGA BEACON A LISTA NO VACIA*/
                     beacon.isConected = true
+                    //beacon.isRegistered = true
                     beaconOnConnection.add(beacon) //UPDAET VIEW
                     recordBeacon(beacon, BeaconEventType.ENTER)
                     observer?.listOfBeacons = beaconOnConnection

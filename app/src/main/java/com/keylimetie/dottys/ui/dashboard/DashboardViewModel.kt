@@ -579,7 +579,6 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
                         response.toString()
                     )
                 userCurrentUserDataObserver?.dottysBeaconList = user
-                mContext.initEstimoteBeaconManager()
             },
             object : Response.ErrorListener {
                 override fun onErrorResponse(error: VolleyError) {
