@@ -71,8 +71,8 @@ class BeaconsHandler(private val context: DottysBaseActivity, private val observ
         if(context.getCurrentToken().isNullOrEmpty()){return}
         Log.d("BEACON ACTIVITY", "Beacon Service Started")
         connnectBeaconManager()
-        beaconManager?.setForegroundScanPeriod(1500, 1500)
-        beaconManager?.setBackgroundScanPeriod(1500, 1500)
+        beaconManager?.setForegroundScanPeriod(3000, 5000)
+        beaconManager?.setBackgroundScanPeriod(3000, 5000)
         startDiscoveringLisener()
         starMonitoringLisener()
         /*beaconManager?.setRangingListener(BeaconManager.BeaconRangingListener { region, list ->

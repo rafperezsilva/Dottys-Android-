@@ -271,6 +271,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
             this,
             beaconList ?: getBeaconStatus()?.beaconArray ?: return
         )
+        reloadLogsList()
     }
 
     fun reloadLogsList() {
