@@ -349,7 +349,6 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
 
     }
 
-
     private fun setTitleToolbar(idItem: Int) {
         val textTitle = findViewById<TextView>(R.id.title_tool_bar_textview)
         textTitle.text = getToolbarTitle(idItem)

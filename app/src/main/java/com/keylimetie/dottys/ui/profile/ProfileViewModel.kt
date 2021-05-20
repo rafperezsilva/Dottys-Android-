@@ -129,7 +129,7 @@ class ProfileViewModel(
 
 
     fun getDataToUpdate() {
-        var data = activity?.getUserPreference()
+        val data = activity?.getUserPreference()
         data?.firstName = firstNameEditText?.text.toString()
         data?.lastName = lastNameEditText?.text.toString()
         data?.fullName = "${data?.firstName} ${data?.lastName}"
@@ -218,10 +218,10 @@ class ProfileViewModel(
 
       fun uploadProfile(
           profileData: DottysLoginResponseModel,
-          activity: DottysMainNavigationActivity?
+          activity: DottysBaseActivity?
       ) {
         val mQueue = Volley.newRequestQueue(activity)
-     //   activity?.showLoader()
+       activity?.showLoader()
           profileData.cell = null
         val jsonProfile = JSONObject(profileData.toJson())
         val jsonObjectRequest = object : JsonObjectRequest(

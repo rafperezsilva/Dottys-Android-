@@ -36,6 +36,10 @@ data class DottysLoginResponseModel (
     var weeklyPlayDuration: Long? = null,
     var weeklyVisits: Long? = null,
     var tags: List<Any?>? = null,
+    var trackLocation: String? = null,// NEVER / WHILE_USING / ALWAYS
+    var bluetooth: Boolean? = null,
+    var notifications: Boolean? = null,
+    var backgroundAppRefresh: Boolean? = null,
 
     @get:JsonProperty("_id")@field:JsonProperty("_id")
     var id: String? = null,
@@ -52,10 +56,7 @@ data class DottysLoginResponseModel (
     var address1: String? = null,
     var appVersion: String? = null,
     var city: String? = null,
-
-    @get:JsonProperty("deviceId")@field:JsonProperty("deviceId")
     var deviceId: String? = null,
-
     var state: String? = null,
     var zip: String? = null,
 

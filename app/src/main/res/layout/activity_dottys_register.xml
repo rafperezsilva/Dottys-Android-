@@ -10,7 +10,7 @@
     <ScrollView
         android:id="@+id/register_scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:foregroundGravity="center"
         app:layout_constraintBottom_toTopOf="@+id/submit_register_button"
         app:layout_constraintEnd_toEndOf="@+id/submit_register_button"
@@ -409,7 +409,7 @@ contain 1 uppercase and 1 lowercase letter."
 
                 <LinearLayout
 
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
