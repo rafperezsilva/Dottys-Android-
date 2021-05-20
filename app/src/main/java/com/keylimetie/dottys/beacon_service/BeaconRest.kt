@@ -29,7 +29,7 @@ class BeaconRest(private val context: DottysBaseActivity) {
                 Response.Listener<JSONObject> { response ->
                      context.hideLoader()
                     Log.i("$TAG BEACON HAS RECORDED", "${response.toString(5)}")
-                    observer.beaconEvent = DottysBeaconResponseModel.fromJson(response.toString(5))
+                    observer.beaconRecord = DottysBeaconResponseModel.fromJson(response.toString(5))
                     isUploading = false
                 },
                 Response.ErrorListener { error ->
@@ -108,14 +108,14 @@ class BeaconRest(private val context: DottysBaseActivity) {
 interface BeaconEventDelegate {
     fun onBeaconAtNearLocationRetrieved(beaconData: DottysBeaconsModel)
 
-    fun onBeaconEventChange(beaconEvent: DottysBeaconResponseModel)
+    fun onBeaconRecorded(beaconEvent: DottysBeaconResponseModel)
 }
 
 
 class BeaconEventObserver(lisener: BeaconEventDelegate) {
-    var beaconEvent: DottysBeaconResponseModel by Delegates.observable(
+    var beaconRecord: DottysBeaconResponseModel by Delegates.observable(
             initialValue = DottysBeaconResponseModel(),
-            onChange = { _, _, new -> lisener.onBeaconEventChange(new) })
+            onChange = { _, _, new -> lisener.onBeaconRecorded(new) })
     var beaconData: DottysBeaconsModel by Delegates.observable(
             initialValue = DottysBeaconsModel(),
             onChange = { _, _, new -> lisener.onBeaconAtNearLocationRetrieved(new) })
