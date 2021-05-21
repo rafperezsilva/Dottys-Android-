@@ -26,7 +26,7 @@
             android:layout_weight="0"
             android:fontFamily="@font/proxima_nova_light"
             android:text="PRUEBS DE TEXTO"
-            android:textSize="26sp" />
+            android:textSize="26dp" />
 
         <ImageView
             android:id="@+id/image_top_pager"

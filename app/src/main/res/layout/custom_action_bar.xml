@@ -23,7 +23,7 @@
 <!--            android:layout_height="wrap_content"-->
 <!--            android:layout_gravity="center"-->
 <!--            android:clickable="false"-->
-<!--            android:textSize="18sp"-->
+<!--            android:textSize="18dp"-->
 <!--            android:fontFamily="@font/proxima_nova_regular"-->
 <!--            android:text="X"-->
 <!--            android:visibility="invisible">-->
@@ -34,7 +34,7 @@
             android:layout_width = "match_parent"
             android:layout_height = "match_parent"
             android:layout_marginLeft = "10dp"
-            android:textSize = "22sp"
+            android:textSize = "22dp"
             android:textColor = "#FFF"
             android:layout_marginRight="35dp"
             app:fontFamily = "@font/proxima_nova_regular" />

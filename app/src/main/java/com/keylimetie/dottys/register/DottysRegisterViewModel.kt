@@ -3,11 +3,14 @@ package com.keylimetie.dottys.register
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.text.InputType
+import android.text.*
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.*
+import android.widget.TextView.BufferType
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModel
 import com.android.volley.NetworkResponse
@@ -24,12 +27,12 @@ import com.keylimetie.dottys.login.DottysLoginObserver
 import com.keylimetie.dottys.login.DottysLoginViewModel
 import com.keylimetie.dottys.ui.locations.showSnackBarMessage
 import com.keylimetie.dottys.utils.isValidPassword
+import com.keylimetie.dottys.utils.makeLinks
 import com.keylimetie.dottys.utils.volley_multipart.VolleyMultipartRequest
 import org.json.JSONObject
 import java.util.*
 import kotlin.math.roundToInt
 import kotlin.properties.Delegates
-
 
 open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): ViewModel(), View.OnClickListener, DottysLoginDelegate {
     private var termsOfServiceLabel: TextView? = null
@@ -64,7 +67,7 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
     var heigth = 0f
     fun initRegisterView(activityRegister: DottysRegisterActivity) {
         activityRegisterObserver = DottysRegisterUserObserver(activityRegister)
-        isRegisterUser = activityRegister.intent.getBooleanExtra("IS_REGISTER_USER",false)
+        isRegisterUser = activityRegister.intent.getBooleanExtra("IS_REGISTER_USER", false)
         initItemsAtView(activityRegister)
         addCustomsSettings()
         showPasswordButtonAction()
@@ -72,7 +75,7 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
            // showPreVerificationLayer(activityRegister)/*FIXME*/
             editTextData?.let { it1 ->
                 if (validateEditTextData(activityRegister, it1)) {
-                    registerNewUser(activityRegister,dataForRegister)/*FIXME*/
+                    registerNewUser(activityRegister, dataForRegister)/*FIXME*/
                 }
             }
         }
@@ -117,6 +120,16 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
        singFromRegister?.setOnClickListener(this)
        val scrollView = activityRegister.findViewById<ScrollView>(id.register_scroll_view)
        scrollView.alpha = if(isRegisterUser) 0.0f else 1.0f
+       val i = Intent(activityRegister, TermsAndPrivacyActivity::class.java)
+       activityRegister.findViewById<TextView>(R.id.term_conditions_TV).makeLinks(
+           Pair("Terms of Service", View.OnClickListener {
+               i.putExtra("TERMS_PRIVACY", "TERMS")
+               activityRegister?.startActivity(i)
+           }),
+           Pair("Privacy Policy", View.OnClickListener {
+               i.putExtra("TERMS_PRIVACY", "PRIVACY")
+               activityRegister?.startActivity(i)
+           }))
      }
 
     private fun initLoginFloatinItems(){
@@ -158,7 +171,14 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
         val month: Int = c.get(Calendar.MONTH)
         val day: Int = c.get(Calendar.DAY_OF_MONTH)
         val datePickerDialog = activityRegister?.let {
-         val dp =   DatePickerDialog(it,R.style.DatePicker, activityRegister, year - 21, month, day)
+         val dp =   DatePickerDialog(
+             it,
+             R.style.DatePicker,
+             activityRegister,
+             year - 21,
+             month,
+             day
+         )
 //            dp.datePicker.spinnersShown = true
 //            dp.datePicker.calendarViewShown = false
             dp
@@ -216,26 +236,30 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
     ): Boolean {
         for (item in editTextData) {
             if (item?.text?.isEmpty() == true) {
-                activityRegister.showSnackBarMessage(activityRegister,
+                activityRegister.showSnackBarMessage(
+                    activityRegister,
                     activityRegister.getString(R.string.complete_all_fields)
                 )
                 return false
             }
         }
         if (!passwordEditText?.text.toString().isValidPassword()) {
-            activityRegister.showSnackBarMessage(activityRegister,
+            activityRegister.showSnackBarMessage(
+                activityRegister,
                 activityRegister.getString(R.string.password_policy_check_message)
             )
             return false
         }
         if (legalAgeCheckBox?.isChecked != true) {
-            activityRegister.showSnackBarMessage(activityRegister,
+            activityRegister.showSnackBarMessage(
+                activityRegister,
                 activityRegister.getString(R.string.legal_age_message)
             )
             return false
         }
         if (termsAndConditionsCheckBox?.isChecked != true) {
-            activityRegister.showSnackBarMessage(activityRegister,
+            activityRegister.showSnackBarMessage(
+                activityRegister,
                 activityRegister.getString(R.string.terms_and_conditions_messages)
             )
             return false
@@ -276,6 +300,7 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
             }
         }
     }
+   // val myTextView = activityRegwister?.findViewById<TextView>(R.id.term_conditions_TV)
 
     fun showPreVerificationLayer(activityRegister: DottysRegisterActivity) {
         //  val displayMetrics = DisplayMetrics()
@@ -302,7 +327,7 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
             "A text message with a verification\ncode has been sent to phone"
         } else {
             val cell = activityRegister.getUserPreference().cell ?: ""
-            val terminalPhoneNumber =   cell?.subSequence(cell?.count()  - 4, cell.count())
+            val terminalPhoneNumber =   cell?.subSequence(cell?.count() - 4, cell.count())
             "A text message with a verification\ncode has been sent to (xxx) xxx-${terminalPhoneNumber}."
         }
 
@@ -313,14 +338,20 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
             if (currentUser != null) {
                 var intent =
                     Intent(activityRegister, DottysEnterVerificationCodeActivity::class.java)
-                intent.putExtra("EMAIL_FORGOT", currentUser.email ?: dottysBaseActivity.getUserPreference().email)
+                intent.putExtra(
+                    "EMAIL_FORGOT",
+                    currentUser.email ?: dottysBaseActivity.getUserPreference().email
+                )
                 if (dottysBaseActivity.getUserPreference() !=  null &&
                     dottysBaseActivity.getUserPreference().cellVerified == false &&
                         isRegisterUser) {
                     intent.putExtra("VERIFY_CELL", true)
                 }
                 intent.putExtra("REGISTER_VIEW_TYPE", true)
-                intent.putExtra("USER_DATA", activityRegisterObserver?.registerUser?.toJson().toString())
+                intent.putExtra(
+                    "USER_DATA",
+                    activityRegisterObserver?.registerUser?.toJson().toString()
+                )
                 activityRegister.startActivity(intent)
 
 
@@ -360,9 +391,14 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
                 activityRegister.hideLoader()
                 if (error.networkResponse != null) {
                     activityRegister.hideCustomKeyboard(activityRegister)
-                    val errorRes = DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
+                    val errorRes = DottysErrorModel.fromJson(
+                        error.networkResponse.data.toString(
+                            Charsets.UTF_8
+                        )
+                    )
                     if (errorRes.error?.messages?.size ?: 0 > 0) {
-                        DottysBaseActivity().showSnackBarMessage(activityRegister,
+                        DottysBaseActivity().showSnackBarMessage(
+                            activityRegister,
                             errorRes.error?.messages?.first() ?: ""
                         )
                     }
@@ -394,18 +430,19 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
             context.baseUrl + "users/profilePicture",
             params,
             Response.Listener { response ->
-                 context.hideLoader()
+                context.hideLoader()
                 activityRegisterObserver?.imageHasUploaded = true
                 print(response.statusCode)
             },
             Response.ErrorListener { error ->
-               context.hideLoader()
+                context.hideLoader()
                 activityRegisterObserver?.imageHasUploaded = false
-                if(error.networkResponse != null ) {
+                if (error.networkResponse != null) {
                     val errorRes =
                         DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                     if (errorRes.error?.messages?.size ?: 0 > 0) {
-                        DottysBaseActivity().showSnackBarMessage(context,
+                        DottysBaseActivity().showSnackBarMessage(
+                            context,
                             errorRes.error?.messages?.first() ?: ""
                         )
                     }
@@ -432,7 +469,7 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
     /**
      * REQUEST VERIFICATION PHONE
      * */
-    fun requestNewVerificationPhone (context: DottysBaseActivity) {
+    fun requestNewVerificationPhone(context: DottysBaseActivity) {
       context.showLoader()
         val mQueue = Volley.newRequestQueue(context)
         val params = HashMap<String, String>()
@@ -441,22 +478,27 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
             context.baseUrl + "users/requestVerifyPhone",
             params,
             Response.Listener { response ->
-                 context.hideLoader()
+                context.hideLoader()
                 val container = context.findViewById<View>(android.R.id.content)
                 if (container != null) {
                     context.hideCustomKeyboard(context)
-                    Snackbar.make(container, "A verification code has been send", Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(
+                        container,
+                        "A verification code has been send",
+                        Snackbar.LENGTH_LONG
+                    ).show()
                 }
-                Log.i("REQUEST VERIFY PHONE","STATUS ${response.statusCode}")
+                Log.i("REQUEST VERIFY PHONE", "STATUS ${response.statusCode}")
             },
             Response.ErrorListener { error ->
-               context.hideLoader()
+                context.hideLoader()
                 context.finish()
-                 if(error.networkResponse != null ) {
+                if (error.networkResponse != null) {
                     val errorRes =
                         DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
                     if (errorRes.error?.messages?.size ?: 0 > 0) {
-                        DottysBaseActivity().showSnackBarMessage(context,
+                        DottysBaseActivity().showSnackBarMessage(
+                            context,
                             errorRes.error?.messages?.first() ?: ""
                         )
                     }
@@ -482,14 +524,14 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
 
 
     override fun onClick(v: View?) {
-        val i = Intent(activityRegister,TermsAndPrivacyActivity::class.java)
+        val i = Intent(activityRegister, TermsAndPrivacyActivity::class.java)
         when(v?.id){
             R.id.terms_of_service_text_view -> {
-                i.putExtra("TERMS_PRIVACY","TERMS")
+                i.putExtra("TERMS_PRIVACY", "TERMS")
                 activityRegister?.startActivity(i)
             }
             R.id.privacy_policy_text_view -> {
-                i.putExtra("TERMS_PRIVACY","PRIVACY")
+                i.putExtra("TERMS_PRIVACY", "PRIVACY")
                 activityRegister?.startActivity(i)
             }
             R.id.sign_from_register -> {

@@ -28,8 +28,8 @@ open class TermsAndPrivacyActivityViewModel(mainActivity: TermsAndPrivacyActivit
     }
 
     private fun initPrivacyPolicy(mainActivity: TermsAndPrivacyActivity){
-        termsTextContainer.visibility = View.INVISIBLE
-        val url = mainActivity.getGlobalData().privacyURL ?: DottysConstantItems.defaultPolicyURL
+        termsTextContainer.visibility = View.GONE
+        val url = mainActivity.getGlobalData().privacyURL ?: DottysConstantItems.privacyPolicyURL
         pPWebView.settings.domStorageEnabled = true
         pPWebView.settings.javaScriptEnabled = true
         pPWebView.loadUrl(url)

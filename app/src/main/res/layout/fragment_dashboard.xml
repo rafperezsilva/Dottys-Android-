@@ -73,7 +73,7 @@
                             android:layout_marginBottom="15dp"
                             android:fontFamily="@font/proxima_nova_regular"
                             android:textColor="#FFF"
-                            android:textSize="14sp" />
+                            android:textSize="14dp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -92,7 +92,7 @@
                             android:fontFamily="@font/proxima_nova_regular"
                             android:text="0"
                             android:textColor="#FFF"
-                            android:textSize="42sp" />
+                            android:textSize="42dp" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -101,7 +101,7 @@
                             android:fontFamily="@font/proxima_nova_regular"
                             android:text="POINTS EARNED"
                             android:textColor="#9B9B9B"
-                            android:textSize="12sp" />
+                            android:textSize="12dp" />
                        <LinearLayout
                            android:layout_width="match_parent"
                            android:layout_height="wrap_content"
@@ -118,7 +118,7 @@
                                android:layout_gravity="top|end"
                                android:textAlignment="textEnd"
                                android:textColor="#FFF"
-                               android:textSize="22sp" />
+                               android:textSize="22dp" />
                            <TextView
                                android:layout_weight="1"
                                android:id="@+id/cash_rewards_textview"
@@ -128,7 +128,7 @@
                                android:text="0"
                                android:textAlignment="textStart"
                                android:textColor="#FFF"
-                               android:textSize="42sp" />
+                               android:textSize="42dp" />
                        </LinearLayout>
                         <TextView
                             android:layout_width="match_parent"
@@ -136,7 +136,7 @@
                             android:fontFamily="@font/proxima_nova_regular"
                             android:text="CASH REWARDS"
                             android:textColor="#9B9B9B"
-                            android:textSize="12sp" />
+                            android:textSize="12dp" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -216,7 +216,7 @@
                             android:background="@drawable/shape_circular_badge"
                             android:elevation="20dp"
                             android:text="5"
-                            android:textSize="25sp"
+                            android:textSize="25dp"
                             android:textColor="#FFF"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"></TextView>
@@ -232,7 +232,7 @@
                             android:text="5"
 
                             android:textColor="#FFF"
-                            android:textSize="10sp"
+                            android:textSize="10dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"  />
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -340,7 +340,7 @@
 <!--                     android:id="@+id/left_roll_pager_button"-->
 <!--                    android:textColor="#060606"-->
 <!--                    android:textAlignment="textStart"-->
-<!--                    android:textSize="45sp"-->
+<!--                    android:textSize="45dp"-->
 <!--                    android:text="〈"-->
 <!--                    android:background="@color/transparent"-->
 <!--                    android:layout_alignParentTop="true"-->
@@ -354,7 +354,7 @@
 <!--                     android:id="@+id/rigth_roll_pager_button"-->
 <!--                    android:textColor="#060606"-->
 <!--                    android:textAlignment="textEnd"-->
-<!--                    android:textSize="45sp"-->
+<!--                    android:textSize="45dp"-->
 <!--                    android:text="〉"-->
 <!--                    android:background="@color/transparent"-->
 <!--                    android:layout_alignParentTop="true"-->
@@ -383,7 +383,7 @@
 <!--                        android:fontFamily="@font/proxima_nova_semibold"-->
 <!--                        android:text="MY DRAWING ENTRIES"-->
 <!--                        android:textColor="#FFF"-->
-<!--                        android:textSize="22sp" />-->
+<!--                        android:textSize="22dp" />-->
 
 <!--                    <LinearLayout-->
 <!--                        android:layout_width="match_parent"-->
@@ -408,7 +408,7 @@
 <!--                                android:fontFamily="@font/proxima_nova_extrabold"-->
 <!--                                android:text="0"-->
 <!--                                android:textColor="#E5BA4A"-->
-<!--                                android:textSize="45sp" />-->
+<!--                                android:textSize="45dp" />-->
 
 <!--                            <TextView-->
 <!--                                android:layout_width="wrap_content"-->
@@ -417,7 +417,7 @@
 <!--                                android:fontFamily="@font/proxima_nova_regular"-->
 <!--                                android:text="Weekly"-->
 <!--                                android:textColor="#FFF"-->
-<!--                                android:textSize="18sp" />-->
+<!--                                android:textSize="18dp" />-->
 
 <!--                            <TextView-->
 <!--                                android:id="@+id/weekly_end_days"-->
@@ -426,7 +426,7 @@
 <!--                                android:fontFamily="@font/proxima_nova_regular"-->
 <!--                                android:text=""-->
 <!--                                android:textColor="#E5BA4A"-->
-<!--                                android:textSize="18sp" />-->
+<!--                                android:textSize="18dp" />-->
 <!--                        </LinearLayout>-->
 
 <!--                        <RelativeLayout-->
@@ -453,7 +453,7 @@
 <!--                                android:fontFamily="@font/proxima_nova_extrabold"-->
 <!--                                android:text="0"-->
 <!--                                android:textColor="#E5BA4A"-->
-<!--                                android:textSize="45sp" />-->
+<!--                                android:textSize="45dp" />-->
 
 <!--                            <TextView-->
 <!--                                android:layout_width="wrap_content"-->
@@ -462,7 +462,7 @@
 <!--                                android:fontFamily="@font/proxima_nova_regular"-->
 <!--                                android:text="Monthly"-->
 <!--                                android:textColor="#FFF"-->
-<!--                                android:textSize="18sp" />-->
+<!--                                android:textSize="18dp" />-->
 
 <!--                            <TextView-->
 <!--                                android:id="@+id/monthly_end_days"-->
@@ -471,7 +471,7 @@
 <!--                                android:fontFamily="@font/proxima_nova_regular"-->
 <!--                                android:text=""-->
 <!--                                android:textColor="#E5BA4A"-->
-<!--                                android:textSize="18sp" />-->
+<!--                                android:textSize="18dp" />-->
 <!--                        </LinearLayout>-->
 
 <!--                        <RelativeLayout-->
@@ -498,7 +498,7 @@
 <!--                                android:fontFamily="@font/proxima_nova_extrabold"-->
 <!--                                android:text="0"-->
 <!--                                android:textColor="#E5BA4A"-->
-<!--                                android:textSize="45sp" />-->
+<!--                                android:textSize="45dp" />-->
 
 <!--                            <TextView-->
 <!--                                android:layout_width="wrap_content"-->
@@ -507,7 +507,7 @@
 <!--                                android:fontFamily="@font/proxima_nova_regular"-->
 <!--                                android:text="Quarterly"-->
 <!--                                android:textColor="#FFF"-->
-<!--                                android:textSize="18sp" />-->
+<!--                                android:textSize="18dp" />-->
 
 <!--                            <TextView-->
 <!--                                android:id="@+id/quarterly_end_days"-->
@@ -516,7 +516,7 @@
 <!--                                android:fontFamily="@font/proxima_nova_regular"-->
 <!--                                android:text=""-->
 <!--                                android:textColor="#E5BA4A"-->
-<!--                                android:textSize="18sp" />-->
+<!--                                android:textSize="18dp" />-->
 <!--                        </LinearLayout>-->
 
 
@@ -534,7 +534,7 @@
 <!--                        android:text="Your drawing entries are entered at 75th St, Darien, IL 60561"-->
 <!--                        android:textColor="#FFF"-->
 <!--                        android:textFontWeight="0"-->
-<!--                        android:textSize="14sp" />-->
+<!--                        android:textSize="14dp" />-->
 <!--                </LinearLayout>-->
 <!--            </LinearLayout>-->
             <!--endregion-->
@@ -598,7 +598,7 @@
 <!--            android:fontFamily="@font/proxima_nova_light    "-->
 <!--            android:text="Device Analytics"-->
 <!--            android:textColor="#FFF"-->
-<!--            android:textSize="22sp"-->
+<!--            android:textSize="22dp"-->
 <!--            app:layout_constraintEnd_toEndOf="parent"-->
 <!--            app:layout_constraintStart_toStartOf="parent"-->
 <!--            app:layout_constraintTop_toTopOf="parent" />-->
@@ -635,7 +635,7 @@
 <!--                android:text="User ID:"-->
 <!--                android:textAlignment="textStart"-->
 <!--                android:textColor="#FFF"-->
-<!--                android:textSize="16sp" />-->
+<!--                android:textSize="16dp" />-->
 
 <!--            <TextView-->
 <!--                android:id="@+id/user_host_id"-->
@@ -647,7 +647,7 @@
 <!--                android:text=""-->
 <!--                android:textAlignment="textEnd"-->
 <!--                android:textColor="#FFF"-->
-<!--                android:textSize="16sp" />-->
+<!--                android:textSize="16dp" />-->
 <!--        </LinearLayout>-->
 <!--        &lt;!&ndash;LOCATION SERVICE &ndash;&gt;-->
 <!--        <LinearLayout-->
@@ -670,7 +670,7 @@
 <!--                android:text="Location Services:"-->
 <!--                android:textAlignment="textStart"-->
 <!--                android:textColor="#FFF"-->
-<!--                android:textSize="16sp" />-->
+<!--                android:textSize="16dp" />-->
 
 <!--            <TextView-->
 <!--                android:id="@+id/location_enable_textview"-->
@@ -681,7 +681,7 @@
 <!--                android:text=""-->
 <!--                android:textAlignment="textEnd"-->
 <!--                android:textColor="#FFF"-->
-<!--                android:textSize="16sp" />-->
+<!--                android:textSize="16dp" />-->
 <!--        </LinearLayout>-->
 <!--        &lt;!&ndash;PUSH NOTIFICATION &ndash;&gt;-->
 <!--        <LinearLayout-->
@@ -704,7 +704,7 @@
 <!--                android:text="Push Notifications:"-->
 <!--                android:textAlignment="textStart"-->
 <!--                android:textColor="#FFF"-->
-<!--                android:textSize="16sp" />-->
+<!--                android:textSize="16dp" />-->
 
 <!--            <TextView-->
 <!--                android:id="@+id/is_push_enable_textview"-->
@@ -715,7 +715,7 @@
 <!--                android:text=""-->
 <!--                android:textAlignment="textEnd"-->
 <!--                android:textColor="#FFF"-->
-<!--                android:textSize="16sp" />-->
+<!--                android:textSize="16dp" />-->
 <!--        </LinearLayout>-->
 
 <!--        <RelativeLayout-->
@@ -757,7 +757,7 @@
 <!--                    android:text="Current Location:"-->
 <!--                    android:textAlignment="textStart"-->
 <!--                    android:textColor="#FFF"-->
-<!--                    android:textSize="16sp" />-->
+<!--                    android:textSize="16dp" />-->
 
 <!--                <TextView-->
 <!--                    android:id="@+id/location_analitycs_store"-->
@@ -768,7 +768,7 @@
 <!--                    android:text=""-->
 <!--                    android:textAlignment="textEnd"-->
 <!--                    android:textColor="#FFF"-->
-<!--                    android:textSize="16sp" />-->
+<!--                    android:textSize="16dp" />-->
 <!--            </LinearLayout>-->
 
 <!--            <TextView-->
@@ -783,7 +783,7 @@
 <!--                android:text=""-->
 <!--                android:textAlignment="textStart"-->
 <!--                android:textColor="#8BFFFFFF"-->
-<!--                android:textSize="14sp" />-->
+<!--                android:textSize="14dp" />-->
 <!--        </LinearLayout>-->
 
 

@@ -8,14 +8,14 @@
     tools:context=".game_play.DottysSlotMachineActivity">
 
 <!--    <TextView-->
-<!--        android:layout_marginTop="10sp"-->
-<!--        android:layout_marginStart="10sp"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:layout_marginStart="10dp"-->
 <!--        android:id="@+id/score_tv"-->
 <!--        android:layout_width="wrap_content"-->
 <!--        android:layout_height="wrap_content"-->
 <!--        android:text=" score_text"-->
 <!--        android:textColor="@color/WHITE"-->
-<!--        android:padding="20sp"-->
+<!--        android:padding="20dp"-->
 <!--        android:background="#000"/>-->
 
     <FrameLayout
@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:padding="10sp" />
+                android:padding="10dp" />
 
             <com.keylimetie.dottys.game_play.slotImageScroll.SlotScroll
                 android:id="@+id/image2"
@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:padding="10sp" />
+                android:padding="10dp" />
 
             <com.keylimetie.dottys.game_play.slotImageScroll.SlotScroll
                 android:id="@+id/image3"
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:padding="10sp" />
+                android:padding="10dp" />
 
         </LinearLayout>
 

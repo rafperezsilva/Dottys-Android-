@@ -46,7 +46,7 @@
                     android:fontFamily="@font/proxima_nova_light"
                     android:text="Sign up!"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="25sp" />
+                    android:textSize="25dp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -57,7 +57,7 @@
                     android:text="Already registered?"
                     android:textAlignment="textEnd"
                     android:textColor="#56585A"
-                    android:textSize="14sp" />
+                    android:textSize="14dp" />
 
                 <TextView
                     android:id="@+id/sign_from_register"
@@ -67,7 +67,7 @@
                     android:fontFamily="@font/proxima_nova_light"
                     android:text="Sign in"
                     android:textColor="#5A9402"
-                    android:textSize="14sp" />
+                    android:textSize="14dp" />
 
             </LinearLayout>
 
@@ -254,7 +254,7 @@
                     android:text="Password must be at least 6 characters in length and
 contain 1 uppercase and 1 lowercase letter."
                     android:textAlignment="textStart"
-                    android:textSize="12sp" />
+                    android:textSize="12dp" />
 
 
             </LinearLayout>
@@ -386,7 +386,7 @@ contain 1 uppercase and 1 lowercase letter."
                     android:layout_width="match_parent"
                     android:text="I am at least 21 years old."
                     android:textColor="#56585A"
-                    android:textSize="14sp" />
+                    android:textSize="14dp" />
 
 
             </LinearLayout>
@@ -406,9 +406,12 @@ contain 1 uppercase and 1 lowercase letter."
                     android:layout_height="25dp"
                     android:buttonTint="#FF5A9402"
                     android:src="@mipmap/calendar_icon" />
-
-                <LinearLayout
-
+                <HorizontalScrollView
+                    android:visibility="gone"
+                    android:scrollbarStyle="outsideInset"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                        <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
@@ -420,7 +423,7 @@ contain 1 uppercase and 1 lowercase letter."
                         android:text="I agree to the"
                         android:textAlignment="textStart"
                         android:textColor="#56585A"
-                        android:textSize="14sp" />
+                        android:textSize="14dp" />
 
                     <TextView
                         android:id="@+id/terms_of_service_text_view"
@@ -430,7 +433,7 @@ contain 1 uppercase and 1 lowercase letter."
                         android:text="Terms of Service"
                         android:textAlignment="textStart"
                         android:textColor="#5A9402"
-                        android:textSize="14sp" />
+                        android:textSize="14dp" />
 
                     <TextView
                         style="@style/TextViewRegisterStyle"
@@ -438,7 +441,7 @@ contain 1 uppercase and 1 lowercase letter."
                         android:maxLines="1"
                         android:text="and"
                         android:textColor="#56585A"
-                        android:textSize="14sp" />
+                        android:textSize="14dp" />
 
                     <TextView
                         android:id="@+id/privacy_policy_text_view"
@@ -447,9 +450,19 @@ contain 1 uppercase and 1 lowercase letter."
                         android:maxLines="1"
                         android:text="Privacy Policy."
                         android:textColor="#5A9402"
-                        android:textSize="14sp" />
+                        android:textSize="14dp" />
                 </LinearLayout>
+                </HorizontalScrollView>
+                <TextView
+                    style="@style/TextViewRegisterStyle"
+android:id="@+id/term_conditions_TV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:text="I agree to the Terms of Service and Privacy Policy."
+                    android:textColorLink="#FF5A9402"
 
+                    />
             </LinearLayout>
 
         </LinearLayout>
@@ -471,7 +484,7 @@ contain 1 uppercase and 1 lowercase letter."
         android:text="SUBMIT"
         android:textAlignment="center"
         android:textColor="#FFF"
-        android:textSize="23sp"
+        android:textSize="23dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -512,7 +525,7 @@ contain 1 uppercase and 1 lowercase letter."
             android:text="Sent!"
             android:textAlignment="center"
             android:textColor="#FFF"
-            android:textSize="36sp"
+            android:textSize="36dp"
             app:layout_constraintTop_toBottomOf="@+id/image_verification" />
 
         <TextView
@@ -528,7 +541,7 @@ contain 1 uppercase and 1 lowercase letter."
             android:text=""
             android:textAlignment="center"
             android:textColor="#FFF"
-            android:textSize="18sp"
+            android:textSize="18dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/send_label" />
@@ -593,7 +606,7 @@ contain 1 uppercase and 1 lowercase letter."
                     android:src="@mipmap/user_icon" />
 
                 <TextView
-                    android:textSize="18sp"
+                    android:textSize="18dp"
                     android:textColor="#9B9B9B"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

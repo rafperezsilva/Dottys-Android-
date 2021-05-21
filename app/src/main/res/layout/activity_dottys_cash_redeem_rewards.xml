@@ -38,7 +38,7 @@
              android:fontFamily="@font/proxima_nova_semibold"
             android:text="CONGRATS!"
             android:textColor="#FFF"
-            android:textSize="32sp"
+            android:textSize="32dp"
             app:layout_constraintBottom_toTopOf="@+id/you_earned_label"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -52,7 +52,7 @@
             android:fontFamily="@font/proxima_nova_semibold"
             android:text="You’ve just earned"
             android:textColor="#FFF"
-            android:textSize="22sp"
+            android:textSize="22dp"
             app:layout_constraintBottom_toTopOf="@+id/redeem_rewards_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -89,7 +89,7 @@
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/proxima_nova_bold"
                 android:gravity="center"
-                android:textSize="55sp"
+                android:textSize="55dp"
                 app:layout_constraintLeft_toLeftOf="@id/redeem_rewards_image"
                 app:layout_constraintRight_toRightOf="@id/redeem_rewards_image"
                 app:layout_constraintTop_toTopOf="@id/redeem_rewards_image" />
@@ -105,7 +105,7 @@
             android:fontFamily="@font/proxima_nova_semibold"
             android:text="See Dotty’s host to\nredeem your reward"
             android:textColor="#FFF"
-            android:textSize="20sp" />
+            android:textSize="20dp" />
 
 
     </LinearLayout>
@@ -143,7 +143,7 @@
             android:text="ENTER HOST ID"
             android:textColor="#FFF"
 
-            android:textSize="28sp"
+            android:textSize="28dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -156,7 +156,7 @@
             android:text="To complete Validation and Redemption."
             android:textColor="#FFF"
 
-            android:textSize="18sp"
+            android:textSize="18dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title_enter_code" />
@@ -287,7 +287,7 @@
                     android:fontFamily="@font/proxima_nova_semibold"
                     android:text="9"
                     android:textColor="#FFF"
-                    android:textSize="28sp"
+                    android:textSize="28dp"
                     android:visibility="invisible" />
 
                 <Button

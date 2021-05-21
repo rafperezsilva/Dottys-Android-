@@ -19,7 +19,7 @@ android {
         applicationId "com.keylimetie.dottys"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 10
+        versionCode 11
         versionName "3.0.31"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

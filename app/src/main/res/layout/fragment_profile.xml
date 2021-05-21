@@ -332,7 +332,7 @@
                 android:fontFamily="@font/proxima_nova_regular"
                 android:textAlignment="textStart"
                 android:textColor="#FFF"
-                android:textSize="25sp" />
+                android:textSize="25dp" />
 
             <TextView
                 android:text="dlkasjdlksjdlasjdklajs"
@@ -342,7 +342,7 @@
                 android:fontFamily="@font/proxima_nova_regular"
                 android:textAlignment="textStart"
                 android:textColor="#FFF"
-                android:textSize="14sp" />
+                android:textSize="14dp" />
         </LinearLayout>
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -34,7 +34,7 @@
                 android:fontFamily="@font/proxima_nova_semibold"
                 android:gravity="left"
                 android:textColor="#000"
-                android:textSize="20sp" />
+                android:textSize="20dp" />
 
             <TextView
                 android:id="@+id/subtitle_dashboard_pager"
@@ -45,7 +45,7 @@
                 android:fontFamily="@font/proxima_nova_regular"
                 android:gravity="left"
                 android:textColor="#000"
-                android:textSize="17sp" />
+                android:textSize="17dp" />
         </LinearLayout>
 
         <ImageView
