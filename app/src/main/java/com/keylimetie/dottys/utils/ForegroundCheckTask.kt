@@ -24,7 +24,7 @@ class ForegroundCheckTask(isAppOnBackground: Boolean, baseActivity: DottysBaseAc
     AsyncTask<Context?, Void?, Boolean?>(), DottysLocationChangeDelegates {
      var isOnBackground = isAppOnBackground
      var activity = baseActivity
-    var mainHandler:  Handler? = null
+     var mainHandlerBackgorund:  Handler? = null
      var updateLocationInterval = TaskBackgroundTimeInterval.ZERO_INTERVAL
     protected fun doInBackground(vararg params: Context): Boolean {
         val context = params[0].applicationContext
@@ -47,9 +47,9 @@ class ForegroundCheckTask(isAppOnBackground: Boolean, baseActivity: DottysBaseAc
 
      fun triggerBackgroundTask(){
 
-        if (mainHandler != null) {return}
-        mainHandler = Handler(Looper.getMainLooper())
-        mainHandler?.post(object : Runnable {
+        if (mainHandlerBackgorund != null) {return}
+        mainHandlerBackgorund = Handler(Looper.getMainLooper())
+        mainHandlerBackgorund?.post(object : Runnable {
             override fun run() {
 
                 val nearStore = activity.getUserNearsLocations().locations
@@ -65,9 +65,9 @@ class ForegroundCheckTask(isAppOnBackground: Boolean, baseActivity: DottysBaseAc
                     } else {
                         Log.d("---- ", "\n ---------------------------------- \n ** FOREGROUND TASK ACTION TRIGERED ** \n INTERVAL: ${ updateLocationInterval.name} \n STORE: ${nearStore?.first().storeNumber} \n DISTANCE: ${nearStore?.first().distance} \n ----------------------------------  ")
                     }
-                    mainHandler?.postDelayed(this, updateLocationInterval.interval)//updateLocationInterval.interval)
+                    mainHandlerBackgorund?.postDelayed(this, updateLocationInterval.interval)//updateLocationInterval.interval)
                 } else {
-                    mainHandler?.removeCallbacks(this)
+                    mainHandlerBackgorund?.removeCallbacks(this)
                 }
             }
         })

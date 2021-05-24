@@ -134,12 +134,12 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
         }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
-        Log.e("LOG    ", "${item?.itemId}")
+        //Log.e("LOG    ", "${item?.itemId}")
         return super.onContextItemSelected(item)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.e("LOG    ", "${item?.itemId}")
+        //Log.e("LOG    ", "${item?.itemId}")
         return super.onOptionsItemSelected(item)
     }
 
@@ -360,6 +360,10 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
 
     }
 
+    override fun onStop() {
+        super.onStop()
+      //  beaconService?.handlerData.
+    }
     override fun onPause() {
         super.onPause()
         controller.removeOnDestinationChangedListener(listener)
