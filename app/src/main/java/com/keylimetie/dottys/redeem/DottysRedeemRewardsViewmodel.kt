@@ -403,15 +403,16 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
         activityRewards: DottysCashRedeemRewardsActivity, hostCode: String,
     ) {
         val mQueue = Volley.newRequestQueue(activityRewards)
-        activityRewards.showLoader()
+
         val params = HashMap<String, String>()
-        if (activityRewards.getBeaconStatus()?.beaconArray?.first()?.locationID ?: "" == "") {
+        if (activityRewards.getUserNearsLocations().locations?.isNullOrEmpty() == true || activityRewards.getUserNearsLocations().locations?.first()?.distance ?: 1.0 > 0.3) {
             DottysBaseActivity().showSnackBarMessage(activityRewards,
                 "GO TO DOTTY'S LOCATION TO CHANGE CODE"
             )
 
             return
         }
+        activityRewards.showLoader()
         params["hostCode"] = hostCode
         params["curLocationId"] = activityRewards.getBeaconStatus()?.beaconArray?.first()?.locationID ?: ""
 

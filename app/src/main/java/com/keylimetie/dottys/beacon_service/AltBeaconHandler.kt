@@ -1,3 +1,10 @@
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
+import android.util.Log
+import com.keylimetie.dottys.DottysBaseActivity
+import org.altbeacon.beacon.*
+
 //package com.keylimetie.dottys.beacon_service
 //
 //import android.content.Context
@@ -10,18 +17,10 @@
 //import org.altbeacon.beacon.*
 //
 //
-//class AltBeaconHandler(private val context: DottysBaseActivity): BeaconConsumer {
-//    protected val TAG = "MonitoringActivity"
-//    private var beaconManager: BeaconManager? = null
-//
-//
-//
-//
-//    init {
-//        beaconManager = BeaconManager.getInstanceForApplication(context)
-//        beaconManager?.bind(this)
-//    }
-//
+class AltBeaconHandler(private val context: DottysBaseActivity) {
+
+
+
 //    override fun onBeaconServiceConnect() {
 //        beaconManager?.removeAllMonitorNotifiers();
 //        beaconManager?.addMonitorNotifier(object : MonitorNotifier {
@@ -63,18 +62,6 @@
 //             } catch (e: RemoteException) { Log.e(TAG, "${e.message}")    }
 //    }
 //
-//    override fun getApplicationContext(): Context {
-//       return context
-//    }
-//
-//    override fun unbindService(p0: ServiceConnection?) {
-//         Log.e(TAG, "${p0.toString()}")
-//    }
-//
-//    override fun bindService(p0: Intent?, p1: ServiceConnection?, p2: Int): Boolean {
-//        Log.e(TAG, "${p2.toString()}")
-//   return true
-//
-//    }
-//
-//}
+
+
+}
