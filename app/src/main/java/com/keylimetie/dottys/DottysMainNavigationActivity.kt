@@ -408,10 +408,10 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
 
                 val bitmapBase = MediaStore.Images.Media.getBitmap(contentResolver, image_uri)
                 val bitmap = if (bitmapBase.width > bitmapBase.height) {
-                    showSnackBarMessage(this, "ROTATED BITMAP")
+                   // showSnackBarMessage(this, "ROTATED BITMAP")
                     bitmapBase.rotateBitmap()
                 } else {
-                    showSnackBarMessage(this, "NO ROTATED")
+                   // showSnackBarMessage(this, "NO ROTATED")
                     bitmapBase
                 }
                 val stream = ByteArrayOutputStream()

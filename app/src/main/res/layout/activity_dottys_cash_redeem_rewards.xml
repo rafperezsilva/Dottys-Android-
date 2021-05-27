@@ -31,24 +31,24 @@
 
 
         <TextView
+            android:layout_weight="3"
             android:id="@+id/congrats_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginBottom="15dp"
              android:fontFamily="@font/proxima_nova_semibold"
             android:text="CONGRATS!"
             android:textColor="#FFF"
             android:textSize="32dp"
-            app:layout_constraintBottom_toTopOf="@+id/you_earned_label"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+             />
 
         <TextView
+            android:layout_weight="3"
             android:id="@+id/you_earned_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginBottom="15dp"
-            android:layout_weight="2"
+
             android:fontFamily="@font/proxima_nova_semibold"
             android:text="You’ve just earned"
             android:textColor="#FFF"
@@ -58,18 +58,21 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_weight="2"
             android:layout_marginTop="25dp"
             android:layout_marginBottom="15dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:minHeight="150dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_weight="1"
             android:gravity="center">
 
             <ImageView
+
+                android:minHeight="150dp"
                  android:id="@+id/redeem_rewards_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:src="@mipmap/cash_cover"
@@ -83,7 +86,7 @@
                 android:textColor="#000"
                 android:id="@+id/quantity_cahs_textview"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="20dp"
@@ -96,12 +99,13 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
+
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginStart="35dp"
             android:layout_marginTop="0dp"
             android:layout_marginEnd="35dp"
-            android:layout_weight="1"
+            android:layout_weight="5"
             android:fontFamily="@font/proxima_nova_semibold"
             android:text="See Dotty’s host to\nredeem your reward"
             android:textColor="#FFF"
