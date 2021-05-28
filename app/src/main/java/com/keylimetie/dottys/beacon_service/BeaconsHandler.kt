@@ -16,6 +16,7 @@ import com.keylimetie.dottys.ui.dashboard.models.BeaconType
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeacon
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconArray
 import java.util.*
+import java.util.concurrent.Executors
 import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
 
@@ -40,10 +41,16 @@ class BeaconsHandler(
         context.getDottysBeaconsList()//Preferences.getNearestBeaconsStored(context)?.beacons
 
     fun beaconsConnected(): ArrayList<DottysBeacon> {
-        return if(context.getBeaconStatus()?.beaconArray.isNullOrEmpty()) {
-            beaconOnDatabase ?: ArrayList()
-        }else {
-            context.getBeaconStatus()?.beaconArray ?: ArrayList()
+        return when {
+            context.getBeaconStatus()?.beaconArray.isNullOrEmpty() -> {
+                beaconOnDatabase ?: ArrayList()
+            }
+            beaconOnDatabase?.first()?.location?.storeNumber != context.getBeaconStatus()?.beaconArray?.first()?.location?.storeNumber -> {
+                  beaconOnDatabase!!
+            }
+            else -> {
+                context.getBeaconStatus()?.beaconArray ?: ArrayList()
+            }
         }
     }
 
@@ -116,7 +123,7 @@ class BeaconsHandler(
                 taskCounter = 0
 
                 Handler().postDelayed({
-                    connectionToBeaconHandler(beacons, beaconRegion)
+                  //  connectionToBeaconHandler(beacons, beaconRegion)
                 }, 15000)
             }
 
@@ -138,7 +145,7 @@ class BeaconsHandler(
 //        Log.d(
 //            "CHECKEABLE",
 //            "REGISTERED ${DottysBeaconArray(beaconsConnected().filter { it.isRegistered } as ArrayList<DottysBeacon>).toJson()} * $context * ")
-        if (taskCounter > 3) {
+        if (taskCounter > 4) {
             if (!beaconsConnected().filter { it.isRegistered && it.expiration > 1 }
                     .isNullOrEmpty()) {
                 val expiredBeacons = beaconsConnected()
@@ -158,7 +165,7 @@ class BeaconsHandler(
                     PreferenceTypeKey.BEACON_AT_CONECTION,
                     DottysBeaconArray(expiredBeacons).toJson()
                 )
-            } else if (taskCounter >= 4) {
+            } else if (taskCounter >= 5) {
                 if (!beaconsConnected().filter { it.isRegistered }.isNullOrEmpty()) {
                     val expiredBeacons = beaconsConnected()
                     expiredBeacons.forEach {
@@ -208,7 +215,7 @@ class BeaconsHandler(
 //        }, 18000)
     }
 
-    fun removeBeaconsLisener() {
+    private fun removeBeaconsLisener() {
         for (region in context.getDottysBeaconsList() ?: arrayListOf()) {
             beaconManager?.stopMonitoring(region.id)
             beaconManager?.stopRanging(
@@ -220,6 +227,7 @@ class BeaconsHandler(
                 )
             )
         }
+        beaconManager?.stopConfigurableDevicesDiscovery()
         beaconManager?.disconnect()
     }
 
@@ -242,16 +250,16 @@ class BeaconsHandler(
         }
         else
         {
-            if(restartManagerount >= 9){
+            if(restartManagerount >= 10){
                 restartManagerount = 0
-                removeBeaconsLisener()
+                //removeBeaconsLisener()
                 removeTaskHandler()
                 Handler().postDelayed({
                     Log.d("BEACONS MANAGER",
                         "🆚 BEACON MANAGER 🔛 RESTART TASK COUNTER ♈️ $taskCounter"
                     )
-                    connnectBeaconManager()
-                }, 2000)
+                 //   connnectBeaconManager()
+                }, 1000)
             }
             restartManagerount += 1
         }
@@ -263,6 +271,65 @@ class BeaconsHandler(
 
         taskCounter = 0
 
+    }
+
+    private fun connectionToBeaconHandler2(
+        beacons: MutableList<Beacon>?,
+        beaconRegion: BeaconRegion?
+    ) {
+        val beacon = beaconOnDatabase?.filter { it.minor == beaconRegion?.minor?.toLong() }?.first()
+        beaconsConnected().forEach {if(it.isRegistered) {Log.d("REGISTERED BEACON", "✅ MINOR ${it.minor} - ${it.isRegistered}")}}
+        if(beaconsConnected().isEmpty()) {return}
+        val activeListAux = beaconsConnected()
+        val activeAux = activeListAux.first { it.minor == beacon?.minor }
+        var mssgTest = "MOCK"
+
+        when {
+            beacons?.size ?: 0 > 0
+            && beacons?.first { it.minor == beacon?.minor?.toInt() }?.rssi ?: -100 > if (beacon?.beaconType == BeaconType.LOCATION) {-90} else {-70}
+            -> {
+                 /** BEACON ACTIVE */
+                    if(activeAux.isConected != true) {
+                        Handler().postDelayed({
+                            observer?.listOfBeacons = beaconsConnected()
+                            print("🔶🟩 $mssgTest")
+                                              }, 2000)
+                    }
+
+                    activeAux.isConected = true
+                    activeAux.expiration = 0
+                if(!activeAux.isRegistered){
+                    recordBeacon(activeAux,BeaconEventType.ENTER)
+                }
+
+
+            }
+            else -> {
+                /** BEACON EMPTY */
+                if(activeAux.expiration in 2..3 && activeAux.isConected == true){
+                    if(activeAux.isConected != true) {
+                        Handler().postDelayed({
+                            observer?.listOfBeacons = beaconsConnected()
+                        }, 1000)
+                    }
+                }
+                activeAux.isConected = activeAux.expiration <= 3 && activeAux.isConected == true
+                activeAux.expiration = if(activeAux.isRegistered){activeAux.expiration.plus(1)}else{0}
+            }
+        }
+        try {
+            if(activeAux.expiration >= 5 ){
+                activeAux.expiration = 0
+                recordBeacon(activeAux, BeaconEventType.EXIT)
+            }
+            activeListAux[beaconsConnected().indexOf(beaconsConnected().first { it.minor == beacon?.minor })] =
+                activeAux
+            context.saveDataPreference(
+                PreferenceTypeKey.BEACON_AT_CONECTION,
+                DottysBeaconArray(activeListAux).toJson()
+            )
+        } catch (e:Exception) { Log.e("ERROR SAVE DATA" , "On beacon data update 🟥 ${e.message}")}
+        mssgTest = "REAL"
     }
 
     private fun connectionToBeaconHandler(
@@ -335,8 +402,9 @@ class BeaconsHandler(
         }
 
 
-
-        beaconTimerScanner()
+if(beaconsConnected().filter { it.isRegistered }.size < 2) {
+    beaconTimerScanner()
+}
     }
 
     private fun recordBeacon(beaconRecorded: DottysBeacon, eventType: BeaconEventType) {
