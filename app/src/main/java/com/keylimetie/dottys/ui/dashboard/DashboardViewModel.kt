@@ -566,6 +566,11 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
 
     /*BEACON LIST REQUEST */
     fun getBeaconList(mContext: DottysBaseActivity, storeNumber: String) {
+
+        if(mContext.getDottysBeaconsList()?.isNotEmpty() == true && "${mContext.getDottysBeaconsList()?.first()?.location?.storeNumber}" == storeNumber){
+            mContext.initEstimoteBeaconManager()
+            return
+        }
         val mQueue = Volley.newRequestQueue(mContext)
         mContext.showLoader()
         val jsonObjectRequest = object : JsonObjectRequest(Method.GET,
@@ -578,6 +583,9 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
                     DottysBeaconsModel.fromJson(
                         response.toString()
                     )
+                mContext.saveDataPreference(PreferenceTypeKey.BEACONS_LIST, user.toJson())
+                mContext.saveDataPreference(PreferenceTypeKey.BEACON_AT_CONECTION, user.toJson())
+                mContext.initEstimoteBeaconManager()
                 userCurrentUserDataObserver?.dottysBeaconList = user
             },
             object : Response.ErrorListener {

@@ -264,6 +264,7 @@ class LocationsViewModel(val contextMain: DottysBaseActivity) : ViewModel(),
                 stores.locations = filterLocations as ArrayList<DottysStoresLocation>?
                 Log.d("LOCATIONS RESPONSE -->",stores.toJson())
                 mContext.saveDataPreference(PreferenceTypeKey.LOCATIONS, stores.toJson())
+
                 locationDataObserver?.dottysLocationsModel = stores
                 stores.locations?.let { initExpandableList(mContext, it) }
                 locationsStores = stores.locations
@@ -296,6 +297,7 @@ class LocationsViewModel(val contextMain: DottysBaseActivity) : ViewModel(),
             }
 
         }
+        print("TOKEN 🚩: ${mContext.getCurrentToken() ?: ""}")
         mQueue.add(jsonObjectRequest)
     }
 

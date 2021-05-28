@@ -60,7 +60,7 @@ data class DottysBeaconResponseModel (
           val beaconCasted = DottysBeacon()
            beaconCasted.userID = userID
            beaconCasted.locationSequence = locationSequence
-           beaconCasted.id = id
+           beaconCasted.id = beaconIdentifier
            beaconCasted.uuid = uuid
            beaconCasted.eventType = eventType
            beaconCasted.updatedAt = updatedAt
