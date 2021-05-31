@@ -403,17 +403,19 @@ open class DottysRedeemRewardsViewmodel : ViewModel() {
         activityRewards: DottysCashRedeemRewardsActivity, hostCode: String,
     ) {
         val mQueue = Volley.newRequestQueue(activityRewards)
-        activityRewards.showLoader()
+        val currentLocations = activityRewards.getUserNearsLocations().locations
         val params = HashMap<String, String>()
-        if (activityRewards.getBeaconStatus()?.beaconArray?.first()?.locationID ?: "" == "") {
+        if (!currentLocations.isNullOrEmpty()
+            && currentLocations.first().distance ?: 1.0  > 0.5) {
             DottysBaseActivity().showSnackBarMessage(activityRewards,
                 "GO TO DOTTY'S LOCATION TO CHANGE CODE"
             )
 
             return
         }
+        activityRewards.showLoader()
         params["hostCode"] = hostCode
-        params["curLocationId"] = activityRewards.getBeaconStatus()?.beaconArray?.first()?.locationID ?: ""
+        params["curLocationId"] = currentLocations?.first()?.id ?: ""
 
         val jsonObject = JSONObject(params as Map<*, *>)
         val jsonObjectRequest = object : JsonObjectRequest(
