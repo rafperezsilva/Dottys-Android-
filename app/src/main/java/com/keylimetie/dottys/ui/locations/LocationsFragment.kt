@@ -9,6 +9,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.R
+import com.keylimetie.dottys.ui.dashboard.DashboardViewModel
 
 
 class LocationsFragment : Fragment(), DottysLocationDelegates {
@@ -57,19 +58,21 @@ class LocationsFragment : Fragment(), DottysLocationDelegates {
     }
 
     override fun getStoresLocation(locations: DottysLocationsStoresModel) {
+        val mContext = activity as DottysMainNavigationActivity
         locations.locations?.let {
                 locationViewModel.initMapWHitMarker(it)
         }
         locationViewModel.screenDimensionManager(LocationViewType.COLLAPSE_TYPE)
 
         locations.locations?.let {
-            locationViewModel.initExpandableList(activity as DottysMainNavigationActivity,
+            locationViewModel.initExpandableList(mContext,
                 it)
         }
         if (locations.locations.isNullOrEmpty()){
             locationViewModel.screenDimensionManager(LocationViewType.MAP_FULL)
-          (activity as DottysMainNavigationActivity).showSnackBarMessage(activity as DottysMainNavigationActivity,"You have no stores near you at this time, please come  back later.")
+          (mContext).showSnackBarMessage(mContext,"You have no stores near you at this time, please come  back later.")
         }
+        DashboardViewModel(mContext).getBeaconList(mContext,locations.locations?.first()?.storeNumber.toString())
     }
 
 
