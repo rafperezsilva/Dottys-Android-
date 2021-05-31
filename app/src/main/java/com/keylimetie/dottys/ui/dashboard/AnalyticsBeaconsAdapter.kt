@@ -58,7 +58,7 @@ class AnalyticBeacoonsAdapter(
 
 
     private fun fillItemsInView(beacon: DottysBeacon) {
-        idBeacon?.text = beacon.id
+        idBeacon?.text = beacon.beaconIdentifier
         typeBeacon?.text =
             "${beacon.beaconType?.value} | Major: ${beacon.major.toString()} - Minor:${beacon.minor.toString()}"
         var conectionStatusColor: Drawable? = when (beacon.isConected) {
