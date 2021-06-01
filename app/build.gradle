@@ -63,11 +63,11 @@ dependencies {
      implementation 'com.estimote:sdk:1.0.12'
     implementation 'com.estimote:mustard:0.2.1'
      implementation 'com.estimote:scanning-plugin:0.25.4'
-    // implementation 'org.altbeacon:android-beacon-library:2.13.1'
+    // implementation 'org.altbeacon:android-beacon-library:2.13.1
 
-    implementation 'com.google.firebase:firebase-crashlytics:17.2.2'
-    implementation 'com.google.firebase:firebase-core:17.5.0'
-    implementation 'com.google.firebase:firebase-analytics:17.5.0'
+    implementation platform('com.google.firebase:firebase-bom:27.1.0')
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.onesignal:OneSignal:3.15.3'
 
     //noinspection GradleCompatible
