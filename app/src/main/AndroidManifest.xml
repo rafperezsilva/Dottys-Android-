@@ -104,7 +104,9 @@
         <!-- android:value="AIzaSyDbgunZHBK75Lb-jJmGKV9M6HmPbCn4U1E" /> -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBUH7AKtM5vEsx4IpST9tb6-l2LPu9SvtE" />
+            android:value="AIzaSyAzgF_ugdJfxJErDzf6BizoBxYc3grUXzY"/>
+<!--                "AIzaSyBUH7AKtM5vEsx4IpST9tb6-l2LPu9SvtE" -->
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -129,6 +131,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service android:name="com.google.android.gms.measurement.AppMeasurementService"
+            android:enabled="true"
+            android:exported="false"/>
+
+        <receiver android:name="com.google.android.gms.measurement.AppMeasurementReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.measurement.UPLOAD" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

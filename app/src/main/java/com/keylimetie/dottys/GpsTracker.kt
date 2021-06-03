@@ -252,7 +252,7 @@ val text7 = "To function properly, Dotty’s requires<br>access to location in o
         private const val MIN_DISTANCE_CHANGE_FOR_UPDATES: Long = 200 // 200 meters
 
         // The minimum time between updates in milliseconds
-        private const val MIN_TIME_BW_UPDATES = (1000 * 60 * 5)  // 5 minutes
+        private const val MIN_TIME_BW_UPDATES = (1000 * 60 * 30)  // 30 minutes
             .toLong()
     }
 
