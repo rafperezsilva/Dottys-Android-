@@ -27,12 +27,14 @@ class BeaconRest(private val context: DottysBaseActivity) {
                 "${context.baseUrl}beaconEventSummaries/event",
                 jsonObject,
                 Response.Listener<JSONObject> { response ->
+                    context.beaconService?.isUpdatingBeacon = false
                      context.hideLoader()
                     Log.i("$TAG BEACON HAS RECORDED", "${response.toString(5)}")
                     observer.beaconRecord = DottysBeaconResponseModel.fromJson(response.toString(5))
                     isUploading = false
                 },
                 Response.ErrorListener { error ->
+                    context.beaconService?.isUpdatingBeacon = false
 //                    val updates = Preferences.getLastestBeaconConnections(context)
 //                    updates?.beacon = null
 //                    updates?.let { Preferences.saveDataPreference(context as BaseActivity, PreferenceTypeKey.CONECTIONS_UPDATES, it?.toJson()) }

@@ -1,4 +1,4 @@
-package org.altbeacon.beaconreference
+package com.keylimetie.dottys.utils
 
 import android.app.Application
 import android.app.NotificationManager
@@ -8,10 +8,13 @@ import android.app.PendingIntent
 import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.keylimetie.dottys.DottysMainNavigationActivity
 import org.altbeacon.beacon.*
 import org.altbeacon.beacon.powersave.BackgroundPowerSaver
 import org.altbeacon.beacon.startup.BootstrapNotifier
@@ -64,7 +67,7 @@ class BeaconReferenceApplication: Application(), BootstrapNotifier, RangeNotifie
         // - send notifications on bluetooth problems
         // - power cycle bluetooth to recover on bluetooth problems
         // - periodically do a proactive scan or transmission to verify the bluetooth stack is OK
-        BluetoothMedic.getInstance().setNotificationsEnabled(true, R.drawable.ic_launcher_background)
+        BluetoothMedic.getInstance().setNotificationsEnabled(true, com.keylimetie.dottys.R.mipmap.ic_launcher_foreground)
         BluetoothMedic.getInstance().enablePowerCycleOnFailures(this)
         BluetoothMedic.getInstance().enablePeriodicTests(this, BluetoothMedic.SCAN_TEST + BluetoothMedic.TRANSMIT_TEST)
 
@@ -114,11 +117,12 @@ class BeaconReferenceApplication: Application(), BootstrapNotifier, RangeNotifie
         regionBootstrap = RegionBootstrap(this, region)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun setupForegroundService() {
         val builder = Notification.Builder(this, "BeaconReferenceApp")
-        builder.setSmallIcon(R.drawable.ic_launcher_background)
+        builder.setSmallIcon(com.keylimetie.dottys.R.mipmap.ic_launcher_foreground)
         builder.setContentTitle("Scanning for Beacons")
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, DottysMainNavigationActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
                 this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT
         )
@@ -177,9 +181,9 @@ class BeaconReferenceApplication: Application(), BootstrapNotifier, RangeNotifie
         val builder = NotificationCompat.Builder(this)
             .setContentTitle("Beacon Reference Application")
             .setContentText("A beacon is nearby.")
-            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setSmallIcon( com.keylimetie.dottys.R.mipmap.ic_launcher_foreground)
         val stackBuilder = TaskStackBuilder.create(this)
-        stackBuilder.addNextIntent(Intent(this, MainActivity::class.java))
+        stackBuilder.addNextIntent(Intent(this, DottysMainNavigationActivity::class.java))
         val resultPendingIntent = stackBuilder.getPendingIntent(
             0,
             PendingIntent.FLAG_UPDATE_CURRENT

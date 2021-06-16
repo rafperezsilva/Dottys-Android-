@@ -1,5 +1,6 @@
 package com.keylimetie.dottys.ui.dashboard.models
 
+import android.util.Log
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -11,10 +12,12 @@ import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.databind.ser.std.StdSerializer
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.beacon_service.BeaconEventType
 import com.keylimetie.dottys.beacon_service.DottysBeaconResponseModel
 import com.keylimetie.dottys.ui.locations.CompanyType
 import com.keylimetie.dottys.ui.locations.DottysStoresLocation
+import org.altbeacon.beacon.Beacon
 
 
 @Suppress("UNCHECKED_CAST")
@@ -106,6 +109,14 @@ data class  DottysBeacon (
         fun fromJson(json: String) = mapperBeacons.readValue<DottysBeacon>(json)
 
     }
+    fun fromAltBeacon(beacon:Beacon, context: DottysBaseActivity):DottysBeacon?{
+       return try {
+           context.beaconService?.beaconOnDatabase?.first { it.minor?.toInt() == beacon.id3.toInt() && it.major?.toInt() == beacon.id2.toInt() } }
+       catch (e:Exception) {
+               Log.e("ON GET BEACON", "ERROR BEACON ${e.message}")
+               null
+           }
+       }
 }
 
 
