@@ -3,10 +3,13 @@ package com.keylimetie.dottys.ui.dashboard
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Color
 import android.icu.math.BigDecimal
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -21,6 +24,8 @@ import com.android.volley.toolbox.ImageRequest
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.qrcode.QRCodeWriter
 import com.keylimetie.dottys.*
 import com.keylimetie.dottys.R.id
 import com.keylimetie.dottys.models.DottysGlobalDataModel
@@ -37,7 +42,9 @@ import com.keylimetie.dottys.ui.drawing.models.DottysDrawing
 import com.keylimetie.dottys.ui.drawing.models.DottysDrawingRewardsModel
 import com.keylimetie.dottys.ui.drawing.models.DottysDrawingUserModel
 import com.keylimetie.dottys.ui.locations.showSnackBarMessage
+import com.keylimetie.dottys.utils.castQRCodeBitmap
 import com.keylimetie.dottys.utils.md5
+import com.keylimetie.dottys.utils.stringGetYear
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import org.json.JSONArray
@@ -70,8 +77,8 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
     var userCurrentUserDataObserver: DottysCurrentUserObserver? = null
     var dashboardView: View? = null
 
-    var floatingAnalicsView: ConstraintLayout? = null
-    var mainFragmentActivity: DottysMainNavigationActivity? = mainActivity
+    private var floatingAnalicsView: ConstraintLayout? = null
+    private var mainFragmentActivity: DottysMainNavigationActivity? = mainActivity
     var fragmentDashBoard: DashboardFragment? = null
     var drawingBadgeCounter: Int? = 0
     var adapter: DashboardPagerAdapter? = null
@@ -98,6 +105,9 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
     override fun onClick(v: View?) {
 
         when (v?.id) {
+            id.phanton_profile_button -> {
+                initQRCodeView()
+            }
             id.analitycs_floating_view, id.close_analytics_buttom -> {
                 mainFragmentActivity?.let { hideAnalitycsView(it) }
             }
@@ -146,7 +156,7 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
         fragmentDashBoard = fragment
         getCurrentUserRequest(mContext)
         initDashboardItemsView()
-        addProfileImage(mContext, dashboardView)
+        addProfileImage(mContext, dashboardView,  dashboardView.findViewById<CircleImageView>(id.profile_dashboard_image))
 
     }
 
@@ -164,7 +174,11 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
         badgeCounterDrawingManager(drawingBadgeCounter ?: 0)
         hideAnalitycsView(mainFragmentActivity ?: return)
         fragmentDashBoard?.addPagerDashboardImages(mainActivity?.getBannersStored()?.bannerList?.sortedBy { it.priority } ?: return)
-        addProfileImage(mainFragmentActivity ?: return, dashboardView  ?: return)
+        dashboardView?.findViewById<CircleImageView>(id.profile_dashboard_image)?.let {
+            addProfileImage(mainFragmentActivity ?: return, dashboardView  ?: return,
+                it
+            )
+        }
     }
 
     // FILL DATA NAME AND BUTTON DASHBOARD
@@ -188,6 +202,24 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
     }
 
 
+    private fun initQRCodeView(){
+        val user = mainFragmentActivity?.getUserPreference() ?: return
+
+        mainFragmentActivity?.findViewById<TextView>(R.id.member_name_TV)?.text = user.fullName
+        mainFragmentActivity?.findViewById<TextView>(R.id.member_since_TV)?.text =  "Member Since ${user.createdAt?.stringGetYear()}"
+        val qrView = mainFragmentActivity?.findViewById<View>(R.id.qr_view)
+        qrView?.animate()?.translationY(mainFragmentActivity?.screenHeigth?.toFloat() ?: 0f)?.setDuration(0)?.start()
+        qrView?.animate()?.translationY(0f)?.setDuration(450)?.start()
+        qrView?.visibility = View.VISIBLE
+        val userId = user.id ?: return
+        Picasso.get().load(mainFragmentActivity?.getUserPreference()?.profilePicture).into(mainFragmentActivity?.findViewById<CircleImageView>(id.qr_profile_dashboard_image))
+        mainFragmentActivity?.findViewById<ImageView>(id.qr_image_IV)?.setImageBitmap(userId.castQRCodeBitmap())
+        mainFragmentActivity?.findViewById<View>(id.close_qr_view_button)?.setOnClickListener {
+            qrView?.animate()?.translationY(mainFragmentActivity?.screenHeigth?.toFloat() ?: 0f)?.setDuration(350)?.withEndAction {
+                qrView.visibility = View.GONE
+            }
+        }
+    }
 
     fun badgeCounterDrawingManager(badgeCounter: Int) {
         if (badgeCounter == 0) {
@@ -228,8 +260,9 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
     private fun addProfileImage(
         mContext: DottysMainNavigationActivity,
         rootView: View,
+        imageView: CircleImageView
     ) {
-        val imageView = rootView.findViewById<CircleImageView>(id.profile_dashboard_image)
+       // val imageView = rootView.findViewById<CircleImageView>(id.profile_dashboard_image)
         if (mainFragmentActivity?.userPictureBM != null){
             imageView.setImageBitmap(mainFragmentActivity?.userPictureBM)
 
@@ -237,7 +270,7 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
 
             imageView.setImageResource(R.mipmap.default_profile_image)
             if (mainFragmentActivity?.getUserPreference()?.profilePicture?.isNotBlank() == true) {
-                Picasso.with(mContext)
+                Picasso.get()//with(mContext)
                     .load(mainFragmentActivity?.getUserPreference()?.profilePicture)
                     .transform(CircleTransform()).into(imageView)
             }

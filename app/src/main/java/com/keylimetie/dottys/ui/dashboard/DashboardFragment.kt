@@ -404,7 +404,7 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
         for (index in 0 until limitOfFlipperView) {
             val imageView = viewFragment?.findViewById<ImageView>(staticImagesResouerce[index])
 
-            Picasso.with(activity)
+            Picasso.get()//.with(activity)
                 .load(bannerList[index].image)
                 .into(imageView)
 
