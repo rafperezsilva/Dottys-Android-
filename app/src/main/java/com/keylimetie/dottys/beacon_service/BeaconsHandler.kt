@@ -1,19 +1,16 @@
 package com.keylimetie.dottys.beacon_service
 
 
-import android.R
-import android.app.AlertDialog
+import android.bluetooth.BluetoothAdapter
 import android.os.Handler
 import android.util.Log
-import android.widget.ArrayAdapter
 import androidx.lifecycle.Observer
 import com.keylimetie.dottys.DottysBaseActivity
-import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.PreferenceTypeKey
 import com.keylimetie.dottys.saveDataPreference
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeacon
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconArray
-import com.keylimetie.dottys.utils.BeaconReferenceApplication
+import com.keylimetie.dottys.utils.DottysBeaconReferenceApplication
 import org.altbeacon.beacon.Beacon
 import org.altbeacon.beacon.BeaconManager
 import org.altbeacon.beacon.MonitorNotifier
@@ -24,10 +21,10 @@ class BeaconsHandler(
     private val context: DottysBaseActivity,
     private val observer: BeaconHandlerObserver?
 ){
-    lateinit var beaconReferenceApplication: BeaconReferenceApplication
+    lateinit var dottysBeaconReferenceApplication: DottysBeaconReferenceApplication
     var handlerData = Handler()
     var runnable: Runnable? = null
-    var delay = 15000
+    
     var handlerDataTask: Handler? = null
     var beaconManager: BeaconManager? = null
     var taskCounter = 0
@@ -38,55 +35,103 @@ class BeaconsHandler(
     fun beaconsConnected(): ArrayList<DottysBeacon> {
         return context.getBeaconStatus()?.beaconArray ?: beaconOnDatabase ?: ArrayList()
     }
+
+    // This gets called from the BeaconReferenceApplication when monitoring events change changes
+    val monitoringObserver = Observer<Int> { state ->
+       var stateString = "inside"
+        if (state == MonitorNotifier.OUTSIDE) {
+
+            stateString == "outside"
+               }
+        else {
+        }
+        Log.d("TAG", "♦️🟩🟦🟦🟪 monitoring state changed to : $stateString")
+
+
+    }
+
     val rangingObserver = Observer<Collection<Beacon>> { beacons ->
         Log.d("TAG", "Ranged: ${beacons.count()} beacons")
-        if (beaconManager?.rangedRegions?.isNotEmpty() == true) {
-         Log.e("🎩 COÑO", "${beacons.size}")
+        if (beacons.size > 0) {
+         Log.e("🎩 COÑO", "${beacons.size} $context")
             try {
                 //beacons.forEach { Log.d("POWER ", " 👓 MINOR ${it.id3} 🎯 TX: ${it.rssi}") }
-                connectionToBeaconHandler2(beacons)
+            beaconHandler(beacons)
                // beacons.forEach { Log.d("BEACON DETECTED","AT MINOR ${it.id3}") }
             } catch (e: Exception){
                 Log.d("BEACON DETECTED","ERROR: ${e.message}")
             }
         }
     }
-    val monitoringObserver = Observer<Int> { state ->
-        var dialogTitle = "Beacons detected"
-        var dialogMessage = "didEnterRegionEvent has fired"
-        var stateString = "inside"
-        if (state == MonitorNotifier.OUTSIDE) {
-            dialogTitle = "No beacons detected"
-            dialogMessage = "didExitRegionEvent has fired"
-            stateString == "outside"
-//            beaconCountTextView.text = "Outside of the beacon region -- no beacons detected"
-//            beaconListView.adapter = ArrayAdapter(this, R.layout.simple_list_item_1, arrayOf("--"))
-        }
-        else {
-            print("Inside the beacon region.")
-        }
-        Log.d("TAG", "monitoring state changed to : $stateString")
-        val builder =
-            AlertDialog.Builder(context)
-        builder.setTitle(dialogTitle)
-        builder.setMessage(dialogMessage)
-        builder.setPositiveButton(android.R.string.ok, null)
 
+    private fun beaconHandler(beacons:Collection<Beacon>){
+        val beaconAux = beaconsConnected()
+        for(item in beaconsConnected()){
+            beacons.forEach { Log.d("INFO BEACON", "👺 MINOR ${it.id3} | RSSI AVG -${it.runningAverageRssi} 🟨 RRSI-${it.rssi}") }
+            if(beacons.any { it.id3.toInt() == item.minor?.toInt()}) {
+                val beaconActive = beaconsConnected().first { it.minor?.toInt() == beacons.first { it2 -> it2.id3.toInt() == item.minor?.toInt() }.id3.toInt()}
+                if (beaconActive.isConected != true) {
+                    Handler().postDelayed({
+                        observer?.listOfBeacons = beaconsConnected()
 
+                    }, 2000)
+                }
+                Log.d(
+                    "BEACON MANAGER",
+                    "${item.expiration} ✋ TO RENOVATE  ${item.minor}  "
+                )
+                beaconActive.isConected = true
+                beaconActive.expiration = 0
+                beaconAux[beaconsConnected().indexOf(beaconsConnected().first { it.minor == beaconActive.minor })] =
+                    beaconActive
+                recordBeacon(beaconActive,BeaconEventType.ENTER)
+            } else {
+
+                if(item.isRegistered || item.isConected == true) {
+
+                    item.isConected = item.expiration <= 2
+                    item.expiration += 1
+                    if (item.isConected == true && item.expiration == 3 )
+
+                       {
+                        Handler().postDelayed({
+                            observer?.listOfBeacons = beaconsConnected()
+
+                        }, 2000)
+                    }
+                    Log.d(
+                        "BEACON MANAGER",
+                        "${item.expiration} ✊ TO EXPIRE  ${item.minor}  "
+                    )
+                    beaconAux[beaconsConnected().indexOf(beaconsConnected().first { it.minor == item.minor })] =
+                        item
+                   if( item.expiration > 5){recordBeacon(item,BeaconEventType.EXIT)}
+                }
+            }
+            context.saveDataPreference(PreferenceTypeKey.BEACON_AT_CONECTION,
+                DottysBeaconArray(beaconAux).toJson())
+        }
+
+        beaconTimerScanner()
     }
 
-
-    fun initBeacon(){
-    // beaconReferenceApplication = BeaconReferenceApplication()
+    fun initBeacon() {
+        requestPermission()
+        if(beaconManager != null) {return}
         beaconManager = BeaconManager.getInstanceForApplication(context)
-        beaconManager?.foregroundBetweenScanPeriod = 15000
-        beaconManager?.backgroundBetweenScanPeriod = 15000
-        beaconManager?.backgroundScanPeriod = 15000
-        beaconManager?.
-        beaconManager?.foregroundScanPeriod = 15000
-      beaconReferenceApplication = (context.application) as BeaconReferenceApplication
-        beaconReferenceApplication.monitoringData.state.observe(context, monitoringObserver)
-        beaconReferenceApplication.rangingData.beacons.observe(context, rangingObserver)    }
+
+        runnable = Runnable { runnableNewAction() }
+
+        beaconManager?.foregroundBetweenScanPeriod = 1500
+        beaconManager?.backgroundBetweenScanPeriod = 1500
+        beaconManager?.backgroundScanPeriod = 8000
+        beaconManager?.foregroundScanPeriod = 8000
+         dottysBeaconReferenceApplication = (context.application) as DottysBeaconReferenceApplication
+        dottysBeaconReferenceApplication.monitoringData.state.observe(context, monitoringObserver)
+
+        // beaconReferenceApplication.monitoringData.state.observe(context, monitoringObserver)
+        dottysBeaconReferenceApplication.rangingData.beacons.observe(context, rangingObserver)
+}
     /*fun initBeacon(){
         val rangingObserver = Observer<Collection<Beacon>> { beacons ->
             Log.d("TAG", "Ranged: ${beacons.count()} beacons")
@@ -103,13 +148,26 @@ class BeaconsHandler(
 
     var breakCounter = 0
     private fun connectionToBeaconHandler2(beacons:Collection<Beacon>){
-        for (beaconEach in 0 until beaconsConnected().size){
+        breakCounter += 1
+        taskCounter = 0
+//        if(breakCounter >= 5) {breakCounter = 0}
+//        if(breakCounter > 1) {
+//            return
+//        }
+            for (beaconEach in beacons){
 
-            Log.d("ESTUPIDES","✋ $beaconEach")
-            connectionToBeaconHandler(
-                beacons as MutableList,
-                beaconsConnected()[beaconEach].minor?.toInt()
-            )
+                beaconsConnected().forEach {
+                    if (it?.minor?.toInt() == beaconEach.id3.toInt() && beaconEach.distance < 1.0) {
+                        Log.d("ESTUPIDES", "👊🏿 $beaconEach")
+                        connectionToBeaconHandler(beacons as ArrayList<Beacon>, it?.minor?.toInt())
+                    } else {
+                        connectionToBeaconHandler(null, it?.minor?.toInt())
+                    }
+
+            }
+
+         Log.d("ESTUPIDES","✋ $beaconEach")
+
         }
 
 //
@@ -133,7 +191,7 @@ class BeaconsHandler(
     }
  var isUpdatingBeacon = false
     private fun connectionToBeaconHandler(
-        beacons: MutableList<Beacon>?,
+        beacons: ArrayList<Beacon>?,
         beaconRegion: Int?
     ){
         if(isUpdatingBeacon){return}
@@ -196,18 +254,18 @@ class BeaconsHandler(
             if(beaconsConnected().filter { it.minor == beacon.minor && it.isConected == true || it.isRegistered }.isNotEmpty()){
                 if(beaconsConnected().first{ it.minor == beacon.minor}.isConected != true && !beaconsConnected().first{ it.minor == beacon.minor}.isRegistered){return}
                 val beaconToExpire = beaconsConnected().first{ it.minor == beacon.minor}
-                if(beaconToExpire.isConected == true){
+                if(beaconToExpire.isConected == true && beaconToExpire.expiration > 3){
                     Handler().postDelayed({
                         observer?.listOfBeacons = beaconsConnected()
                     }, 1000)
                 }
-                beaconToExpire.isConected = false
+                beaconToExpire.isConected = beaconToExpire.expiration > 3
                 beaconToExpire.expiration += 1
                 val auxList = beaconsConnected()
                 auxList[beaconsConnected().indexOf(beaconsConnected().first{it.minor == beaconToExpire.minor})] = beaconToExpire
                 context.saveDataPreference(PreferenceTypeKey.BEACON_AT_CONECTION,DottysBeaconArray(auxList).toJson())
 
-                if (beaconToExpire.expiration > 5){
+                if (beaconToExpire.expiration > 7){
                     recordBeacon(beaconToExpire,BeaconEventType.EXIT)
                 }
             }
@@ -242,7 +300,7 @@ class BeaconsHandler(
 //            beaconRecorded.beaconType ==  BeaconType.GAMING || beaconRecorded.isRegistered && eventType == BeaconEventType.ENTER) {
 //                    return
 //        }
-        isUpdatingBeacon = true
+
         BeaconRest(context).recordBeaconEvent(
             DottysBeaconRequestModel(
                 beaconRecorded.beaconIdentifier,
@@ -260,10 +318,9 @@ class BeaconsHandler(
         handlerData.removeCallbacksAndMessages(null)
         handlerData.removeCallbacks(runnable!!)
         handlerData.postDelayed(Runnable {
-            handlerData.postDelayed(runnable!!, delay.toLong())
-            runneableAction()
-            Log.e ("HANLDER DATA","This method will run every 10 seconds")
-        }.also { runnable = it }, delay.toLong())
+            handlerData.postDelayed(runnable!!, context.delayBeaconChecker.toLong())
+            runnableNewAction()
+        }.also { runnable = it }, context.delayBeaconChecker.toLong())
 //        handlerData?.removeCallbacks {}
 //        if(handlerData != null){return}
 //        handlerData = Handler(Looper.getMainLooper())
@@ -274,6 +331,11 @@ class BeaconsHandler(
 //                handlerData?.postDelayed(this, 18000)
 //            }
 //        }, 18000)
+    }
+
+    private fun runnableNewAction(){
+            Log.e("RUNNEABLE🕒", "${context.delayBeaconChecker}}")
+       // initBeacon()
     }
 
     private fun runneableAction(){
@@ -338,7 +400,13 @@ class BeaconsHandler(
             handlerData.removeCallbacksAndMessages(null)
         }
     }
+    private fun requestPermission() {
+        val mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+        if (!mBluetoothAdapter.isEnabled) {
+            mBluetoothAdapter.enable()
 
+        }
+    }
 }
 /**    BeaconManager.BeaconRangingListener, BeaconManager.NearableListener,
     BeaconManager.ScanStatusListener, BeaconManager.BeaconMonitoringListener {

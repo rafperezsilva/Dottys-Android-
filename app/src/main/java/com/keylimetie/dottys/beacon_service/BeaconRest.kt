@@ -19,7 +19,8 @@ class BeaconRest(private val context: DottysBaseActivity) {
 
     fun recordBeaconEvent(beaconData: DottysBeaconRequestModel, observer: BeaconEventObserver) {
         val mQueue = Volley.newRequestQueue(context)
-        isUploading = true
+        if(context.beaconService?.isUpdatingBeacon == true){return}
+        context.beaconService?.isUpdatingBeacon = true
         //BaseLoader(context).showLoader()
             val jsonObject = JSONObject(beaconData.toJson())
         val jsonObjectRequest = object : JsonObjectRequest(

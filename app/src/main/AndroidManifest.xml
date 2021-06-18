@@ -44,7 +44,7 @@
         android:protectionLevel="signature" />
 
     <application
-        android:name=".utils.BeaconReferenceApplication"
+        android:name=".utils.DottysBeaconReferenceApplication"
         android:foregroundServiceType="location"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher_foreground"

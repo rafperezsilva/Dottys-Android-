@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.crashlytics.CrashlyticsRegistrar
+import com.google.firebase.crashlytics.internal.model.CrashlyticsReport
 import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.R
@@ -72,7 +74,14 @@ class LocationsFragment : Fragment(), DottysLocationDelegates {
             locationViewModel.screenDimensionManager(LocationViewType.MAP_FULL)
           (mContext).showSnackBarMessage(mContext,"You have no stores near you at this time, please come  back later.")
         }
-        DashboardViewModel(mContext).getBeaconList(mContext,locations.locations?.first()?.storeNumber.toString())
+        try {
+            DashboardViewModel(mContext).getBeaconList(
+                mContext,
+                locations.locations?.first()?.storeNumber.toString()
+            )
+        } catch (e:Exception){
+            CrashlyticsReport.Session.Event.Log.builder().setContent("ERROR MAP FRAGMENT" + "${e.message}")
+        }
     }
 
 

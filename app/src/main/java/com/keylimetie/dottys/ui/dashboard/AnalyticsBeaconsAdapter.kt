@@ -61,16 +61,14 @@ class AnalyticBeacoonsAdapter(
         idBeacon?.text = beacon.id
         typeBeacon?.text =
             "${beacon.beaconType?.value} | Major: ${beacon.major.toString()} - Minor:${beacon.minor.toString()}"
-        var conectionStatusColor: Drawable? = when (beacon.isConected) {
-            true -> {
+        var connectionStatusColor: Drawable? = if (beacon.isConected == true) {
+
                 mContext.resources.getDrawable(R.drawable.shape_circular_conected)
-            }
-            else -> {
+            } else  {
                 mContext.resources.getDrawable(R.drawable.shape_circular_disconected)
 
             }
-        }
-        statusColorBeacon?.background = conectionStatusColor
+               statusColorBeacon?.background = connectionStatusColor
     }
 
 

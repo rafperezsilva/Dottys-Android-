@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.DottysMainNavigationActivity
 import org.altbeacon.beacon.*
 import org.altbeacon.beacon.powersave.BackgroundPowerSaver
@@ -21,13 +22,16 @@ import org.altbeacon.beacon.startup.BootstrapNotifier
 import org.altbeacon.beacon.startup.RegionBootstrap
 import org.altbeacon.bluetooth.BluetoothMedic
 
-class BeaconReferenceApplication: Application(), BootstrapNotifier, RangeNotifier {
+class DottysBeaconReferenceApplication: Application(), BootstrapNotifier, RangeNotifier {
     val rangingData = RangingData()
     val monitoringData = MonitoringData()
     var alreadyStartedRangingAtBoot = false
     lateinit var region: Region
     lateinit var regionBootstrap: RegionBootstrap
 
+    val scanningPeriod: Long = 60000 * 5
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate() {
         super.onCreate()
 
@@ -59,7 +63,7 @@ class BeaconReferenceApplication: Application(), BootstrapNotifier, RangeNotifie
 
         // enabling debugging will send lots of verbose debug information from the library to Logcat
         // this is useful for troubleshooting problmes
-        // BeaconManager.setDebug(true)
+         //BeaconManager.setDebug(true)
 
 
         // The BluetoothMedic code here, if included, will watch for problems with the bluetooth
@@ -80,13 +84,13 @@ class BeaconReferenceApplication: Application(), BootstrapNotifier, RangeNotifie
         // If you want to continuously range beacons in the background more often than every 15 mintues,
         // you can use the library's built-in foreground service to unlock this behavior on Android
         // 8+.   the method below shows how you set that up.
-        //setupForegroundService()
+      setupForegroundService()
 
         // The code below will start "monitoring" for beacons matching the region definition below
         // the region definition is a wildcard that matches all beacons regardless of identifiers.
         // if you only want to detect becaonc with a specific UUID, change the id1 paremeter to
         // a UUID like "2F234454-CF6D-4A0F-ADF2-F4911BA9FFA6"
-        region = Region("wildcard-region", null, null, null)
+        region = Region("3D085F5D-072E-D57D-62FE-50DADE7F2CB6", null, null, null)
         regionBootstrap = RegionBootstrap(this, region)
 
         // Note that the RegionBootstrap is a specialized form of starting beacon monitoring that
@@ -105,6 +109,10 @@ class BeaconReferenceApplication: Application(), BootstrapNotifier, RangeNotifie
         //beaconManager.setEnableScheduledScanJobs(false);
         //beaconManager.setBackgroundBetweenScanPeriod(0);
         //beaconManager.setBackgroundScanPeriod(1100);
+        beaconManager.foregroundBetweenScanPeriod = 5000
+        beaconManager.backgroundBetweenScanPeriod = 5000
+        beaconManager.backgroundScanPeriod = 8000
+        beaconManager.foregroundScanPeriod = 8000
     }
 
     fun disableMonitoring() {
@@ -119,10 +127,10 @@ class BeaconReferenceApplication: Application(), BootstrapNotifier, RangeNotifie
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun setupForegroundService() {
-        val builder = Notification.Builder(this, "BeaconReferenceApp")
+        val builder = Notification.Builder(this, "DottysBeaconReferenceApp")
         builder.setSmallIcon(com.keylimetie.dottys.R.mipmap.ic_launcher_foreground)
         builder.setContentTitle("Scanning for Beacons")
-        val intent = Intent(this, DottysMainNavigationActivity::class.java)
+        val intent = Intent(this, DottysBaseActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
                 this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT
         )
@@ -156,7 +164,7 @@ class BeaconReferenceApplication: Application(), BootstrapNotifier, RangeNotifie
         // matching a Region (defined above) are first seen.
         Log.d(TAG, "didEnterRegion")
         monitoringData.state.postValue(MonitorNotifier.INSIDE)
-        sendNotification()
+    //    sendNotification()
     }
 
     override fun didExitRegion(region: Region?) {
@@ -183,7 +191,7 @@ class BeaconReferenceApplication: Application(), BootstrapNotifier, RangeNotifie
             .setContentText("A beacon is nearby.")
             .setSmallIcon( com.keylimetie.dottys.R.mipmap.ic_launcher_foreground)
         val stackBuilder = TaskStackBuilder.create(this)
-        stackBuilder.addNextIntent(Intent(this, DottysMainNavigationActivity::class.java))
+        stackBuilder.addNextIntent(Intent(this, DottysBaseActivity::class.java))
         val resultPendingIntent = stackBuilder.getPendingIntent(
             0,
             PendingIntent.FLAG_UPDATE_CURRENT

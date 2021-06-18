@@ -26,6 +26,8 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.navigation.NavigationView
+import com.keylimetie.dottys.beacon_service.BeaconHandlerObserver
+import com.keylimetie.dottys.beacon_service.BeaconsHandler
 import com.keylimetie.dottys.redeem.DottysRewardRedeemedActivity
 import com.keylimetie.dottys.register.DottysRegisterUserDelegates
 import com.keylimetie.dottys.register.DottysRegisterUserObserver
@@ -40,7 +42,6 @@ import com.keylimetie.dottys.ui.drawing.DrawingViewModel
 import com.keylimetie.dottys.ui.drawing.RewardsSegment
 import com.keylimetie.dottys.ui.drawing.models.DottysDrawingRewardsModel
 import com.keylimetie.dottys.ui.drawing.models.DottysDrawingUserModel
-import com.keylimetie.dottys.ui.locations.showSnackBarMessage
 import com.keylimetie.dottys.utils.rotateBitmap
 import java.io.ByteArrayOutputStream
 import java.io.IOException
@@ -356,12 +357,20 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
 
     override fun onResume() {
         super.onResume()
+        delayBeaconChecker = 1000 * 1
         controller.addOnDestinationChangedListener(listener)
 
     }
 
     override fun onStop() {
         super.onStop()
+        delayBeaconChecker = 60000
+        beaconService?.beaconTimerScanner()
+        if(beaconService == null) {
+        beaconService = BeaconsHandler( this, BeaconHandlerObserver(this))
+        beaconService?.initBeacon()
+        }
+        Log.d("MAIN NAVIGATION", "🔯>>>> BACKGROUND APP <<<🈺")
       //  beaconService?.handlerData.
     }
     override fun onPause() {
