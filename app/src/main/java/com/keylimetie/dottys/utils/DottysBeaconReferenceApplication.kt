@@ -16,27 +16,30 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.DottysMainNavigationActivity
+import com.keylimetie.dottys.beacon_service.BeaconEventObserver
 import org.altbeacon.beacon.*
 import org.altbeacon.beacon.powersave.BackgroundPowerSaver
 import org.altbeacon.beacon.startup.BootstrapNotifier
 import org.altbeacon.beacon.startup.RegionBootstrap
 import org.altbeacon.bluetooth.BluetoothMedic
+import java.util.*
+import kotlin.collections.ArrayList
 
 class DottysBeaconReferenceApplication: Application(), BootstrapNotifier, RangeNotifier {
     val rangingData = RangingData()
     val monitoringData = MonitoringData()
     var alreadyStartedRangingAtBoot = false
     lateinit var region: Region
-    lateinit var regionBootstrap: RegionBootstrap
-
+    private lateinit var regionBootstrap: RegionBootstrap
+    var beaconsObserver: BeaconEventObserver? = null
     val scanningPeriod: Long = 60000 * 5
+    var context: DottysBaseActivity? = null
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate() {
         super.onCreate()
 
         val beaconManager = BeaconManager.getInstanceForApplication(this)
-
         // By default the AndroidBeaconLibrary will only find AltBeacons.  If you wish to make it
         // find a different type of beacon, you must specify the byte layout for that beacon's
         // advertisement with a line like below.  The example shows how to find a beacon with the
@@ -57,9 +60,7 @@ class DottysBeaconReferenceApplication: Application(), BootstrapNotifier, RangeN
         //beaconManager.getBeaconParsers().clear()
 
         // The example shows how to find iBeacon.
-        beaconManager.getBeaconParsers().add(
-            BeaconParser().
-                setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"))
+
 
         // enabling debugging will send lots of verbose debug information from the library to Logcat
         // this is useful for troubleshooting problmes
@@ -115,6 +116,11 @@ class DottysBeaconReferenceApplication: Application(), BootstrapNotifier, RangeN
         beaconManager.foregroundScanPeriod = 8000
     }
 
+    fun initBootStarpRegion(reginonList: ArrayList<Region>){
+        regionBootstrap = RegionBootstrap(this, reginonList)
+        enableMonitoring()
+    }
+
     fun disableMonitoring() {
         if (regionBootstrap != null) {
             regionBootstrap.disable()
@@ -122,14 +128,17 @@ class DottysBeaconReferenceApplication: Application(), BootstrapNotifier, RangeN
     }
 
     fun enableMonitoring() {
-        regionBootstrap = RegionBootstrap(this, region)
+        if(!context?.getBeaconStatus()?.beaconArray.isNullOrEmpty()) {
+ Log.e("BACGROUND", "HAS BEACON IN BACKGROUN")
+            //regionBootstrap = RegionBootstrap(this, region)
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun setupForegroundService() {
         val builder = Notification.Builder(this, "DottysBeaconReferenceApp")
-        builder.setSmallIcon(com.keylimetie.dottys.R.mipmap.ic_launcher_foreground)
-        builder.setContentTitle("Scanning for Beacons")
+        builder.setSmallIcon(com.keylimetie.dottys.R.mipmap.dottys_notification_icon)
+        builder.setContentTitle("Scanning for Beacons at background")
         val intent = Intent(this, DottysBaseActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
                 this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT
@@ -137,12 +146,13 @@ class DottysBeaconReferenceApplication: Application(), BootstrapNotifier, RangeN
         builder.setContentIntent(pendingIntent);
         val channel =  NotificationChannel("My Notification Channel ID",
             "My Notification Name", NotificationManager.IMPORTANCE_DEFAULT)
-        channel.setDescription("My Notification Channel Description")
+        channel.description = "My Notification Channel Description"
         val notificationManager =  getSystemService(
                 Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel);
-        builder.setChannelId(channel.getId());
+        builder.setChannelId(channel.id);
         BeaconManager.getInstanceForApplication(this).enableForegroundServiceScanning(builder.build(), 456);
+
     }
 
 
@@ -166,6 +176,14 @@ class DottysBeaconReferenceApplication: Application(), BootstrapNotifier, RangeN
         monitoringData.state.postValue(MonitorNotifier.INSIDE)
     //    sendNotification()
     }
+//
+//    val regions = ArrayList<Region>()
+//    beaconsConnected().forEach { regions.add(
+//        Region(
+//            Identifier.parse(it.id).toString(),
+//            Identifier.fromUuid(UUID.fromString(it.uuid))!!,
+//            Identifier.fromInt(it.major?.toInt() ?: 0), Identifier.fromInt(it.minor?.toInt() ?: 0)))
+//    }
 
     override fun didExitRegion(region: Region?) {
         Log.d(TAG, "didExitRegion")
@@ -182,6 +200,8 @@ class DottysBeaconReferenceApplication: Application(), BootstrapNotifier, RangeN
                 Log.d(TAG, "$beacon about ${beacon.distance} meters away")
             }
         }
+
+        beaconsObserver?.background  = beacons
         rangingData.beacons.postValue(beacons)
     }
 

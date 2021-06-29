@@ -357,18 +357,21 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
 
     override fun onResume() {
         super.onResume()
-        delayBeaconChecker = 1000 * 1
+        delayBeaconChecker = 35000 * 1
         controller.addOnDestinationChangedListener(listener)
 
     }
 
     override fun onStop() {
         super.onStop()
-        delayBeaconChecker = 60000
-        beaconService?.beaconTimerScanner()
+        delayBeaconChecker = 60000*15//120000
+//        beaconService?.beaconTimerScanner()
         if(beaconService == null) {
         beaconService = BeaconsHandler( this, BeaconHandlerObserver(this))
-        beaconService?.initBeacon()
+            if(beaconService?.beaconsConnected()?.filter { it.isRegistered || it.isConected == true }?.size ?: 0 > 0) {
+                beaconService?.initBeacon()
+            }
+        //beaconService?.initBeacon()
         }
         Log.d("MAIN NAVIGATION", "🔯>>>> BACKGROUND APP <<<🈺")
       //  beaconService?.handlerData.

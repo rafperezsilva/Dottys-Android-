@@ -9,6 +9,7 @@ import com.android.volley.toolbox.Volley
 import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconsModel
 import com.keylimetie.dottys.utils.Preferences
+import org.altbeacon.beacon.Beacon
 import org.json.JSONObject
 import java.util.*
 import kotlin.properties.Delegates
@@ -19,7 +20,7 @@ class BeaconRest(private val context: DottysBaseActivity) {
 
     fun recordBeaconEvent(beaconData: DottysBeaconRequestModel, observer: BeaconEventObserver) {
         val mQueue = Volley.newRequestQueue(context)
-        if(context.beaconService?.isUpdatingBeacon == true){return}
+        //if(context.beaconService?.isUpdatingBeacon == true){return}
         context.beaconService?.isUpdatingBeacon = true
         //BaseLoader(context).showLoader()
             val jsonObject = JSONObject(beaconData.toJson())
@@ -112,6 +113,7 @@ interface BeaconEventDelegate {
     fun onBeaconAtNearLocationRetrieved(beaconData: DottysBeaconsModel)
 
     fun onBeaconRecorded(beaconEvent: DottysBeaconResponseModel)
+    fun onBackgrounBeaconFetch(beaconEvent: MutableCollection<Beacon>?)
 }
 
 
@@ -122,5 +124,8 @@ class BeaconEventObserver(lisener: BeaconEventDelegate) {
     var beaconData: DottysBeaconsModel by Delegates.observable(
             initialValue = DottysBeaconsModel(),
             onChange = { _, _, new -> lisener.onBeaconAtNearLocationRetrieved(new) })
+ var background: MutableCollection<Beacon>? by Delegates.observable(
+            initialValue = null,
+            onChange = { _, _, new -> lisener.onBackgrounBeaconFetch(new) })
 
 }
