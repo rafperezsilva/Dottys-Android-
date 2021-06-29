@@ -58,7 +58,7 @@ class DottysDrawingAdapter(
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val rowView = inflater.inflate(R.layout.drawing_fragment_item, parent, false)
         val params = rowView.layoutParams//ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
-        params.height = (activityFragment.displayMetrics.heightPixels*0.1).toInt()
+        params.height = (activityFragment.displayMetrics.heightPixels*0.2).toInt()
        // params.height = heigthForItem(parent)
         rowView.layoutParams = params
         val rewards = dataSource[position]

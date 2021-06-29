@@ -82,12 +82,12 @@ dependencies {
 
 
 
-    implementation 'org.altbeacon:android-beacon-library:2.18-beta'
+    implementation 'org.altbeacon:android-beacon-library:2.19-beta'
     //coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.2'
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.2"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1"
     //coroutine scopes
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
 
 
     //noinspection GradleCompatible
@@ -98,7 +98,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8'
-    implementation 'com.android.volley:volley:1.1.1'
+    implementation 'com.android.volley:volley:1.2.0'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
     implementation 'com.clock.scratch:Scratch:1.0.0'
     implementation 'io.coil-kt:coil:1.0.0-rc3'
@@ -114,14 +114,14 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.4.0-alpha01'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.4.0-alpha02'
 
     implementation 'com.github.reinaldoarrosi:maskededittext:1.1.0'
     def camerax_version = "1.0.0-alpha04"
     implementation "androidx.camera:camera-core:$camerax_version"
     implementation "androidx.camera:camera-camera2:$camerax_version"
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
