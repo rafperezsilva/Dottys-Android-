@@ -63,14 +63,20 @@ open class GpsTracker(private val mContext: DottysBaseActivity) : Service(),
                     if (ActivityCompat.checkSelfPermission(
                             mContext,
                             Manifest.permission.ACCESS_FINE_LOCATION
-                        ) !== PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                        ) !== PackageManager.PERMISSION_GRANTED
+                        && ActivityCompat.checkSelfPermission(
                             mContext,
                             Manifest.permission.ACCESS_COARSE_LOCATION
+                        ) !== PackageManager.PERMISSION_GRANTED
+                        && ActivityCompat.checkSelfPermission(
+                            mContext,
+                            Manifest.permission.ACCESS_BACKGROUND_LOCATION
                         ) !== PackageManager.PERMISSION_GRANTED
                     ) {
                         ActivityCompat.requestPermissions(
                             mContext as Activity,
                             arrayOf(
+                                Manifest.permission.ACCESS_BACKGROUND_LOCATION,
                                 Manifest.permission.ACCESS_FINE_LOCATION,
                                 Manifest.permission.ACCESS_COARSE_LOCATION
                             ),
@@ -99,14 +105,20 @@ open class GpsTracker(private val mContext: DottysBaseActivity) : Service(),
                         if (ActivityCompat.checkSelfPermission(
                                 mContext,
                                 Manifest.permission.ACCESS_FINE_LOCATION
-                            ) !== PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                            ) !== PackageManager.PERMISSION_GRANTED
+                            && ActivityCompat.checkSelfPermission(
                                 mContext,
                                 Manifest.permission.ACCESS_COARSE_LOCATION
+                            ) !== PackageManager.PERMISSION_GRANTED
+                        && ActivityCompat.checkSelfPermission(
+                                mContext,
+                                Manifest.permission.ACCESS_BACKGROUND_LOCATION
                             ) !== PackageManager.PERMISSION_GRANTED
                         ) {
                             ActivityCompat.requestPermissions(
                                 mContext as Activity,
                                 arrayOf(
+                                    Manifest.permission.ACCESS_BACKGROUND_LOCATION,
                                     Manifest.permission.ACCESS_FINE_LOCATION,
                                     Manifest.permission.ACCESS_COARSE_LOCATION
                                 ),

@@ -16,6 +16,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.DottysMainNavigationActivity
+import com.keylimetie.dottys.beacon_service.BeaconEventObserver
 import org.altbeacon.beacon.*
 import org.altbeacon.beacon.powersave.BackgroundPowerSaver
 import org.altbeacon.beacon.startup.BootstrapNotifier
@@ -30,6 +31,8 @@ class DottysBeaconReferenceApplication: Application(), BootstrapNotifier, RangeN
     lateinit var regionBootstrap: RegionBootstrap
 
     val scanningPeriod: Long = 60000 * 5
+    var beaconsObserver: BeaconEventObserver? = null
+    var context: DottysBaseActivity? = null
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate() {
@@ -71,7 +74,7 @@ class DottysBeaconReferenceApplication: Application(), BootstrapNotifier, RangeN
         // - send notifications on bluetooth problems
         // - power cycle bluetooth to recover on bluetooth problems
         // - periodically do a proactive scan or transmission to verify the bluetooth stack is OK
-        BluetoothMedic.getInstance().setNotificationsEnabled(true, com.keylimetie.dottys.R.mipmap.ic_launcher_foreground)
+        BluetoothMedic.getInstance().setNotificationsEnabled(true, com.keylimetie.dottys.R.mipmap.dottys_notification_icon)
         BluetoothMedic.getInstance().enablePowerCycleOnFailures(this)
         BluetoothMedic.getInstance().enablePeriodicTests(this, BluetoothMedic.SCAN_TEST + BluetoothMedic.TRANSMIT_TEST)
 
@@ -128,8 +131,9 @@ class DottysBeaconReferenceApplication: Application(), BootstrapNotifier, RangeN
     @RequiresApi(Build.VERSION_CODES.O)
     fun setupForegroundService() {
         val builder = Notification.Builder(this, "DottysBeaconReferenceApp")
-        builder.setSmallIcon(com.keylimetie.dottys.R.mipmap.ic_launcher_foreground)
-        builder.setContentTitle("Scanning for Beacons")
+        builder.setSmallIcon(com.keylimetie.dottys.R.mipmap.dottys_notification_icon)
+        builder.setContentTitle("Scanning for Beacons at background")
+
         val intent = Intent(this, DottysBaseActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
                 this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT
@@ -166,6 +170,11 @@ class DottysBeaconReferenceApplication: Application(), BootstrapNotifier, RangeN
         monitoringData.state.postValue(MonitorNotifier.INSIDE)
     //    sendNotification()
     }
+    fun initBootStarpRegion(reginonList: ArrayList<Region>){
+        regionBootstrap = RegionBootstrap(this, reginonList)
+        enableMonitoring()
+    }
+
 
     override fun didExitRegion(region: Region?) {
         Log.d(TAG, "didExitRegion")
@@ -182,6 +191,7 @@ class DottysBeaconReferenceApplication: Application(), BootstrapNotifier, RangeN
                 Log.d(TAG, "$beacon about ${beacon.distance} meters away")
             }
         }
+        beaconsObserver?.background  = beacons
         rangingData.beacons.postValue(beacons)
     }
 

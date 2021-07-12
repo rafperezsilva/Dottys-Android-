@@ -64,7 +64,7 @@ class BeaconsHandler(
         }
     }
 
-    private fun beaconHandler(beacons:Collection<Beacon>){
+    internal fun beaconHandler(beacons:Collection<Beacon>){
         val beaconAux = beaconsConnected()
         for(item in beaconsConnected()){
             beacons.forEach { Log.d("INFO BEACON", "👺 MINOR ${it.id3} | RSSI AVG -${it.runningAverageRssi} 🟨 RRSI-${it.rssi}") }
@@ -129,6 +129,8 @@ class BeaconsHandler(
          dottysBeaconReferenceApplication = (context.application) as DottysBeaconReferenceApplication
         dottysBeaconReferenceApplication.monitoringData.state.observe(context, monitoringObserver)
 
+        dottysBeaconReferenceApplication.beaconsObserver = BeaconEventObserver(context)
+        dottysBeaconReferenceApplication.context = context
         // beaconReferenceApplication.monitoringData.state.observe(context, monitoringObserver)
         dottysBeaconReferenceApplication.rangingData.beacons.observe(context, rangingObserver)
 }
@@ -190,7 +192,7 @@ class BeaconsHandler(
 
     }
  var isUpdatingBeacon = false
-    private fun connectionToBeaconHandler(
+    internal fun connectionToBeaconHandler(
         beacons: ArrayList<Beacon>?,
         beaconRegion: Int?
     ){
