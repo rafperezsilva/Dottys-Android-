@@ -75,10 +75,10 @@ fun String.encodeToBitmap():Bitmap? {
 
 
 fun String.castQRCodeBitmap():Bitmap{
-    val content = "bitcoin:3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy"
+    //val content = "bitcoin:3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy"
 
     val writer = QRCodeWriter()
-    val bitMatrix = writer.encode(content, BarcodeFormat.QR_CODE, 512, 512)
+    val bitMatrix = writer.encode(this, BarcodeFormat.QR_CODE, 512, 512)
     val width = bitMatrix.width
     val height = bitMatrix.height
     val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565)

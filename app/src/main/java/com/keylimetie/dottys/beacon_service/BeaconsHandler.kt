@@ -5,22 +5,23 @@ import android.bluetooth.BluetoothAdapter
 import android.os.Handler
 import android.util.Log
 import androidx.lifecycle.Observer
+
+import org.altbeacon.beacon.Beacon
+import org.altbeacon.beacon.BeaconManager
+import org.altbeacon.beacon.MonitorNotifier
+import kotlin.properties.Delegates
 import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.PreferenceTypeKey
 import com.keylimetie.dottys.saveDataPreference
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeacon
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeaconArray
 import com.keylimetie.dottys.utils.DottysBeaconReferenceApplication
-import org.altbeacon.beacon.Beacon
-import org.altbeacon.beacon.BeaconManager
-import org.altbeacon.beacon.MonitorNotifier
-import kotlin.properties.Delegates
-
 
 class BeaconsHandler(
     private val context: DottysBaseActivity,
     private val observer: BeaconHandlerObserver?
-){
+)
+{
     lateinit var dottysBeaconReferenceApplication: DottysBeaconReferenceApplication
     var handlerData = Handler()
     var runnable: Runnable? = null
