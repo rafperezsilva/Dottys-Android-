@@ -301,13 +301,17 @@ open class DottysForgotPasswordViewModel : ViewModel()  {
             Response.ErrorListener { error ->
                 verificationActivity.hideLoader()
                 verificationActivity.hideCustomKeyboard(verificationActivity)
-                val errorRes = DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
-                if (errorRes.error?.messages?.size ?: 0 > 0) {
-                    DottysBaseActivity().showSnackBarMessage(verificationActivity,
-                        errorRes.error?.messages?.first() ?: ""
-                    )
-                }
-                Log.e("ERROR VOLLEY ", error.message, error)
+                try {
+                    val errorRes =
+                        DottysErrorModel.fromJson(error.networkResponse.data.toString(Charsets.UTF_8))
+                    if (errorRes.error?.messages?.size ?: 0 > 0) {
+                        DottysBaseActivity().showSnackBarMessage(
+                            verificationActivity,
+                            errorRes.error?.messages?.first() ?: ""
+                        )
+                    }
+                    Log.e("ERROR VOLLEY ", error.message, error)
+                } catch (e:Exception){Log.e("FORGOT_PASSWORD_VM","CAST ERROR ${e.message}")}
                 verificationCodeObserver?.sendVerificationRegistrationCode = false
             }) { //no semicolon or coma
 

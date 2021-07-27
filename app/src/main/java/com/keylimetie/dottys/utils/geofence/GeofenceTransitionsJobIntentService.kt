@@ -94,7 +94,7 @@ class GeofenceTransitionsJobIntentService: JobIntentService() {
                 triggeringGeofences)
    Log.e("TRANSITION TYPE --", ">> ${if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER)  "ENTER" else "EXIT"}")
             // Send notification and log the transition details.
-            sendNotification(geofenceTransitionDetails, geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER)
+        //    sendNotification(geofenceTransitionDetails, geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER)
             Log.i(TAG, geofenceTransitionDetails)
         } else {
             // Log the error.

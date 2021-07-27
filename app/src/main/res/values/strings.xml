@@ -7,9 +7,11 @@
     <string name="subtitle_third_splash_item">Points can be redeemed for incentives and\nother rewards, either through\nthe app or on premise.</string>
     <string name="title_four_splash_item">Are you ready?\nLet’s Go!</string>
     <string name="subtitle_four_splash_item">Receive notifications for contests, special\nevents, promotions and other incentives only\navailable through the Dotty’s app.</string>
-
-    <string name="url_base_development">https://uat.rewards.icsdottys.com/api/</string>
+<!--PRODUCCION-->
     <string name="url_base_production">https://api.playspinwinbrands.com/api/</string>
+<!--    DEVELOPMENT-->
+<!--    <string name="url_base_production">https://dev.api.playspinwinbrands.com/api/</string>-->
+
     <string name="title_activity_dottys_main">DottysMainActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

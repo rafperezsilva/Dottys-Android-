@@ -148,7 +148,6 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
         }
     }
 
-
     /* GET DOTTYS STORE LOCATION  */
     fun updateDottysLocations(activity: DottysBaseActivity) {
         var locationModel = LocationsViewModel(activity)
@@ -185,13 +184,11 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
             }
             else -> {
                   dashboardViewModel.initDashboardButtons()
-                  dashboardViewModel.getBannerDashboard(activity as DottysMainNavigationActivity)
+                try {
+                    dashboardViewModel.getBannerDashboard(activity as DottysMainNavigationActivity)
+                } catch (e:Exception){Log.e("DASHBOARD","ON GET BANNERS  ${e.message}")}
               }
           }
-
-
-        //TODO dashboardViewModel.getDrawingSummary(activity as DottysMainNavigationActivity)
-        //updateDataAtProfile(activity as DottysMainNavigationActivity)
     }
 
     @SuppressLint("InflateParams")
@@ -248,7 +245,6 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
                      .start()
              }
         }
-
     }
 
     /**
@@ -264,45 +260,25 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
 
     /** 2 **/
     override fun getUserRewards(rewards: DottysRewardsModel) {
-//        val activity = dashboardViewModel.mainFragmentActivity
-//       if (activity?.getBeaconAtStoreLocation()?.size ?: 0 <= 0 && activity?.getUserNearsLocations()?.locations?.size ?: 0 > 0){
-//            activity.let { dashboardViewModel?.getBeaconList(it as DottysBaseActivity)  }
-//       }
         dashboardViewModel.drawingBadgeCounter =
             rewards.rewards?.filter { it.redeemed == false }?.size ?: 0
         dashboardViewModel.badgeCounterDrawingManager(dashboardViewModel.drawingBadgeCounter ?: 0)
 
-        (activity as DottysMainNavigationActivity).gpsTracker?.locationGps.let {
+        (activity as? DottysMainNavigationActivity)?.gpsTracker?.locationGps.let {
             val locationViewModel = LocationsViewModel(activity as DottysMainNavigationActivity)
             locationViewModel.locationDataObserver = DottysLocationStoresObserver(this)
             locationViewModel.getLocationsDottysRequest((activity as DottysMainNavigationActivity),
                 it?.latitude.toString(),
                 it?.longitude.toString())
         }
-
-        //TODO REMOVE INTENT
-//        var intent = Intent(activity, DottysProfilePictureActivity::class.java)
-//        startActivity(intent)
-        //viewFragment?.let { activity?.let { it1 -> dashboardViewModel.addProfileImage(it1, it) } }
-        //   dashboardViewModel.drawingViewModel.drawingObserver = DottysDrawingObserver(this)
-
-//    TODO    val locationId =  activity?.getUserPreference()?.homeLocationID
-//         dashboardViewModel.drawingViewModel.getCurrentDrawingLocation(activity ?: return, locationId ?: return)
-
     }
 
     /** 3 **/
     override fun getStoresLocation(locations: DottysLocationsStoresModel) {
-
-        // mainActivity?.saveDataPreference(PreferenceTypeKey.LOCATIONS, locations.toJson())
         mainActivity?.beaconsStatusObserver?.distanceToNearStore =
             (locations.locations?.first()?.distance ?: return)
         if(locations.locations.isNullOrEmpty()){return}
-        //if (locations.locations?.first()?.distance ?: return < 0.5 || mainActivity?.getBeaconStatus()?.beaconArray.isNullOrEmpty()) {
             activity.let { dashboardViewModel.getBeaconList(it as DottysBaseActivity, locations.locations?.first()?.storeNumber.toString()) }
-        //} else {
-
-     //   }
     }
 
     /** 4
@@ -316,20 +292,7 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
             )
             activity?.initEstimoteBeaconManager()
         }
-      //  DottysBeaconActivity(activity ?: return)
-//        dashboardViewModel.initAnalitycsItems(activity?.getBeaconStatus()?.beaconArray
-//            ?: activity?.getBeaconStatus()?.beaconArray ?: return)
         activity.let { dashboardViewModel.getDrawingSummary(it as DottysMainNavigationActivity) }
-//        dashboardViewModel.initAnalitycsItems(
-//            (if (mainActivity?.getBeaconStatus()?.beaconArray.isNullOrEmpty()) {
-//                mainActivity?.getBeaconStatus()?.beaconArray
-//            } else {
-//                mainActivity?.getBeaconStatus()?.beaconArray
-//            })
-//        )
-
-      //  activity.let { it?.let { it1 -> dashboardViewModel.getDrawingSummary(it1) } }
-
     }
 
     /** 5 **/
