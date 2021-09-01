@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.widget.TextView
 import com.keylimetie.dottys.*
+import com.keylimetie.dottys.models.DottysLoginResponseModel
 import com.keylimetie.dottys.register.DottysProfilePictureActivity
 
 class DottysEnterVerificationCodeActivity : DottysBaseActivity(), DottysForgotPasswordDelegates {

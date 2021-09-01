@@ -9,11 +9,11 @@ import android.os.Bundle
 import android.provider.Settings
 import android.widget.TextView
 import com.keylimetie.dottys.*
+import com.keylimetie.dottys.models.DottysLoginResponseModel
 import com.keylimetie.dottys.splash.getVersionApp
 import com.keylimetie.dottys.ui.profile.DottysProfileDelegates
 import com.keylimetie.dottys.ui.profile.DottysProfileObserver
 import com.keylimetie.dottys.ui.profile.ProfileViewModel
-import com.keylimetie.dottys.utils.geofence.GeofenceBroadcastReceiver
 
 
 class DottysLoginActivity : DottysBaseActivity(), DottysLoginDelegate, DottysProfileDelegates {

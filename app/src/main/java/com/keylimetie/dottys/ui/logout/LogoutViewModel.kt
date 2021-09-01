@@ -8,7 +8,7 @@ import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.keylimetie.dottys.DottysBaseActivity
-import com.keylimetie.dottys.DottysErrorModel
+import com.keylimetie.dottys.models.DottysErrorModel
 import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.ui.locations.showSnackBarMessage
 import org.json.JSONObject

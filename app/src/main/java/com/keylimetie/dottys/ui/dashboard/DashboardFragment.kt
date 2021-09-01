@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import com.keylimetie.dottys.*
 
 import com.keylimetie.dottys.models.DottysGlobalDataModel
+import com.keylimetie.dottys.models.DottysLoginResponseModel
 import com.keylimetie.dottys.models.DottysRewardsModel
 import com.keylimetie.dottys.register.DottysRegisterActivity
 import com.keylimetie.dottys.splash.getVersionApp
@@ -366,17 +367,13 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
         }
         for (index in 0 until limitOfFlipperView) {
             val imageView = viewFragment?.findViewById<ImageView>(staticImagesResouerce[index])
-
             Picasso.get()//.with(activity)
                 .load(bannerList[index].image)
                 .into(imageView)
-
         }
         flipperViewDashboard?.setOnClickListener(this)
         flipperViewDashboard?.addOnLayoutChangeListener(this)
         maxChildFlipperView = bannerList.count()
-
-
     }
 
 //    override fun onBeaconsServiceChange(beaconsData: DottysBeaconArray) {
@@ -402,11 +399,13 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
 
 
     fun gotToNextBanner(){
-        if (flipperViewDashboard?.displayedChild ?: 0 >= maxChildFlipperView - 1) {
-            flipperViewDashboard?.displayedChild = 0
-        } else {
-            flipperViewDashboard?.showNext()
-        }
+        try {
+            if (flipperViewDashboard?.displayedChild ?: 0 >= maxChildFlipperView - 1) {
+                flipperViewDashboard?.displayedChild = 0
+            } else {
+                flipperViewDashboard?.showNext()
+            }
+        } catch (e:Exception){Log.e("ERROR","FLIP IMAGE BANNER: ${e.message}")}
     }
 
     override fun onLayoutChange(

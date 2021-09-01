@@ -15,6 +15,9 @@ import com.android.volley.toolbox.Volley
 import com.dottysrewards.dottys.service.VolleyService
 import com.keylimetie.dottys.*
 import com.keylimetie.dottys.forgot_password.DottysForgotPasswordMainActivity
+import com.keylimetie.dottys.models.DottysErrorModel
+import com.keylimetie.dottys.models.DottysLoginResponseModel
+import com.keylimetie.dottys.models.DottysRegisterModel
 import com.keylimetie.dottys.register.DottysRegisterActivity
 import com.keylimetie.dottys.ui.locations.showSnackBarMessage
 import org.json.JSONObject

@@ -55,7 +55,7 @@ class GeofenceTransitionsJobIntentService: JobIntentService() {
 
     val timer = object: CountDownTimer(1000 * 60 * 5 , 1000) {
         override fun onTick(millisUntilFinished: Long) {
-            canSendNotification = false
+          //  canSendNotification = false
             Log.d("COUNTER NOTIFICATION", "EXPIRE ON $millisUntilFinished milisec")
 
         }

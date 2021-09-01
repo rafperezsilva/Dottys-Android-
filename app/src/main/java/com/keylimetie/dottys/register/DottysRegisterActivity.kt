@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.DatePicker
 import android.widget.TextView
 import com.keylimetie.dottys.*
+import com.keylimetie.dottys.models.DottysLoginResponseModel
 import com.keylimetie.dottys.ui.locations.showSnackBarMessage
 import java.time.LocalDate
 import java.util.*
@@ -33,7 +34,11 @@ class DottysRegisterActivity : DottysBaseActivity(), DatePickerDialog.OnDateSetL
         if(registerViewModel.isRegisterUser){
             hideCustomKeyboard(this)
             registerViewModel.showPreVerificationLayer(this)
-            registerViewModel.requestNewVerificationPhone(this)
+            getUserPreference().email?.let {
+                registerViewModel.requestNewVerificationPhone(this,
+                    it
+                )
+            }
         }
 
     }

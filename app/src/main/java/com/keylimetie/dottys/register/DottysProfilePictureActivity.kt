@@ -18,7 +18,7 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
 import com.keylimetie.dottys.DottysBaseActivity
-import com.keylimetie.dottys.DottysLoginResponseModel
+import com.keylimetie.dottys.models.DottysLoginResponseModel
 import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.R
 import com.keylimetie.dottys.ui.locations.showSnackBarMessage

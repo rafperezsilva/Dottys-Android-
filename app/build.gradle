@@ -23,8 +23,8 @@ android {
         applicationId "com.keylimetie.dottys"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 12
-        versionName "3.0.33"
+        versionCode 15
+        versionName "3.0.34"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
          manifestPlaceholders = [

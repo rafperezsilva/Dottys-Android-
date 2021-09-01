@@ -2,7 +2,7 @@ package com.keylimetie.dottys.utils
 
 import android.content.Context
 import com.keylimetie.dottys.DottysBaseActivity
-import com.keylimetie.dottys.DottysLoginResponseModel
+import com.keylimetie.dottys.models.DottysLoginResponseModel
 import com.keylimetie.dottys.PreferenceTypeKey
 import com.keylimetie.dottys.models.DottysGlobalDataModel
 import com.keylimetie.dottys.models.DottysRewardsModel

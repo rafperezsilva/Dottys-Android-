@@ -28,7 +28,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.bumptech.glide.Glide
 import com.keylimetie.dottys.DottysBaseActivity
-import com.keylimetie.dottys.DottysErrorModel
+import com.keylimetie.dottys.models.DottysErrorModel
 import com.keylimetie.dottys.R
 import com.keylimetie.dottys.models.DottysRewardsModel
 import com.keylimetie.dottys.ui.dashboard.DashboardViewModel

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.KeyEvent
 import com.keylimetie.dottys.*
 import com.keylimetie.dottys.models.DottysGlobalDataModel
+import com.keylimetie.dottys.models.DottysLoginResponseModel
 import com.keylimetie.dottys.models.DottysRewardsModel
 import com.keylimetie.dottys.ui.dashboard.DottysDashboardDelegates
 import com.keylimetie.dottys.ui.dashboard.models.DottysBannerModel

@@ -22,6 +22,8 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.keylimetie.dottys.*
 import com.keylimetie.dottys.forgot_password.DottysVerificationTypeActivity
+import com.keylimetie.dottys.models.DottysErrorModel
+import com.keylimetie.dottys.models.DottysLoginResponseModel
 import com.keylimetie.dottys.register.DottysProfilePictureActivity
 import com.keylimetie.dottys.utils.md5
 import com.keylimetie.dottys.utils.stringGetYear

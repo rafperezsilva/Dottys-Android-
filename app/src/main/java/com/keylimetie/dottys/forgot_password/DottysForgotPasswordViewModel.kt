@@ -16,7 +16,7 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.keylimetie.dottys.DottysBaseActivity
-import com.keylimetie.dottys.DottysErrorModel
+import com.keylimetie.dottys.models.DottysErrorModel
 import com.keylimetie.dottys.R
 import com.keylimetie.dottys.forgot_password.VerificationMethodType.EMAIL
 import com.keylimetie.dottys.forgot_password.VerificationMethodType.SMS
@@ -164,7 +164,11 @@ open class DottysForgotPasswordViewModel : ViewModel()  {
 
         resendCodeTextView.setOnClickListener {
             val registerMOdel = DottysRegisterViewModel(verificationCodeActivity)
-            registerMOdel.requestNewVerificationPhone(verificationCodeActivity)
+            phone?.let { it1 ->
+                registerMOdel.requestNewVerificationPhone(verificationCodeActivity,
+                    it1
+                )
+            }
         }
         firtsEditTextCode?.requestFocus()
         editTextArray = arrayOf(
@@ -231,7 +235,7 @@ open class DottysForgotPasswordViewModel : ViewModel()  {
             /*GO TO VERIFY CODE */
 //            var intent = Intent(verificationCodeActivity, DottysProfilePictureActivity::class.java)
 //            verificationCodeActivity.startActivity(intent)/*FIXME*/
-           verifyRegisterCodeSMS(verificationCodeActivity,codeCollector(editTextArray))/*FIXME*/
+           verifyRegisterCodeSMS(verificationCodeActivity,codeCollector(editTextArray),email)
         } else {
             if (codeCollector(editTextArray) != "") {
                 var intent =
@@ -281,14 +285,15 @@ open class DottysForgotPasswordViewModel : ViewModel()  {
     /* NETWORK REQUEST VERIFY REGISTER CODE SMS PASSWORD  */
     fun verifyRegisterCodeSMS(
         verificationActivity: DottysEnterVerificationCodeActivity,
-        verifiationCode: String
-
+        verifiationCode: String,
+        email:String
     ) {
         val mQueue = Volley.newRequestQueue(verificationActivity)
         verificationActivity.showLoader()
         val params = HashMap<String, String>()
         verificationCodeObserver = DottysForgotPasswordObserver(verificationActivity)
         params["verificationKey"] = verifiationCode
+        params["email"] = email
 
         val jsonObject = JSONObject(params as Map<*, *>)
         val jsonObjectRequest = object : JsonObjectRequest(

@@ -3,8 +3,6 @@ package com.keylimetie.dottys.ui.dashboard
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Color
 import android.icu.math.BigDecimal
 import android.util.Log
 import android.view.View
@@ -24,13 +22,9 @@ import com.android.volley.toolbox.ImageRequest
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.qrcode.QRCodeWriter
 import com.keylimetie.dottys.*
 import com.keylimetie.dottys.R.id
-import com.keylimetie.dottys.models.DottysGlobalDataModel
-import com.keylimetie.dottys.models.DottysRewardsModel
-import com.keylimetie.dottys.models.Monthly
+import com.keylimetie.dottys.models.*
 import com.keylimetie.dottys.redeem.DottysRedeemRewardsActivity
 import com.keylimetie.dottys.redeem.DottysRewardRedeemedActivity
 import com.keylimetie.dottys.ui.dashboard.models.*
@@ -209,7 +203,7 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
         mainFragmentActivity?.findViewById<TextView>(R.id.member_since_TV)?.text =  "Member Since ${user.createdAt?.stringGetYear()}"
         val qrView = mainFragmentActivity?.findViewById<View>(R.id.qr_view)
         qrView?.animate()?.translationY(mainFragmentActivity?.screenHeigth?.toFloat() ?: 0f)?.setDuration(0)?.start()
-        qrView?.animate()?.translationY(0f)?.setDuration(450)?.start()
+        qrView?.animate()?.translationY(0f)?.setDuration(350)?.start()
         qrView?.visibility = View.VISIBLE
         val userId = user.id ?: return
         Picasso.get().load(mainFragmentActivity?.getUserPreference()?.profilePicture).into(mainFragmentActivity?.findViewById<CircleImageView>(id.qr_profile_dashboard_image))

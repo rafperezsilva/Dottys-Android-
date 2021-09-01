@@ -1,4 +1,4 @@
-package com.keylimetie.dottys
+package com.keylimetie.dottys.models
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
@@ -8,11 +8,11 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 
-val mapper = jacksonObjectMapper().apply {
-    this.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true)
-    propertyNamingStrategy = PropertyNamingStrategy.LOWER_CAMEL_CASE
-    setSerializationInclusion(JsonInclude.Include.NON_NULL)
-}
+//val mapper = jacksonObjectMapper().apply {
+//    this.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true)
+//    propertyNamingStrategy = PropertyNamingStrategy.LOWER_CAMEL_CASE
+//    setSerializationInclusion(JsonInclude.Include.NON_NULL)
+//}
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class DottysLoginResponseModel (
     var averageDailyPlayDuration: Long? = null,
@@ -104,11 +104,11 @@ enum class DottysRoleUser(var varue: String) {
 
     companion object {
         fun fromvarue(varue: String): DottysRoleUser = when (varue) {
-            "EMPLOYEE"     -> DottysRoleUser.EMPLOYEE
-            "SUPER_ADMIN"     -> DottysRoleUser.SUPER_ADMIN
-            "ADMIN"     -> DottysRoleUser.ADMIN
-            "USER" -> DottysRoleUser.USER
-            "REGION_ADMIN" -> DottysRoleUser.REGION_ADMIN
+            "EMPLOYEE"     -> EMPLOYEE
+            "SUPER_ADMIN"     -> SUPER_ADMIN
+            "ADMIN"     -> ADMIN
+            "USER" -> USER
+            "REGION_ADMIN" -> REGION_ADMIN
 
 
             else -> throw IllegalArgumentException()

@@ -28,6 +28,8 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.navigation.NavigationView
 import com.keylimetie.dottys.beacon_service.BeaconHandlerObserver
 import com.keylimetie.dottys.beacon_service.BeaconsHandler
+import com.keylimetie.dottys.models.DottysLoginResponseModel
+import com.keylimetie.dottys.models.DottysRoleUser
 import com.keylimetie.dottys.redeem.DottysRewardRedeemedActivity
 import com.keylimetie.dottys.register.DottysRegisterUserDelegates
 import com.keylimetie.dottys.register.DottysRegisterUserObserver
@@ -357,7 +359,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
 
     override fun onResume() {
         super.onResume()
-        delayBeaconChecker = 1000 * 1
+        delayBeaconChecker = 60000 * 5
         controller.addOnDestinationChangedListener(listener)
 
     }

@@ -4,16 +4,14 @@ import android.app.DatePickerDialog
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.text.*
-import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.*
-import android.widget.TextView.BufferType
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModel
 import com.android.volley.NetworkResponse
+import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
@@ -25,6 +23,10 @@ import com.keylimetie.dottys.forgot_password.DottysEnterVerificationCodeActivity
 import com.keylimetie.dottys.login.DottysLoginDelegate
 import com.keylimetie.dottys.login.DottysLoginObserver
 import com.keylimetie.dottys.login.DottysLoginViewModel
+import com.keylimetie.dottys.models.DottysErrorModel
+import com.keylimetie.dottys.models.DottysLoginResponseModel
+import com.keylimetie.dottys.models.DottysRegisterModel
+import com.keylimetie.dottys.models.DottysRegisterRequestModel
 import com.keylimetie.dottys.ui.locations.showSnackBarMessage
 import com.keylimetie.dottys.utils.isValidPassword
 import com.keylimetie.dottys.utils.makeLinks
@@ -469,14 +471,15 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
     /**
      * REQUEST VERIFICATION PHONE
      * */
-    fun requestNewVerificationPhone(context: DottysBaseActivity) {
+    fun requestNewVerificationPhone(context: DottysBaseActivity, email: String) {
       context.showLoader()
         val mQueue = Volley.newRequestQueue(context)
         val params = HashMap<String, String>()
-        params["Authorization"] = context.getCurrentToken() ?: ""
-        val request = object : VolleyMultipartRequest(
+            params["email"] = email
+        val request = object : JsonObjectRequest(
+            Request.Method.POST,
             context.baseUrl + "users/requestVerifyPhone",
-            params,
+            JSONObject(params as Map<*, *>),
             Response.Listener { response ->
                 context.hideLoader()
                 val container = context.findViewById<View>(android.R.id.content)
@@ -488,7 +491,7 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
                         Snackbar.LENGTH_LONG
                     ).show()
                 }
-                Log.i("REQUEST VERIFY PHONE", "STATUS ${response.statusCode}")
+                Log.i("REQUEST VERIFY PHONE", "STATUS ${response.toString(5)}")
             },
             Response.ErrorListener { error ->
                 context.hideLoader()

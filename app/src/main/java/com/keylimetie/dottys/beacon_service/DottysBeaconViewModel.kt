@@ -8,7 +8,7 @@ package com.keylimetie.dottys.beacon_service
  import com.android.volley.toolbox.JsonObjectRequest
  import com.android.volley.toolbox.Volley
  import com.keylimetie.dottys.DottysBaseActivity
- import com.keylimetie.dottys.DottysErrorModel
+ import com.keylimetie.dottys.models.DottysErrorModel
  import com.keylimetie.dottys.ui.dashboard.models.DottysBeacon
  import com.keylimetie.dottys.ui.locations.showSnackBarMessage
  import org.json.JSONObject

@@ -64,7 +64,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:foregroundGravity="center"
@@ -75,24 +75,29 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-
                 android:id="@+id/ticket_redemeed_buck"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="40dp"
-                android:src="@mipmap/cash_cover" />
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:scaleType="fitCenter"
+                android:minHeight="150dp"
+                android:src="@mipmap/cash_cover"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/quantity_entries"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="-45dp"
+                android:layout_height="wrap_content"
                 android:fontFamily="@font/proxima_nova_extrabold"
+                android:paddingTop="-55dp"
                 android:text=""
                 android:textColor="#1E1E1E"
-                android:textSize="60dp" />
-        </RelativeLayout>
+                android:textSize="60dp"
+                app:layout_constraintBottom_toBottomOf="@+id/ticket_redemeed_buck"
+                app:layout_constraintTop_toTopOf="@+id/ticket_redemeed_buck" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 <!--        <ImageView-->
 <!--            android:id="@+id/reward_barcode"-->

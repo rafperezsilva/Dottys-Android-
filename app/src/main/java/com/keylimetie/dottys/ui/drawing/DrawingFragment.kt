@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.keylimetie.dottys.*
 import com.keylimetie.dottys.models.DottysGlobalDataModel
+import com.keylimetie.dottys.models.DottysLoginResponseModel
 import com.keylimetie.dottys.models.DottysRewardsModel
 import com.keylimetie.dottys.ui.dashboard.DashboardViewModel
 import com.keylimetie.dottys.ui.dashboard.DottysCurrentUserObserver
