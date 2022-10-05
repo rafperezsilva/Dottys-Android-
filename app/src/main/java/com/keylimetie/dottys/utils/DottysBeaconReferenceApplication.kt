@@ -1,27 +1,24 @@
 package com.keylimetie.dottys.utils
 
-import android.app.Application
-import android.app.NotificationManager
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.PendingIntent
-import android.app.TaskStackBuilder
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.provider.Telephony.Sms
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.keylimetie.dottys.DottysBaseActivity
-import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.beacon_service.BeaconEventObserver
 import org.altbeacon.beacon.*
 import org.altbeacon.beacon.powersave.BackgroundPowerSaver
 import org.altbeacon.beacon.startup.BootstrapNotifier
 import org.altbeacon.beacon.startup.RegionBootstrap
 import org.altbeacon.bluetooth.BluetoothMedic
+
 
 class DottysBeaconReferenceApplication: Application(), BootstrapNotifier, RangeNotifier {
     val rangingData = RangingData()
@@ -33,6 +30,7 @@ class DottysBeaconReferenceApplication: Application(), BootstrapNotifier, RangeN
     val scanningPeriod: Long = 60000 * 5
     var beaconsObserver: BeaconEventObserver? = null
     var context: DottysBaseActivity? = null
+    var regionUUID: String? = null
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate() {
@@ -60,7 +58,7 @@ class DottysBeaconReferenceApplication: Application(), BootstrapNotifier, RangeN
         //beaconManager.getBeaconParsers().clear()
 
         // The example shows how to find iBeacon.
-        beaconManager.getBeaconParsers().add(
+        beaconManager.beaconParsers.add(
             BeaconParser().
                 setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"))
 
@@ -88,14 +86,13 @@ class DottysBeaconReferenceApplication: Application(), BootstrapNotifier, RangeN
         // you can use the library's built-in foreground service to unlock this behavior on Android
         // 8+.   the method below shows how you set that up.
       setupForegroundService()
+        Log.e("☢️","$regionUUID")
 
-        // The code below will start "monitoring" for beacons matching the region definition below
-        // the region definition is a wildcard that matches all beacons regardless of identifiers.
-        // if you only want to detect becaonc with a specific UUID, change the id1 paremeter to
         // a UUID like "2F234454-CF6D-4A0F-ADF2-F4911BA9FFA6"
-        region = Region("3D085F5D-072E-D57D-62FE-50DADE7F2CB6", null, null, null)
-        regionBootstrap = RegionBootstrap(this, region)
-
+        try {
+            region = Region("3D085F5D-072E-D57D-62FE-50DADE7F2CB6", null, null, null)
+            regionBootstrap = RegionBootstrap(this, region)
+        } catch(e: Exception){}
         // Note that the RegionBootstrap is a specialized form of starting beacon monitoring that
         // is optimized for background detection.  Because this cocde is in a custom application
         // class, having the aove code here will detect beacons even after your app is killed or
@@ -124,7 +121,7 @@ class DottysBeaconReferenceApplication: Application(), BootstrapNotifier, RangeN
         }
     }
 
-    fun enableMonitoring() {
+    private fun enableMonitoring() {
         regionBootstrap = RegionBootstrap(this, region)
     }
 

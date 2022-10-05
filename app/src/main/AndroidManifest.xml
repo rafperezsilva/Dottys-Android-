@@ -5,7 +5,7 @@
 
     <permission android:name="android.permission.CALL_PHONE" />
     <permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
@@ -69,11 +69,35 @@
             android:name="com.keylimetie.dottys.utils.geofence.GeofenceBroadcastReceiver"
             android:enabled="true"
             android:exported="true" />
+        <receiver android:name=".SmsListener"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BROADCAST_SMS"
+            tools:ignore="Instantiatable">
+<!--            <intent-filter android:priority="1000">-->
+<!--                <action android:name="android.provider.Telephony.SMS_RECEIVED" />-->
+<!--            </intent-filter>-->
+        </receiver>
+<!--        <receiver android:name=".SmsListener" android:exported="true">-->
+<!--            <intent-filter android:priority="999">-->
+<!--                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>-->
+<!--            </intent-filter>-->
+<!--        </receiver>-->
+<!--        <receiver-->
+<!--            android:name=".SmsListener"-->
+<!--            android:enabled="true"     -->
+<!--            android:exported="false"    -->
+<!--             />-->
 
         <service
             android:name="com.keylimetie.dottys.utils.geofence.GeofenceTransitionsJobIntentService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+   <service
+            android:name="com.keylimetie.dottys.SMSTransitionsJobIntentService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
 
         <activity
             android:name="com.keylimetie.dottys.game_play.roulette.DottysRouletteActivity"
@@ -95,6 +119,7 @@
             android:name="com.keylimetie.dottys.register.DottysProfilePictureActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name="com.keylimetie.dottys.register.DottysRegisterActivity" />
+
         <activity android:name="com.keylimetie.dottys.forgot_password.DottysEnterPasswordActivity" />
         <activity android:name="com.keylimetie.dottys.forgot_password.DottysEnterVerificationCodeActivity" />
         <activity android:name="com.keylimetie.dottys.forgot_password.DottysVerificationTypeActivity" />
@@ -145,6 +170,9 @@
                 <action android:name="com.google.android.gms.measurement.UPLOAD" />
             </intent-filter>
         </receiver>
+
+
+
     </application>
 
 </manifest>

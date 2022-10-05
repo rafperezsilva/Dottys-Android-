@@ -279,7 +279,7 @@ class DashboardFragment : Fragment(), DottysDashboardDelegates, DottysDrawingDel
         mainActivity?.beaconsStatusObserver?.distanceToNearStore =
             (locations.locations?.first()?.distance ?: return)
         if(locations.locations.isNullOrEmpty()){return}
-            activity.let { dashboardViewModel.getBeaconList(it as DottysBaseActivity, locations.locations?.first()?.storeNumber.toString()) }
+            activity.let { dashboardViewModel.getBeaconList(it as DottysBaseActivity, locations.locations?.first()?.storeNumber.toString(), null) }
     }
 
     /** 4

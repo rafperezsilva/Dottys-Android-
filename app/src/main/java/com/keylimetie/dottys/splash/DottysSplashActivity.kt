@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.WindowManager
 import com.keylimetie.dottys.DottysBaseActivity
 import com.keylimetie.dottys.R
+import com.keylimetie.dottys.checkMainPermissions
+import com.keylimetie.dottys.requestMainPermissions
 
 
 class DottysSplashActivity : DottysBaseActivity() {

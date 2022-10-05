@@ -63,6 +63,13 @@ open class DottysForgotPasswordViewModel : ViewModel()  {
         buttonForgotClickLisener(forgotActivity)
     }
 
+    fun fillCodeVerification(smsCode:String){
+        if(smsCode.length >= editTextArray.size){
+            for((index,et) in editTextArray.withIndex()){
+                et?.setText(smsCode[index].toString())
+            }
+        }
+    }
     fun buttonForgotClickLisener(forgotActivity: DottysForgotPasswordMainActivity) {
         submitForfotPassword?.setOnClickListener {
             if (emailTextview?.text?.isNotEmpty() == true &&

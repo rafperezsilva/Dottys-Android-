@@ -75,6 +75,7 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
         showPasswordButtonAction()
         submitRegisterButon?.setOnClickListener {
            // showPreVerificationLayer(activityRegister)/*FIXME*/
+            submitRegisterButon?.isEnabled = false
             editTextData?.let { it1 ->
                 if (validateEditTextData(activityRegister, it1)) {
                     registerNewUser(activityRegister, dataForRegister)/*FIXME*/
@@ -155,15 +156,6 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
             }
         }
 
-//        showConfirmPasswordButon?.setOnClickListener {
-//            showConfirmPasswordButonState = !(showConfirmPasswordButonState)
-//            if (showConfirmPasswordButonState) {
-//                passwordConfirmEditText?.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-//            } else {
-//                passwordConfirmEditText?.inputType =
-//                    (InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD)
-//            }
-//        }
 
     }
 
@@ -238,6 +230,7 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
     ): Boolean {
         for (item in editTextData) {
             if (item?.text?.isEmpty() == true) {
+                activityRegister.registerViewModel.submitRegisterButon?.isEnabled = true
                 activityRegister.showSnackBarMessage(
                     activityRegister,
                     activityRegister.getString(R.string.complete_all_fields)
@@ -338,7 +331,7 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
         goToVerification.setOnClickListener {
            val currentUser = activityRegisterObserver?.registerUser
             if (currentUser != null) {
-                var intent =
+                val intent =
                     Intent(activityRegister, DottysEnterVerificationCodeActivity::class.java)
                 intent.putExtra(
                     "EMAIL_FORGOT",
@@ -372,7 +365,7 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
     ) {
         val mQueue = Volley.newRequestQueue(activityRegister)
         activityRegister.showLoader()
-
+        //activityRegister.initReceiveSMSLisener()
         val jsonObject = JSONObject(registerData.toJson())
         val jsonObjectRequest = object : JsonObjectRequest(Method.POST,
             activityRegister.baseUrl + "users/register",
@@ -388,6 +381,7 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
                     )
 
                 activityRegisterObserver?.registerUser = user
+                submitRegisterButon?.isEnabled = true
             },
             Response.ErrorListener { error ->
                 activityRegister.hideLoader()
@@ -405,6 +399,7 @@ open class DottysRegisterViewModel(val dottysBaseActivity: DottysBaseActivity): 
                         )
                     }
                     Log.e("ERROR VOLLEY ", error.message, error)
+                    submitRegisterButon?.isEnabled = true
                 }
                 // Log.e("TAG", error.message, error)
             }) { //no semicolon or coma

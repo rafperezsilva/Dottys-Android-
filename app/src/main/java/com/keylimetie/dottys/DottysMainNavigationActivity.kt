@@ -36,6 +36,7 @@ import com.keylimetie.dottys.register.DottysRegisterUserObserver
 import com.keylimetie.dottys.register.DottysRegisterViewModel
 import com.keylimetie.dottys.splash.getVersionApp
 import com.keylimetie.dottys.ui.dashboard.AnalyticBeacoonsAdapter
+import com.keylimetie.dottys.ui.dashboard.DashboardViewModel
 import com.keylimetie.dottys.ui.dashboard.DottysPagerDelegates
 import com.keylimetie.dottys.ui.dashboard.models.DottysBeacon
 import com.keylimetie.dottys.ui.drawing.DottysDrawingDelegates
@@ -261,6 +262,9 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
         locationEnableTextView?.text = isEnableLocation
         getUserNearsLocations().locations?.let {
             try {
+                if((it.first().storeNumber ?: 0) != getBeaconStatus()?.beaconArray?.first()?.major ?: 0){
+                    DashboardViewModel(this).getBeaconList(this,"${it.first().storeNumber ?: 0}",true)
+                }
                 storeLocation.text = "Store #${it.first().storeNumber ?: 0}"
             } catch (e: Exception) {
                 Log.e("STORE SETTER AT ANALITYCS", "${e.message}")
@@ -268,15 +272,18 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
         }
 
 
-        val listViewRewards =
-            findViewById<ListView>(R.id.beacons_analytics_listview)
-        listViewRewards?.adapter = AnalyticBeacoonsAdapter(
-            this,
-            beaconList ?: getBeaconStatus()?.beaconArray ?: return
-        )
+        reloadBeaconList(beaconList)
+
         reloadLogsList()
     }
-
+internal fun reloadBeaconList(beaconList:ArrayList<DottysBeacon>?) {
+    val listViewRewards =
+        findViewById<ListView>(R.id.beacons_analytics_listview)
+    listViewRewards?.adapter = AnalyticBeacoonsAdapter(
+        this,
+        beaconList ?: getBeaconStatus()?.beaconArray ?: return
+    )
+}
     fun reloadLogsList() {
         (findViewById(R.id.last_conection_LV) as? ListView)?.adapter = ArrayAdapter(
             this,
@@ -338,7 +345,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
     }
 
     private fun isValidUserAdmin(): Boolean {
-        if (this.getUserPreference().email == "rafael.perez@kitschier.com") {
+        if (this.getUserPreference().email == "rafael.perez@kitschier.com" || this.getUserPreference().email == "rafael@bluecoltan.com") {
             return true
         }
         if (this.getUserPreference().acl.isNullOrEmpty()) {
@@ -375,6 +382,7 @@ class DottysMainNavigationActivity : DottysBaseActivity(), DottysLocationChangeD
         Log.d("MAIN NAVIGATION", "🔯>>>> BACKGROUND APP <<<🈺")
       //  beaconService?.handlerData.
     }
+
     override fun onPause() {
         super.onPause()
         controller.removeOnDestinationChangedListener(listener)

@@ -260,7 +260,7 @@ class LocationsViewModel(val contextMain: DottysBaseActivity) : ViewModel(),
                     DottysLocationsStoresModel.fromLocationJson(
                         response.toString()
                     )
-                val filterLocations =  stores.locations?.filter { it.company == CompanyType.Dotty }
+                val filterLocations =  stores.locations//?.filter { it.company == CompanyType.Dotty }
                 stores.locations = filterLocations as ArrayList<DottysStoresLocation>?
                 Log.d("LOCATIONS RESPONSE -->",stores.toJson())
                 mContext.saveDataPreference(PreferenceTypeKey.LOCATIONS, stores.toJson())

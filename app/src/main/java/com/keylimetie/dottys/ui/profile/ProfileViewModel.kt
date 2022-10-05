@@ -25,6 +25,7 @@ import com.keylimetie.dottys.forgot_password.DottysVerificationTypeActivity
 import com.keylimetie.dottys.models.DottysErrorModel
 import com.keylimetie.dottys.models.DottysLoginResponseModel
 import com.keylimetie.dottys.register.DottysProfilePictureActivity
+import com.keylimetie.dottys.utils.geofence.Constants
 import com.keylimetie.dottys.utils.md5
 import com.keylimetie.dottys.utils.stringGetYear
 import de.hdodenhof.circleimageview.CircleImageView
@@ -200,7 +201,7 @@ class ProfileViewModel(
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     Manifest.permission.CAMERA
                 ),
-                pictureActivity.PERMISSION_CODE
+                Constants.PERMISSION_CODE
             )
 
         } else {

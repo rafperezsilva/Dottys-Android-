@@ -14,7 +14,7 @@ import java.util.*
 
 class DottysRegisterActivity : DottysBaseActivity(), DatePickerDialog.OnDateSetListener,
     DottysRegisterUserDelegates {
-    private val registerViewModel = DottysRegisterViewModel(this)
+    internal val registerViewModel = DottysRegisterViewModel(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dottys_register)

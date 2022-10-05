@@ -22,6 +22,7 @@ import com.keylimetie.dottys.models.DottysLoginResponseModel
 import com.keylimetie.dottys.DottysMainNavigationActivity
 import com.keylimetie.dottys.R
 import com.keylimetie.dottys.ui.locations.showSnackBarMessage
+import com.keylimetie.dottys.utils.geofence.Constants
 import com.keylimetie.dottys.utils.rotateBitmap
 import java.io.ByteArrayOutputStream
 import java.io.IOException
@@ -31,7 +32,7 @@ import kotlin.math.roundToInt
 
 class DottysProfilePictureActivity: DottysBaseActivity(), DottysRegisterUserDelegates, View.OnClickListener
    {
-      val PERMISSION_CODE = 1000
+
       val IMAGE_CAPTURE_CODE = 1001
     var image_uri: Uri? = null
 
@@ -57,7 +58,7 @@ class DottysProfilePictureActivity: DottysBaseActivity(), DottysRegisterUserDele
         takePicture.setOnClickListener(this)
         registerViewModel.activityRegisterObserver = DottysRegisterUserObserver(this)
     }
-
+/**
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -65,7 +66,7 @@ class DottysProfilePictureActivity: DottysBaseActivity(), DottysRegisterUserDele
     ) {
         //called when user presses ALLOW or DENY from Permission Request Popup
         when (requestCode) {
-            PERMISSION_CODE -> {
+           Constants.PERMISSION_CODE -> {
                 if (grantResults.size > 0 && grantResults[0] ==
                     PackageManager.PERMISSION_GRANTED
                 ) {
@@ -76,8 +77,8 @@ class DottysProfilePictureActivity: DottysBaseActivity(), DottysRegisterUserDele
             }
         }
     }
-
-     private fun openCamera() {
+*/
+      fun openCamera() {
 //          val values = ContentValues()
 //        values.put(MediaStore.Images.Media.TITLE, "New Picture")
 //        values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera")
@@ -147,7 +148,7 @@ class DottysProfilePictureActivity: DottysBaseActivity(), DottysRegisterUserDele
     override fun imageProfileHasUploaded(hasUploaded: Boolean) {
         val intent = Intent(this, DottysMainNavigationActivity::class.java)
         intent.putExtra("HAS_UPLOADED_IMAGE",true)
-        showSnackBarMessage(this, "HAS IMAGE UPLOADED $hasUploaded ${userPictureBM?.byteCount}")
+        showSnackBarMessage(this, "IMAGE HAS UPLOADED $hasUploaded ${userPictureBM?.byteCount}")
         startActivity(intent)
     }
 
@@ -177,7 +178,7 @@ class DottysProfilePictureActivity: DottysBaseActivity(), DottysRegisterUserDele
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
                 )
                 //show popup to request permission
-                requestPermissions(permission, PERMISSION_CODE)
+                requestPermissions(permission, Constants.PERMISSION_CODE)
             } else {
                 //permission already granted
                 openCamera()

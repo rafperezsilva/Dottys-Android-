@@ -592,13 +592,17 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
     }
 
     /*BEACON LIST REQUEST */
-    fun getBeaconList(mContext: DottysBaseActivity, storeNumber: String) {
+    fun getBeaconList(mContext: DottysBaseActivity, storeNumber: String, force: Boolean?) {
         print("TOKEN 🚩: ${mContext.getCurrentToken() ?: ""}")
-        if(mContext.getDottysBeaconsList()?.isNotEmpty() == true || "${mContext.getDottysBeaconsList()?.first()?.location?.storeNumber}" == storeNumber){
-            mContext.initEstimoteBeaconManager()
-            return
+        if(force != true) {
+            if (mContext.getDottysBeaconsList()?.isNotEmpty() == true || "${
+                    mContext.getDottysBeaconsList()?.first()?.location?.storeNumber
+                }" == storeNumber
+            ) {
+                mContext.initEstimoteBeaconManager()
+                return
+            }
         }
-
         val mQueue = Volley.newRequestQueue(mContext)
         mContext.showLoader()
         val jsonObjectRequest = object : JsonObjectRequest(Method.GET,
@@ -616,7 +620,10 @@ class DashboardViewModel(private val mainActivity: DottysMainNavigationActivity?
                 mContext.saveDataPreference(PreferenceTypeKey.BEACON_AT_CONECTION, user.toJson())
                 mContext.initEstimoteBeaconManager()
                 if(mContext is DottysMainNavigationActivity){
-                    (mContext as? DottysMainNavigationActivity)?.initAnalyticsItems(user.beacons as ArrayList<DottysBeacon>?)
+                        if(force != true)
+                            (mContext as? DottysMainNavigationActivity)?.initAnalyticsItems(user.beacons as ArrayList<DottysBeacon>?)
+                    (mContext as? DottysMainNavigationActivity)?.reloadBeaconList(user.beacons as ArrayList<DottysBeacon>?)
+
                 }
             },
             object : Response.ErrorListener {

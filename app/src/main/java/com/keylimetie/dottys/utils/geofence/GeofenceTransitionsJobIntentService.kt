@@ -219,19 +219,19 @@ class GeofenceTransitionsJobIntentService: JobIntentService() {
         }
     }
 
-    companion object {
-        private const val JOB_ID = 573
-        private const val TAG = "GeofenceTransitionsIS"
-        const val CHANNEL_ID = "channel_02"
+        companion object {
+            private const val JOB_ID = 573
+            private const val TAG = "GeofenceTransitionsIS"
+            const val CHANNEL_ID = "channel_02"
 
-        /**
-         * Convenience method for enqueuing work in to this service.
-         */
-        fun enqueueWork(context: Context?, intent: Intent?) {
-            enqueueWork(context!!,
-                GeofenceTransitionsJobIntentService::class.java,
-                JOB_ID,
-                intent!!)
+            /**
+             * Convenience method for enqueuing work in to this service.
+             */
+            fun enqueueWork(context: Context?, intent: Intent?) {
+                enqueueWork(context!!,
+                    GeofenceTransitionsJobIntentService::class.java,
+                    JOB_ID,
+                    intent!!)
+            }
         }
-    }
 }

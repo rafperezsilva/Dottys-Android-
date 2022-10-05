@@ -22,6 +22,10 @@ import java.util.*
  * Constants used in this sample.
  */
 internal object Constants {
+    val REQUEST_PERMISSIONS_REQUEST_CODE = 34
+
+    const val PERMISSION_CODE = 1000
+    public const val SMS_REQUEST = 90004
     private const val PACKAGE_NAME = "com.google.android.gms.location.Geofence"
     const val GEOFENCES_ADDED_KEY = PACKAGE_NAME + ".GEOFENCES_ADDED_KEY"
 

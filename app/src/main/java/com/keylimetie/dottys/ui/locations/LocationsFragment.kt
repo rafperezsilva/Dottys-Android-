@@ -72,12 +72,13 @@ class LocationsFragment : Fragment(), DottysLocationDelegates {
         }
         if (locations.locations.isNullOrEmpty()){
             locationViewModel.screenDimensionManager(LocationViewType.MAP_FULL)
-          (mContext).showSnackBarMessage(mContext,"You have no stores near you at this time, please come  back later.")
+      //    (mContext).showSnackBarMessage(mContext,"You have no stores near you at this time, please come  back later.")
         }
         try {
             DashboardViewModel(mContext).getBeaconList(
                 mContext,
-                locations.locations?.first()?.storeNumber.toString()
+                locations.locations?.first()?.storeNumber.toString(),
+                null
             )
         } catch (e:Exception){
             CrashlyticsReport.Session.Event.Log.builder().setContent("ERROR MAP FRAGMENT" + "${e.message}")
